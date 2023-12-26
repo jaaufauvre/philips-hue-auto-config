@@ -17,26 +17,20 @@
           "id": {
             "type": "string",
             "description": "Uniquely identify the room in this configuration",
-            "examples": [
-              "my_bedroom"
-            ]
+            "examples": ["my_bedroom"]
           },
           "name": {
             "type": "string",
             "minLength": 1,
             "maxLength": 32,
             "description": "A name for the room",
-            "examples": [
-              "Parent's bedroom"
-            ]
+            "examples": ["Parent's bedroom"]
           },
           "type": {
             "type": "string",
             "default": "other",
             "description": "The type of room. See 'archetype' here: https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_room_get",
-            "examples": [
-              "bedroom"
-            ],
+            "examples": ["bedroom"],
             "enum": [
               "living_room",
               "kitchen",
@@ -84,10 +78,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["id", "name"]
       }
     },
     "zones": {
@@ -101,26 +92,20 @@
           "id": {
             "type": "string",
             "description": "Uniquely identify the zone in this configuration",
-            "examples": [
-              "my_upstairs_zone"
-            ]
+            "examples": ["my_upstairs_zone"]
           },
           "name": {
             "type": "string",
             "minLength": 1,
             "maxLength": 32,
             "description": "A name for the zone",
-            "examples": [
-              "Upstairs"
-            ]
+            "examples": ["Upstairs"]
           },
           "type": {
             "type": "string",
             "default": "other",
             "description": "The type of zone. See 'archetype' here: https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_zone_get",
-            "examples": [
-              "top_floor"
-            ],
+            "examples": ["top_floor"],
             "enum": [
               "living_room",
               "kitchen",
@@ -168,10 +153,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["id", "name"]
       }
     },
     "lights": {
@@ -182,44 +164,35 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string", 
+            "type": "string",
             "description": "Uniquely identify the light in this configuration",
-            "examples": [
-              "my_light"
-            ]
+            "examples": ["my_light"]
           },
           "mac": {
             "type": "string",
+            "pattern": "^[a-f0-9-:]+$",
             "description": "MAC address, required for uniquely identifying lights added to a bridge",
-            "examples": [
-              "00:17:88:01:06:28:e3:8c-0b"
-            ]
+            "examples": ["00:17:88:01:06:28:e3:8c-0b"]
           },
           "serial": {
             "type": "string",
             "pattern": "^[A-F0-9]+$",
             "minLength": 6,
             "description": "Serial number printed on the light, recommended for searching for missing lights",
-            "examples": [
-              "AB01CD"
-            ]
+            "examples": ["AB01CD"]
           },
           "name": {
             "type": "string",
             "minLength": 1,
             "maxLength": 32,
             "description": "A name for the light",
-            "examples": [
-              "My Philips Hue bulb"
-            ]
+            "examples": ["My Philips Hue bulb"]
           },
           "type": {
             "type": "string",
             "default": "unknown_archetype",
             "description": "The type of light. See 'archetype' here: https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_light_get",
-            "examples": [
-              "vintage_bulb"
-            ],
+            "examples": ["vintage_bulb"],
             "enum": [
               "unknown_archetype",
               "classic_bulb",
@@ -275,9 +248,7 @@
           "room": {
             "type": "string",
             "description": "ID of a room the light belongs to",
-            "examples": [
-              "my_bedroom"
-            ]
+            "examples": ["my_bedroom"]
           },
           "zones": {
             "type": "array",
@@ -285,21 +256,14 @@
             "items": {
               "type": "string",
               "description": "ID of a zone",
-              "examples": [
-                "upstairs"
-              ]
+              "examples": ["upstairs"]
             }
           },
           "comment": {
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "mac",
-          "name",
-          "room"
-        ]
+        "required": ["id", "mac", "name", "room"]
       }
     },
     "motion-sensors": {
@@ -312,49 +276,152 @@
           "id": {
             "type": "string",
             "description": "Uniquely identify the motion sensor in this configuration",
-            "examples": [
-              "my_sensor"
-            ]
+            "examples": ["my_sensor"]
           },
           "mac": {
             "type": "string",
+            "pattern": "^[a-f0-9-:]+$",
             "description": "MAC address, required for uniquely identifying motion sensors added to a bridge",
-            "examples": [
-              "00:17:88:01:0b:d0:31:3c-2b-0205"
-            ]
+            "examples": ["00:17:88:01:0b:d0:31:3c-02-0406"]
           },
           "serial": {
             "type": "string",
             "pattern": "^[A-F0-9]+$",
             "minLength": 6,
             "description": "Serial number printed on the motion sensor, recommended for searching for missing motion sensors",
-            "examples": [
-              "AB01CD02"
-            ]
+            "examples": ["0BAB01CD"]
           },
           "name": {
             "type": "string",
             "minLength": 1,
             "maxLength": 32,
             "description": "A name for the motion sensor",
-            "examples": [
-              "My motion sensor"
-            ]
+            "examples": ["My motion sensor"]
           },
           "comment": {
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "mac",
-          "name"
-        ]
+        "required": ["id", "mac", "name"]
+      }
+    },
+    "tap-dial-switches": {
+      "type": "array",
+      "uniqueItemProperties": ["id", "name", "mac"],
+      "description": "A list of tap dial switches",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Uniquely identify the tap dial switch in this configuration",
+            "examples": ["my_dial"]
+          },
+          "mac": {
+            "type": "string",
+            "pattern": "^[a-f0-9-:]+$",
+            "description": "MAC address, required for uniquely identifying tap dial switches added to a bridge",
+            "examples": ["00:17:88:01:0d:e0:03:c0-fc00-0014"]
+          },
+          "serial": {
+            "type": "string",
+            "pattern": "^[A-F0-9]+$",
+            "minLength": 6,
+            "description": "Serial number printed on the tap dial switch, recommended for searching for missing tap dial switches",
+            "examples": ["AB01CD"]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "description": "A name for the tap dial switch",
+            "examples": ["My tap dial"]
+          },
+          "comment": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "mac", "name"]
+      }
+    },
+    "dimmer-switches": {
+      "type": "array",
+      "uniqueItemProperties": ["id", "name", "mac"],
+      "description": "A list of dimmer switches",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Uniquely identify the dimmer switch in this configuration",
+            "examples": ["my_dimmer"]
+          },
+          "mac": {
+            "type": "string",
+            "pattern": "^[a-f0-9-:]+$",
+            "description": "MAC address, required for uniquely identifying dimmer switches added to a bridge",
+            "examples": ["00:17:88:01:0b:11:cc:4e-01-fc00"]
+          },
+          "serial": {
+            "type": "string",
+            "pattern": "^[A-F0-9]+$",
+            "minLength": 6,
+            "description": "Serial number printed on the dimmer switch, recommended for searching for missing dimmer switches",
+            "examples": ["AB01CD"]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "description": "A name for the dimmer switch",
+            "examples": ["My dimmer"]
+          },
+          "comment": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "mac", "name"]
+      }
+    },
+    "wall-switches": {
+      "type": "array",
+      "uniqueItemProperties": ["id", "name", "mac"],
+      "description": "A list of wall switches",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Uniquely identify the wall switch in this configuration",
+            "examples": ["my_wall_switch"]
+          },
+          "mac": {
+            "type": "string",
+            "pattern": "^[a-f0-9-:]+$",
+            "description": "MAC address, required for uniquely identifying wall switches added to a bridge",
+            "examples": ["00:17:88:01:0c:13:bf:4d-01-fc00"]
+          },
+          "serial": {
+            "type": "string",
+            "pattern": "^[A-F0-9]+$",
+            "minLength": 6,
+            "description": "Serial number printed on the wall switch, recommended for searching for missing wall switches",
+            "examples": ["AB01CD"]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "description": "A name for the wall switch",
+            "examples": ["My wall switch"]
+          },
+          "comment": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "mac", "name"]
       }
     }
   },
-  "required": [
-    "rooms",
-    "lights"
-  ]
+  "required": ["rooms", "lights"]
 }

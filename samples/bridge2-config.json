@@ -166,7 +166,7 @@
       ]
     },
     {
-      "id": "dessing_ceiling",
+      "id": "dressing_ceiling",
       "mac": "00:17:88:01:0c:9b:bb:95-0b",
       "serial": "730E9A",
       "name": "Dressing color ceiling",
@@ -329,6 +329,77 @@
       "mac": "00:17:88:01:0b:58:00:7c-02-0406",
       "serial": "0B58007C",
       "name": "Motion sensor hallway down"
+    }
+  ],
+  "dimmer-switches": [
+    {
+      "id": "toilet_dimmer",
+      "mac": "00:17:88:01:0d:be:6c:a9-01-fc00",
+      "serial": "299347",
+      "name": "Dimmer toilet"
+    },
+    {
+      "id": "bathroom_dimmer",
+      "mac": "00:17:88:01:0c:b2:e7:35-01-fc00",
+      "serial": "82CCD6",
+      "name": "Dimmer bathroom"
+    },
+    {
+      "id": "savannah_dimmer",
+      "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
+      "serial": "0517BA",
+      "name": "Dimmer Savannah"
+    },
+    {
+      "id": "bedroom_dimmer",
+      "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
+      "serial": "2381C6",
+      "name": "Dimmer bedroom"
+    }
+  ],
+  "tap-dial-switches": [
+    {
+      "id": "tv_dial",
+      "mac": "00:17:88:01:0d:ea:cf:3e-01-fc00-0014",
+      "serial": "806995",
+      "name": "Tap dial TV room"
+    }
+  ],
+  "wall-switches": [
+    {
+      "id": "tv_ws",
+      "mac": "00:17:88:01:0d:08:f0:76-01-fc00",
+      "name": "Wall switch TV room"
+    },
+    {
+      "id": "savannah_ws",
+      "mac": "00:17:88:01:0c:55:d9:12-01-fc00",
+      "name": "Wall switch Savannah"
+    },
+    {
+      "id": "bathroom_ws",
+      "mac": "00:17:88:01:0c:53:dc:3f-01-fc00",
+      "name": "Wall switch bathroom"
+    },
+    {
+      "id": "bedroom_ws",
+      "mac": "00:17:88:01:0c:54:44:d6-01-fc00",
+      "name": "Wall switch bedroom"
+    },
+    {
+      "id": "hall_down_up_ws",
+      "mac": "00:17:88:01:0c:54:44:da-01-fc00",
+      "name": "Wall switch hallway down/up"
+    },
+    {
+      "id": "hall_down_toilet_ws",
+      "mac": "00:17:88:01:0c:53:df:28-01-fc00",
+      "name": "Wall switch hallway down/toilet"
+    },
+    {
+      "id": "dressing_ws",
+      "mac": "00:17:88:01:0c:53:dc:3c-01-fc00",
+      "name": "Wall switch dressing"
     }
   ]
 }

@@ -2,19 +2,32 @@ import { Logger } from '../log/logger'
 import fs from 'fs'
 import Ajv from 'ajv'
 import AjvKeywords from 'ajv-keywords'
-import { ConfigGen, Light, MotionSensor, Room, Zone } from './config-gen'
+import {
+  ConfigGen,
+  Light,
+  MotionSensor,
+  TapDialSwitch,
+  DimmerSwitch,
+  WallSwitch,
+  Room,
+  Zone,
+} from './config-gen'
+
+interface Decryptable {
+  mac: string
+  serial?: string
+}
 
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
   lights: Light[]
-  'motion-sensors'?: MotionSensor[]
   name?: string
   rooms: Room[]
   zones?: Zone[]
-
-  print() {
-    Logger.info(this._internalConfig)
-  }
+  motionSensors?: MotionSensor[]
+  tapDialSwitches?: TapDialSwitch[]
+  dimmerSwitches?: DimmerSwitch[]
+  wallSwitches?: WallSwitch[]
 
   constructor(configFilePath: any, xorKey?: string) {
     if (!configFilePath) {
@@ -31,12 +44,15 @@ class Config implements ConfigGen {
       throw Error('Could not parse config!')
     }
     this.validate()
-    this.decrypt(xorKey)
     this.lights = this._internalConfig.lights
     this.rooms = this._internalConfig.rooms
     this.zones = this._internalConfig.zones
     this.name = this._internalConfig.name
-    this['motion-sensors'] = this._internalConfig['motion-sensors']
+    this.motionSensors = this._internalConfig['motion-sensors']
+    this.tapDialSwitches = this._internalConfig['tap-dial-switches']
+    this.dimmerSwitches = this._internalConfig['dimmer-switches']
+    this.wallSwitches = this._internalConfig['wall-switches']
+    this.decrypt(xorKey)
   }
 
   private validate() {
@@ -59,17 +75,20 @@ class Config implements ConfigGen {
       return
     }
     Logger.info(`Decrypting MAC and serial values with key: '${xorKey}' ...`)
-    this._internalConfig.lights.forEach((light: Light) => {
-      light.serial = this.decryptSerial(xorKey, light.serial)
-      light.mac = this.decryptMac(xorKey, light.mac)
-    })
-    this._internalConfig['motion-sensors']?.forEach((sensor: MotionSensor) => {
-      sensor.serial = this.decryptSerial(xorKey, sensor.serial)
-      sensor.mac = this.decryptMac(xorKey, sensor.mac)
+    const objects = [
+      ...this.lights,
+      ...(this.motionSensors ?? []),
+      ...(this.tapDialSwitches ?? []),
+      ...(this.dimmerSwitches ?? []),
+      ...(this.wallSwitches ?? []),
+    ]
+    objects.forEach((obj: Decryptable) => {
+      obj.serial = this.decryptSerial(xorKey, obj.serial)
+      obj.mac = this.decryptMac(xorKey, obj.mac)
     })
   }
 
-  // "ABCDEF" (lights) or "0BABCDEF" (sensors).
+  // Examples: "ABCDEF" (lights) or "0BABCDEF" (sensors).
   // Only the 6 last hex numbers are encrypted.
   private decryptSerial(xorKey: string, serial?: string) {
     if (!serial) {
@@ -88,7 +107,7 @@ class Config implements ConfigGen {
     return newSerial
   }
 
-  // "00:17:88:01:0c:ab:cd:ef-0b" (lights) or "00:17:88:01:0b:ab:cd:ef-02-0406"" (sensors).
+  // Examples: "00:17:88:01:0c:ab:cd:ef-0b" (lights) or "00:17:88:01:0b:ab:cd:ef-02-0406" (sensors).
   // Only the 6 last hex numbers are encrypted.
   private decryptMac(xorKey: string, mac: string) {
     let newMac = mac.substring(0, 15)
@@ -111,6 +130,12 @@ class Config implements ConfigGen {
 
   private decryptChar(keyChar: string, char: string) {
     return (parseInt(char, 16) ^ parseInt(keyChar, 16)).toString(16)
+  }
+
+  print() {
+    const copy = Object.assign({}, this)
+    copy._internalConfig = JSON.parse('{}')
+    Logger.info(copy)
   }
 }
 

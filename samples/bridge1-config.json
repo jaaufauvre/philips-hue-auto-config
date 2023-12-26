@@ -363,5 +363,64 @@
       "serial": "0B58026A",
       "name": "Motion sensor kitchen"
     }
+  ],
+  "dimmer-switches": [
+    {
+      "id": "aaliya_dimmer",
+      "mac": "00:17:88:01:0b:e3:88:a9-01-fc00",
+      "serial": "D328A0",
+      "name": "Dimmer Aaliya"
+    },
+    {
+      "id": "kids_bathroom_dimmer",
+      "mac": "00:17:88:01:0b:ec:d1:41-01-fc00",
+      "serial": "61E40B",
+      "name": "Dimmer kids bathroom"
+    }
+  ],
+  "tap-dial-switches": [
+    {
+      "id": "kitchen_dial",
+      "mac": "00:17:88:01:0d:a2:09:21-01-fc00-0014",
+      "serial": "0057DB",
+      "name": "Tap dial kitchen"
+    }
+  ],
+  "wall-switches": [
+    {
+      "id": "aaliya_ws",
+      "mac": "00:17:88:01:0c:53:df:35-01-fc00",
+      "name": "Wall switch Aaliya"
+    },
+    {
+      "id": "kitchen_ws_left",
+      "mac": "00:17:88:01:0c:55:de:c5-01-fc00",
+      "name": "Wall switch kitchen L"
+    },
+    {
+      "id": "kitchen_ws_right",
+      "mac": "00:17:88:01:0c:55:dc:5d-01-fc00",
+      "name": "Wall switch kitchen R"
+    },
+    {
+      "id": "kitchen_garden_ws",
+      "mac": "00:17:88:01:0c:55:dc:46-01-fc00",
+      "name": "Wall switch kitchen/garden"
+    },
+    {
+      "id": "office_ws",
+      "mac": "00:17:88:01:0d:08:f2:a0-01-fc00",
+      "name": "Wall switch office"
+    },
+    {
+      "id": "hall_up_attic_ws",
+      "mac": "00:17:88:01:0c:54:44:ec-01-fc00",
+      "name": "Wall switch hallway up/attic"
+    },
+    {
+      "id": "hall_up_bathroom_ws",
+      "mac": "00:17:88:01:0c:54:44:dd-01-fc00",
+      "name": "Wall switch hallway up/bathroom"
+    }
   ]
 }

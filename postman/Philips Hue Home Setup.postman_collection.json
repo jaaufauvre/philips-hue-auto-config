@@ -414,6 +414,67 @@
 					"response": []
 				},
 				{
+					"name": "Update light type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{lightId}}\",\r\n    \"metadata\": {\r\n        \"archetype\": \"plug\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"light",
+								"{{lightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update light type (v1)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"config\": {\r\n        \"archetype\": \"plug\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights",
+								"{{lightIdV1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Search for new lights (v1)",
 					"request": {
 						"method": "POST",
@@ -621,6 +682,213 @@
 								"{{username}}",
 								"scenes",
 								"{{sceneIdV1}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tap dial switches",
+			"item": [
+				{
+					"name": "Get all tap dial switches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single tap dial switch",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device/{{tapDialId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device",
+								"{{tapDialId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single tap dial switch (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{tapDialIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"{{tapDialIdV1}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dimmer switches",
+			"item": [
+				{
+					"name": "Get all dimmer switches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single dimmer switch",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device/{{dimmerId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device",
+								"{{dimmerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single dimmer switch (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{dimmerIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"{{dimmerIdV1}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wall switches",
+			"item": [
+				{
+					"name": "Get all wall switches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single wall switch",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device/{{wallSwitchId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device",
+								"{{wallSwitchId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single wall switch (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{wallSwitchIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"{{wallSwitchIdV1}}"
 							]
 						}
 					},

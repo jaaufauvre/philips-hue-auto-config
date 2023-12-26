@@ -9,6 +9,10 @@
 
 export interface ConfigGen {
     /**
+     * A list of dimmer switches
+     */
+    "dimmer-switches"?: DimmerSwitch[];
+    /**
      * A list of lights and smart plugs
      */
     lights: Light[];
@@ -22,9 +26,39 @@ export interface ConfigGen {
      */
     rooms: Room[];
     /**
+     * A list of tap dial switches
+     */
+    "tap-dial-switches"?: TapDialSwitch[];
+    /**
+     * A list of wall switches
+     */
+    "wall-switches"?: WallSwitch[];
+    /**
      * A list of zones
      */
     zones?: Zone[];
+    [property: string]: any;
+}
+
+export interface DimmerSwitch {
+    comment?: string;
+    /**
+     * Uniquely identify the dimmer switch in this configuration
+     */
+    id: string;
+    /**
+     * MAC address, required for uniquely identifying dimmer switches added to a bridge
+     */
+    mac: string;
+    /**
+     * A name for the dimmer switch
+     */
+    name: string;
+    /**
+     * Serial number printed on the dimmer switch, recommended for searching for missing dimmer
+     * switches
+     */
+    serial?: string;
     [property: string]: any;
 }
 
@@ -209,6 +243,50 @@ export enum RoomType {
     TopFloor = "top_floor",
     Tv = "tv",
     Upstairs = "upstairs",
+}
+
+export interface TapDialSwitch {
+    comment?: string;
+    /**
+     * Uniquely identify the tap dial switch in this configuration
+     */
+    id: string;
+    /**
+     * MAC address, required for uniquely identifying tap dial switches added to a bridge
+     */
+    mac: string;
+    /**
+     * A name for the tap dial switch
+     */
+    name: string;
+    /**
+     * Serial number printed on the tap dial switch, recommended for searching for missing tap
+     * dial switches
+     */
+    serial?: string;
+    [property: string]: any;
+}
+
+export interface WallSwitch {
+    comment?: string;
+    /**
+     * Uniquely identify the wall switch in this configuration
+     */
+    id: string;
+    /**
+     * MAC address, required for uniquely identifying wall switches added to a bridge
+     */
+    mac: string;
+    /**
+     * A name for the wall switch
+     */
+    name: string;
+    /**
+     * Serial number printed on the wall switch, recommended for searching for missing wall
+     * switches
+     */
+    serial?: string;
+    [property: string]: any;
 }
 
 /**
@@ -398,11 +476,21 @@ function r(name: string) {
 
 const typeMap: any = {
     "ConfigGen": o([
+        { json: "dimmer-switches", js: "dimmer-switches", typ: u(undefined, a(r("DimmerSwitch"))) },
         { json: "lights", js: "lights", typ: a(r("Light")) },
         { json: "motion-sensors", js: "motion-sensors", typ: u(undefined, a(r("MotionSensor"))) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "rooms", js: "rooms", typ: a(r("Room")) },
+        { json: "tap-dial-switches", js: "tap-dial-switches", typ: u(undefined, a(r("TapDialSwitch"))) },
+        { json: "wall-switches", js: "wall-switches", typ: u(undefined, a(r("WallSwitch"))) },
         { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
+    ], "any"),
+    "DimmerSwitch": o([
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: "" },
+        { json: "mac", js: "mac", typ: "" },
+        { json: "name", js: "name", typ: "" },
+        { json: "serial", js: "serial", typ: u(undefined, "") },
     ], "any"),
     "Light": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -426,6 +514,20 @@ const typeMap: any = {
         { json: "id", js: "id", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
+    ], "any"),
+    "TapDialSwitch": o([
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: "" },
+        { json: "mac", js: "mac", typ: "" },
+        { json: "name", js: "name", typ: "" },
+        { json: "serial", js: "serial", typ: u(undefined, "") },
+    ], "any"),
+    "WallSwitch": o([
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: "" },
+        { json: "mac", js: "mac", typ: "" },
+        { json: "name", js: "name", typ: "" },
+        { json: "serial", js: "serial", typ: u(undefined, "") },
     ], "any"),
     "Zone": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },

@@ -1,0 +1,334 @@
+{
+  "name": "Bridge 2 config",
+  "defaults": {
+    "powerup": {
+      "preset": "powerfail",
+      "configured": true,
+      "on": {
+        "mode": "previous"
+      },
+      "dimming": {
+        "mode": "previous"
+      },
+      "color": {
+        "mode": "previous"
+      }
+    }
+  },
+  "rooms": [
+    {
+      "id": "tv_room",
+      "name": "TV Room",
+      "type": "tv"
+    },
+    {
+      "id": "hallway_down",
+      "name": "Hallway downstairs",
+      "type": "hallway"
+    },
+    {
+      "id": "toilet",
+      "name": "Toilet",
+      "type": "toilet"
+    },
+    {
+      "id": "dressing",
+      "name": "Dressing room",
+      "type": "closet"
+    },
+    {
+      "id": "bedroom",
+      "name": "Bedroom",
+      "type": "bedroom"
+    },
+    {
+      "id": "bedroom_sav",
+      "name": "Savannah's bedroom",
+      "type": "kids_bedroom"
+    },
+    {
+      "id": "bathroom",
+      "name": "Bathroom",
+      "type": "bathroom"
+    }
+  ],
+  "zones": [
+    {
+      "id": "bridge",
+      "name": "Bridge #2",
+      "type": "other"
+    },
+    {
+      "id": "downstairs",
+      "name": "Downstairs",
+      "type": "downstairs"
+    },
+    {
+      "id": "upstairs",
+      "name": "Upstairs",
+      "type": "upstairs"
+    }
+  ],
+  "lights": [
+    {
+      "id": "tv_gradient_left",
+      "mac": "00:17:88:01:0c:c5:9a:29-0b",
+      "serial": "6E3F87",
+      "name": "TV Signe gradient left",
+      "type": "hue_signe",
+      "room": "tv_room",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "tv_gradient_right",
+      "mac": "00:17:88:01:0c:c4:46:30-0b",
+      "serial": "B5187E",
+      "name": "TV Signe gradient right",
+      "type": "hue_signe",
+      "room": "tv_room",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "tv_ceiling",
+      "mac": "00:17:88:01:0d:3c:ce:f4-0b",
+      "serial": "BADB02",
+      "name": "TV room color ceiling",
+      "type": "sultan_bulb",
+      "room": "tv_room",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "hall_down_1",
+      "mac": "00:17:88:01:0c:96:46:ea-0b",
+      "serial": "80521A",
+      "name": "Hallway down color ceiling 1",
+      "type": "sultan_bulb",
+      "room": "hallway_down",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ],
+      "comment": "Close to the main door"
+    },
+    {
+      "id": "hall_down_2",
+      "mac": "00:17:88:01:0b:3f:d7:59-0b",
+      "serial": "74EF6D",
+      "name": "Hallway down ambiance ceiling 2",
+      "type": "sultan_bulb",
+      "room": "hallway_down",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ],
+      "comment": "Close to the kitchen"
+    },
+    {
+      "id": "toilet_ceiling",
+      "mac": "00:17:88:01:0d:89:f8:b6-0b",
+      "name": "Xamento toilet",
+      "type": "ceiling_round",
+      "room": "toilet",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "toilet_spot_left",
+      "mac": "00:17:88:01:0b:53:07:b5-0b",
+      "name": "Toilet Adore spot left",
+      "type": "double_spot",
+      "room": "toilet",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "toilet_spot_right",
+      "mac": "00:17:88:01:0b:53:07:c6-0b",
+      "name": "Toilet Adore spot right",
+      "type": "double_spot",
+      "room": "toilet",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "dessing_ceiling",
+      "mac": "00:17:88:01:0c:9b:bb:95-0b",
+      "serial": "730E9A",
+      "name": "Dressing color ceiling",
+      "type": "sultan_bulb",
+      "room": "dressing",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "bedroom_ceiling_2",
+      "mac": "00:17:88:01:0c:9b:98:a5-0b",
+      "serial": "8F1B18",
+      "name": "Bedroom color ceiling",
+      "type": "sultan_bulb",
+      "room": "bedroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ],
+      "comment": "Close to bed"
+    },
+    {
+      "id": "bedroom_ceiling_1",
+      "mac": "00:17:88:01:0b:31:2e:1d-0b",
+      "serial": "201364",
+      "name": "Bedroom ambiance ceiling",
+      "type": "sultan_bulb",
+      "room": "bedroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ],
+      "comment": "Close to door"
+    },
+    {
+      "id": "bedroom_shade",
+      "mac": "00:17:88:01:0b:3d:8b:d8-0b",
+      "serial": "66CB13",
+      "name": "Bedroom color shade",
+      "type": "table_shade",
+      "room": "bedroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "bedroom_candle_left",
+      "mac": "00:17:88:01:0c:d0:b8:87-0b",
+      "serial": "B74BB2",
+      "name": "Left ambiance candle",
+      "type": "table_shade",
+      "room": "bedroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "bedroom_candle_right",
+      "mac": "00:17:88:01:0c:d0:af:99-0b",
+      "serial": "5317F3",
+      "name": "Right ambiance candle",
+      "type": "table_shade",
+      "room": "bedroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "savannah_plug_shelves",
+      "mac": "00:17:88:01:0b:49:f0:2d-0b",
+      "serial": "1E4560",
+      "name": "Savannah bed light",
+      "type": "plug",
+      "room": "bedroom_sav",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ],
+      "comment": "Smart plug for shelves"
+    },
+    {
+      "id": "savannah_plug_bed",
+      "mac": "00:17:88:01:0b:49:b4:8a-0b",
+      "serial": "33221A",
+      "name": "Savannah shelves light",
+      "type": "plug",
+      "room": "bedroom_sav",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ],
+      "comment": "Smart plug for bed"
+    },
+    {
+      "id": "savannah_ceiling",
+      "mac": "00:17:88:01:0c:9d:f2:05-0b",
+      "serial": "D034F5",
+      "name": "Savannah color ceiling",
+      "type": "sultan_bulb",
+      "room": "bedroom_sav",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "savannah_signe",
+      "mac": "00:17:88:01:0b:73:30:f6-0b",
+      "serial": "410ABF",
+      "name": "Savannah Signe gradient",
+      "type": "hue_signe",
+      "room": "bedroom_sav",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "bathroom_ceiling",
+      "mac": "00:17:88:01:0d:89:f8:a0-0b",
+      "name": "Xamento bathroom",
+      "type": "ceiling_round",
+      "room": "bathroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "bathroom_spot_left",
+      "mac": "00:17:88:01:0b:5d:0f:5e-0b",
+      "name": "Bathroom Adore spot left",
+      "type": "double_spot",
+      "room": "bathroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    },
+    {
+      "id": "bathroom_spot_right",
+      "mac": "00:17:88:01:0b:5f:ea:d4-0b",
+      "name": "Bathroom Adore spot right",
+      "type": "double_spot",
+      "room": "bathroom",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
+    }
+  ],
+  "motion-sensors": [
+    {
+      "id": "hall_down_sensor",
+      "mac": "00:17:88:01:0b:58:00:7c-02-0406",
+      "serial": "0B58007C",
+      "name": "Motion sensor hallway down"
+    }
+  ]
+}

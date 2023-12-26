@@ -1,0 +1,667 @@
+{
+	"info": {
+		"_postman_id": "f0592507-d233-4367-b59b-88f022740a7f",
+		"name": "Philips Hue Home Setup",
+		"description": "1. Go to [https://discovery.meethue.com/](https://discovery.meethue.com/)\n2. Update bridge variable (example: 192.168.1.13)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20649604"
+	},
+	"item": [
+		{
+			"name": "Authorization & Config",
+			"item": [
+				{
+					"name": "Press link button and create user (v1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});\r",
+									"pm.test(\"Save username and clientkey\", function () {\r",
+									"    var jsonData = pm.response.json()\r",
+									"    var username = jsonData[0].success.username\r",
+									"    var clientkey = jsonData[0].success.clientkey\r",
+									"    pm.expect(username).to.be.not.null\r",
+									"    pm.environment.set(\"username\", username);\r",
+									"    pm.environment.set(\"clientkey\", clientkey);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\":\"Postman#Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read devices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read bridge",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/bridge",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"bridge"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read config (v1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});\r",
+									"pm.test(\"Save username and clientkey\", function () {\r",
+									"    var jsonData = pm.response.json()\r",
+									"    var username = jsonData[0].success.username\r",
+									"    var clientkey = jsonData[0].success.clientkey\r",
+									"    pm.expect(username).to.be.not.null\r",
+									"    pm.environment.set(\"username\", username);\r",
+									"    pm.environment.set(\"clientkey\", username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\":\"Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/config",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"config"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get resources",
+			"item": [
+				{
+					"name": "Get all zones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/zone",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"zone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all rooms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/room",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"room"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all resources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all scripts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/behavior_script",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"behavior_script"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all temperature services",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/temperature",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"temperature"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lights",
+			"item": [
+				{
+					"name": "Get all lights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/light",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"light"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all lights (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single light",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"light",
+								"{{lightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single light (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights",
+								"{{lightIdV1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Switch light on",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{lightId}}\",\r\n    \"on\": {\r\n        \"on\": true\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"light",
+								"{{lightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Switch light off",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{lightId}}\",\r\n    \"on\": {\r\n        \"on\": false\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"light",
+								"{{lightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for new lights (v1)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"deviceid\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get new lights after scan (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights/new",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights",
+								"new"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Motion sensors",
+			"item": [
+				{
+					"name": "Get all motion sensors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/motion",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"motion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single motion sensor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/motion/{{motionId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"motion",
+								"{{motionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single motion sensor (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{motionIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"{{motionIdV1}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rules",
+			"item": [
+				{
+					"name": "Get all rules (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/rules",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"rules"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Scenes",
+			"item": [
+				{
+					"name": "Get all scenes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/scene",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"scene"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single scene",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/scene/{{sceneId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"scene",
+								"{{sceneId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single scene (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/scenes/{{sceneIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"scenes",
+								"{{sceneIdV1}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{username}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "hue-application-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

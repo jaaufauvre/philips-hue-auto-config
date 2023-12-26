@@ -1,0 +1,38 @@
+{
+  "name": "XOR encrypted config",
+  "rooms": [
+    {
+      "id": "room",
+      "name": "Room"
+    }
+  ],
+  "lights": [
+    {
+      "id": "0",
+      "mac": "00:17:88:01:0c:22:1e:81-0b",
+      "serial": "99A53A",
+      "name": "Encrypted 1",
+      "room": "room"
+    },
+    {
+      "id": "1",
+      "mac": "00:17:88:01:0c:11:2d:b2-0b",
+      "name": "Encrypted 2",
+      "room": "room"
+    }
+  ],
+  "motion-sensors": [
+    {
+      "id": "2",
+      "mac": "00:17:88:01:0b:98:c2:7f-02-0406",
+      "serial": "0B98C27F",
+      "name": "Encrypted 3"
+    },
+    {
+      "id": "3",
+      "mac": "00:17:88:01:0b:21:3b:c6-02-0406",
+      "serial": "0B213BC6",
+      "name": "Encrypted 4"
+    }
+  ]
+}

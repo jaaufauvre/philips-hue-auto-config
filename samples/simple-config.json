@@ -1,0 +1,25 @@
+{
+  "name": "Simple config",
+  "rooms": [
+    {
+      "id": "my_bedroom",
+      "name": "Alex's bedroom"
+    }
+  ],
+  "lights": [
+    {
+      "id": "ceiling",
+      "mac": "00:17:88:01:0c:28:e3:8c-0b",
+      "serial": "267F81",
+      "name": "Bedroom ceiling bulb",
+      "room": "my_bedroom"
+    },
+    {
+      "id": "bed_table",
+      "mac": "00:17:88:01:0b:e4:c9:f8-0b",
+      "serial": "D775E8",
+      "name": "Bed color candle",
+      "room": "my_bedroom"
+    }
+  ]
+}

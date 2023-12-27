@@ -41,6 +41,9 @@ describe('Config', () => {
       expect(e.message).toContain('Config is invalid. Errors:')
     }
   })
+  test('should print config', () => {
+    new Config('./tests/config/res/encrypted-config.json').print()
+  })
   test('should decrypt serials and MAC addresses when XOR key provided', () => {
     const config1 = new Config(
       './tests/config/res/encrypted-config.json',
@@ -88,6 +91,26 @@ describe('Config', () => {
     expect(config2.dimmerSwitches![0].serial).toBe('006644')
     expect(config2.dimmerSwitches![0].mac).toBe(
       '00:17:88:01:0b:89:89:89-01-fc00',
+    )
+  })
+  test('should not decrypt serials and MAC addresses when no XOR key provided', () => {
+    const config = new Config('./tests/config/res/encrypted-config.json')
+
+    expect(config.lights[0].serial).toBe('99A53A')
+    expect(config.lights[1].serial).toBe(undefined)
+    expect(config.lights[0].mac).toBe('00:17:88:01:0c:22:1e:81-0b')
+    expect(config.lights[1].mac).toBe('00:17:88:01:0c:11:2d:b2-0b')
+    expect(config.motionSensors![0].serial).toBe('0B98C27F')
+    expect(config.motionSensors![0].mac).toBe('00:17:88:01:0b:98:c2:7f-02-0406')
+    expect(config.tapDialSwitches![0].serial).toBe('0B213BC6')
+    expect(config.tapDialSwitches![0].mac).toBe(
+      '00:17:88:01:0b:21:3b:c6-fc00-0014',
+    )
+    expect(config.wallSwitches![0].serial).toBe('AAAAAA')
+    expect(config.wallSwitches![0].mac).toBe('00:17:88:01:0c:11:11:11-01-fc00')
+    expect(config.dimmerSwitches![0].serial).toBe('ABCDEF')
+    expect(config.dimmerSwitches![0].mac).toBe(
+      '00:17:88:01:0b:22:22:22-01-fc00',
     )
   })
 })

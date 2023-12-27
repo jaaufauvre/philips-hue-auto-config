@@ -22,5 +22,6 @@ function main() {
   Logger.info(`${(config.tapDialSwitches ?? []).length} tap dial switch(es)`)
   Logger.info(`${(config.dimmerSwitches ?? []).length} dimmer switch(es)`)
   Logger.info(`${(config.wallSwitches ?? []).length} wall switch(es)`)
+  config.print()
   Logger.info('Done!', Logger.YELLOW)
 }

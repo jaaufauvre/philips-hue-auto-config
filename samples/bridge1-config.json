@@ -283,6 +283,7 @@
     {
       "id": "kids_bathroom_ceiling",
       "mac": "00:17:88:01:0c:29:a1:04-0b",
+      "serial": "58B5F4",
       "name": "Xamento kids bathroom",
       "type": "ceiling_round",
       "room": "kids_bathroom",
@@ -294,6 +295,7 @@
     {
       "id": "kids_bathroom_spot_left",
       "mac": "00:17:88:01:0b:2d:69:66-0b",
+      "serial": "C6F5B0",
       "name": "Kids bathroom Adore spot left",
       "type": "double_spot",
       "room": "kids_bathroom",
@@ -305,6 +307,7 @@
     {
       "id": "kids_bathroom_spot_right",
       "mac": "00:17:88:01:0b:2e:f7:9e-0b",
+      "serial": "A6627C",
       "name": "Kids bathroom Adore spot right",
       "type": "double_spot",
       "room": "kids_bathroom",

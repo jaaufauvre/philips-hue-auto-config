@@ -135,6 +135,7 @@
     {
       "id": "toilet_ceiling",
       "mac": "00:17:88:01:0d:89:f8:b6-0b",
+      "serial": "81EB49",
       "name": "Xamento toilet",
       "type": "ceiling_round",
       "room": "toilet",
@@ -146,6 +147,7 @@
     {
       "id": "toilet_spot_left",
       "mac": "00:17:88:01:0b:53:07:b5-0b",
+      "serial": "F38D69",
       "name": "Toilet Adore spot left",
       "type": "double_spot",
       "room": "toilet",
@@ -157,6 +159,7 @@
     {
       "id": "toilet_spot_right",
       "mac": "00:17:88:01:0b:53:07:c6-0b",
+      "serial": "5EEBA7",
       "name": "Toilet Adore spot right",
       "type": "double_spot",
       "room": "toilet",
@@ -292,6 +295,7 @@
     {
       "id": "bathroom_ceiling",
       "mac": "00:17:88:01:0d:89:f8:a0-0b",
+      "serial": "29799E",
       "name": "Xamento bathroom",
       "type": "ceiling_round",
       "room": "bathroom",
@@ -303,6 +307,7 @@
     {
       "id": "bathroom_spot_left",
       "mac": "00:17:88:01:0b:5d:0f:5e-0b",
+      "serial": "B14325",
       "name": "Bathroom Adore spot left",
       "type": "double_spot",
       "room": "bathroom",
@@ -314,6 +319,7 @@
     {
       "id": "bathroom_spot_right",
       "mac": "00:17:88:01:0b:5f:ea:d4-0b",
+      "serial": "A44AE7",
       "name": "Bathroom Adore spot right",
       "type": "double_spot",
       "room": "bathroom",

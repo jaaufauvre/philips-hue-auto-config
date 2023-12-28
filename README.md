@@ -23,8 +23,10 @@ It can be used to:
 
 ## Run the program
 
-1. Reset the Hue Bridge, then press the button in the centre of the Hue Bridge
-2. Run: `cd module`, then `npm install && npm run start --config=../samples/simple-config.json`
+* Reset the Hue Bridge, then press the button in the centre of the Hue Bridge
+* Run: `cd module && npm install` 
+* With Bridge discovery: `npm run start --config=../samples/simple-config.json`
+* Without Bridge discovery: `npm run start --config=../samples/simple-config.json --bridge=192.168.1.25`
 
 ## Program steps
 

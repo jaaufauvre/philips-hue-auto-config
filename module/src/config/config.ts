@@ -43,7 +43,7 @@ class Config implements ConfigGen {
     } catch {
       throw Error('Could not parse config!')
     }
-    this.validate()
+    this.#validate()
     this.lights = this._internalConfig.lights
     this.rooms = this._internalConfig.rooms
     this.zones = this._internalConfig.zones
@@ -52,10 +52,10 @@ class Config implements ConfigGen {
     this.tapDialSwitches = this._internalConfig['tap-dial-switches']
     this.dimmerSwitches = this._internalConfig['dimmer-switches']
     this.wallSwitches = this._internalConfig['wall-switches']
-    this.decrypt(xorKey)
+    this.#decrypt(xorKey)
   }
 
-  private validate() {
+  #validate() {
     Logger.info(`Validating config '${this._internalConfig.name}' ...`)
     const ajv = new Ajv()
     AjvKeywords(ajv)
@@ -69,7 +69,7 @@ class Config implements ConfigGen {
     }
   }
 
-  private decrypt(xorKey?: string) {
+  #decrypt(xorKey?: string) {
     if (!xorKey) {
       // Do nothing
       return
@@ -83,14 +83,14 @@ class Config implements ConfigGen {
       ...(this.wallSwitches ?? []),
     ]
     objects.forEach((obj: Decryptable) => {
-      obj.serial = this.decryptSerial(xorKey, obj.serial)
-      obj.mac = this.decryptMac(xorKey, obj.mac)
+      obj.serial = this.#decryptSerial(xorKey, obj.serial)
+      obj.mac = this.#decryptMac(xorKey, obj.mac)
     })
   }
 
   // Examples: "ABCDEF" (lights) or "0BABCDEF" (sensors).
   // Only the 6 last hex numbers are encrypted.
-  private decryptSerial(xorKey: string, serial?: string) {
+  #decryptSerial(xorKey: string, serial?: string) {
     if (!serial) {
       // Do nothing
       return serial
@@ -98,7 +98,7 @@ class Config implements ConfigGen {
     let newSerial = serial.substring(0, serial.length - 6)
     let count: number = 0
     for (let i: number = serial.length - 6; i < serial.length; i++) {
-      newSerial += this.decryptChar(
+      newSerial += this.#decryptChar(
         xorKey.charAt(count % xorKey.length),
         serial.charAt(i),
       ).toUpperCase()
@@ -109,7 +109,7 @@ class Config implements ConfigGen {
 
   // Examples: "00:17:88:01:0c:ab:cd:ef-0b" (lights) or "00:17:88:01:0b:ab:cd:ef-02-0406" (sensors).
   // Only the 6 last hex numbers are encrypted.
-  private decryptMac(xorKey: string, mac: string) {
+  #decryptMac(xorKey: string, mac: string) {
     let newMac = mac.substring(0, 15)
     let count: number = 0
     for (let i: number = 15; i < mac.indexOf('-'); i++) {
@@ -118,7 +118,7 @@ class Config implements ConfigGen {
         newMac += ':'
         continue
       }
-      newMac += this.decryptChar(
+      newMac += this.#decryptChar(
         xorKey.charAt(count % xorKey.length),
         currentChar,
       )
@@ -128,14 +128,21 @@ class Config implements ConfigGen {
     return newMac
   }
 
-  private decryptChar(keyChar: string, char: string) {
+  #decryptChar(keyChar: string, char: string) {
     return (parseInt(char, 16) ^ parseInt(keyChar, 16)).toString(16)
   }
 
   print() {
     const copy = Object.assign({}, this)
     copy._internalConfig = JSON.parse('{}')
-    Logger.info(copy)
+    Logger.debug(copy)
+    Logger.info(`${copy.lights.length} light(s)`)
+    Logger.info(`${copy.rooms.length} room(s)`)
+    Logger.info(`${(copy.zones ?? []).length} zones(s)`)
+    Logger.info(`${(copy.motionSensors ?? []).length} motion sensor(s)`)
+    Logger.info(`${(copy.tapDialSwitches ?? []).length} tap dial switch(es)`)
+    Logger.info(`${(copy.dimmerSwitches ?? []).length} dimmer switch(es)`)
+    Logger.info(`${(copy.wallSwitches ?? []).length} wall switch(es)`)
   }
 }
 

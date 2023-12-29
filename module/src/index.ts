@@ -18,7 +18,7 @@ async function main() {
 
   // Inputs
   const providedBridgeIp = process.env.npm_config_bridge as string
-  const providedAppKey = process.env.npm_config_key as string
+  const providedAppKey = process.env.npm_config_appkey as string
   const configPath = process.env.npm_config_config as string
   const configEncryptionKey = process.env.npm_config_xor as string
 

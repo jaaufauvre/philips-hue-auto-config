@@ -29,7 +29,7 @@ It can be used to:
 
 Additional options:
 * `--bridge=192.168.1.25` - Will skip Hue Bridge discovery and use the provided IP address instead
-* `--key=AXYvXm9Bf5b…PZPW40TEM` - Will use the provided authentication key instead of creating a new one
+* `--appkey=AXYvXm9Bf5b…PZPW40TEM` - Will use the provided authentication key instead of creating a new one
 
 ## Program steps
 

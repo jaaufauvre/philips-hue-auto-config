@@ -2,41 +2,61 @@
  * A simple logger with timestamp and colors.
  * Set the DEBUG env variable to get "debug" logs.
  */
+export enum Colors {
+  Default,
+  Red,
+  Green,
+  Yellow,
+  DarkBlue,
+  Purple,
+  LightBlue,
+}
+
 export class Logger {
-  static RED = '\x1b[31m%s\x1b[0m'
-  static GREEN = '\x1b[32m%s\x1b[0m'
-  static YELLOW = '\x1b[33m%s\x1b[0m'
-  static DARK_BLUE = '\x1b[34m%s\x1b[0m'
-  static PURPLE = '\x1b[35m%s\x1b[0m'
-  static LIGHT_BLUE = '\x1b[36m%s\x1b[0m'
+  static #useDebug = false
+  static #colorMap: Map<Colors, string | undefined> = new Map([
+    [Colors.Red, '\x1b[31m%s\x1b[0m'],
+    [Colors.Green, '\x1b[32m%s\x1b[0m'],
+    [Colors.Yellow, '\x1b[33m%s\x1b[0m'],
+    [Colors.DarkBlue, '\x1b[34m%s\x1b[0m'],
+    [Colors.Purple, '\x1b[35m%s\x1b[0m'],
+    [Colors.LightBlue, '\x1b[36m%s\x1b[0m'],
+  ])
 
-  static #log = (msg: string, color?: string) => {
-    const logMsg = `${new Date().toISOString()} - ${msg}`
-    if (color) {
-      console.log(color, logMsg)
+  static #log = (...objects: any[]) => {
+    let color = Colors.Default
+    if (objects.length > 0 && Object.values(Colors).includes(objects[0])) {
+      color = objects[0]
+      objects.shift()
+    }
+    objects.unshift(new Date().toISOString())
+    if (Colors.Default === color) {
+      console.log(...objects)
     } else {
-      console.log(logMsg)
+      console.log(
+        this.#colorMap.get(color)!.replace('%s', '%s '.repeat(objects.length)),
+        ...objects,
+      )
     }
   }
 
-  static info = (obj: any, color?: string) => {
-    Logger.#log(Logger.toString(obj), color)
+  static info = (...objects: any[]) => {
+    this.#log(...objects)
   }
 
-  static error = (obj: any) => {
-    Logger.#log(`[Error] ${Logger.toString(obj)}`, Logger.RED)
+  static error = (...objects: any[]) => {
+    objects.unshift('[Error]')
+    this.#log(Colors.Red, ...objects)
   }
 
-  static debug = (obj: any) => {
-    if (process.env.DEBUG == 'true') {
-      Logger.#log(`[Debug] ${Logger.toString(obj)}`)
+  static debug = (...objects: any[]) => {
+    if (process.env.DEBUG == 'true' || Logger.#useDebug) {
+      objects.unshift('[Debug]')
+      this.#log(...objects)
     }
   }
 
-  static toString(obj: any): string {
-    if (typeof obj === 'string') {
-      return obj
-    }
-    return JSON.stringify(obj, null, 2)
+  static setDebug(useDebug: boolean) {
+    this.#useDebug = useDebug
   }
 }

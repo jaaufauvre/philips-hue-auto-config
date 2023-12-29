@@ -65,7 +65,9 @@ class Config implements ConfigGen {
     const isConfigValid = ajv.compile<Config>(schema)(this._internalConfig)
     if (!isConfigValid) {
       const errors = ajv.compile(schema).errors
-      throw Error(`Config is invalid. Errors: ${Logger.toString(errors)}`)
+      throw Error(
+        `Config is invalid. Errors:${JSON.stringify(errors, null, 2)}`,
+      )
     }
   }
 

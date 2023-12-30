@@ -2,7 +2,7 @@
  * A simple logger with timestamp and colors.
  * Set the DEBUG env variable to get "debug" logs.
  */
-export enum Colors {
+export enum Color {
   Default,
   Red,
   Green,
@@ -14,23 +14,23 @@ export enum Colors {
 
 export class Logger {
   static #useDebug = false
-  static #colorMap: Map<Colors, string | undefined> = new Map([
-    [Colors.Red, '\x1b[31m%s\x1b[0m'],
-    [Colors.Green, '\x1b[32m%s\x1b[0m'],
-    [Colors.Yellow, '\x1b[33m%s\x1b[0m'],
-    [Colors.DarkBlue, '\x1b[34m%s\x1b[0m'],
-    [Colors.Purple, '\x1b[35m%s\x1b[0m'],
-    [Colors.LightBlue, '\x1b[36m%s\x1b[0m'],
+  static #colorMap: Map<Color, string | undefined> = new Map([
+    [Color.Red, '\x1b[31m%s\x1b[0m'],
+    [Color.Green, '\x1b[32m%s\x1b[0m'],
+    [Color.Yellow, '\x1b[33m%s\x1b[0m'],
+    [Color.DarkBlue, '\x1b[34m%s\x1b[0m'],
+    [Color.Purple, '\x1b[35m%s\x1b[0m'],
+    [Color.LightBlue, '\x1b[36m%s\x1b[0m'],
   ])
 
   static #log = (...objects: any[]) => {
-    let color = Colors.Default
-    if (objects.length > 0 && Object.values(Colors).includes(objects[0])) {
+    let color = Color.Default
+    if (objects.length > 0 && Object.values(Color).includes(objects[0])) {
       color = objects[0]
       objects.shift()
     }
     objects.unshift(new Date().toISOString())
-    if (Colors.Default === color) {
+    if (Color.Default === color) {
       console.log(...objects)
     } else {
       console.log(
@@ -46,7 +46,7 @@ export class Logger {
 
   static error = (...objects: any[]) => {
     objects.unshift('[Error]')
-    this.#log(Colors.Red, ...objects)
+    this.#log(Color.Red, ...objects)
   }
 
   static debug = (...objects: any[]) => {

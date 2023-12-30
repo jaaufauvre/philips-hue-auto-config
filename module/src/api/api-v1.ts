@@ -5,6 +5,7 @@ import { Logger } from '../log/logger'
 
 export class ApiV1 {
   #bridgeIp
+  #appKey
 
   #httpsClient = new HttpClient(
     new https.Agent({
@@ -13,8 +14,9 @@ export class ApiV1 {
     }),
   )
 
-  constructor(bridgeIp: string) {
+  constructor(bridgeIp: string, appKey?: string) {
     this.#bridgeIp = bridgeIp
+    this.#appKey = appKey
   }
 
   #getBaseUrl = () => 'https://' + this.#bridgeIp

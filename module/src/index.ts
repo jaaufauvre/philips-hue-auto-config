@@ -1,10 +1,6 @@
 ﻿import { Config } from './config/config'
-import { Logger, Colors } from './log/logger'
-import crypto from 'crypto'
-import type from 'typia'
-import { Discovery } from './api/discovery'
-import { ApiV1, CreateUserSuccess } from './api/api-v1'
-import { ApiV2 } from './api/api-v2'
+import { Logger, Color } from './log/logger'
+import { Bridge } from './bridge/bridge'
 
 main().catch((e) => {
   if (e instanceof Error) {
@@ -14,7 +10,7 @@ main().catch((e) => {
 
 async function main() {
   Logger.setDebug(false)
-  Logger.info(Colors.Yellow, 'Starting ...')
+  Logger.info(Color.Yellow, 'Starting ...')
 
   // Inputs
   const providedBridgeIp = process.env.npm_config_bridge as string
@@ -29,7 +25,7 @@ async function main() {
   // Discovery?
   let bridgeIpAddresses
   if (!providedBridgeIp) {
-    bridgeIpAddresses = await discoverBridges()
+    bridgeIpAddresses = await Bridge.discoverBridges()
     Logger.info(
       `Found ${bridgeIpAddresses.length} bridge(s): ${bridgeIpAddresses}`,
     )
@@ -38,59 +34,23 @@ async function main() {
     bridgeIpAddresses = [providedBridgeIp]
   }
 
-  // User creation?
-  let bridgeIp, appKey
+  // User/app key creation?
+  const bridge = new Bridge()
   if (providedAppKey && providedBridgeIp) {
-    bridgeIp = providedBridgeIp
-    appKey = providedAppKey
-    Logger.info(`Provided app key for bridge ${bridgeIp}: '${appKey}'`)
+    Logger.info(
+      `Provided app key for bridge ${providedBridgeIp}: '${providedAppKey}'`,
+    )
+    bridge.init(providedBridgeIp, providedAppKey)
   } else {
-    const result = await accessBridge(bridgeIpAddresses)
-    bridgeIp = result[0]
-    appKey = result[1]
-    Logger.info(`Created app key for bridge ${bridgeIp}: '${appKey}'`)
+    const result = await Bridge.findAndAccessBridge(bridgeIpAddresses)
+    Logger.info(`Created app key for bridge ${result[0]}: '${result[1]}'`)
+    bridge.init(result[0], result[1])
   }
 
   // Rooms
-  const apiv2 = new ApiV2(bridgeIp, appKey)
   for (const room of config.rooms) {
-    const created = await apiv2.createRoom({
-      type: 'room',
-      metadata: {
-        name: room.name,
-        archetype: room.type ?? 'other',
-      },
-      children: [],
-    })
-    Logger.info(
-      `Room '${room.name}' was created with ID: '${created.data[0].rid}'`,
-    )
+    await bridge.createRoom(room.name, room.type)
   }
-  Logger.info(Colors.Yellow, 'Done!')
-}
 
-async function discoverBridges() {
-  const bridges = await new Discovery().discover()
-  return bridges.map((bridge) => bridge.internalipaddress)
-}
-
-async function accessBridge(
-  bridgeIpAddresses: string[],
-): Promise<[string, string]> {
-  for (const bridgeIpAddress of bridgeIpAddresses) {
-    Logger.info(`Trying to access bridge ${bridgeIpAddress} ...`)
-    const params = {
-      devicetype: `philips-hue-auto-config#${crypto
-        .randomBytes(6)
-        .toString('hex')}`, // "a83eb079e766"
-      generateclientkey: true,
-    }
-    const response = await new ApiV1(bridgeIpAddress).createUser(params)
-    if (type.is<CreateUserSuccess>(response)) {
-      return [bridgeIpAddress, response[0].success.username]
-    } else {
-      Logger.info(`Could not access bridge ${bridgeIpAddress}!`)
-    }
-  }
-  throw Error('Make sure your pressed the button in the centre of the bridge!')
+  Logger.info(Color.Yellow, 'Done!')
 }

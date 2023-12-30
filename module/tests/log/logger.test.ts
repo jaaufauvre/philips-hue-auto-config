@@ -1,4 +1,4 @@
-import { Logger, Colors } from '../../src/log/logger'
+import { Logger, Color } from '../../src/log/logger'
 
 describe('Logger', () => {
   test('should print info message', () => {
@@ -6,12 +6,12 @@ describe('Logger', () => {
   })
 
   test('should print info message with color', () => {
-    Logger.info(Colors.Yellow, 'This is a info message in yellow')
-    Logger.info(Colors.DarkBlue, 'This is a info message in dark blue')
-    Logger.info(Colors.Green, 'This is a info message in green')
-    Logger.info(Colors.LightBlue, 'This is a info message in light blue')
-    Logger.info(Colors.Purple, 'This is a info message in purple')
-    Logger.info(Colors.Red, 'This is a info message in red')
+    Logger.info(Color.Yellow, 'This is a info message in yellow')
+    Logger.info(Color.DarkBlue, 'This is a info message in dark blue')
+    Logger.info(Color.Green, 'This is a info message in green')
+    Logger.info(Color.LightBlue, 'This is a info message in light blue')
+    Logger.info(Color.Purple, 'This is a info message in purple')
+    Logger.info(Color.Red, 'This is a info message in red')
   })
 
   test('should print error message', () => {

@@ -47,10 +47,27 @@ async function main() {
     bridge.init(result[0], result[1])
   }
 
-  // Rooms
+  // Rooms & zones
+  const idMap = new Map<any, string>()
   for (const room of config.rooms) {
-    await bridge.createRoom(room.name, room.type)
+    const id = await bridge.addRoom(room.name, room.type)
+    idMap.set(room, id)
   }
+  for (const zone of config.zones ?? []) {
+    const id = await bridge.addZone(zone.name, zone.type)
+    idMap.set(zone, id)
+  }
+  Logger.debug(idMap)
 
-  Logger.info(Color.Yellow, 'Done!')
+  // Lights
+  const lightIds = config.lights.map((light) => {
+    return {
+      mac: light.mac,
+      serial: light.serial,
+    }
+  })
+  const lightMap = await bridge.addLights(lightIds)
+  Logger.debug(lightMap)
+
+  Logger.info(Color.Yellow, 'Done! 🙌')
 }

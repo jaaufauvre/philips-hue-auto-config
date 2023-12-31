@@ -24,21 +24,41 @@ export class ApiV2 {
 
   async createRoom(room: NewRoom): Promise<CreatedRooms> {
     Logger.info(
-      `Creating room '${room.metadata.name}' on bridge ${this.#bridgeIp} ...`,
+      `[v2] Creating room '${room.metadata.name}' on bridge ${this.#bridgeIp} ...`,
     )
-    const uri = this.#getBaseUrl() + '/room'
+    const uri = `${this.#getBaseUrl()}/room`
     return await this.#httpsClient.post<CreatedRooms>(uri, room)
   }
 
+  async createZone(zone: NewZone): Promise<CreatedZones> {
+    Logger.info(
+      `[v2] Creating zone '${zone.metadata.name}' on bridge ${this.#bridgeIp} ...`,
+    )
+    const uri = `${this.#getBaseUrl()}/zone`
+    return await this.#httpsClient.post<CreatedZones>(uri, zone)
+  }
+
   async getResources(): Promise<Resources> {
-    Logger.info(`Retrieving resources on bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[v2] Retrieving resources from bridge ${this.#bridgeIp} ...`)
     return await this.#httpsClient.get<Resources>(this.#getBaseUrl())
   }
 
   async getRooms(): Promise<Rooms> {
-    Logger.info(`Retrieving rooms on bridge ${this.#bridgeIp} ...`)
-    const uri = this.#getBaseUrl() + '/room'
+    Logger.info(`[v2] Retrieving rooms from bridge ${this.#bridgeIp} ...`)
+    const uri = `${this.#getBaseUrl()}/room`
     return await this.#httpsClient.get<Rooms>(uri)
+  }
+
+  async getZones(): Promise<Zones> {
+    Logger.info(`[v2] Retrieving zones from bridge ${this.#bridgeIp} ...`)
+    const uri = `${this.#getBaseUrl()}/zone`
+    return await this.#httpsClient.get<Zones>(uri)
+  }
+
+  async getLights() {
+    Logger.info(`[v2] Retrieving lights from bridge ${this.#bridgeIp} ...`)
+    const uri = `${this.#getBaseUrl()}/light`
+    return await this.#httpsClient.get<Lights>(uri)
   }
 }
 
@@ -48,26 +68,21 @@ export class ApiV2 {
 export interface NewRoom {
   metadata: RoomMetadata
   type: 'room'
-  children: RoomChild[]
+  children: any[]
 }
 
 export interface Rooms {
   errors: any[]
-  data: CreatedRoom[]
+  data: Room[]
 }
 
-export interface CreatedRoom {
+export interface Room {
   id: string
   id_v1: string
-  children: RoomChild[]
-  services: RoomChild[]
+  children: any[]
+  services: any[]
   metadata: RoomMetadata
   type: 'room'
-}
-
-export interface RoomChild {
-  rid: string
-  rtype: string
 }
 
 export interface RoomMetadata {
@@ -83,6 +98,58 @@ export interface CreatedRooms {
 export interface CreatedRoom {
   rid: string
   rtype: string
+}
+
+//
+// Zones
+//
+export interface NewZone {
+  metadata: ZoneMetadata
+  type: 'zone'
+  children: any[]
+}
+
+export interface Zones {
+  errors: any[]
+  data: Zone[]
+}
+
+export interface Zone {
+  id: string
+  id_v1: string
+  children: any[]
+  services: any[]
+  metadata: ZoneMetadata
+  type: 'zone'
+}
+
+export interface ZoneMetadata {
+  name: string
+  archetype: string
+}
+
+export interface CreatedZones {
+  data: CreatedZone[]
+  errors: any[]
+}
+
+export interface CreatedZone {
+  rid: string
+  rtype: string
+}
+
+//
+// Lights
+//
+export interface Lights {
+  errors: any[]
+  data: Light[]
+}
+
+export interface Light {
+  id: string
+  id_v1: string
+  type: 'light'
 }
 
 //

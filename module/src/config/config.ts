@@ -12,6 +12,7 @@ import {
   Room,
   Zone,
 } from './config-gen'
+import _ from 'lodash'
 
 interface Decryptable {
   mac: string
@@ -135,7 +136,7 @@ class Config implements ConfigGen {
   }
 
   print() {
-    const copy = Object.assign({}, this)
+    const copy = _.cloneDeep(this)
     copy._internalConfig = JSON.parse('{}')
     Logger.debug(copy)
     Logger.info(`${copy.lights.length} light(s)`)

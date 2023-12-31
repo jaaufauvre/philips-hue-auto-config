@@ -38,7 +38,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"devicetype\":\"Postman#Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"raw": "{\r\n    \"devicetype\":\"philips-hue-auto-config#20231227@2:36pm\", \r\n    \"generateclientkey\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -60,6 +60,19 @@
 				},
 				{
 					"name": "Read devices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -81,6 +94,19 @@
 				},
 				{
 					"name": "Read bridge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -102,6 +128,144 @@
 				},
 				{
 					"name": "Read config (v1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\":\"Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/config",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"config"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read everything (v1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\":\"Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user from whitelist (v1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\":\"Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/config/whitelist/{{username}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"config",
+								"whitelist",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get resources",
+			"item": [
+				{
+					"name": "Get all capabilities (v1)",
 					"event": [
 						{
 							"listen": "test",
@@ -139,7 +303,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/config",
+							"raw": "https://{{bridge}}/api/{{username}}/capabilities",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -147,17 +311,12 @@
 							"path": [
 								"api",
 								"{{username}}",
-								"config"
+								"capabilities"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Get resources",
-			"item": [
+				},
 				{
 					"name": "Get all zones",
 					"request": {
@@ -334,6 +493,27 @@
 					"name": "Get single light (v1)",
 					"request": {
 						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights",
+								"{{lightIdV1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete single light (v1)",
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",

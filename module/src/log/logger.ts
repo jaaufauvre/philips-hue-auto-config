@@ -1,3 +1,4 @@
+import * as util from 'util'
 /**
  * A simple logger with timestamp and colors.
  * Set the DEBUG env variable to get "debug" logs.
@@ -33,10 +34,7 @@ export class Logger {
     if (Color.Default === color) {
       console.log(...objects)
     } else {
-      console.log(
-        this.#colorMap.get(color)!.replace('%s', '%s '.repeat(objects.length)),
-        ...objects,
-      )
+      console.log(this.#colorMap.get(color), util.format(...objects))
     }
   }
 
@@ -44,9 +42,18 @@ export class Logger {
     this.#log(...objects)
   }
 
+  static warn = (...objects: any[]) => {
+    objects.unshift('[Warn]')
+    this.#log(...objects)
+  }
+
   static error = (...objects: any[]) => {
     objects.unshift('[Error]')
     this.#log(Color.Red, ...objects)
+  }
+
+  static table = (tabularData?: any) => {
+    console.table(tabularData)
   }
 
   static debug = (...objects: any[]) => {

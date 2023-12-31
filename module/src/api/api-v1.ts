@@ -19,20 +19,51 @@ export class ApiV1 {
     this.#appKey = appKey
   }
 
-  #getBaseUrl = () => 'https://' + this.#bridgeIp
+  #getBaseUrl = () => `https://${this.#bridgeIp}/api`
 
   async createUser(
     params: CreateUserParams,
   ): Promise<CreateUserError | CreateUserSuccess> {
-    Logger.info(`Creating user on bridge ${this.#bridgeIp} ...`)
-    const uri = this.#getBaseUrl() + '/api'
+    Logger.info(`[v1] Creating user on bridge ${this.#bridgeIp} ...`)
+    const uri = this.#getBaseUrl()
     return await this.#httpsClient.post<CreateUserError | CreateUserSuccess>(
       uri,
       params,
     )
   }
+
+  async searchLights(params: SearchLightParams) {
+    Logger.info(
+      `[v1] Searching for lights to add to bridge ${this.#bridgeIp} ...`,
+    )
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights`
+    return await this.#httpsClient.post(uri, params)
+  }
+
+  async getNewLights() {
+    Logger.info(
+      `[v1] Trying to retrieve new lights from bridge ${this.#bridgeIp} ...`,
+    )
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights/new`
+    return await this.#httpsClient.get<NewLights>(uri)
+  }
+
+  async getLights() {
+    Logger.info(`[v1] Retrieving lights from bridge ${this.#bridgeIp} ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights`
+    return await this.#httpsClient.get<LightsV1>(uri)
+  }
+
+  async deleteLight(id: string) {
+    Logger.info(`[v1] Deleting light from bridge ${this.#bridgeIp} ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
 }
 
+//
+// User
+//
 export interface CreateUserParams {
   devicetype: string
   generateclientkey: boolean
@@ -54,3 +85,22 @@ export interface UserSuccess {
   }
 }
 export type CreateUserSuccess = UserSuccess[]
+
+//
+// Lights
+//
+export interface SearchLightParams {
+  deviceid: string[]
+}
+
+export interface NewLights {
+  lastscan: string
+}
+
+export type LightId = string
+export interface LightV1 {
+  uniqueid: string
+}
+export interface LightsV1 {
+  [key: string]: LightV1
+}

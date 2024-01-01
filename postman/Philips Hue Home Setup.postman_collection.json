@@ -1075,6 +1075,78 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Rooms",
+			"item": [
+				{
+					"name": "Add light to room",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"children\": [\r\n    {\r\n      \"rid\": \"faa096ca-2a06-42ea-8ca3-6a9f93d62b15\", // Light owner ID\r\n      \"rtype\": \"device\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/room/{{roomId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"room",
+								"{{roomId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Zones",
+			"item": [
+				{
+					"name": "Add light to zone",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"children\": [\r\n    {\r\n      \"rid\": \"130d1dbb-46f8-4beb-98b9-e248e2468ab6\", // Light ID\r\n      \"rtype\": \"light\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/zone/{{zoneId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"zone",
+								"{{zoneId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {

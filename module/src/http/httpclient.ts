@@ -13,6 +13,10 @@ class HttpClient {
     return await this.#handleError<Promise<T>>(() => this.#get<T>(uri))
   }
 
+  async put<T>(uri: string, body: any) {
+    return await this.#handleError<Promise<T>>(() => this.#put<T>(uri, body))
+  }
+
   async delete<T>(uri: string) {
     return await this.#handleError<Promise<T>>(() => this.#delete<T>(uri))
   }
@@ -24,6 +28,18 @@ class HttpClient {
   async #get<T>(uri: string): Promise<T> {
     Logger.debug(`Sending GET request to ${uri} ...`)
     const response = await axios.get<T>(uri, {
+      httpsAgent: this.#httpsAgent,
+      headers: this.#headers,
+    })
+    const data = response.data
+    Logger.debug('Response:', data)
+    return data
+  }
+
+  async #put<T>(uri: string, body: any): Promise<T> {
+    Logger.debug(`Sending PUT request to ${uri} ...`)
+    Logger.debug('Request:', body)
+    const response = await axios.put<T>(uri, body, {
       httpsAgent: this.#httpsAgent,
       headers: this.#headers,
     })

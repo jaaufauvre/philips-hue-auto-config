@@ -19,12 +19,26 @@ interface Decryptable {
   serial?: string
 }
 
+interface ExtendedLight extends Light {
+  idV1?: string
+  idV2?: string
+  ownerId?: string
+}
+
+interface ExtendedRoom extends Room {
+  idV2?: string
+}
+
+interface ExtendedZone extends Zone {
+  idV2?: string
+}
+
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
-  lights: Light[]
+  lights: ExtendedLight[]
   name?: string
-  rooms: Room[]
-  zones?: Zone[]
+  rooms: ExtendedRoom[]
+  zones?: ExtendedZone[]
   motionSensors?: MotionSensor[]
   tapDialSwitches?: TapDialSwitch[]
   dimmerSwitches?: DimmerSwitch[]
@@ -54,6 +68,32 @@ class Config implements ConfigGen {
     this.dimmerSwitches = this._internalConfig['dimmer-switches']
     this.wallSwitches = this._internalConfig['wall-switches']
     this.#decrypt(xorKey)
+  }
+
+  getResourceById(id: string) {
+    return _.find(
+      [
+        _.find(this.lights, (light) =>
+          _.includes([light.id, light.serial, light.mac], id),
+        ),
+        _.find(this.rooms, (room) => room.id === id),
+        _.find(this.zones, (zone) => zone.id === id),
+      ],
+      (resource) => resource !== undefined,
+    )
+  }
+
+  print() {
+    const copy = _.cloneDeep(this)
+    copy._internalConfig = JSON.parse('{}')
+    Logger.debug(copy)
+    Logger.info(`${copy.lights.length} light(s)`)
+    Logger.info(`${copy.rooms.length} room(s)`)
+    Logger.info(`${(copy.zones ?? []).length} zones(s)`)
+    Logger.info(`${(copy.motionSensors ?? []).length} motion sensor(s)`)
+    Logger.info(`${(copy.tapDialSwitches ?? []).length} tap dial switch(es)`)
+    Logger.info(`${(copy.dimmerSwitches ?? []).length} dimmer switch(es)`)
+    Logger.info(`${(copy.wallSwitches ?? []).length} wall switch(es)`)
   }
 
   #validate() {
@@ -133,19 +173,6 @@ class Config implements ConfigGen {
 
   #decryptChar(keyChar: string, char: string) {
     return (parseInt(char, 16) ^ parseInt(keyChar, 16)).toString(16)
-  }
-
-  print() {
-    const copy = _.cloneDeep(this)
-    copy._internalConfig = JSON.parse('{}')
-    Logger.debug(copy)
-    Logger.info(`${copy.lights.length} light(s)`)
-    Logger.info(`${copy.rooms.length} room(s)`)
-    Logger.info(`${(copy.zones ?? []).length} zones(s)`)
-    Logger.info(`${(copy.motionSensors ?? []).length} motion sensor(s)`)
-    Logger.info(`${(copy.tapDialSwitches ?? []).length} tap dial switch(es)`)
-    Logger.info(`${(copy.dimmerSwitches ?? []).length} dimmer switch(es)`)
-    Logger.info(`${(copy.wallSwitches ?? []).length} wall switch(es)`)
   }
 }
 

@@ -4,7 +4,7 @@ import type from 'typia'
 import { Discovery } from '../api/discovery'
 import _ from 'lodash'
 import { ApiV1, CreateUserSuccess } from '../api/api-v1'
-import { ApiV2, ResourceType } from '../api/api-v2'
+import { ApiV2 } from '../api/api-v2'
 
 export class Bridge {
   #apiv1?: ApiV1
@@ -57,9 +57,7 @@ export class Bridge {
       },
       children: [],
     })
-    const id = created.data[0].rid
-    Logger.info(Color.Green, `Room '${name}' was created with ID: '${id}'`)
-    return id
+    return created.data[0].rid
   }
 
   async addZone(name: string, archetype?: string) {
@@ -75,23 +73,23 @@ export class Bridge {
       },
       children: [],
     })
-    const id = created.data[0].rid
-    Logger.info(Color.Green, `Zone '${name}' was created with ID: '${id}'`)
-    return id
+    return created.data[0].rid
   }
 
   async addLights(
     lightIdList: LightIdentifiers[],
   ): Promise<LightIdentifiers[]> {
-    Logger.info('Adding lights:')
-    Logger.table(lightIdList)
+    Logger.info('Adding lights ...')
 
-    while (_.some(await this.#findMissingLights(lightIdList))) {
+    while (await this.#hasMissingLights(lightIdList)) {
       // Search without serial
       await this.#apiv1!.searchLights({ deviceid: [] })
-      while ((await this.#apiv1!.getNewLights()).lastscan === 'active') {
-        Logger.info('Scan is in progress ...')
-        await this.#wait(15000)
+      while (
+        (await this.#isScanning()) &&
+        (await this.#hasMissingLights(lightIdList))
+      ) {
+        Logger.info(Color.DarkBlue, 'Scan is in progress ...')
+        await this.#wait(10000)
       }
       const missingLightIdList = await this.#findMissingLights(lightIdList)
       if (_.isEmpty(missingLightIdList)) {
@@ -108,9 +106,12 @@ export class Bridge {
         const serial = missingLightId.serial
         Logger.info(`Searching for serial ${serial}`)
         await this.#apiv1!.searchLights({ deviceid: [serial] })
-        while ((await this.#apiv1!.getNewLights()).lastscan === 'active') {
-          Logger.info('Scan with serial is in progress ...')
-          await this.#wait(15000)
+        while (
+          (await this.#isScanning()) &&
+          !(await this.#hasLight(missingLightId.mac))
+        ) {
+          Logger.info(Color.DarkBlue, 'Scan with serial is in progress ...')
+          await this.#wait(10000)
         }
       }
     }
@@ -120,7 +121,7 @@ export class Bridge {
     const lightsV2 = await this.#apiv2!.getLights()
     for (const id of Object.keys(lightsV1)) {
       if (!_.includes(macAddresses, lightsV1[id].uniqueid)) {
-        // A light was found and was not listed in the config, we delete it
+        // A light was found and was not listed in the config, we delete it from the bridge
         Logger.info(`Deleting light '${id}' (not declared in the config) ...`)
         await this.#apiv1!.deleteLight(id)
       }
@@ -132,25 +133,53 @@ export class Bridge {
         Object.keys(lightsV1),
         (key) => lightsV1[key].uniqueid === lightId.mac,
       )
-      lightId.id_v2 = _.find(
+      const light = _.find(
         lightsV2.data,
         (light) => light.id_v1 === `/lights/${lightId.id_v1}`,
-      )?.id
-      Logger.info(
-        Color.Green,
-        `Light '${lightId.mac}' was added with IDs: '${lightId.id_v1}' (v1) and '${lightId.id_v2}' (v2)`,
       )
+      lightId.id_v2 = light!.id
+      lightId.ownerId = light!.owner.rid
     })
     return finalLightIdList
   }
 
+  async addLightToRoom(lightOwnerId: string, roomId: string) {
+    Logger.info(`Adding light owned by '${lightOwnerId}' to room '${roomId}'`)
+    const children = (await this.#apiv2!.getRoom(roomId)).data[0].children
+    children.push({
+      rid: lightOwnerId,
+      rtype: 'device',
+    })
+    const room = {
+      children: children,
+    }
+    await this.#apiv2!.updateRoom(roomId, room)
+  }
+
+  async addLightToZone(lightId: string, zoneId: string) {
+    Logger.info(`Adding light '${lightId}' to zone '${zoneId}'`)
+    const children = (await this.#apiv2!.getZone(zoneId)).data[0].children
+    children.push({
+      rid: lightId,
+      rtype: 'light',
+    })
+    const zone = {
+      children: children,
+    }
+    await this.#apiv2!.updateZone(zoneId, zone)
+  }
+
+  async #hasMissingLights(lightIdList: LightIdentifiers[]) {
+    return _.some(await this.#findMissingLights(lightIdList))
+  }
+
   async #findMissingLights(
-    lightIds: LightIdentifiers[],
+    lightIdList: LightIdentifiers[],
   ): Promise<LightIdentifiers[]> {
     const addedMacAddresses = Object.values(await this.#apiv1!.getLights()).map(
       (light) => light.uniqueid,
     )
-    const missingLightIds = _.cloneDeep(lightIds)
+    const missingLightIds = _.cloneDeep(lightIdList)
     _.remove(missingLightIds, (lightId) =>
       _.includes(addedMacAddresses, lightId.mac),
     )
@@ -159,20 +188,23 @@ export class Bridge {
     return missingLightIds
   }
 
+  async #isScanning(): Promise<boolean> {
+    return (await this.#apiv1!.getNewLights()).lastscan === 'active'
+  }
+
   async #hasRoom(name: string): Promise<boolean> {
     const rooms = await this.#apiv2!.getRooms()
-    return _.some(
-      rooms.data,
-      (r) => r.type === ResourceType.Room && r.metadata?.name === name,
-    )
+    return _.some(rooms.data, (room) => room.metadata?.name === name)
   }
 
   async #hasZone(name: string): Promise<boolean> {
     const zones = await this.#apiv2!.getZones()
-    return _.some(
-      zones.data,
-      (r) => r.type === ResourceType.Zone && r.metadata?.name === name,
-    )
+    return _.some(zones.data, (room) => room.metadata?.name === name)
+  }
+
+  async #hasLight(mac: string): Promise<boolean> {
+    const lights = await this.#apiv1!.getLights()
+    return _.some(Object.values(lights), (light) => light.uniqueid === mac)
   }
 
   #wait(ms: number) {
@@ -186,4 +218,5 @@ export type LightIdentifiers = {
   serial?: string
   id_v1?: string
   id_v2?: string
+  ownerId?: string
 }

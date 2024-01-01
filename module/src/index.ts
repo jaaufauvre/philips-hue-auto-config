@@ -1,6 +1,7 @@
 ﻿import { Config } from './config/config'
 import { Logger, Color } from './log/logger'
 import { Bridge } from './bridge/bridge'
+import _ from 'lodash'
 
 main().catch((e) => {
   if (e instanceof Error) {
@@ -48,26 +49,56 @@ async function main() {
   }
 
   // Rooms & zones
-  const idMap = new Map<any, string>()
   for (const room of config.rooms) {
     const id = await bridge.addRoom(room.name, room.type)
-    idMap.set(room, id)
+    room.idV2 = id
+    Logger.info(
+      Color.Green,
+      `Room '${room.name}' was created with ID: '${room.idV2}'`,
+    )
   }
   for (const zone of config.zones ?? []) {
     const id = await bridge.addZone(zone.name, zone.type)
-    idMap.set(zone, id)
+    zone.idV2 = id
+    Logger.info(
+      Color.Green,
+      `Zone '${zone.name}' was created with ID: '${zone.idV2}'`,
+    )
   }
-  Logger.debug(idMap)
 
-  // Lights
-  const lightIds = config.lights.map((light) => {
-    return {
-      mac: light.mac,
-      serial: light.serial,
-    }
+  // Add lights
+  const lightIds = config.lights.map((light) => ({
+    mac: light.mac,
+    serial: light.serial,
+  }))
+  _.forEach(await bridge.addLights(lightIds), (lightId) => {
+    const light = config.getResourceById(lightId.mac)!
+    light.idV1 = lightId.id_v1
+    light.idV2 = lightId.id_v2
+    light.ownerId = lightId.ownerId
+    Logger.info(
+      Color.Green,
+      `Light '${light.name}' was added with IDs: '${light.idV1}' (v1) and '${light.idV2}' (v2)`,
+    )
   })
-  const lightMap = await bridge.addLights(lightIds)
-  Logger.debug(lightMap)
+
+  // Add lights to rooms & zones
+  for (const light of config.lights) {
+    const room = config.getResourceById(light.room)!
+    await bridge.addLightToRoom(light.ownerId!, room!.idV2!)
+    Logger.info(
+      Color.Green,
+      `Light '${light.name}' was added to room '${room.name}'`,
+    )
+    for (const zoneId of light.zones ?? []) {
+      const zone = config.getResourceById(zoneId)!
+      await bridge.addLightToZone(light.idV2!, zone.idV2!)
+      Logger.info(
+        Color.Green,
+        `Light '${light.name}' was added to zone '${zone.name}'`,
+      )
+    }
+  }
 
   Logger.info(Color.Yellow, 'Done! 🙌')
 }

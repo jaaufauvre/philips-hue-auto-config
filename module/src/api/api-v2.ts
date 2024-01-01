@@ -23,40 +23,55 @@ export class ApiV2 {
   #getBaseUrl = () => `https://${this.#bridgeIp}/clip/v2/resource`
 
   async createRoom(room: NewRoom): Promise<CreatedRooms> {
-    Logger.info(
-      `[v2] Creating room '${room.metadata.name}' on bridge ${this.#bridgeIp} ...`,
-    )
+    Logger.info(`[API v2] Creating room '${room.metadata.name}' ...`)
     const uri = `${this.#getBaseUrl()}/room`
     return await this.#httpsClient.post<CreatedRooms>(uri, room)
   }
 
   async createZone(zone: NewZone): Promise<CreatedZones> {
-    Logger.info(
-      `[v2] Creating zone '${zone.metadata.name}' on bridge ${this.#bridgeIp} ...`,
-    )
+    Logger.info(`[API v2] Creating zone '${zone.metadata.name}' ...`)
     const uri = `${this.#getBaseUrl()}/zone`
     return await this.#httpsClient.post<CreatedZones>(uri, zone)
   }
 
-  async getResources(): Promise<Resources> {
-    Logger.info(`[v2] Retrieving resources from bridge ${this.#bridgeIp} ...`)
-    return await this.#httpsClient.get<Resources>(this.#getBaseUrl())
-  }
-
   async getRooms(): Promise<Rooms> {
-    Logger.info(`[v2] Retrieving rooms from bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[API v2] Retrieving rooms ...`)
     const uri = `${this.#getBaseUrl()}/room`
     return await this.#httpsClient.get<Rooms>(uri)
   }
 
+  async getRoom(id: string): Promise<Rooms> {
+    Logger.info(`[API v2] Retrieving room '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/room/${id}`
+    return await this.#httpsClient.get<Rooms>(uri)
+  }
+
+  async updateRoom(id: string, room: UpdatedRoom) {
+    Logger.info(`[API v2] Updating room '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/room/${id}`
+    return await this.#httpsClient.put(uri, room)
+  }
+
   async getZones(): Promise<Zones> {
-    Logger.info(`[v2] Retrieving zones from bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[API v2] Retrieving zones ...`)
     const uri = `${this.#getBaseUrl()}/zone`
     return await this.#httpsClient.get<Zones>(uri)
   }
 
+  async getZone(id: string): Promise<Zones> {
+    Logger.info(`[API v2] Retrieving zone '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/zone/${id}`
+    return await this.#httpsClient.get<Zones>(uri)
+  }
+
+  async updateZone(id: string, zone: UpdatedZone) {
+    Logger.info(`[API v2] Updating zone '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/zone/${id}`
+    return await this.#httpsClient.put(uri, zone)
+  }
+
   async getLights() {
-    Logger.info(`[v2] Retrieving lights from bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[API v2] Retrieving lights ...`)
     const uri = `${this.#getBaseUrl()}/light`
     return await this.#httpsClient.get<Lights>(uri)
   }
@@ -79,10 +94,14 @@ export interface Rooms {
 export interface Room {
   id: string
   id_v1: string
-  children: any[]
+  children: Resource[]
   services: any[]
   metadata: RoomMetadata
   type: 'room'
+}
+
+export interface UpdatedRoom {
+  children: Resource[]
 }
 
 export interface RoomMetadata {
@@ -91,13 +110,8 @@ export interface RoomMetadata {
 }
 
 export interface CreatedRooms {
-  data: CreatedRoom[]
+  data: Resource[]
   errors: any[]
-}
-
-export interface CreatedRoom {
-  rid: string
-  rtype: string
 }
 
 //
@@ -117,10 +131,14 @@ export interface Zones {
 export interface Zone {
   id: string
   id_v1: string
-  children: any[]
+  children: Resource[]
   services: any[]
   metadata: ZoneMetadata
   type: 'zone'
+}
+
+export interface UpdatedZone {
+  children: Resource[]
 }
 
 export interface ZoneMetadata {
@@ -129,13 +147,8 @@ export interface ZoneMetadata {
 }
 
 export interface CreatedZones {
-  data: CreatedZone[]
+  data: Resource[]
   errors: any[]
-}
-
-export interface CreatedZone {
-  rid: string
-  rtype: string
 }
 
 //
@@ -149,53 +162,14 @@ export interface Lights {
 export interface Light {
   id: string
   id_v1: string
+  owner: Resource
   type: 'light'
 }
 
 //
 // Resources
 //
-export interface Resources {
-  errors: any[]
-  data: Resource[]
-}
-
 export interface Resource {
-  id: string
-  type: ResourceType
-  metadata?: ResourceMetadata
-}
-
-export enum ResourceType {
-  BehaviorInstance = 'behavior_instance',
-  BehaviorScript = 'behavior_script',
-  Bridge = 'bridge',
-  BridgeHome = 'bridge_home',
-  Button = 'button',
-  Device = 'device',
-  DevicePower = 'device_power',
-  DeviceSoftwareUpdate = 'device_software_update',
-  Entertainment = 'entertainment',
-  EntertainmentConfiguration = 'entertainment_configuration',
-  Geolocation = 'geolocation',
-  GroupedLight = 'grouped_light',
-  Homekit = 'homekit',
-  Light = 'light',
-  LightLevel = 'light_level',
-  Matter = 'matter',
-  Motion = 'motion',
-  PublicImage = 'public_image',
-  RelativeRotary = 'relative_rotary',
-  Room = 'room',
-  Scene = 'scene',
-  Taurus7455 = 'taurus_7455',
-  Temperature = 'temperature',
-  ZigbeeConnectivity = 'zigbee_connectivity',
-  ZigbeeDeviceDiscovery = 'zigbee_device_discovery',
-  Zone = 'zone',
-}
-
-export interface ResourceMetadata {
-  name?: string
-  archetype?: string
+  rid: string
+  rtype: string
 }

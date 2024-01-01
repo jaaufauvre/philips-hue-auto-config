@@ -24,7 +24,7 @@ export class ApiV1 {
   async createUser(
     params: CreateUserParams,
   ): Promise<CreateUserError | CreateUserSuccess> {
-    Logger.info(`[v1] Creating user on bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[API v1] Creating user ...`)
     const uri = this.#getBaseUrl()
     return await this.#httpsClient.post<CreateUserError | CreateUserSuccess>(
       uri,
@@ -33,29 +33,25 @@ export class ApiV1 {
   }
 
   async searchLights(params: SearchLightParams) {
-    Logger.info(
-      `[v1] Searching for lights to add to bridge ${this.#bridgeIp} ...`,
-    )
+    Logger.info(`[API v1] Searching for lights to add to bridge ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights`
     return await this.#httpsClient.post(uri, params)
   }
 
   async getNewLights() {
-    Logger.info(
-      `[v1] Trying to retrieve new lights from bridge ${this.#bridgeIp} ...`,
-    )
+    Logger.info(`[API v1] Trying to retrieve new lights ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights/new`
     return await this.#httpsClient.get<NewLights>(uri)
   }
 
   async getLights() {
-    Logger.info(`[v1] Retrieving lights from bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[API v1] Retrieving lights ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights`
     return await this.#httpsClient.get<LightsV1>(uri)
   }
 
   async deleteLight(id: string) {
-    Logger.info(`[v1] Deleting light from bridge ${this.#bridgeIp} ...`)
+    Logger.info(`[API v1] Deleting light '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights/${id}`
     return await this.#httpsClient.delete(uri)
   }

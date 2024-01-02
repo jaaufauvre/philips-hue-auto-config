@@ -262,7 +262,7 @@
 			]
 		},
 		{
-			"name": "Get resources",
+			"name": "Resources",
 			"item": [
 				{
 					"name": "Get all capabilities (v1)",
@@ -707,6 +707,32 @@
 			]
 		},
 		{
+			"name": "Grouped Lights",
+			"item": [
+				{
+					"name": "Get all grouped light",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/grouped_light",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"grouped_light"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Motion sensors",
 			"item": [
 				{
@@ -862,6 +888,37 @@
 								"{{username}}",
 								"scenes",
 								"{{sceneIdV1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate scene",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"recall\":{\"action\": \"active\"}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/scene/{{sceneId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"scene",
+								"{{sceneId}}"
 							]
 						}
 					},

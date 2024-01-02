@@ -1,5 +1,5 @@
 {
-  "name": "Bridge 1 config",
+  "name": "Bridge #1 config",
   "defaults": {
     "powerup": {
       "preset": "powerfail",
@@ -50,12 +50,12 @@
     },
     {
       "id": "downstairs",
-      "name": "Downstairs",
+      "name": "Downstairs #1",
       "type": "downstairs"
     },
     {
       "id": "upstairs",
-      "name": "Upstairs",
+      "name": "Upstairs #1",
       "type": "upstairs"
     },
     {

@@ -48,7 +48,10 @@ async function main() {
     bridge.init(result[0], result[1])
   }
 
-  // Rooms & zones
+  // Reset
+  await bridge.resetBridge()
+  Logger.info(Color.Green, `All bridge resources were deleted`)
+
   for (const room of config.rooms) {
     const id = await bridge.addRoom(room.name, room.type)
     room.idV2 = id
@@ -82,8 +85,12 @@ async function main() {
     )
   })
 
-  // Add lights to rooms & zones
   for (const light of config.lights) {
+    // Update light types & names
+    await bridge.updateLightMetadata(light.ownerId!, light.name, light.type)
+    Logger.info(Color.Green, `Metadata for light '${light.name}' were updated'`)
+
+    // Add lights to rooms & zones
     const room = config.getResourceById(light.room)!
     await bridge.addLightToRoom(light.ownerId!, room!.idV2!)
     Logger.info(

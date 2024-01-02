@@ -44,6 +44,18 @@ export class Bridge {
     )
   }
 
+  async resetBridge() {
+    for (const light of (await this.#apiv2!.getLights()).data) {
+      await this.#apiv2!.deleteDevice(light.owner.rid)
+    }
+    for (const room of (await this.#apiv2!.getRooms()).data) {
+      await this.#apiv2!.deleteRoom(room.id)
+    }
+    for (const zone of (await this.#apiv2!.getZones()).data) {
+      await this.#apiv2!.deleteZone(zone.id)
+    }
+  }
+
   async addRoom(name: string, archetype?: string) {
     if (await this.#hasRoom(name)) {
       // Rooms can have the same name
@@ -167,6 +179,17 @@ export class Bridge {
       children: children,
     }
     await this.#apiv2!.updateZone(zoneId, zone)
+  }
+
+  async updateLightMetadata(lightOwnerId: string, name: string, type?: string) {
+    Logger.info(`Updating metadata for device '${lightOwnerId}'`)
+    const device = {
+      metadata: {
+        name: name,
+        archetype: type ?? 'unknown_archetype',
+      },
+    }
+    await this.#apiv2!.updateDevice(lightOwnerId, device)
   }
 
   async #hasMissingLights(lightIdList: LightIdentifiers[]) {

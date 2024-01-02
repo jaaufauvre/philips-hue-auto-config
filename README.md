@@ -38,10 +38,11 @@ The program will:
 1. Load and check the JSON configuration
 2. Search for the Hue Bridge
 3. Create a Bridge user and authentication key
-4. Create rooms and zones
-5. Search for lights (from their serial and MAC address) and add them to rooms and zones
-6. Create a "Default" scene for each room
-7. Configure a default power-on behaviour for all lights
+4. Delete bridge resources (if any)
+5. Create rooms and zones
+6. Search for lights (from their serial and MAC address) and add them to rooms and zones
+7. Create a "Default" scene for each room
+8. Configure a default power-on behaviour for all lights
 
 ## References
 

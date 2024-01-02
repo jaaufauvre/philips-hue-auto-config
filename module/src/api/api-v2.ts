@@ -46,6 +46,12 @@ export class ApiV2 {
     return await this.#httpsClient.get<Rooms>(uri)
   }
 
+  async deleteRoom(id: string) {
+    Logger.info(`[API v2] Deleting room '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/room/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
+
   async updateRoom(id: string, room: UpdatedRoom) {
     Logger.info(`[API v2] Updating room '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/room/${id}`
@@ -64,16 +70,34 @@ export class ApiV2 {
     return await this.#httpsClient.get<Zones>(uri)
   }
 
+  async deleteZone(id: string) {
+    Logger.info(`[API v2] Deleting zone '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/zone/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
+
   async updateZone(id: string, zone: UpdatedZone) {
     Logger.info(`[API v2] Updating zone '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/zone/${id}`
     return await this.#httpsClient.put(uri, zone)
   }
 
-  async getLights() {
+  async getLights(): Promise<Lights> {
     Logger.info(`[API v2] Retrieving lights ...`)
     const uri = `${this.#getBaseUrl()}/light`
     return await this.#httpsClient.get<Lights>(uri)
+  }
+
+  async updateDevice(id: string, device: UpdatedDevice) {
+    Logger.info(`[API v2] Updating device '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/device/${id}`
+    return await this.#httpsClient.put(uri, device)
+  }
+
+  async deleteDevice(id: string) {
+    Logger.info(`[API v2] Deleting device '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/device/${id}`
+    return await this.#httpsClient.delete(uri)
   }
 }
 
@@ -164,6 +188,18 @@ export interface Light {
   id_v1: string
   owner: Resource
   type: 'light'
+}
+
+//
+// Devices
+//
+export interface UpdatedDevice {
+  metadata: DeviceMetadata
+}
+
+export interface DeviceMetadata {
+  name: string
+  archetype: string
 }
 
 //

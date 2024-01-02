@@ -28,12 +28,6 @@ export class ApiV2 {
     return await this.#httpsClient.post<CreatedRooms>(uri, room)
   }
 
-  async createZone(zone: NewZone): Promise<CreatedZones> {
-    Logger.info(`[API v2] Creating zone '${zone.metadata.name}' ...`)
-    const uri = `${this.#getBaseUrl()}/zone`
-    return await this.#httpsClient.post<CreatedZones>(uri, zone)
-  }
-
   async getRooms(): Promise<Rooms> {
     Logger.info(`[API v2] Retrieving rooms ...`)
     const uri = `${this.#getBaseUrl()}/room`
@@ -56,6 +50,12 @@ export class ApiV2 {
     Logger.info(`[API v2] Updating room '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/room/${id}`
     return await this.#httpsClient.put(uri, room)
+  }
+
+  async createZone(zone: NewZone): Promise<CreatedZones> {
+    Logger.info(`[API v2] Creating zone '${zone.metadata.name}' ...`)
+    const uri = `${this.#getBaseUrl()}/zone`
+    return await this.#httpsClient.post<CreatedZones>(uri, zone)
   }
 
   async getZones(): Promise<Zones> {
@@ -98,6 +98,20 @@ export class ApiV2 {
     Logger.info(`[API v2] Deleting device '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/device/${id}`
     return await this.#httpsClient.delete(uri)
+  }
+
+  async createScene(scene: NewScene) {
+    Logger.info(
+      `[API v2] Creating scene '${scene.metadata.name}' for group '${scene.group.rid}' ...`,
+    )
+    const uri = `${this.#getBaseUrl()}/scene`
+    return await this.#httpsClient.post<CreatedScenes>(uri, scene)
+  }
+
+  async updateScene(id: string, scene: UpdatedScene) {
+    Logger.info(`[API v2] Updating scene '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/scene/${id}`
+    return await this.#httpsClient.put(uri, scene)
   }
 }
 
@@ -208,4 +222,55 @@ export interface DeviceMetadata {
 export interface Resource {
   rid: string
   rtype: string
+}
+
+//
+// Scenes
+//
+export interface NewScene {
+  actions: SceneAction[]
+  metadata: SceneMetadata
+  group: Resource
+  type: 'scene'
+}
+
+export interface UpdatedScene {
+  recall: Recall
+}
+
+export interface CreatedScenes {
+  data: Resource[]
+  errors: any[]
+}
+
+export interface SceneAction {
+  target: Resource
+  action: Action
+}
+
+export interface Action {
+  on: On
+  dimming: Dimming
+  color_temperature: ColorTemperature
+}
+
+export interface ColorTemperature {
+  mirek: number
+}
+
+export interface Dimming {
+  brightness: number
+}
+
+export interface On {
+  on: boolean
+}
+
+export interface SceneMetadata {
+  name: string
+  image: Resource
+}
+
+export interface Recall {
+  action: string
 }

@@ -83,6 +83,14 @@ class Config implements ConfigGen {
     )
   }
 
+  getRoomLights(room: Room): ExtendedLight[] {
+    return _.filter(this.lights, (light) => room.id === light.room)
+  }
+
+  getZoneLights(zone: Zone): ExtendedLight[] {
+    return _.filter(this.lights, (light) => _.includes(light.zones, zone.id))
+  }
+
   print() {
     const copy = _.cloneDeep(this)
     copy._internalConfig = JSON.parse('{}')

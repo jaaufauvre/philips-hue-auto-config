@@ -107,5 +107,42 @@ async function main() {
     }
   }
 
+  // Create "Default" scenes in rooms and zones
+  const defaultBrightness = 100
+  const defaultMirek = 323
+  const defaultImageId = '732ff1d9-76a7-4630-aad0-c8acc499bb0b'
+  for (const room of config.rooms) {
+    const id = await bridge.addScene(
+      'Default',
+      room.idV2!,
+      'room',
+      _.map(config.getRoomLights(room), (light) => light.idV2!),
+      defaultBrightness,
+      defaultMirek,
+      defaultImageId,
+    )
+    await bridge.activateScene(id)
+    Logger.info(
+      Color.Green,
+      `Default scene was created for room '${room.name}' with ID: '${id}'`,
+    )
+  }
+  for (const zone of config.zones ?? []) {
+    const id = await bridge.addScene(
+      'Default',
+      zone.idV2!,
+      'zone',
+      _.map(config.getZoneLights(zone), (light) => light.idV2!),
+      defaultBrightness,
+      defaultMirek,
+      defaultImageId,
+    )
+    await bridge.activateScene(id)
+    Logger.info(
+      Color.Green,
+      `Default scene was created for zone '${zone.name}' with ID: '${id}'`,
+    )
+  }
+
   Logger.info(Color.Yellow, 'Done! 🙌')
 }

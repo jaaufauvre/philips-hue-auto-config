@@ -41,7 +41,7 @@ The program will:
 4. Delete bridge resources (if any)
 5. Create rooms and zones
 6. Search for lights (from their serial and MAC address) and add them to rooms and zones
-7. Create a "Default" scene for each room
+7. Create a "Default" scene in each room and zone
 8. Configure a default power-on behaviour for all lights
 
 ## References

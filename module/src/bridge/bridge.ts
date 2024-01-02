@@ -192,6 +192,59 @@ export class Bridge {
     await this.#apiv2!.updateDevice(lightOwnerId, device)
   }
 
+  async addScene(
+    name: string,
+    roomOrZoneId: string,
+    roomOrZoneType: string,
+    lightIds: string[],
+    brightness: number,
+    mirek: number,
+    imageId: string,
+  ): Promise<string> {
+    Logger.info(`Adding scene ${name} to room ${roomOrZoneId}`)
+    const actions = _.map(lightIds, (id) => {
+      return {
+        target: {
+          rid: id,
+          rtype: 'light',
+        },
+        action: {
+          on: {
+            on: true,
+          },
+          dimming: {
+            brightness: brightness,
+          },
+          color_temperature: {
+            mirek: mirek,
+          },
+        },
+      }
+    })
+
+    const created = await this.#apiv2!.createScene({
+      type: 'scene',
+      metadata: {
+        name: name,
+        image: {
+          rid: imageId,
+          rtype: 'public_image',
+        },
+      },
+      group: {
+        rid: roomOrZoneId,
+        rtype: roomOrZoneType,
+      },
+      actions: actions,
+    })
+    return created.data[0].rid
+  }
+
+  async activateScene(id: string) {
+    Logger.info(`Activating scene '${id}'`)
+    await this.#apiv2!.updateScene(id, { recall: { action: 'active' } })
+  }
+
   async #hasMissingLights(lightIdList: LightIdentifiers[]) {
     return _.some(await this.#findMissingLights(lightIdList))
   }

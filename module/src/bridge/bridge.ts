@@ -201,7 +201,7 @@ export class Bridge {
     mirek: number,
     imageId: string,
   ): Promise<string> {
-    Logger.info(`Adding scene ${name} to room ${roomOrZoneId}`)
+    Logger.info(`Adding scene '${name}' to ${roomOrZoneType} '${roomOrZoneId}'`)
     const actions = _.map(lightIds, (id) => {
       return {
         target: {

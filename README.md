@@ -42,7 +42,7 @@ The program will:
 5. Create rooms and zones
 6. Search for lights (from their serial and MAC address) and add them to rooms and zones
 7. Create a "Default" scene in each room and zone
-8. Configure a default power-on behaviour for all lights
+8. Configure a default power-on behavior for all lights
 
 ## References
 

@@ -9,6 +9,10 @@
 
 export interface ConfigGen {
     /**
+     * Default settings to apply to lights and scenes
+     */
+    defaults: Defaults;
+    /**
      * A list of dimmer switches
      */
     "dimmer-switches"?: DimmerSwitch[];
@@ -20,7 +24,10 @@ export interface ConfigGen {
      * A list of motion sensors
      */
     "motion-sensors"?: MotionSensor[];
-    name?:             string;
+    /**
+     * A name for this config
+     */
+    name?: string;
     /**
      * A list of rooms
      */
@@ -37,7 +44,65 @@ export interface ConfigGen {
      * A list of zones
      */
     zones?: Zone[];
-    [property: string]: any;
+}
+
+/**
+ * Default settings to apply to lights and scenes
+ */
+export interface Defaults {
+    /**
+     * A default brightness percentage for lights
+     */
+    brigthness: number;
+    /**
+     * A default color temperature for lights
+     */
+    "color-temperature": ColorTemperature;
+    /**
+     * What lights should do when powered on by a classic light switch or after a power outage.
+     * "previous": last-used color and brightness. "default": default color temperature and
+     * brightness. "power_loss_recovery": stays off or turn back on.
+     */
+    "powerup-behavior": PowerupBehavior;
+    /**
+     * A default scene for room and zones
+     */
+    scene: Scene;
+}
+
+/**
+ * A default color temperature for lights
+ */
+export interface ColorTemperature {
+    /**
+     * A color temperature in mirek
+     */
+    mirek: number;
+}
+
+/**
+ * What lights should do when powered on by a classic light switch or after a power outage.
+ * "previous": last-used color and brightness. "default": default color temperature and
+ * brightness. "power_loss_recovery": stays off or turn back on.
+ */
+export enum PowerupBehavior {
+    Default = "default",
+    PowerLossRecovery = "power_loss_recovery",
+    Previous = "previous",
+}
+
+/**
+ * A default scene for room and zones
+ */
+export interface Scene {
+    /**
+     * The ID of a 'public_image' resource for the scene
+     */
+    imageId: string;
+    /**
+     * A name for the scene
+     */
+    name: string;
 }
 
 export interface DimmerSwitch {
@@ -59,7 +124,6 @@ export interface DimmerSwitch {
      * switches
      */
     serial?: string;
-    [property: string]: any;
 }
 
 export interface Light {
@@ -93,7 +157,6 @@ export interface Light {
      * A list of zones the light belongs to
      */
     zones?: string[];
-    [property: string]: any;
 }
 
 /**
@@ -171,7 +234,6 @@ export interface MotionSensor {
      * sensors
      */
     serial?: string;
-    [property: string]: any;
 }
 
 /**
@@ -192,7 +254,6 @@ export interface Room {
      * https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_room_get
      */
     type?: RoomType;
-    [property: string]: any;
 }
 
 /**
@@ -264,7 +325,6 @@ export interface TapDialSwitch {
      * dial switches
      */
     serial?: string;
-    [property: string]: any;
 }
 
 export interface WallSwitch {
@@ -286,7 +346,6 @@ export interface WallSwitch {
      * switches
      */
     serial?: string;
-    [property: string]: any;
 }
 
 /**
@@ -307,7 +366,6 @@ export interface Zone {
      * https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_zone_get
      */
     type?: RoomType;
-    [property: string]: any;
 }
 
 // Converts JSON strings to/from your types
@@ -476,6 +534,7 @@ function r(name: string) {
 
 const typeMap: any = {
     "ConfigGen": o([
+        { json: "defaults", js: "defaults", typ: r("Defaults") },
         { json: "dimmer-switches", js: "dimmer-switches", typ: u(undefined, a(r("DimmerSwitch"))) },
         { json: "lights", js: "lights", typ: a(r("Light")) },
         { json: "motion-sensors", js: "motion-sensors", typ: u(undefined, a(r("MotionSensor"))) },
@@ -484,14 +543,27 @@ const typeMap: any = {
         { json: "tap-dial-switches", js: "tap-dial-switches", typ: u(undefined, a(r("TapDialSwitch"))) },
         { json: "wall-switches", js: "wall-switches", typ: u(undefined, a(r("WallSwitch"))) },
         { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
-    ], "any"),
+    ], false),
+    "Defaults": o([
+        { json: "brigthness", js: "brigthness", typ: 3.14 },
+        { json: "color-temperature", js: "color-temperature", typ: r("ColorTemperature") },
+        { json: "powerup-behavior", js: "powerup-behavior", typ: r("PowerupBehavior") },
+        { json: "scene", js: "scene", typ: r("Scene") },
+    ], false),
+    "ColorTemperature": o([
+        { json: "mirek", js: "mirek", typ: 3.14 },
+    ], false),
+    "Scene": o([
+        { json: "imageId", js: "imageId", typ: "" },
+        { json: "name", js: "name", typ: "" },
+    ], false),
     "DimmerSwitch": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
-    ], "any"),
+    ], false),
     "Light": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
@@ -501,40 +573,45 @@ const typeMap: any = {
         { json: "serial", js: "serial", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, r("LightType")) },
         { json: "zones", js: "zones", typ: u(undefined, a("")) },
-    ], "any"),
+    ], false),
     "MotionSensor": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
-    ], "any"),
+    ], false),
     "Room": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
-    ], "any"),
+    ], false),
     "TapDialSwitch": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
-    ], "any"),
+    ], false),
     "WallSwitch": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
-    ], "any"),
+    ], false),
     "Zone": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
-    ], "any"),
+    ], false),
+    "PowerupBehavior": [
+        "default",
+        "power_loss_recovery",
+        "previous",
+    ],
     "LightType": [
         "bollard",
         "candle_bulb",

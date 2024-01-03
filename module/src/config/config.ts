@@ -11,6 +11,7 @@ import {
   WallSwitch,
   Room,
   Zone,
+  Defaults,
 } from './config-gen'
 import _ from 'lodash'
 
@@ -36,6 +37,7 @@ interface ExtendedZone extends Zone {
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
   lights: ExtendedLight[]
+  defaults: Defaults
   name?: string
   rooms: ExtendedRoom[]
   zones?: ExtendedZone[]
@@ -60,6 +62,7 @@ class Config implements ConfigGen {
     }
     this.#validate()
     this.lights = this._internalConfig.lights
+    this.defaults = this._internalConfig.defaults
     this.rooms = this._internalConfig.rooms
     this.zones = this._internalConfig.zones
     this.name = this._internalConfig.name
@@ -184,4 +187,13 @@ class Config implements ConfigGen {
   }
 }
 
-export { Config, Light, MotionSensor, Room, Zone }
+export {
+  Config,
+  Light,
+  MotionSensor,
+  Room,
+  Zone,
+  ExtendedLight,
+  ExtendedRoom,
+  ExtendedZone,
+}

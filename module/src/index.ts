@@ -1,4 +1,4 @@
-﻿import { Config } from './config/config'
+﻿import { Config, ExtendedLight } from './config/config'
 import { Logger, Color } from './log/logger'
 import { Bridge } from './bridge/bridge'
 import _ from 'lodash'
@@ -75,7 +75,7 @@ async function main() {
     serial: light.serial,
   }))
   _.forEach(await bridge.addLights(lightIds), (lightId) => {
-    const light = config.getResourceById(lightId.mac)!
+    const light = config.getResourceById(lightId.mac)! as ExtendedLight
     light.idV1 = lightId.id_v1
     light.idV2 = lightId.id_v2
     light.ownerId = lightId.ownerId
@@ -108,18 +108,19 @@ async function main() {
   }
 
   // Create "Default" scenes in rooms and zones
-  const defaultBrightness = 100
-  const defaultMirek = 323
-  const defaultImageId = '732ff1d9-76a7-4630-aad0-c8acc499bb0b'
+  const brightness = config.defaults.brigthness
+  const mirek = config.defaults['color-temperature'].mirek
+  const sceneImageId = config.defaults.scene.imageId
+  const sceneName = config.defaults.scene.name
   for (const room of config.rooms) {
     const id = await bridge.addScene(
-      'Default',
+      sceneName,
       room.idV2!,
       'room',
       _.map(config.getRoomLights(room), (light) => light.idV2!),
-      defaultBrightness,
-      defaultMirek,
-      defaultImageId,
+      brightness,
+      mirek,
+      sceneImageId,
     )
     await bridge.activateScene(id)
     Logger.info(
@@ -129,13 +130,13 @@ async function main() {
   }
   for (const zone of config.zones ?? []) {
     const id = await bridge.addScene(
-      'Default',
+      sceneName,
       zone.idV2!,
       'zone',
       _.map(config.getZoneLights(zone), (light) => light.idV2!),
-      defaultBrightness,
-      defaultMirek,
-      defaultImageId,
+      brightness,
+      mirek,
+      sceneImageId,
     )
     await bridge.activateScene(id)
     Logger.info(

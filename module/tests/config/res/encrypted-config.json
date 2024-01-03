@@ -1,5 +1,16 @@
 {
   "name": "XOR encrypted config",
+  "defaults": {
+    "scene": {
+      "name": "My scene",
+      "imageId": "732ff1d9-76a7-4630-aad0-c8acc499bb0b"
+    },
+    "color-temperature": {
+      "mirek": 323
+    },
+    "brigthness": 90,
+    "powerup-behavior": "default"
+  },
   "rooms": [
     {
       "id": "room",

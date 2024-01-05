@@ -42,11 +42,11 @@ describe('Config', () => {
     }
   })
   test('should print config', () => {
-    new Config('./tests/config/res/encrypted-config.json').print()
+    new Config('./tests/config/res/test-config.json').print()
   })
   test('should decrypt serials and MAC addresses when XOR key provided', () => {
     const config1 = new Config(
-      './tests/config/res/encrypted-config.json',
+      './tests/config/res/test-config.json',
       '330F9015', // Long enough key
     )
 
@@ -70,7 +70,7 @@ describe('Config', () => {
     )
 
     const config2 = new Config(
-      './tests/config/res/encrypted-config.json',
+      './tests/config/res/test-config.json',
       'AB', // Short key
     )
 
@@ -94,7 +94,7 @@ describe('Config', () => {
     )
   })
   test('should not decrypt serials and MAC addresses when no XOR key provided', () => {
-    const config = new Config('./tests/config/res/encrypted-config.json')
+    const config = new Config('./tests/config/res/test-config.json')
 
     expect(config.lights[0].serial).toBe('99A53A')
     expect(config.lights[1].serial).toBe(undefined)
@@ -112,5 +112,35 @@ describe('Config', () => {
     expect(config.dimmerSwitches![0].mac).toBe(
       '00:17:88:01:0b:22:22:22-01-fc00',
     )
+  })
+  test('should return light resource by serial', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('99A53A')!.name).toBe('Light 1')
+  })
+  test('should return light resource by ID', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('1')!.name).toBe('Light 2')
+  })
+  test('should return light resource by mac address', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('00:17:88:01:0c:11:2d:b2-0b')!.name).toBe(
+      'Light 2',
+    )
+  })
+  test('should return room resource by ID', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('room')!.name).toBe('Room')
+  })
+  test('should return zone resource by ID', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('zone2')!.name).toBe('Zone 2')
+  })
+  test('should return room lights', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getRoomLights(config.rooms[0]).length).toBe(2)
+  })
+  test('should return zone lights', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getZoneLights(config.zones![0]).length).toBe(1)
   })
 })

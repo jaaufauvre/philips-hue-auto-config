@@ -1,5 +1,5 @@
 {
-  "name": "XOR encrypted config",
+  "name": "A test config",
   "defaults": {
     "scene": {
       "name": "My scene",
@@ -17,18 +17,29 @@
       "name": "Room"
     }
   ],
+  "zones": [
+    {
+      "id": "zone1",
+      "name": "Zone 1"
+    },
+    {
+      "id": "zone2",
+      "name": "Zone 2"
+    }
+  ],
   "lights": [
     {
       "id": "0",
       "mac": "00:17:88:01:0c:22:1e:81-0b",
       "serial": "99A53A",
-      "name": "Encrypted 1",
-      "room": "room"
+      "name": "Light 1",
+      "room": "room",
+      "zones": ["zone1"]
     },
     {
       "id": "1",
       "mac": "00:17:88:01:0c:11:2d:b2-0b",
-      "name": "Encrypted 2",
+      "name": "Light 2",
       "room": "room"
     }
   ],
@@ -37,7 +48,7 @@
       "id": "2",
       "mac": "00:17:88:01:0b:98:c2:7f-02-0406",
       "serial": "0B98C27F",
-      "name": "Encrypted 3"
+      "name": "Motion sensor"
     }
   ],
   "tap-dial-switches": [
@@ -45,7 +56,7 @@
       "id": "3",
       "mac": "00:17:88:01:0b:21:3b:c6-fc00-0014",
       "serial": "0B213BC6",
-      "name": "Encrypted 4"
+      "name": "Tap dial"
     }
   ],
   "wall-switches": [
@@ -53,7 +64,7 @@
       "id": "4",
       "mac": "00:17:88:01:0c:11:11:11-01-fc00",
       "serial": "AAAAAA",
-      "name": "Encrypted 5"
+      "name": "Wall switch"
     }
   ],
   "dimmer-switches": [
@@ -61,7 +72,7 @@
       "id": "5",
       "mac": "00:17:88:01:0b:22:22:22-01-fc00",
       "serial": "ABCDEF",
-      "name": "Encrypted 6"
+      "name": "Dimmer switch"
     }
   ]
 }

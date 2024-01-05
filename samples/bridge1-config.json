@@ -9,7 +9,7 @@
       "mirek": 323
     },
     "brigthness": 100,
-    "powerup-behavior": "power_loss_recovery"
+    "powerup-behavior": "powerfail"
   },
   "rooms": [
     {

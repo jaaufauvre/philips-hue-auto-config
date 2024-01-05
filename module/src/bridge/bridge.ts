@@ -192,6 +192,16 @@ export class Bridge {
     await this.#apiv2!.updateDevice(lightOwnerId, device)
   }
 
+  async updateLightPowerUp(id: string, preset: string) {
+    Logger.info(`Updating power up behavior for light '${id}' to '${preset}'`)
+    const light = {
+      powerup: {
+        preset: preset,
+      },
+    }
+    await this.#apiv2!.updateLight(id, light)
+  }
+
   async addScene(
     name: string,
     roomOrZoneId: string,

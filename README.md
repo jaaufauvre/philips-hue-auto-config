@@ -25,7 +25,7 @@ It can be used to:
 
 1. Reset the Hue Bridge, then press the button in the centre of the Hue Bridge
 2. Run: `cd module && npm install` 
-3. Run: `npm run start --config=../samples/simple-config.json`
+3. Run: `npm run start --config=../samples/your-config.json`
 
 Additional options:
 * `--bridge=192.168.1.25` - Will skip Hue Bridge discovery and use the provided IP address instead
@@ -42,7 +42,7 @@ The program will:
 5. Create rooms and zones
 6. Search for lights (from their serial and MAC address) and add them to rooms and zones
 7. Create a "Default" scene in each room and zone
-8. Configure a default power-on behavior for all lights
+8. Set a default power-on behavior for all lights
 
 ## References
 

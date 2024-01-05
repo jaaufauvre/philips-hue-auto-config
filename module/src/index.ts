@@ -145,5 +145,15 @@ async function main() {
     )
   }
 
+  // Set lights behavior at power on
+  for (const light of config.lights) {
+    const lightId = light.idV2!
+    await bridge.updateLightPowerUp(
+      lightId,
+      config.defaults['powerup-behavior'],
+    )
+  }
+  Logger.info(Color.Green, `Updated power up behavior for all lights`)
+
   Logger.info(Color.Yellow, 'Done! 🙌')
 }

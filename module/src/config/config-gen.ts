@@ -60,8 +60,8 @@ export interface Defaults {
     "color-temperature": ColorTemperature;
     /**
      * What lights should do when powered on by a classic light switch or after a power outage.
-     * "previous": last-used color and brightness. "default": default color temperature and
-     * brightness. "power_loss_recovery": stays off or turn back on.
+     * "last_on_state": last-used color and brightness. "safety": warm white, full brightness.
+     * "powerfail": stays off or turn back on.
      */
     "powerup-behavior": PowerupBehavior;
     /**
@@ -82,13 +82,13 @@ export interface ColorTemperature {
 
 /**
  * What lights should do when powered on by a classic light switch or after a power outage.
- * "previous": last-used color and brightness. "default": default color temperature and
- * brightness. "power_loss_recovery": stays off or turn back on.
+ * "last_on_state": last-used color and brightness. "safety": warm white, full brightness.
+ * "powerfail": stays off or turn back on.
  */
 export enum PowerupBehavior {
-    Default = "default",
-    PowerLossRecovery = "power_loss_recovery",
-    Previous = "previous",
+    LastOnState = "last_on_state",
+    Powerfail = "powerfail",
+    Safety = "safety",
 }
 
 /**
@@ -608,9 +608,9 @@ const typeMap: any = {
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
     ], false),
     "PowerupBehavior": [
-        "default",
-        "power_loss_recovery",
-        "previous",
+        "last_on_state",
+        "powerfail",
+        "safety",
     ],
     "LightType": [
         "bollard",

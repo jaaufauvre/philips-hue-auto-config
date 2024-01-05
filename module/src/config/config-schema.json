@@ -55,8 +55,8 @@
         },
         "powerup-behavior": {
           "type": "string",
-          "description": "What lights should do when powered on by a classic light switch or after a power outage. \"previous\": last-used color and brightness. \"default\": default color temperature and brightness. \"power_loss_recovery\": stays off or turn back on.",
-          "enum": ["default", "previous", "power_loss_recovery"]
+          "description": "What lights should do when powered on by a classic light switch or after a power outage. \"last_on_state\": last-used color and brightness. \"safety\": warm white, full brightness. \"powerfail\": stays off or turn back on.",
+          "enum": ["safety", "last_on_state", "powerfail"]
         }
       },
       "required": [
@@ -373,7 +373,6 @@
       "type": "array",
       "uniqueItemProperties": ["id", "name", "mac"],
       "description": "A list of tap dial switches",
-      "additionalProperties": false,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -454,7 +453,6 @@
       "type": "array",
       "uniqueItemProperties": ["id", "name", "mac"],
       "description": "A list of wall switches",
-      "additionalProperties": false,
       "items": {
         "type": "object",
         "additionalProperties": false,

@@ -88,6 +88,12 @@ export class ApiV2 {
     return await this.#httpsClient.get<Lights>(uri)
   }
 
+  async updateLight(id: string, light: UpdatedLight) {
+    Logger.info(`[API v2] Updating light '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/light/${id}`
+    return await this.#httpsClient.put(uri, light)
+  }
+
   async updateDevice(id: string, device: UpdatedDevice) {
     Logger.info(`[API v2] Updating device '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/device/${id}`
@@ -202,6 +208,14 @@ export interface Light {
   id_v1: string
   owner: Resource
   type: 'light'
+}
+
+export interface UpdatedLight {
+  powerup: Powerup
+}
+
+export interface Powerup {
+  preset: string
 }
 
 //

@@ -94,6 +94,12 @@ export class ApiV2 {
     return await this.#httpsClient.put(uri, light)
   }
 
+  async getDevices(): Promise<Devices> {
+    Logger.info(`[API v2] Retrieving devices ...`)
+    const uri = `${this.#getBaseUrl()}/device`
+    return await this.#httpsClient.get<Devices>(uri)
+  }
+
   async updateDevice(id: string, device: UpdatedDevice) {
     Logger.info(`[API v2] Updating device '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/device/${id}`
@@ -221,6 +227,18 @@ export interface Powerup {
 //
 // Devices
 //
+export interface Devices {
+  errors: any[]
+  data: Device[]
+}
+
+export interface Device {
+  id: string
+  id_v1: string
+  type: 'device'
+  services: Resource[]
+}
+
 export interface UpdatedDevice {
   metadata: DeviceMetadata
 }

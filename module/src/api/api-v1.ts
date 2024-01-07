@@ -55,6 +55,30 @@ export class ApiV1 {
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights/${id}`
     return await this.#httpsClient.delete(uri)
   }
+
+  async searchSensors() {
+    Logger.info(`[API v1] Searching for sensors to add to bridge ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors`
+    return await this.#httpsClient.post(uri, undefined)
+  }
+
+  async getNewSensors() {
+    Logger.info(`[API v1] Trying to retrieve new sensors ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/new`
+    return await this.#httpsClient.get<NewSensors>(uri)
+  }
+
+  async getSensors() {
+    Logger.info(`[API v1] Retrieving sensors ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors`
+    return await this.#httpsClient.get<SensorsV1>(uri)
+  }
+
+  async deleteSensor(id: string) {
+    Logger.info(`[API v1] Deleting sensor '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
 }
 
 //
@@ -98,5 +122,21 @@ export interface LightV1 {
   uniqueid: string
 }
 export interface LightsV1 {
-  [key: string]: LightV1
+  [key: LightId]: LightV1
+}
+
+//
+// Sensors
+//
+export interface NewSensors {
+  lastscan: string
+}
+
+export type SensorId = string
+export interface SensorV1 {
+  uniqueid: string
+  type: string
+}
+export interface SensorsV1 {
+  [key: SensorId]: SensorV1
 }

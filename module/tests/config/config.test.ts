@@ -62,7 +62,6 @@ describe('Config', () => {
     expect(config1.tapDialSwitches![0].mac).toBe(
       '00:17:88:01:0b:12:34:56-fc00-0014',
     )
-    expect(config1.wallSwitches![0].serial).toBe('99A53A')
     expect(config1.wallSwitches![0].mac).toBe('00:17:88:01:0c:22:1e:81-01-fc00')
     expect(config1.dimmerSwitches![0].serial).toBe('98C27F')
     expect(config1.dimmerSwitches![0].mac).toBe(
@@ -86,7 +85,6 @@ describe('Config', () => {
     expect(config2.tapDialSwitches![0].mac).toBe(
       '00:17:88:01:0b:8a:90:6d-fc00-0014',
     )
-    expect(config2.wallSwitches![0].serial).toBe('010101')
     expect(config2.wallSwitches![0].mac).toBe('00:17:88:01:0c:ba:ba:ba-01-fc00')
     expect(config2.dimmerSwitches![0].serial).toBe('006644')
     expect(config2.dimmerSwitches![0].mac).toBe(
@@ -106,7 +104,6 @@ describe('Config', () => {
     expect(config.tapDialSwitches![0].mac).toBe(
       '00:17:88:01:0b:21:3b:c6-fc00-0014',
     )
-    expect(config.wallSwitches![0].serial).toBe('AAAAAA')
     expect(config.wallSwitches![0].mac).toBe('00:17:88:01:0c:11:11:11-01-fc00')
     expect(config.dimmerSwitches![0].serial).toBe('ABCDEF')
     expect(config.dimmerSwitches![0].mac).toBe(
@@ -134,6 +131,16 @@ describe('Config', () => {
   test('should return zone resource by ID', () => {
     const config = new Config('./tests/config/res/test-config.json')
     expect(config.getResourceById('zone2')!.name).toBe('Zone 2')
+  })
+  test('should return wall switch resource by ID', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('4')!.name).toBe('Wall switch')
+  })
+  test('should return wall switch resource by mac address', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(
+      config.getResourceById('00:17:88:01:0c:11:11:11-01-fc00')!.name,
+    ).toBe('Wall switch')
   })
   test('should return room lights', () => {
     const config = new Config('./tests/config/res/test-config.json')

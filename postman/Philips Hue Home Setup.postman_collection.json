@@ -625,6 +625,37 @@
 					"response": []
 				},
 				{
+					"name": "Update light power up",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"powerup\": {\r\n                \"preset\": \"safety\",\r\n                \"dimming\": {\r\n                    \"mode\": \"dimming\",\r\n                    \"dimming\": {\r\n                        \"brightness\": 100.0\r\n                    }\r\n                },\r\n                \"color\": {\r\n                    \"mode\": \"color_temperature\",\r\n                    \"color_temperature\": {\r\n                        \"mirek\": 366\r\n                    }\r\n                }\r\n            }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"light",
+								"{{lightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update light type (v1)",
 					"request": {
 						"method": "PUT",
@@ -930,7 +961,7 @@
 			"name": "Tap dial switches",
 			"item": [
 				{
-					"name": "Get all tap dial switches",
+					"name": "Get all tap dial switches (devices)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -999,7 +1030,7 @@
 			"name": "Dimmer switches",
 			"item": [
 				{
-					"name": "Get all dimmer switches",
+					"name": "Get all dimmer switches (devices)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1068,7 +1099,7 @@
 			"name": "Wall switches",
 			"item": [
 				{
-					"name": "Get all wall switches",
+					"name": "Get all wall switches (devices)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1198,6 +1229,81 @@
 								"resource",
 								"zone",
 								"{{zoneId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sensors",
+			"item": [
+				{
+					"name": "Search for new sensors (v1)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get new sensors after scan (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/new",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all sensors (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors"
 							]
 						}
 					},

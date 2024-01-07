@@ -1,4 +1,4 @@
-﻿import { Config, ExtendedLight } from './config/config'
+﻿import { Config, ExtendedLight, ExtendedWallSwitch } from './config/config'
 import { Logger, Color } from './log/logger'
 import { Bridge } from './bridge/bridge'
 import _ from 'lodash'
@@ -154,6 +154,23 @@ async function main() {
     )
   }
   Logger.info(Color.Green, `Updated power up behavior for all lights`)
+
+  // Add wall switches
+  const wallSwitchIds = (config.wallSwitches ?? []).map((wallSwitch) => ({
+    mac: wallSwitch.mac,
+    name: wallSwitch.name,
+  }))
+  _.forEach(await bridge.addWallSwitches(wallSwitchIds), (wallSwitchId) => {
+    const wallSwitch = config.getResourceById(
+      wallSwitchId.mac,
+    )! as ExtendedWallSwitch
+    wallSwitch.idV1 = wallSwitchId.id_v1
+    wallSwitch.idV2 = wallSwitchId.id_v2
+    Logger.info(
+      Color.Green,
+      `Wall switch '${wallSwitch.name}' was added with IDs: '${wallSwitch.idV1}' (v1) and '${wallSwitch.idV2}' (v2)`,
+    )
+  })
 
   Logger.info(Color.Yellow, 'Done! 🙌')
 }

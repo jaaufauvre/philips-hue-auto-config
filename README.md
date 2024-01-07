@@ -14,7 +14,7 @@ It can be used to:
 ## Input configuration file
 
 ### Schema
-* [config-schema.json](./module/src/config/config-schema.json)
+The configuration must adhere to [config-schema.json](./module/src/config/config-schema.json)
 
 ### Examples
 * [simple-config.json](./samples/simple-config.json)
@@ -23,8 +23,8 @@ It can be used to:
 
 ## Run the program
 
-1. Reset the Hue Bridge, then press the button in the centre of the Hue Bridge
-2. Run: `cd module && npm install` 
+1. Run: `cd module && npm install` 
+2. Reset the Hue Bridge, then press the button in the centre of the Hue Bridge
 3. Run: `npm run start --config=../samples/your-config.json`
 
 Additional options:
@@ -35,7 +35,7 @@ Additional options:
 
 The program will:
 
-1. Load and check the JSON configuration
+1. Load and check the input configuration
 2. Search for the Hue Bridge
 3. Create a Bridge user and authentication key
 4. Delete bridge resources (if any)
@@ -43,6 +43,7 @@ The program will:
 6. Search for lights (from their serial and MAC address) and add them to rooms and zones
 7. Create a "Default" scene in each room and zone
 8. Set a default power-on behavior for all lights
+9. Search for wall switches and add them to the bridge
 
 ## References
 

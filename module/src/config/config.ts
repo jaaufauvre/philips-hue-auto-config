@@ -34,6 +34,11 @@ interface ExtendedZone extends Zone {
   idV2?: string
 }
 
+interface ExtendedWallSwitch extends WallSwitch {
+  idV1?: string
+  idV2?: string
+}
+
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
   lights: ExtendedLight[]
@@ -44,7 +49,7 @@ class Config implements ConfigGen {
   motionSensors?: MotionSensor[]
   tapDialSwitches?: TapDialSwitch[]
   dimmerSwitches?: DimmerSwitch[]
-  wallSwitches?: WallSwitch[]
+  wallSwitches?: ExtendedWallSwitch[]
 
   constructor(configFilePath: any, xorKey?: string) {
     if (!configFilePath) {
@@ -81,6 +86,9 @@ class Config implements ConfigGen {
         ),
         _.find(this.rooms, (room) => room.id === id),
         _.find(this.zones, (zone) => zone.id === id),
+        _.find(this.wallSwitches, (wallSwitch) =>
+          _.includes([wallSwitch.id, wallSwitch.mac], id),
+        ),
       ],
       (resource) => resource !== undefined,
     )
@@ -196,4 +204,5 @@ export {
   ExtendedLight,
   ExtendedRoom,
   ExtendedZone,
+  ExtendedWallSwitch,
 }

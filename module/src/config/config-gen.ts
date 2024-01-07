@@ -341,11 +341,6 @@ export interface WallSwitch {
      * A name for the wall switch
      */
     name: string;
-    /**
-     * Serial number printed on the wall switch, recommended for searching for missing wall
-     * switches
-     */
-    serial?: string;
 }
 
 /**
@@ -599,7 +594,6 @@ const typeMap: any = {
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
-        { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
     "Zone": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },

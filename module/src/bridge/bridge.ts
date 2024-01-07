@@ -4,7 +4,7 @@ import type from 'typia'
 import { Discovery } from '../api/discovery'
 import _ from 'lodash'
 import { ApiV1, CreateUserSuccess } from '../api/api-v1'
-import { ApiV2 } from '../api/api-v2'
+import { ApiV2, Device } from '../api/api-v2'
 
 export class Bridge {
   #apiv1?: ApiV1
@@ -54,6 +54,11 @@ export class Bridge {
     for (const zone of (await this.#apiv2!.getZones()).data) {
       await this.#apiv2!.deleteZone(zone.id)
     }
+    for (const device of (await this.#apiv2!.getDevices()).data) {
+      if (!this.#isBridge(device)) {
+        await this.#apiv2!.deleteDevice(device.id)
+      }
+    }
   }
 
   async addRoom(name: string, archetype?: string) {
@@ -97,7 +102,7 @@ export class Bridge {
       // Search without serial
       await this.#apiv1!.searchLights({ deviceid: [] })
       while (
-        (await this.#isScanning()) &&
+        (await this.#isScanningLights()) &&
         (await this.#hasMissingLights(lightIdList))
       ) {
         Logger.info(Color.DarkBlue, 'Scan is in progress ...')
@@ -119,7 +124,7 @@ export class Bridge {
         Logger.info(`Searching for serial ${serial}`)
         await this.#apiv1!.searchLights({ deviceid: [serial] })
         while (
-          (await this.#isScanning()) &&
+          (await this.#isScanningLights()) &&
           !(await this.#hasLight(missingLightId.mac))
         ) {
           Logger.info(Color.DarkBlue, 'Scan with serial is in progress ...')
@@ -130,7 +135,6 @@ export class Bridge {
     // All lights were found
     const macAddresses = lightIdList.map((lightId) => lightId.mac)
     const lightsV1 = await this.#apiv1!.getLights()
-    const lightsV2 = await this.#apiv2!.getLights()
     for (const id of Object.keys(lightsV1)) {
       if (!_.includes(macAddresses, lightsV1[id].uniqueid)) {
         // A light was found and was not listed in the config, we delete it from the bridge
@@ -139,6 +143,7 @@ export class Bridge {
       }
     }
     // Find light resource IDs
+    const lightsV2 = await this.#apiv2!.getLights()
     const finalLightIdList = _.cloneDeep(lightIdList)
     _.forEach(finalLightIdList, (lightId) => {
       lightId.id_v1 = _.find(
@@ -255,6 +260,53 @@ export class Bridge {
     await this.#apiv2!.updateScene(id, { recall: { action: 'active' } })
   }
 
+  async addWallSwitches(
+    wallSwitchIdList: WallSwitchIdentifiers[],
+  ): Promise<WallSwitchIdentifiers[]> {
+    Logger.info('Adding wall switches ...')
+    for (const wallSwitchId of wallSwitchIdList) {
+      const name = wallSwitchId.name
+      this.#triggerWallSwitchSearch(name)
+      Logger.info(`Searching for wall switch '${name}'`)
+      while (!(await this.#hasSensor(wallSwitchId.mac))) {
+        if (!(await this.#isScanningWallSwitches())) {
+          this.#triggerWallSwitchSearch(name)
+        }
+        Logger.info(Color.DarkBlue, 'Scan is in progress ...')
+        await this.#wait(10000)
+      }
+    }
+    // All wall switches were added
+    const macAddresses = wallSwitchIdList.map(
+      (wallSwitchId) => wallSwitchId.mac,
+    )
+    const wallSwitchesV1 = await this.#getSensors('ZLLSwitch')
+    for (const id of Object.keys(wallSwitchesV1)) {
+      if (!_.includes(macAddresses, wallSwitchesV1[id].uniqueid)) {
+        // A wall switch was added and was not listed in the config, we delete it from the bridge
+        Logger.info(
+          `Deleting wall switch '${id}' (not declared in the config) ...`,
+        )
+        await this.#apiv1!.deleteSensor(id)
+      }
+    }
+    // Find wall switch resource IDs
+    const devicesV2 = await this.#apiv2!.getDevices()
+    const finalWallSwitchIdList = _.cloneDeep(wallSwitchIdList)
+    _.forEach(finalWallSwitchIdList, (wallSwitchId) => {
+      wallSwitchId.id_v1 = _.find(
+        Object.keys(wallSwitchesV1),
+        (key) => wallSwitchesV1[key].uniqueid === wallSwitchId.mac,
+      )
+      const wallSwitch = _.find(
+        devicesV2.data,
+        (device) => device.id_v1 === `/sensors/${wallSwitchId.id_v1}`,
+      )
+      wallSwitchId.id_v2 = wallSwitch!.id
+    })
+    return finalWallSwitchIdList
+  }
+
   async #hasMissingLights(lightIdList: LightIdentifiers[]) {
     return _.some(await this.#findMissingLights(lightIdList))
   }
@@ -274,8 +326,20 @@ export class Bridge {
     return missingLightIds
   }
 
-  async #isScanning(): Promise<boolean> {
+  async #isScanningLights(): Promise<boolean> {
     return (await this.#apiv1!.getNewLights()).lastscan === 'active'
+  }
+
+  async #triggerWallSwitchSearch(name: string) {
+    await this.#apiv1!.searchSensors()
+    Logger.info(
+      Color.Purple,
+      `Now, press or toggle wall switch '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
+    )
+  }
+
+  async #isScanningWallSwitches(): Promise<boolean> {
+    return (await this.#apiv1!.getNewSensors()).lastscan === 'active'
   }
 
   async #hasRoom(name: string): Promise<boolean> {
@@ -293,6 +357,25 @@ export class Bridge {
     return _.some(Object.values(lights), (light) => light.uniqueid === mac)
   }
 
+  async #hasSensor(mac: string): Promise<boolean> {
+    const sensors = await this.#apiv1!.getSensors()
+    return _.some(Object.values(sensors), (sensor) => sensor.uniqueid === mac)
+  }
+
+  async #getSensors(type: string) {
+    const sensors = await this.#apiv1!.getSensors()
+    for (const sensorId of Object.keys(sensors)) {
+      if (sensors[sensorId].type !== type) {
+        delete sensors[sensorId]
+      }
+    }
+    return sensors
+  }
+
+  #isBridge(device: Device) {
+    return _.some(device.services, (resource) => resource.rtype === 'bridge')
+  }
+
   #wait(ms: number) {
     Logger.debug(`Waiting for ${ms} ms...`)
     return new Promise((res) => setTimeout(res, ms))
@@ -305,4 +388,11 @@ export type LightIdentifiers = {
   id_v1?: string
   id_v2?: string
   ownerId?: string
+}
+
+export type WallSwitchIdentifiers = {
+  mac: string
+  name: string
+  id_v1?: string
+  id_v2?: string
 }

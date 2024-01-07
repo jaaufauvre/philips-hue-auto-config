@@ -468,13 +468,6 @@
             "description": "MAC address, required for uniquely identifying wall switches added to a bridge",
             "examples": ["00:17:88:01:0c:13:bf:4d-01-fc00"]
           },
-          "serial": {
-            "type": "string",
-            "pattern": "^[A-F0-9]+$",
-            "minLength": 6,
-            "description": "Serial number printed on the wall switch, recommended for searching for missing wall switches",
-            "examples": ["AB01CD"]
-          },
           "name": {
             "type": "string",
             "minLength": 1,

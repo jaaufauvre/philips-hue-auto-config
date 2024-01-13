@@ -1,5 +1,9 @@
 {
   "name": "A test config",
+  "bridge": {
+    "long": "0W",
+    "lat": "0N"
+  },
   "defaults": {
     "scene": {
       "name": "My scene",

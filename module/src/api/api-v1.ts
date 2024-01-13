@@ -79,6 +79,12 @@ export class ApiV1 {
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/${id}`
     return await this.#httpsClient.delete(uri)
   }
+
+  async updateDaylightSensorConfig(id: string, config: DaylightSensorConfig) {
+    Logger.info(`[API v1] Updating daylight sensor '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/${id}/config`
+    return await this.#httpsClient.put(uri, config)
+  }
 }
 
 //
@@ -139,4 +145,11 @@ export interface SensorV1 {
 }
 export interface SensorsV1 {
   [key: SensorId]: SensorV1
+}
+
+export interface DaylightSensorConfig {
+  long: string
+  lat: string
+  sunriseoffset: number
+  sunsetoffset: number
 }

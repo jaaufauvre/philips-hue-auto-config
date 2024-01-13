@@ -273,14 +273,6 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200)\r",
-									"});\r",
-									"pm.test(\"Save username and clientkey\", function () {\r",
-									"    var jsonData = pm.response.json()\r",
-									"    var username = jsonData[0].success.username\r",
-									"    var clientkey = jsonData[0].success.clientkey\r",
-									"    pm.expect(username).to.be.not.null\r",
-									"    pm.environment.set(\"username\", username);\r",
-									"    pm.environment.set(\"clientkey\", username);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -854,6 +846,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update rule (v1)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Wall Switch Office Day\",\r\n        \"status\": \"enabled\",\r\n        \"conditions\": [\r\n            {\r\n                \"address\": \"/sensors/15/state/buttonevent\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"1002\"\r\n            },\r\n            {\r\n                \"address\": \"/sensors/15/state/lastupdated\",\r\n                \"operator\": \"dx\"\r\n            },\r\n            {\r\n                \"address\": \"/scenes/YYicCfjTU0-VoITI\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"true\"\r\n            },\r\n            {\r\n                \"address\": \"/groups/81/state/any_on\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"false\"\r\n            },\r\n            {\r\n                \"address\": \"/sensors/1/state/daylight\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"false\"\r\n            }\r\n        ],\r\n        \"actions\": [\r\n            {\r\n                \"address\": \"/groups/81/action\",\r\n                \"method\": \"PUT\",\r\n                \"body\": {\r\n                    \"scene\": \"YYicCfjTU0-VoITI\"\r\n                }\r\n            }\r\n        ]\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/rules/3",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"rules",
+								"3"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1304,6 +1326,70 @@
 								"api",
 								"{{username}}",
 								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update daylight sensor config (v1)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"long\": \"6.266155W\",\r\n    \"lat\": \"53.350140N\",\r\n    \"sunriseoffset\": 12,\r\n    \"sunsetoffset\": -12\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/1/config",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"1",
+								"config"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve daylight sensor (v1)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"long\": \"6.266155W\",\r\n    \"lat\": \"53.350140N\",\r\n    \"sunriseoffset\": 30,\r\n    \"sunsetoffset\": -30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/1",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"1"
 							]
 						}
 					},

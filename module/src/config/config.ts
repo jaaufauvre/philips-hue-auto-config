@@ -4,6 +4,7 @@ import Ajv from 'ajv'
 import AjvKeywords from 'ajv-keywords'
 import {
   ConfigGen,
+  Bridge,
   Light,
   MotionSensor,
   TapDialSwitch,
@@ -41,6 +42,7 @@ interface ExtendedWallSwitch extends WallSwitch {
 
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
+  bridge: Bridge
   lights: ExtendedLight[]
   defaults: Defaults
   name?: string
@@ -66,6 +68,7 @@ class Config implements ConfigGen {
       throw Error('Could not parse config!')
     }
     this.#validate()
+    this.bridge = this._internalConfig.bridge
     this.lights = this._internalConfig.lights
     this.defaults = this._internalConfig.defaults
     this.rooms = this._internalConfig.rooms

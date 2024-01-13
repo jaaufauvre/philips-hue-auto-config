@@ -36,14 +36,15 @@ Additional options:
 The program will:
 
 1. Load and check the input configuration
-2. Search for the Hue Bridge
-3. Create a Bridge user and authentication key
+2. Search for the bridge that was pressed
+3. Create a bridge user and authentication key
 4. Delete bridge resources (if any)
-5. Create rooms and zones
-6. Search for lights (from their serial and MAC address) and add them to rooms and zones
-7. Create a "Default" scene in each room and zone
-8. Set a default power-on behavior for all lights
-9. Search for wall switches and add them to the bridge
+5. Add the bridge location for sunset/sunrise detection
+6. Create rooms and zones
+7. Search for lights (from their serial and MAC address) and add them to rooms and zones
+8. Create a "Default" scene in each room and zone
+9. Set a default power-on behavior for all lights
+10. Search for wall switches and add them to the bridge
 
 ## References
 

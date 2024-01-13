@@ -1,5 +1,9 @@
 {
   "name": "Bridge #1 config",
+  "bridge": {
+    "long": "6.266155W",
+    "lat": "53.350140N"
+  },
   "defaults": {
     "scene": {
       "name": "Default",

@@ -9,6 +9,10 @@
 
 export interface ConfigGen {
     /**
+     * Additional bridge configuration
+     */
+    bridge: Bridge;
+    /**
      * Default settings to apply to lights and scenes
      */
     defaults: Defaults;
@@ -44,6 +48,20 @@ export interface ConfigGen {
      * A list of zones
      */
     zones?: Zone[];
+}
+
+/**
+ * Additional bridge configuration
+ */
+export interface Bridge {
+    /**
+     * The bridge latitude
+     */
+    lat: string;
+    /**
+     * The bridge longitude
+     */
+    long: string;
 }
 
 /**
@@ -529,6 +547,7 @@ function r(name: string) {
 
 const typeMap: any = {
     "ConfigGen": o([
+        { json: "bridge", js: "bridge", typ: r("Bridge") },
         { json: "defaults", js: "defaults", typ: r("Defaults") },
         { json: "dimmer-switches", js: "dimmer-switches", typ: u(undefined, a(r("DimmerSwitch"))) },
         { json: "lights", js: "lights", typ: a(r("Light")) },
@@ -538,6 +557,10 @@ const typeMap: any = {
         { json: "tap-dial-switches", js: "tap-dial-switches", typ: u(undefined, a(r("TapDialSwitch"))) },
         { json: "wall-switches", js: "wall-switches", typ: u(undefined, a(r("WallSwitch"))) },
         { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
+    ], false),
+    "Bridge": o([
+        { json: "lat", js: "lat", typ: "" },
+        { json: "long", js: "long", typ: "" },
     ], false),
     "Defaults": o([
         { json: "brigthness", js: "brigthness", typ: 3.14 },

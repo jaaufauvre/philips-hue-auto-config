@@ -61,6 +61,17 @@ export class Bridge {
     }
   }
 
+  async updateBridgeLocation(lat: string, long: string) {
+    Logger.info('Updating bridge location ...')
+    const daylightSensorId = Object.keys(await this.#getSensors('Daylight'))[0]
+    await this.#apiv1!.updateDaylightSensorConfig(daylightSensorId, {
+      long: long,
+      lat: lat,
+      sunriseoffset: -30, // "daylight" value is "true" 30min before sunrise
+      sunsetoffset: 30, // "daylight" value is "false" 30min after sunset
+    })
+  }
+
   async addRoom(name: string, archetype?: string) {
     if (await this.#hasRoom(name)) {
       // Rooms can have the same name

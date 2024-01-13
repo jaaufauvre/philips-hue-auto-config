@@ -52,6 +52,13 @@ async function main() {
   await bridge.resetBridge()
   Logger.info(Color.Green, `All bridge resources were deleted`)
 
+  // Update bridge location
+  const lat = config.bridge.lat
+  const long = config.bridge.long
+  await bridge.updateBridgeLocation(lat, long)
+  Logger.info(Color.Green, `Bridge location is: ${lat}, ${long}`)
+
+  // Create zones & rooms
   for (const room of config.rooms) {
     const id = await bridge.addRoom(room.name, room.type)
     room.idV2 = id

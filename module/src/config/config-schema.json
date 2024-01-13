@@ -8,6 +8,24 @@
       "type": "string",
       "description": "A name for this config"
     },
+    "bridge": {
+      "type": "object",
+      "description": "Additional bridge configuration",
+      "additionalProperties": false,
+      "properties": {
+        "lat": {
+          "type": "string",
+          "description": "The bridge latitude",
+          "examples": ["53.350140N"]
+        },
+        "long": {
+          "type": "string",
+          "description": "The bridge longitude",
+          "examples": ["6.266155W"]
+        }
+      },
+      "required": ["lat", "long"]
+    },
     "defaults": {
       "type": "object",
       "description": "Default settings to apply to lights and scenes",
@@ -483,5 +501,5 @@
       }
     }
   },
-  "required": ["rooms", "lights", "defaults"]
+  "required": ["bridge", "rooms", "lights", "defaults"]
 }

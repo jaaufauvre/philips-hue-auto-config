@@ -120,6 +120,12 @@ export class ApiV2 {
     return await this.#httpsClient.post<CreatedScenes>(uri, scene)
   }
 
+  async getScene(id: string): Promise<Scenes> {
+    Logger.info(`[API v2] Retrieving scene '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/scene/${id}`
+    return await this.#httpsClient.get<Scenes>(uri)
+  }
+
   async updateScene(id: string, scene: UpdatedScene) {
     Logger.info(`[API v2] Updating scene '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/scene/${id}`
@@ -241,11 +247,16 @@ export interface Device {
 
 export interface UpdatedDevice {
   metadata: DeviceMetadata
+  device_mode?: DeviceMode
 }
 
 export interface DeviceMetadata {
   name: string
   archetype: string
+}
+
+export interface DeviceMode {
+  mode: string
 }
 
 //
@@ -263,6 +274,17 @@ export interface NewScene {
   actions: SceneAction[]
   metadata: SceneMetadata
   group: Resource
+  type: 'scene'
+}
+
+export interface Scenes {
+  errors: any[]
+  data: Scene[]
+}
+
+export interface Scene {
+  id: string
+  id_v1: string
   type: 'scene'
 }
 

@@ -1,0 +1,35 @@
+{
+  "name": "A config referencing an undefined zone ID",
+  "bridge": {
+    "long": "",
+    "lat": ""
+  },
+  "defaults": {
+    "scene": {
+      "name": "",
+      "imageId": ""
+    },
+    "color-temperature": {
+      "mirek": 200
+    },
+    "brigthness": 1,
+    "powerup-behavior": "safety"
+  },
+  "rooms": [
+    {
+      "id": "room",
+      "name": "Room"
+    }
+  ],
+  "zones": [],
+  "lights": [
+    {
+      "id": "0",
+      "mac": "00:00:00:00:00:00:00:00-00",
+      "serial": "ABCDEF",
+      "name": "Light",
+      "room": "room",
+      "zones": ["zone1"]
+    }
+  ]
+}

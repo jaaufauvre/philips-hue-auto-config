@@ -376,7 +376,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 32,
+            "maxLength": 26,
             "description": "A name for the motion sensor",
             "examples": ["My motion sensor"]
           },
@@ -416,7 +416,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 32,
+            "maxLength": 26,
             "description": "A name for the tap dial switch",
             "examples": ["My tap dial"]
           },
@@ -456,7 +456,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 32,
+            "maxLength": 26,
             "description": "A name for the dimmer switch",
             "examples": ["My dimmer"]
           },
@@ -489,15 +489,46 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 32,
+            "maxLength": 26,
             "description": "A name for the wall switch",
             "examples": ["My wall switch"]
+          },
+          "mode": {
+            "type": "string",
+            "description": "If the wall switch has one or two buttons",
+            "enum": ["switch_single_rocker", "switch_dual_rocker"]
+          },
+          "button1": {
+            "type": "object",
+            "description": "Configuration for the first wall switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button2": {
+            "type": "object",
+            "description": "Configuration for the second wall switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
           },
           "comment": {
             "type": "string"
           }
         },
-        "required": ["id", "mac", "name"]
+        "required": ["id", "mac", "name", "mode", "button1"]
       }
     }
   },

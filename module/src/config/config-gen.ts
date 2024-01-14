@@ -346,6 +346,14 @@ export interface TapDialSwitch {
 }
 
 export interface WallSwitch {
+    /**
+     * Configuration for the first wall switch button
+     */
+    button1: Button1;
+    /**
+     * Configuration for the second wall switch button
+     */
+    button2?: Button2;
     comment?: string;
     /**
      * Uniquely identify the wall switch in this configuration
@@ -356,9 +364,41 @@ export interface WallSwitch {
      */
     mac: string;
     /**
+     * If the wall switch has one or two buttons
+     */
+    mode: Mode;
+    /**
      * A name for the wall switch
      */
     name: string;
+}
+
+/**
+ * Configuration for the first wall switch button
+ */
+export interface Button1 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the second wall switch button
+ */
+export interface Button2 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * If the wall switch has one or two buttons
+ */
+export enum Mode {
+    SwitchDualRocker = "switch_dual_rocker",
+    SwitchSingleRocker = "switch_single_rocker",
 }
 
 /**
@@ -613,10 +653,19 @@ const typeMap: any = {
         { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
     "WallSwitch": o([
+        { json: "button1", js: "button1", typ: r("Button1") },
+        { json: "button2", js: "button2", typ: u(undefined, r("Button2")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
+        { json: "mode", js: "mode", typ: r("Mode") },
         { json: "name", js: "name", typ: "" },
+    ], false),
+    "Button1": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "Button2": o([
+        { json: "group", js: "group", typ: "" },
     ], false),
     "Zone": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -721,5 +770,9 @@ const typeMap: any = {
         "top_floor",
         "tv",
         "upstairs",
+    ],
+    "Mode": [
+        "switch_dual_rocker",
+        "switch_single_rocker",
     ],
 };

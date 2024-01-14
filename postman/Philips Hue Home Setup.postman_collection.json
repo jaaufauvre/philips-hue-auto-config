@@ -876,6 +876,65 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create rule (v1)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Some rule\",\r\n        \"conditions\": [\r\n            {\r\n                \"address\": \"/sensors/30/state/buttonevent\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"1002\"\r\n            },\r\n            {\r\n                \"address\": \"/sensors/30/state/lastupdated\",\r\n                \"operator\": \"dx\"\r\n            },\r\n            {\r\n                \"address\": \"/groups/81/state/any_on\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"false\"\r\n            }\r\n        ],\r\n        \"actions\": [\r\n            {\r\n                \"address\": \"/groups/81/action\",\r\n                \"method\": \"PUT\",\r\n                \"body\": {\r\n                    \"scene\": \"UckfyQ-8giRKmn0H\"\r\n                }\r\n            }\r\n        ]\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/rules",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"rules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete rule (v1)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Some rule\",\r\n        \"conditions\": [\r\n            {\r\n                \"address\": \"/sensors/30/state/buttonevent\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"1002\"\r\n            },\r\n            {\r\n                \"address\": \"/sensors/30/state/lastupdated\",\r\n                \"operator\": \"dx\"\r\n            },\r\n            {\r\n                \"address\": \"/groups/81/state/any_on\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"false\"\r\n            }\r\n        ],\r\n        \"actions\": [\r\n            {\r\n                \"address\": \"/groups/81/action\",\r\n                \"method\": \"PUT\",\r\n                \"body\": {\r\n                    \"scene\": \"UckfyQ-8giRKmn0H\"\r\n                }\r\n            }\r\n        ]\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/rules/3",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"rules",
+								"3"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1164,6 +1223,37 @@
 					"response": []
 				},
 				{
+					"name": "Update watch switch",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"Office WS\"\r\n    },\r\n    \"device_mode\": {\r\n        \"mode\": \"switch_single_rocker\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device/{{wallSwitchId}}",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device",
+								"{{wallSwitchId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get single wall switch (v1)",
 					"request": {
 						"method": "GET",
@@ -1390,6 +1480,36 @@
 								"{{username}}",
 								"sensors",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete sensor (v1)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"long\": \"6.266155W\",\r\n    \"lat\": \"53.350140N\",\r\n    \"sunriseoffset\": 30,\r\n    \"sunsetoffset\": -30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/25",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"25"
 							]
 						}
 					},

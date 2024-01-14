@@ -67,7 +67,14 @@
     {
       "id": "4",
       "mac": "00:17:88:01:0c:11:11:11-01-fc00",
-      "name": "Wall switch"
+      "name": "Wall switch",
+      "mode": "switch_dual_rocker",
+      "button1": {
+        "group": "room"
+      },
+      "button2": {
+        "group": "zone1"
+      }
     }
   ],
   "dimmer-switches": [

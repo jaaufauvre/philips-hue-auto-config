@@ -1,6 +1,12 @@
-﻿import { Config, ExtendedLight, ExtendedWallSwitch } from './config/config'
+﻿import {
+  Config,
+  ExtendedLight,
+  ExtendedRoom,
+  ExtendedWallSwitch,
+  ExtendedZone,
+} from './config/config'
 import { Logger, Color } from './log/logger'
-import { Bridge } from './bridge/bridge'
+import { Bridge, ButtonType } from './bridge/bridge'
 import _ from 'lodash'
 
 main().catch((e) => {
@@ -60,19 +66,21 @@ async function main() {
 
   // Create zones & rooms
   for (const room of config.rooms) {
-    const id = await bridge.addRoom(room.name, room.type)
-    room.idV2 = id
+    const roomIds = await bridge.addRoom(room.name, room.type)
+    room.idV1 = roomIds[0]
+    room.idV2 = roomIds[1]
     Logger.info(
       Color.Green,
-      `Room '${room.name}' was created with ID: '${room.idV2}'`,
+      `Room '${room.name}' was added with IDs: '${room.idV1}' (v1) and '${room.idV2}' (v2)`,
     )
   }
-  for (const zone of config.zones ?? []) {
-    const id = await bridge.addZone(zone.name, zone.type)
-    zone.idV2 = id
+  for (const zone of config.zones) {
+    const zoneIds = await bridge.addZone(zone.name, zone.type)
+    zone.idV1 = zoneIds[0]
+    zone.idV2 = zoneIds[1]
     Logger.info(
       Color.Green,
-      `Zone '${zone.name}' was created with ID: '${zone.idV2}'`,
+      `Zone '${zone.name}' was added with IDs: '${zone.idV1}' (v1) and '${zone.idV2}' (v2)`,
     )
   }
 
@@ -120,7 +128,7 @@ async function main() {
   const sceneImageId = config.defaults.scene.imageId
   const sceneName = config.defaults.scene.name
   for (const room of config.rooms) {
-    const id = await bridge.addScene(
+    const sceneIds = await bridge.addScene(
       sceneName,
       room.idV2!,
       'room',
@@ -129,14 +137,16 @@ async function main() {
       mirek,
       sceneImageId,
     )
-    await bridge.activateScene(id)
+    room.defaultSceneIdV1 = sceneIds[0]
+    room.defaultSceneIdV2 = sceneIds[1]
+    await bridge.activateScene(room.defaultSceneIdV2!)
     Logger.info(
       Color.Green,
-      `Default scene was created for room '${room.name}' with ID: '${id}'`,
+      `Default scene was created for room '${room.name}' with IDs: '${room.defaultSceneIdV1}' (v1) and '${room.defaultSceneIdV2}' (v2)`,
     )
   }
-  for (const zone of config.zones ?? []) {
-    const id = await bridge.addScene(
+  for (const zone of config.zones) {
+    const zoneIds = await bridge.addScene(
       sceneName,
       zone.idV2!,
       'zone',
@@ -145,10 +155,12 @@ async function main() {
       mirek,
       sceneImageId,
     )
-    await bridge.activateScene(id)
+    zone.defaultSceneIdV1 = zoneIds[0]
+    zone.defaultSceneIdV2 = zoneIds[1]
+    await bridge.activateScene(zone.defaultSceneIdV2!)
     Logger.info(
       Color.Green,
-      `Default scene was created for zone '${zone.name}' with ID: '${id}'`,
+      `Default scene was created for zone '${zone.name}' with with IDs: '${zone.defaultSceneIdV1}' (v1) and '${zone.defaultSceneIdV2}' (v2)`,
     )
   }
 
@@ -163,7 +175,7 @@ async function main() {
   Logger.info(Color.Green, `Updated power up behavior for all lights`)
 
   // Add wall switches
-  const wallSwitchIds = (config.wallSwitches ?? []).map((wallSwitch) => ({
+  const wallSwitchIds = config.wallSwitches.map((wallSwitch) => ({
     mac: wallSwitch.mac,
     name: wallSwitch.name,
   }))
@@ -179,5 +191,42 @@ async function main() {
     )
   })
 
+  for (const wallSwitch of config.wallSwitches) {
+    // Create rules
+    await addWallSwitchButton(ButtonType.Button1, wallSwitch, config, bridge)
+    await addWallSwitchButton(ButtonType.Button2, wallSwitch, config, bridge)
+
+    // Update wall switch name and mode
+    await bridge.updateWallSwitchProperties(
+      wallSwitch.idV2!,
+      wallSwitch.name,
+      wallSwitch.mode,
+    )
+    Logger.info(Color.Green, `Wall switch '${wallSwitch.name}' was configured`)
+  }
+
   Logger.info(Color.Yellow, 'Done! 🙌')
+}
+
+async function addWallSwitchButton(
+  type: ButtonType,
+  wallSwitch: ExtendedWallSwitch,
+  config: Config,
+  bridge: Bridge,
+) {
+  const button =
+    type === ButtonType.Button1 ? wallSwitch.button1 : wallSwitch.button2
+  if (!button) {
+    return
+  }
+  const group = config.getResourceById(button.group)! as
+    | ExtendedRoom
+    | ExtendedZone
+  await bridge.configureWallSwitchButton(
+    type,
+    wallSwitch.idV1!,
+    wallSwitch.name,
+    group.idV1!,
+    group.defaultSceneIdV1!,
+  )
 }

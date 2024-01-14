@@ -28,11 +28,17 @@ interface ExtendedLight extends Light {
 }
 
 interface ExtendedRoom extends Room {
+  idV1?: string
   idV2?: string
+  defaultSceneIdV1?: string
+  defaultSceneIdV2?: string
 }
 
 interface ExtendedZone extends Zone {
+  idV1?: string
   idV2?: string
+  defaultSceneIdV1?: string
+  defaultSceneIdV2?: string
 }
 
 interface ExtendedWallSwitch extends WallSwitch {
@@ -47,11 +53,11 @@ class Config implements ConfigGen {
   defaults: Defaults
   name?: string
   rooms: ExtendedRoom[]
-  zones?: ExtendedZone[]
-  motionSensors?: MotionSensor[]
-  tapDialSwitches?: TapDialSwitch[]
-  dimmerSwitches?: DimmerSwitch[]
-  wallSwitches?: ExtendedWallSwitch[]
+  zones: ExtendedZone[]
+  motionSensors: MotionSensor[]
+  tapDialSwitches: TapDialSwitch[]
+  dimmerSwitches: DimmerSwitch[]
+  wallSwitches: ExtendedWallSwitch[]
 
   constructor(configFilePath: any, xorKey?: string) {
     if (!configFilePath) {
@@ -72,13 +78,15 @@ class Config implements ConfigGen {
     this.lights = this._internalConfig.lights
     this.defaults = this._internalConfig.defaults
     this.rooms = this._internalConfig.rooms
-    this.zones = this._internalConfig.zones
+    this.zones = this._internalConfig.zones ?? []
     this.name = this._internalConfig.name
-    this.motionSensors = this._internalConfig['motion-sensors']
-    this.tapDialSwitches = this._internalConfig['tap-dial-switches']
-    this.dimmerSwitches = this._internalConfig['dimmer-switches']
-    this.wallSwitches = this._internalConfig['wall-switches']
+    this.motionSensors = this._internalConfig['motion-sensors'] ?? []
+    this.tapDialSwitches = this._internalConfig['tap-dial-switches'] ?? []
+    this.dimmerSwitches = this._internalConfig['dimmer-switches'] ?? []
+    this.wallSwitches = this._internalConfig['wall-switches'] ?? []
     this.#decrypt(xorKey)
+    this.#validateLightConfig()
+    this.#validateWallSwitchConfig()
   }
 
   getResourceById(id: string) {
@@ -111,11 +119,11 @@ class Config implements ConfigGen {
     Logger.debug(copy)
     Logger.info(`${copy.lights.length} light(s)`)
     Logger.info(`${copy.rooms.length} room(s)`)
-    Logger.info(`${(copy.zones ?? []).length} zones(s)`)
-    Logger.info(`${(copy.motionSensors ?? []).length} motion sensor(s)`)
-    Logger.info(`${(copy.tapDialSwitches ?? []).length} tap dial switch(es)`)
-    Logger.info(`${(copy.dimmerSwitches ?? []).length} dimmer switch(es)`)
-    Logger.info(`${(copy.wallSwitches ?? []).length} wall switch(es)`)
+    Logger.info(`${copy.zones.length} zones(s)`)
+    Logger.info(`${copy.motionSensors.length} motion sensor(s)`)
+    Logger.info(`${copy.tapDialSwitches.length} tap dial switch(es)`)
+    Logger.info(`${copy.dimmerSwitches.length} dimmer switch(es)`)
+    Logger.info(`${copy.wallSwitches.length} wall switch(es)`)
   }
 
   #validate() {
@@ -142,10 +150,10 @@ class Config implements ConfigGen {
     Logger.info(`Decrypting MAC and serial values with key: '${xorKey}' ...`)
     const objects = [
       ...this.lights,
-      ...(this.motionSensors ?? []),
-      ...(this.tapDialSwitches ?? []),
-      ...(this.dimmerSwitches ?? []),
-      ...(this.wallSwitches ?? []),
+      ...this.motionSensors,
+      ...this.tapDialSwitches,
+      ...this.dimmerSwitches,
+      ...this.wallSwitches,
     ]
     objects.forEach((obj: Decryptable) => {
       obj.serial = this.#decryptSerial(xorKey, obj.serial)
@@ -195,6 +203,30 @@ class Config implements ConfigGen {
 
   #decryptChar(keyChar: string, char: string) {
     return (parseInt(char, 16) ^ parseInt(keyChar, 16)).toString(16)
+  }
+
+  #validateLightConfig() {
+    this.lights.forEach((light) => {
+      light.zones?.forEach((zone) => {
+        this.#checkResourceDefined(zone)
+      })
+      this.#checkResourceDefined(light.room)
+    })
+  }
+
+  #validateWallSwitchConfig() {
+    this.wallSwitches.forEach((wallSwitch) => {
+      this.#checkResourceDefined(wallSwitch.button1.group)
+      if (wallSwitch.button2) {
+        this.#checkResourceDefined(wallSwitch.button2.group)
+      }
+    })
+  }
+
+  #checkResourceDefined(id: string) {
+    if (!this.getResourceById(id)) {
+      throw Error(`Undefined identifier: '${id}'!`)
+    }
   }
 }
 

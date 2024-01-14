@@ -54,10 +54,16 @@ export class Bridge {
     for (const zone of (await this.#apiv2!.getZones()).data) {
       await this.#apiv2!.deleteZone(zone.id)
     }
+    for (const ruleId of Object.keys(await this.#apiv1!.getRules())) {
+      await this.#apiv1!.deleteRule(ruleId)
+    }
     for (const device of (await this.#apiv2!.getDevices()).data) {
       if (!this.#isBridge(device)) {
         await this.#apiv2!.deleteDevice(device.id)
       }
+    }
+    for (const sensorId of Object.keys(await this.#apiv1!.getSensors())) {
+      await this.#apiv1!.deleteSensor(sensorId)
     }
   }
 
@@ -85,7 +91,10 @@ export class Bridge {
       },
       children: [],
     })
-    return created.data[0].rid
+    const idV2 = created.data[0].rid
+    const groupIdV1 = (await this.#apiv2!.getRoom(idV2)).data[0].id_v1 // "/groups/81"
+    const idV1 = groupIdV1.replace('/groups/', '')
+    return [idV1, idV2]
   }
 
   async addZone(name: string, archetype?: string) {
@@ -101,7 +110,10 @@ export class Bridge {
       },
       children: [],
     })
-    return created.data[0].rid
+    const idV2 = created.data[0].rid
+    const groupIdV1 = (await this.#apiv2!.getZone(idV2)).data[0].id_v1 // "/groups/81"
+    const idV1 = groupIdV1.replace('/groups/', '')
+    return [idV1, idV2]
   }
 
   async addLights(
@@ -171,63 +183,69 @@ export class Bridge {
     return finalLightIdList
   }
 
-  async addLightToRoom(lightOwnerId: string, roomId: string) {
-    Logger.info(`Adding light owned by '${lightOwnerId}' to room '${roomId}'`)
-    const children = (await this.#apiv2!.getRoom(roomId)).data[0].children
+  async addLightToRoom(lightOwnerIdV2: string, roomIdV2: string) {
+    Logger.info(
+      `Adding light owned by '${lightOwnerIdV2}' to room '${roomIdV2}'`,
+    )
+    const children = (await this.#apiv2!.getRoom(roomIdV2)).data[0].children
     children.push({
-      rid: lightOwnerId,
+      rid: lightOwnerIdV2,
       rtype: 'device',
     })
     const room = {
       children: children,
     }
-    await this.#apiv2!.updateRoom(roomId, room)
+    await this.#apiv2!.updateRoom(roomIdV2, room)
   }
 
-  async addLightToZone(lightId: string, zoneId: string) {
-    Logger.info(`Adding light '${lightId}' to zone '${zoneId}'`)
-    const children = (await this.#apiv2!.getZone(zoneId)).data[0].children
+  async addLightToZone(lightIdV2: string, zoneIdV2: string) {
+    Logger.info(`Adding light '${lightIdV2}' to zone '${zoneIdV2}'`)
+    const children = (await this.#apiv2!.getZone(zoneIdV2)).data[0].children
     children.push({
-      rid: lightId,
+      rid: lightIdV2,
       rtype: 'light',
     })
     const zone = {
       children: children,
     }
-    await this.#apiv2!.updateZone(zoneId, zone)
+    await this.#apiv2!.updateZone(zoneIdV2, zone)
   }
 
-  async updateLightMetadata(lightOwnerId: string, name: string, type?: string) {
-    Logger.info(`Updating metadata for device '${lightOwnerId}'`)
+  async updateLightMetadata(
+    lightOwnerIdV2: string,
+    name: string,
+    type?: string,
+  ) {
+    Logger.info(`Updating metadata for device '${lightOwnerIdV2}'`)
     const device = {
       metadata: {
         name: name,
         archetype: type ?? 'unknown_archetype',
       },
     }
-    await this.#apiv2!.updateDevice(lightOwnerId, device)
+    await this.#apiv2!.updateDevice(lightOwnerIdV2, device)
   }
 
-  async updateLightPowerUp(id: string, preset: string) {
-    Logger.info(`Updating power up behavior for light '${id}' to '${preset}'`)
+  async updateLightPowerUp(idV2: string, preset: string) {
+    Logger.info(`Updating power up behavior for light '${idV2}' to '${preset}'`)
     const light = {
       powerup: {
         preset: preset,
       },
     }
-    await this.#apiv2!.updateLight(id, light)
+    await this.#apiv2!.updateLight(idV2, light)
   }
 
   async addScene(
     name: string,
-    roomOrZoneId: string,
-    roomOrZoneType: string,
+    groupIdV2: string,
+    groupType: string,
     lightIds: string[],
     brightness: number,
     mirek: number,
     imageId: string,
-  ): Promise<string> {
-    Logger.info(`Adding scene '${name}' to ${roomOrZoneType} '${roomOrZoneId}'`)
+  ) {
+    Logger.info(`Adding scene '${name}' to ${groupType} '${groupIdV2}'`)
     const actions = _.map(lightIds, (id) => {
       return {
         target: {
@@ -247,7 +265,6 @@ export class Bridge {
         },
       }
     })
-
     const created = await this.#apiv2!.createScene({
       type: 'scene',
       metadata: {
@@ -258,17 +275,21 @@ export class Bridge {
         },
       },
       group: {
-        rid: roomOrZoneId,
-        rtype: roomOrZoneType,
+        rid: groupIdV2,
+        rtype: groupType,
       },
       actions: actions,
     })
-    return created.data[0].rid
+
+    const idV2 = created.data[0].rid
+    const sceneIdV1 = (await this.#apiv2!.getScene(idV2)).data[0].id_v1 // "/scenes/FVQmKmwq2L-adLtW"
+    const idV1 = sceneIdV1.replace('/scenes/', '')
+    return [idV1, idV2]
   }
 
-  async activateScene(id: string) {
-    Logger.info(`Activating scene '${id}'`)
-    await this.#apiv2!.updateScene(id, { recall: { action: 'active' } })
+  async activateScene(idV2: string) {
+    Logger.info(`Activating scene '${idV2}'`)
+    await this.#apiv2!.updateScene(idV2, { recall: { action: 'active' } })
   }
 
   async addWallSwitches(
@@ -318,6 +339,91 @@ export class Bridge {
     return finalWallSwitchIdList
   }
 
+  async updateWallSwitchProperties(idV2: string, name: string, mode: string) {
+    Logger.info(`Updating wall switch '${idV2}', mode '${mode}'`)
+    const device = {
+      metadata: {
+        name: name,
+        archetype: 'unknown_archetype',
+      },
+      device_mode: {
+        mode: mode,
+      },
+    }
+    await this.#apiv2!.updateDevice(idV2, device)
+  }
+
+  async configureWallSwitchButton(
+    type: ButtonType,
+    idV1: string,
+    name: string,
+    groupIdV1: string,
+    sceneIdV1: string,
+  ) {
+    Logger.info(
+      `Configuring wall switch '${idV1}' to control group '${groupIdV1}', scene: '${sceneIdV1}', button: '${type}'`,
+    )
+    const event = type === ButtonType.Button1 ? '1002' : '2002'
+    const switchOnRule = {
+      name: `${name} ${type} ON`,
+      conditions: [
+        {
+          address: `/sensors/${idV1}/state/buttonevent`,
+          operator: 'eq',
+          value: event,
+        },
+        {
+          address: `/sensors/${idV1}/state/lastupdated`,
+          operator: 'dx',
+        },
+        {
+          address: `/groups/${groupIdV1}/state/any_on`,
+          operator: 'eq',
+          value: 'false',
+        },
+      ],
+      actions: [
+        {
+          address: `/groups/${groupIdV1}/action`,
+          method: 'PUT',
+          body: {
+            scene: `${sceneIdV1}`,
+          },
+        },
+      ],
+    }
+    const switchOffRule = {
+      name: `${name} ${type} OFF`,
+      conditions: [
+        {
+          address: `/sensors/${idV1}/state/buttonevent`,
+          operator: 'eq',
+          value: event,
+        },
+        {
+          address: `/sensors/${idV1}/state/lastupdated`,
+          operator: 'dx',
+        },
+        {
+          address: `/groups/${groupIdV1}/state/any_on`,
+          operator: 'eq',
+          value: 'true',
+        },
+      ],
+      actions: [
+        {
+          address: `/groups/${groupIdV1}/action`,
+          method: 'PUT',
+          body: {
+            on: false,
+          },
+        },
+      ],
+    }
+    await this.#apiv1!.createRule(switchOnRule)
+    await this.#apiv1!.createRule(switchOffRule)
+  }
+
   async #hasMissingLights(lightIdList: LightIdentifiers[]) {
     return _.some(await this.#findMissingLights(lightIdList))
   }
@@ -345,7 +451,7 @@ export class Bridge {
     await this.#apiv1!.searchSensors()
     Logger.info(
       Color.Purple,
-      `Now, press or toggle wall switch '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
+      `Now, toggle (on/off) each button of wall switch '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
     )
   }
 
@@ -406,4 +512,9 @@ export type WallSwitchIdentifiers = {
   name: string
   id_v1?: string
   id_v2?: string
+}
+
+export enum ButtonType {
+  Button1 = 1,
+  Button2 = 2,
 }

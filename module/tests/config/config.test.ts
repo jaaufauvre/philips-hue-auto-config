@@ -33,6 +33,38 @@ describe('Config', () => {
       expect(e.message).toBe('Could not parse config!')
     }
   })
+  test('should throw Error when light room ID not defined', () => {
+    try {
+      new Config('./tests/config/res/undefined-light-room-id.json')
+      fail()
+    } catch (e: any) {
+      expect(e.message).toBe("Undefined identifier: 'room1'!")
+    }
+  })
+  test('should throw Error when light zone ID not defined', () => {
+    try {
+      new Config('./tests/config/res/undefined-light-zone-id.json')
+      fail()
+    } catch (e: any) {
+      expect(e.message).toBe("Undefined identifier: 'zone1'!")
+    }
+  })
+  test('should throw Error when wall switch button 1 group ID not defined', () => {
+    try {
+      new Config('./tests/config/res/undefined-wallswitch-group-id-1.json')
+      fail()
+    } catch (e: any) {
+      expect(e.message).toBe("Undefined identifier: 'group1'!")
+    }
+  })
+  test('should throw Error when wall switch button 2 group ID not defined', () => {
+    try {
+      new Config('./tests/config/res/undefined-wallswitch-group-id-2.json')
+      fail()
+    } catch (e: any) {
+      expect(e.message).toBe("Undefined identifier: 'group2'!")
+    }
+  })
   test('should throw Error when invalid config', () => {
     try {
       new Config('./tests/config/res/invalid-config.json')

@@ -85,6 +85,24 @@ export class ApiV1 {
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/${id}/config`
     return await this.#httpsClient.put(uri, config)
   }
+
+  async getRules() {
+    Logger.info(`[API v1] Retrieving rules ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules`
+    return await this.#httpsClient.get<RulesV1>(uri)
+  }
+
+  async createRule(rule: NewRule) {
+    Logger.info(`[API v1] Creating rule ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules`
+    return await this.#httpsClient.post(uri, rule)
+  }
+
+  async deleteRule(id: string) {
+    Logger.info(`[API v1] Deleting rule '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
 }
 
 //
@@ -152,4 +170,38 @@ export interface DaylightSensorConfig {
   lat: string
   sunriseoffset: number
   sunsetoffset: number
+}
+
+//
+// Rules
+//
+export type RuleId = string
+export interface RuleV1 {
+  name: string
+}
+export interface RulesV1 {
+  [key: RuleId]: RuleV1
+}
+
+export interface NewRule {
+  name: string
+  conditions: Condition[]
+  actions: Action[]
+}
+
+export interface Action {
+  address: string
+  method: string
+  body: Body
+}
+
+export interface Body {
+  scene?: string
+  on?: boolean
+}
+
+export interface Condition {
+  address: string
+  operator: string
+  value?: string
 }

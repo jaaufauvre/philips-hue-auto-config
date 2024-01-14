@@ -27,6 +27,16 @@
       "type": "hallway"
     },
     {
+      "id": "kids_bathroom",
+      "name": "Kids bathroom",
+      "type": "bathroom"
+    },
+    {
+      "id": "hallway_up",
+      "name": "Hallway upstairs",
+      "type": "hallway"
+    },
+    {
       "id": "toilet",
       "name": "Toilet",
       "type": "toilet"
@@ -37,19 +47,9 @@
       "type": "closet"
     },
     {
-      "id": "bedroom",
-      "name": "Bedroom",
-      "type": "bedroom"
-    },
-    {
       "id": "bedroom_sav",
       "name": "Savannah's bedroom",
       "type": "kids_bedroom"
-    },
-    {
-      "id": "bathroom",
-      "name": "Bathroom",
-      "type": "bathroom"
     }
   ],
   "zones": [
@@ -181,68 +181,6 @@
       ]
     },
     {
-      "id": "bedroom_ceiling_2",
-      "mac": "00:17:88:01:0c:9b:98:a5-0b",
-      "serial": "8F1B18",
-      "name": "Bedroom color ceiling",
-      "type": "sultan_bulb",
-      "room": "bedroom",
-      "zones": [
-        "bridge",
-        "upstairs"
-      ],
-      "comment": "Close to bed"
-    },
-    {
-      "id": "bedroom_ceiling_1",
-      "mac": "00:17:88:01:0b:31:2e:1d-0b",
-      "serial": "201364",
-      "name": "Bedroom ambiance ceiling",
-      "type": "sultan_bulb",
-      "room": "bedroom",
-      "zones": [
-        "bridge",
-        "upstairs"
-      ],
-      "comment": "Close to door"
-    },
-    {
-      "id": "bedroom_shade",
-      "mac": "00:17:88:01:0b:3d:8b:d8-0b",
-      "serial": "66CB13",
-      "name": "Bedroom color shade",
-      "type": "table_shade",
-      "room": "bedroom",
-      "zones": [
-        "bridge",
-        "upstairs"
-      ]
-    },
-    {
-      "id": "bedroom_candle_left",
-      "mac": "00:17:88:01:0c:d0:b8:87-0b",
-      "serial": "B74BB2",
-      "name": "Left ambiance candle",
-      "type": "table_shade",
-      "room": "bedroom",
-      "zones": [
-        "bridge",
-        "upstairs"
-      ]
-    },
-    {
-      "id": "bedroom_candle_right",
-      "mac": "00:17:88:01:0c:d0:af:99-0b",
-      "serial": "5317F3",
-      "name": "Right ambiance candle",
-      "type": "table_shade",
-      "room": "bedroom",
-      "zones": [
-        "bridge",
-        "upstairs"
-      ]
-    },
-    {
       "id": "savannah_plug_shelves",
       "mac": "00:17:88:01:0b:49:f0:2d-0b",
       "serial": "1E4560",
@@ -293,40 +231,66 @@
       ]
     },
     {
-      "id": "bathroom_ceiling",
-      "mac": "00:17:88:01:0d:89:f8:a0-0b",
-      "serial": "29799E",
-      "name": "Xamento bathroom",
+      "id": "kids_bathroom_ceiling",
+      "mac": "00:17:88:01:0c:29:a1:04-0b",
+      "serial": "58B5F4",
+      "name": "Xamento kids bathroom",
       "type": "ceiling_round",
-      "room": "bathroom",
+      "room": "kids_bathroom",
       "zones": [
         "bridge",
         "upstairs"
       ]
     },
     {
-      "id": "bathroom_spot_left",
-      "mac": "00:17:88:01:0b:5d:0f:5e-0b",
-      "serial": "B14325",
-      "name": "Bathroom Adore spot left",
+      "id": "kids_bathroom_spot_left",
+      "mac": "00:17:88:01:0b:2d:69:66-0b",
+      "serial": "C6F5B0",
+      "name": "Kids bathroom Adore spot left",
       "type": "double_spot",
-      "room": "bathroom",
+      "room": "kids_bathroom",
       "zones": [
         "bridge",
         "upstairs"
       ]
     },
     {
-      "id": "bathroom_spot_right",
-      "mac": "00:17:88:01:0b:5f:ea:d4-0b",
-      "serial": "A44AE7",
-      "name": "Bathroom Adore spot right",
+      "id": "kids_bathroom_spot_right",
+      "mac": "00:17:88:01:0b:2e:f7:9e-0b",
+      "serial": "A6627C",
+      "name": "Kids bathroom Adore spot right",
       "type": "double_spot",
-      "room": "bathroom",
+      "room": "kids_bathroom",
       "zones": [
         "bridge",
         "upstairs"
       ]
+    },
+    {
+      "id": "hall_up_1",
+      "mac": "00:17:88:01:0b:3f:e3:56-0b",
+      "serial": "AFC13C",
+      "name": "Hallway up ambiance ceiling 1",
+      "type": "sultan_bulb",
+      "room": "hallway_up",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ],
+      "comment": "Close to bathroom"
+    },
+    {
+      "id": "hall_up_2",
+      "mac": "00:17:88:01:0b:31:2f:40-0b",
+      "serial": "7D0271",
+      "name": "Hallway up ambiance ceiling 2",
+      "type": "sultan_bulb",
+      "room": "hallway_up",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ],
+      "comment": "Close to bedrooms"
     }
   ],
   "motion-sensors": [
@@ -361,6 +325,12 @@
       "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
       "serial": "2381C6",
       "name": "Dimmer bedroom"
+    },
+    {
+      "id": "kids_bathroom_dimmer",
+      "mac": "00:17:88:01:0b:ec:d1:41-01-fc00",
+      "serial": "61E40B",
+      "name": "Dimmer kids bathroom"
     }
   ],
   "tap-dial-switches": [
@@ -375,37 +345,74 @@
     {
       "id": "tv_ws",
       "mac": "00:17:88:01:0d:08:f0:76-01-fc00",
-      "name": "Wall switch TV room"
+      "name": "Switch TV room",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "group": "tv_room"
+      }
     },
     {
       "id": "savannah_ws",
       "mac": "00:17:88:01:0c:55:d9:12-01-fc00",
-      "name": "Wall switch Savannah"
-    },
-    {
-      "id": "bathroom_ws",
-      "mac": "00:17:88:01:0c:53:dc:3f-01-fc00",
-      "name": "Wall switch bathroom"
-    },
-    {
-      "id": "bedroom_ws",
-      "mac": "00:17:88:01:0c:54:44:d6-01-fc00",
-      "name": "Wall switch bedroom"
+      "name": "Switch Savannah",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "group": "bedroom_sav"
+      }
     },
     {
       "id": "hall_down_up_ws",
       "mac": "00:17:88:01:0c:54:44:da-01-fc00",
-      "name": "Wall switch hallway down/up"
+      "name": "Switch hallway down/up",
+      "mode": "switch_dual_rocker",
+      "button1": {
+        "group": "hallway_up"
+      },
+      "button2": {
+        "group": "hallway_down"
+      }
     },
     {
       "id": "hall_down_toilet_ws",
       "mac": "00:17:88:01:0c:53:df:28-01-fc00",
-      "name": "Wall switch hallway down/toilet"
+      "name": "Switch hallway down/toilet",
+      "mode": "switch_dual_rocker",
+      "button1": {
+        "group": "toilet"
+      },
+      "button2": {
+        "group": "hallway_down"
+      }
     },
     {
       "id": "dressing_ws",
       "mac": "00:17:88:01:0c:53:dc:3c-01-fc00",
-      "name": "Wall switch dressing"
+      "name": "Switch dressing",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "group": "dressing"
+      }
+    },
+    {
+      "id": "hall_up_bathroom_ws",
+      "mac": "00:17:88:01:0c:54:44:dd-01-fc00",
+      "name": "Switch hallway up/bathroom",
+      "mode": "switch_dual_rocker",
+      "button1": {
+        "group": "kids_bathroom"
+      },
+      "button2": {
+        "group": "hallway_up"
+      }
+    },
+    {
+      "id": "hall_up_attic_ws",
+      "mac": "00:17:88:01:0c:54:44:ec-01-fc00",
+      "name": "Switch hallway up/attic",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "group": "hallway_up"
+      }
     }
   ]
 }

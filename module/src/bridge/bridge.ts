@@ -65,11 +65,19 @@ export class Bridge {
     for (const sensorId of Object.keys(await this.#apiv1!.getSensors())) {
       await this.#apiv1!.deleteSensor(sensorId)
     }
+    for (const linkId of Object.keys(await this.#apiv1!.getResourcelinks())) {
+      await this.#apiv1!.deleteResourcelink(linkId)
+    }
+    for (const sceneId of Object.keys(await this.#apiv1!.getScenes())) {
+      await this.#apiv1!.deleteScene(sceneId)
+    }
   }
 
   async updateBridgeLocation(lat: string, long: string) {
     Logger.info('Updating bridge location ...')
-    const daylightSensorId = Object.keys(await this.#getSensors('Daylight'))[0]
+    const daylightSensorId = Object.keys(
+      await this.#getSensors(['Daylight']),
+    )[0]
     await this.#apiv1!.updateDaylightSensorConfig(daylightSensorId, {
       long: long,
       lat: lat,
@@ -296,47 +304,63 @@ export class Bridge {
     wallSwitchIdList: WallSwitchIdentifiers[],
   ): Promise<WallSwitchIdentifiers[]> {
     Logger.info('Adding wall switches ...')
-    for (const wallSwitchId of wallSwitchIdList) {
-      const name = wallSwitchId.name
-      this.#triggerWallSwitchSearch(name)
-      Logger.info(`Searching for wall switch '${name}'`)
-      while (!(await this.#hasSensor(wallSwitchId.mac))) {
-        if (!(await this.#isScanningWallSwitches())) {
-          this.#triggerWallSwitchSearch(name)
-        }
-        Logger.info(Color.DarkBlue, 'Scan is in progress ...')
-        await this.#wait(10000)
-      }
-    }
-    // All wall switches were added
-    const macAddresses = wallSwitchIdList.map(
-      (wallSwitchId) => wallSwitchId.mac,
-    )
-    const wallSwitchesV1 = await this.#getSensors('ZLLSwitch')
-    for (const id of Object.keys(wallSwitchesV1)) {
-      if (!_.includes(macAddresses, wallSwitchesV1[id].uniqueid)) {
-        // A wall switch was added and was not listed in the config, we delete it from the bridge
-        Logger.info(
-          `Deleting wall switch '${id}' (not declared in the config) ...`,
-        )
-        await this.#apiv1!.deleteSensor(id)
-      }
-    }
+    // All all wall switches
+    await this.#addAccessories(wallSwitchIdList, AccessoryType.WallSwitch)
     // Find wall switch resource IDs
+    const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#apiv2!.getDevices()
-    const finalWallSwitchIdList = _.cloneDeep(wallSwitchIdList)
-    _.forEach(finalWallSwitchIdList, (wallSwitchId) => {
-      wallSwitchId.id_v1 = _.find(
-        Object.keys(wallSwitchesV1),
-        (key) => wallSwitchesV1[key].uniqueid === wallSwitchId.mac,
-      )
+    const finalIdList = _.cloneDeep(wallSwitchIdList)
+    _.forEach(finalIdList, (wallSwitchId) => {
+      wallSwitchId.id_v1 = _.find(Object.keys(sensorsV1), (key) => {
+        const value = sensorsV1[key]
+        const uniqueId = value.uniqueid
+        return uniqueId != null && uniqueId === wallSwitchId.mac
+      })
       const wallSwitch = _.find(
         devicesV2.data,
         (device) => device.id_v1 === `/sensors/${wallSwitchId.id_v1}`,
       )
       wallSwitchId.id_v2 = wallSwitch!.id
     })
-    return finalWallSwitchIdList
+    return finalIdList
+  }
+
+  async addTapDialSwitches(
+    tapDialSwitchIdList: TapDialSwitchIdentifiers[],
+  ): Promise<TapDialSwitchIdentifiers[]> {
+    Logger.info('Adding tap dial switches ...')
+    // All all tap dial switches
+    await this.#addAccessories(tapDialSwitchIdList, AccessoryType.TapDialSwitch)
+    // Find tap dial resource IDs
+    const sensorsV1 = await this.#getSensors()
+    const devicesV2 = await this.#apiv2!.getDevices()
+    const finalIdList = _.cloneDeep(tapDialSwitchIdList)
+    _.forEach(finalIdList, (tapDialSwitchId) => {
+      tapDialSwitchId.switch_id_v1 = _.find(Object.keys(sensorsV1), (key) => {
+        const value = sensorsV1[key]
+        const uniqueId = value.uniqueid
+        return (
+          uniqueId != null &&
+          uniqueId.startsWith(tapDialSwitchId.mac) &&
+          sensorsV1[key].type === 'ZLLSwitch'
+        )
+      })
+      tapDialSwitchId.dial_id_v1 = _.find(Object.keys(sensorsV1), (key) => {
+        const value = sensorsV1[key]
+        const uniqueId = value.uniqueid
+        return (
+          uniqueId != null &&
+          uniqueId.startsWith(tapDialSwitchId.mac) &&
+          value.type === 'ZLLRelativeRotary'
+        )
+      })
+      const tapDialSwitch = _.find(
+        devicesV2.data,
+        (device) => device.id_v1 === `/sensors/${tapDialSwitchId.dial_id_v1}`,
+      )
+      tapDialSwitchId.id_v2 = tapDialSwitch!.id
+    })
+    return finalIdList
   }
 
   async updateWallSwitchProperties(idV2: string, name: string, mode: string) {
@@ -353,24 +377,57 @@ export class Bridge {
     await this.#apiv2!.updateDevice(idV2, device)
   }
 
-  async configureWallSwitchButton(
-    type: ButtonType,
+  async updateTapDialSwitchProperties(
+    switchIdV1: string,
+    dialIdV1: string,
+    idV2: string,
+    name: string,
+  ) {
+    Logger.info(`Updating tap dial switch '${idV2}'`)
+    const device = {
+      metadata: {
+        name: name,
+      },
+    }
+    const sensor = {
+      name: name,
+    }
+    await this.#apiv2!.updateDevice(idV2, device)
+    await this.#apiv1!.updateSensor(dialIdV1, sensor)
+    await this.#apiv1!.updateSensor(switchIdV1, sensor)
+  }
+
+  async configureAccessoryButton(
+    type: AccessoryType,
+    button: ButtonType,
     idV1: string,
     name: string,
     groupIdV1: string,
     sceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring wall switch '${idV1}' to control group '${groupIdV1}', scene: '${sceneIdV1}', button: '${type}'`,
+      `Configuring accessory '${idV1}' to control group '${groupIdV1}', scene: '${sceneIdV1}', button: '${button}'`,
     )
-    const event = type === ButtonType.Button1 ? '1002' : '2002'
+    let onEvent, offEvent
+    switch (type) {
+      case AccessoryType.WallSwitch:
+        onEvent = `${button}000` // initial_press
+        offEvent = `${button}000` // initial_press
+        break
+      case AccessoryType.TapDialSwitch:
+        onEvent = `${button}000` // initial_press
+        offEvent = `${button}010` // long_press
+        break
+      default:
+        throw new Error(`Unsupported accessory type: '${type}'`)
+    }
     const switchOnRule = {
-      name: `${name} ${type} ON`,
+      name: `${name} #${button} ON`,
       conditions: [
         {
           address: `/sensors/${idV1}/state/buttonevent`,
           operator: 'eq',
-          value: event,
+          value: onEvent,
         },
         {
           address: `/sensors/${idV1}/state/lastupdated`,
@@ -393,12 +450,12 @@ export class Bridge {
       ],
     }
     const switchOffRule = {
-      name: `${name} ${type} OFF`,
+      name: `${name} #${button} OFF`,
       conditions: [
         {
           address: `/sensors/${idV1}/state/buttonevent`,
           operator: 'eq',
-          value: event,
+          value: offEvent,
         },
         {
           address: `/sensors/${idV1}/state/lastupdated`,
@@ -424,6 +481,74 @@ export class Bridge {
     await this.#apiv1!.createRule(switchOffRule)
   }
 
+  async configureTapDial(
+    idV2: string,
+    groupIdV2: string,
+    sceneIdV2: string,
+    groupType: string,
+  ) {
+    Logger.info(
+      `Configuring dial '${idV2}' to control group '${groupIdV2}', scene: '${sceneIdV2}'`,
+    )
+    const button = {
+      on_short_release: {
+        action: 'do_nothing',
+      },
+      on_long_press: {
+        action: 'do_nothing',
+      },
+      where: [
+        {
+          group: {
+            rid: groupIdV2,
+            rtype: groupType,
+          },
+        },
+      ],
+    }
+    const behavior = {
+      type: 'behavior_instance',
+      enabled: true,
+      script_id: 'f306f634-acdb-4dd6-bdf5-48dd626d667e', // "Tap Switch script"
+      configuration: {
+        device: {
+          rid: idV2,
+          rtype: 'device',
+        },
+        button1: button,
+        button2: button,
+        button3: button,
+        button4: button,
+        rotary: {
+          on_dim_off: {
+            action: 'all_off',
+          },
+          on_dim_on: {
+            recall_single: [
+              {
+                action: {
+                  recall: {
+                    rid: sceneIdV2,
+                    rtype: 'scene',
+                  },
+                },
+              },
+            ],
+          },
+          where: [
+            {
+              group: {
+                rid: groupIdV2,
+                rtype: groupType,
+              },
+            },
+          ],
+        },
+      },
+    }
+    await this.#apiv2!.createBehaviorInstance(behavior)
+  }
+
   async #hasMissingLights(lightIdList: LightIdentifiers[]) {
     return _.some(await this.#findMissingLights(lightIdList))
   }
@@ -443,20 +568,47 @@ export class Bridge {
     return missingLightIds
   }
 
+  async #addAccessories(accessoryIdList: Identifiers[], type: AccessoryType) {
+    for (const accessoryId of accessoryIdList) {
+      const name = accessoryId.name
+      this.#triggerSensorSearch(name, type)
+      Logger.info(`Searching for '${name}'`)
+      while (!(await this.#hasSensor(accessoryId.mac))) {
+        if (!(await this.#isScanningSensors())) {
+          this.#triggerSensorSearch(name, type)
+        }
+        Logger.info(Color.DarkBlue, 'Scan is in progress ...')
+        await this.#wait(10000)
+      }
+    }
+  }
+
+  async #triggerSensorSearch(name: string, type: AccessoryType) {
+    await this.#apiv1!.searchSensors()
+    switch (type) {
+      case AccessoryType.WallSwitch:
+        Logger.info(
+          Color.Purple,
+          `Now, toggle (on/off) each button of wall switch '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
+        )
+        break
+      case AccessoryType.TapDialSwitch:
+        Logger.info(
+          Color.Purple,
+          `Now, press button #1 of tap dial switch '${name}' for 3 seconds. Reset the device in case it doesn't show up after a few minutes.`,
+        )
+        break
+      default:
+        throw new Error(`Unsupported accessory type: '${type}'`)
+    }
+  }
+
+  async #isScanningSensors(): Promise<boolean> {
+    return (await this.#apiv1!.getNewSensors()).lastscan === 'active'
+  }
+
   async #isScanningLights(): Promise<boolean> {
     return (await this.#apiv1!.getNewLights()).lastscan === 'active'
-  }
-
-  async #triggerWallSwitchSearch(name: string) {
-    await this.#apiv1!.searchSensors()
-    Logger.info(
-      Color.Purple,
-      `Now, toggle (on/off) each button of wall switch '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
-    )
-  }
-
-  async #isScanningWallSwitches(): Promise<boolean> {
-    return (await this.#apiv1!.getNewSensors()).lastscan === 'active'
   }
 
   async #hasRoom(name: string): Promise<boolean> {
@@ -479,10 +631,10 @@ export class Bridge {
     return _.some(Object.values(sensors), (sensor) => sensor.uniqueid === mac)
   }
 
-  async #getSensors(type: string) {
+  async #getSensors(types?: string[]) {
     const sensors = await this.#apiv1!.getSensors()
     for (const sensorId of Object.keys(sensors)) {
-      if (sensors[sensorId].type !== type) {
+      if (types && !_.includes(types, sensors[sensorId].type)) {
         delete sensors[sensorId]
       }
     }
@@ -499,22 +651,37 @@ export class Bridge {
   }
 }
 
-export type LightIdentifiers = {
+type Identifiers = {
   mac: string
+  name: string
+}
+
+export type LightIdentifiers = Identifiers & {
   serial?: string
   id_v1?: string
   id_v2?: string
   ownerId?: string
 }
 
-export type WallSwitchIdentifiers = {
-  mac: string
-  name: string
+export type WallSwitchIdentifiers = Identifiers & {
   id_v1?: string
+  id_v2?: string
+}
+
+export type TapDialSwitchIdentifiers = Identifiers & {
+  dial_id_v1?: string
+  switch_id_v1?: string
   id_v2?: string
 }
 
 export enum ButtonType {
   Button1 = 1,
   Button2 = 2,
+  Button3 = 3,
+  Button4 = 4,
+}
+
+export enum AccessoryType {
+  WallSwitch,
+  TapDialSwitch,
 }

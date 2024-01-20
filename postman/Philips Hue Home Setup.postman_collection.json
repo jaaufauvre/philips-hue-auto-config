@@ -372,27 +372,6 @@
 					"response": []
 				},
 				{
-					"name": "Get all scripts",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/behavior_script",
-							"protocol": "https",
-							"host": [
-								"{{bridge}}"
-							],
-							"path": [
-								"clip",
-								"v2",
-								"resource",
-								"behavior_script"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get all temperature services",
 					"request": {
 						"method": "GET",
@@ -854,7 +833,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"name\": \"Wall Switch Office Day\",\r\n        \"status\": \"enabled\",\r\n        \"conditions\": [\r\n            {\r\n                \"address\": \"/sensors/15/state/buttonevent\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"1002\"\r\n            },\r\n            {\r\n                \"address\": \"/sensors/15/state/lastupdated\",\r\n                \"operator\": \"dx\"\r\n            },\r\n            {\r\n                \"address\": \"/scenes/YYicCfjTU0-VoITI\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"true\"\r\n            },\r\n            {\r\n                \"address\": \"/groups/81/state/any_on\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"false\"\r\n            },\r\n            {\r\n                \"address\": \"/sensors/1/state/daylight\",\r\n                \"operator\": \"eq\",\r\n                \"value\": \"false\"\r\n            }\r\n        ],\r\n        \"actions\": [\r\n            {\r\n                \"address\": \"/groups/81/action\",\r\n                \"method\": \"PUT\",\r\n                \"body\": {\r\n                    \"scene\": \"YYicCfjTU0-VoITI\"\r\n                }\r\n            }\r\n        ]\r\n    }",
+							"raw": "{\r\n    \"name\": \"Button 1\",\r\n    \"status\": \"enabled\",\r\n    \"conditions\": [\r\n        {\r\n            \"address\": \"/sensors/86/state/buttonevent\",\r\n            \"operator\": \"eq\",\r\n            \"value\": \"1000\"\r\n        },\r\n        {\r\n            \"address\": \"/sensors/86/state/lastupdated\",\r\n            \"operator\": \"dx\"\r\n        }\r\n    ],\r\n    \"actions\": [\r\n        {\r\n            \"address\": \"/groups/81/action\",\r\n            \"method\": \"PUT\",\r\n            \"body\": {\r\n                \"scene\": \"kZjlhjR47sArGjDr\"\r\n            }\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -862,7 +841,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/rules/3",
+							"raw": "https://{{bridge}}/api/{{username}}/rules/1",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -871,7 +850,7 @@
 								"api",
 								"{{username}}",
 								"rules",
-								"3"
+								"1"
 							]
 						}
 					},
@@ -957,6 +936,26 @@
 								"v2",
 								"resource",
 								"scene"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all scenes (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/scenes",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"scenes"
 							]
 						}
 					},
@@ -1063,6 +1062,27 @@
 					"response": []
 				},
 				{
+					"name": "Get all \"relative_rotary\" devices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/relative_rotary",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"relative_rotary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get single tap dial switch",
 					"request": {
 						"method": "GET",
@@ -1079,6 +1099,37 @@
 								"resource",
 								"device",
 								"{{tapDialId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update tap dial switch",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"My Tap Dial\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device/fb35fb8f-f8bc-49ef-997b-ee21c16f58d6",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device",
+								"fb35fb8f-f8bc-49ef-997b-ee21c16f58d6"
 							]
 						}
 					},
@@ -1229,7 +1280,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"Office WS\"\r\n    },\r\n    \"device_mode\": {\r\n        \"mode\": \"switch_single_rocker\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"Office WS\"\r\n    },\r\n    \"device_mode\": {\r\n        \"mode\": \"switch_dual_rocker\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1510,6 +1561,164 @@
 								"{{username}}",
 								"sensors",
 								"25"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schedules",
+			"item": [
+				{
+					"name": "Get all schedules (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/schedules",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resourcelinks",
+			"item": [
+				{
+					"name": "Get all resourcelinks (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/resourcelinks",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"resourcelinks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Behavior scripts",
+			"item": [
+				{
+					"name": "Get all \"behavior_script\"",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/behavior_script",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"behavior_script"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all \"behavior_instance\"",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/behavior_instance",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"behavior_instance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update \"behavior_instance\"",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"id\": \"c7d0097d-8186-4c08-b5ca-3b8fc2fd841c\",\r\n    \"type\": \"behavior_instance\",\r\n    \"enabled\": true,\r\n    \"configuration\": {\r\n        \"device\": {\r\n            \"rid\": \"ad323a03-b30b-458f-a06c-862098854775\",\r\n            \"rtype\": \"device\"\r\n        },\r\n        \"button1\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"button2\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"button3\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"button4\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"rotary\": {\r\n            \"on_dim_off\": {\r\n                \"action\": \"all_off\"\r\n            },\r\n            \"on_dim_on\": {\r\n                \"recall_single\": [\r\n                    {\r\n                        \"action\": {\r\n                            \"recall\": {\r\n                                \"rid\": \"fd7b4733-07f6-4f9b-b648-eae11c95f1fa\",\r\n                                \"rtype\": \"scene\"\r\n                            }\r\n                        }\r\n                    }\r\n                ]\r\n            },\r\n            \"where\": [\r\n                {\r\n                    \"group\": {\r\n                        \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                        \"rtype\": \"room\"\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/behavior_instance/c7d0097d-8186-4c08-b5ca-3b8fc2fd841c",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"behavior_instance",
+								"c7d0097d-8186-4c08-b5ca-3b8fc2fd841c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create \"behavior_instance\"",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"type\": \"behavior_instance\",\r\n    \"script_id\": \"f306f634-acdb-4dd6-bdf5-48dd626d667e\",\r\n    \"enabled\": true,\r\n    \"configuration\": {\r\n        \"device\": {\r\n            \"rid\": \"ad323a03-b30b-458f-a06c-862098854775\",\r\n            \"rtype\": \"device\"\r\n        },\r\n        \"button1\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"button2\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"button3\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"button4\": {\r\n            \"on_short_release\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"on_long_press\": {\r\n                \"action\": \"do_nothing\"\r\n            },\r\n            \"where\": [{\r\n                \"group\": {\r\n                    \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                    \"rtype\": \"room\"\r\n                }\r\n            }]\r\n        },\r\n        \"rotary\": {\r\n            \"on_dim_off\": {\r\n                \"action\": \"all_off\"\r\n            },\r\n            \"on_dim_on\": {\r\n                \"recall_single\": [\r\n                    {\r\n                        \"action\": {\r\n                            \"recall\": {\r\n                                \"rid\": \"fd7b4733-07f6-4f9b-b648-eae11c95f1fa\",\r\n                                \"rtype\": \"scene\"\r\n                            }\r\n                        }\r\n                    }\r\n                ]\r\n            },\r\n            \"where\": [\r\n                {\r\n                    \"group\": {\r\n                        \"rid\": \"08ca97a1-f0e1-433e-ab82-f02044167087\",\r\n                        \"rtype\": \"room\"\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/behavior_instance",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"behavior_instance"
 							]
 						}
 					},

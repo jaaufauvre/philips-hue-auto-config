@@ -44,7 +44,8 @@ The program will:
 7. Search for lights (from their serial and MAC address) and add them to rooms and zones
 8. Create a "Default" scene in each room and zone
 9. Set a default power-on behavior for all lights
-10. Search for wall switches and add them to the bridge
+10. Search for accessories and add them to the bridge
+11. Configure accessories to activate the "Default" scene of a room or a zone
 
 ## References
 

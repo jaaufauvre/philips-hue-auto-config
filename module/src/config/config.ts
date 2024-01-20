@@ -21,28 +21,40 @@ interface Decryptable {
   serial?: string
 }
 
-interface ExtendedLight extends Light {
+interface Identifiable {
+  id: string
+}
+
+export interface ExtendedLight extends Light {
   idV1?: string
   idV2?: string
   ownerId?: string
 }
 
-interface ExtendedRoom extends Room {
+export interface ExtendedRoom extends Room {
   idV1?: string
   idV2?: string
   defaultSceneIdV1?: string
   defaultSceneIdV2?: string
+  groupType?: 'room'
 }
 
-interface ExtendedZone extends Zone {
+export interface ExtendedZone extends Zone {
   idV1?: string
   idV2?: string
   defaultSceneIdV1?: string
   defaultSceneIdV2?: string
+  groupType?: 'zone'
 }
 
-interface ExtendedWallSwitch extends WallSwitch {
+export interface ExtendedWallSwitch extends WallSwitch {
   idV1?: string
+  idV2?: string
+}
+
+export interface ExtendedTapDialSwitch extends TapDialSwitch {
+  dialIdV1?: string
+  switchIdV1?: string
   idV2?: string
 }
 
@@ -55,7 +67,7 @@ class Config implements ConfigGen {
   rooms: ExtendedRoom[]
   zones: ExtendedZone[]
   motionSensors: MotionSensor[]
-  tapDialSwitches: TapDialSwitch[]
+  tapDialSwitches: ExtendedTapDialSwitch[]
   dimmerSwitches: DimmerSwitch[]
   wallSwitches: ExtendedWallSwitch[]
 
@@ -84,9 +96,13 @@ class Config implements ConfigGen {
     this.tapDialSwitches = this._internalConfig['tap-dial-switches'] ?? []
     this.dimmerSwitches = this._internalConfig['dimmer-switches'] ?? []
     this.wallSwitches = this._internalConfig['wall-switches'] ?? []
+    _.forEach(this.rooms, (room) => (room.groupType = 'room'))
+    _.forEach(this.zones, (zone) => (zone.groupType = 'zone'))
     this.#decrypt(xorKey)
+    this.#validateUniqueIds()
     this.#validateLightConfig()
     this.#validateWallSwitchConfig()
+    this.#validateTapDialSwitchConfig()
   }
 
   getResourceById(id: string) {
@@ -99,6 +115,9 @@ class Config implements ConfigGen {
         _.find(this.zones, (zone) => zone.id === id),
         _.find(this.wallSwitches, (wallSwitch) =>
           _.includes([wallSwitch.id, wallSwitch.mac], id),
+        ),
+        _.find(this.tapDialSwitches, (tapDialSwitch) =>
+          _.includes([tapDialSwitch.id, tapDialSwitch.mac], id),
         ),
       ],
       (resource) => resource !== undefined,
@@ -205,6 +224,21 @@ class Config implements ConfigGen {
     return (parseInt(char, 16) ^ parseInt(keyChar, 16)).toString(16)
   }
 
+  #validateUniqueIds() {
+    const all = _.concat<Identifiable>(
+      this.lights,
+      this.rooms,
+      this.zones,
+      this.tapDialSwitches,
+      this.motionSensors,
+      this.dimmerSwitches,
+      this.wallSwitches,
+    )
+    if (all.length != _.uniqBy(all, (i) => i.id).length) {
+      throw new Error('Identifiers must be unique!')
+    }
+  }
+
   #validateLightConfig() {
     this.lights.forEach((light) => {
       light.zones?.forEach((zone) => {
@@ -223,6 +257,16 @@ class Config implements ConfigGen {
     })
   }
 
+  #validateTapDialSwitchConfig() {
+    this.tapDialSwitches.forEach((tapDialSwitch) => {
+      this.#checkResourceDefined(tapDialSwitch.button1.group)
+      this.#checkResourceDefined(tapDialSwitch.button2.group)
+      this.#checkResourceDefined(tapDialSwitch.button3.group)
+      this.#checkResourceDefined(tapDialSwitch.button4.group)
+      this.#checkResourceDefined(tapDialSwitch.dial.group)
+    })
+  }
+
   #checkResourceDefined(id: string) {
     if (!this.getResourceById(id)) {
       throw Error(`Undefined identifier: '${id}'!`)
@@ -230,14 +274,4 @@ class Config implements ConfigGen {
   }
 }
 
-export {
-  Config,
-  Light,
-  MotionSensor,
-  Room,
-  Zone,
-  ExtendedLight,
-  ExtendedRoom,
-  ExtendedZone,
-  ExtendedWallSwitch,
-}
+export { Config, Light, MotionSensor, Room, Zone }

@@ -3,10 +3,11 @@
   ExtendedLight,
   ExtendedRoom,
   ExtendedWallSwitch,
+  ExtendedTapDialSwitch,
   ExtendedZone,
 } from './config/config'
 import { Logger, Color } from './log/logger'
-import { Bridge, ButtonType } from './bridge/bridge'
+import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import _ from 'lodash'
 
 main().catch((e) => {
@@ -88,6 +89,7 @@ async function main() {
   const lightIds = config.lights.map((light) => ({
     mac: light.mac,
     serial: light.serial,
+    name: light.name,
   }))
   _.forEach(await bridge.addLights(lightIds), (lightId) => {
     const light = config.getResourceById(lightId.mac)! as ExtendedLight
@@ -131,7 +133,7 @@ async function main() {
     const sceneIds = await bridge.addScene(
       sceneName,
       room.idV2!,
-      'room',
+      room.groupType!,
       _.map(config.getRoomLights(room), (light) => light.idV2!),
       brightness,
       mirek,
@@ -149,7 +151,7 @@ async function main() {
     const zoneIds = await bridge.addScene(
       sceneName,
       zone.idV2!,
-      'zone',
+      zone.groupType!,
       _.map(config.getZoneLights(zone), (light) => light.idV2!),
       brightness,
       mirek,
@@ -191,8 +193,30 @@ async function main() {
     )
   })
 
+  // Add tap dial switches
+  const tapDialSwitchIds = config.tapDialSwitches.map((tapDialSwitch) => ({
+    mac: tapDialSwitch.mac,
+    name: tapDialSwitch.name,
+  }))
+  _.forEach(
+    await bridge.addTapDialSwitches(tapDialSwitchIds),
+    (tapDialSwitchId) => {
+      const tapDialSwitch = config.getResourceById(
+        tapDialSwitchId.mac,
+      )! as ExtendedTapDialSwitch
+      tapDialSwitch.dialIdV1 = tapDialSwitchId.dial_id_v1
+      tapDialSwitch.switchIdV1 = tapDialSwitchId.switch_id_v1
+      tapDialSwitch.idV2 = tapDialSwitchId.id_v2
+      Logger.info(
+        Color.Green,
+        `Tap dial switch '${tapDialSwitch.name}' was added with IDs: '${tapDialSwitch.dialIdV1}', '${tapDialSwitch.switchIdV1}' (v1) and '${tapDialSwitch.idV2}' (v2)`,
+      )
+    },
+  )
+
+  // Configure wall switches
   for (const wallSwitch of config.wallSwitches) {
-    // Create rules
+    // Create button rules
     await addWallSwitchButton(ButtonType.Button1, wallSwitch, config, bridge)
     await addWallSwitchButton(ButtonType.Button2, wallSwitch, config, bridge)
 
@@ -205,27 +229,116 @@ async function main() {
     Logger.info(Color.Green, `Wall switch '${wallSwitch.name}' was configured`)
   }
 
+  // Configure tap dial switches
+  for (const tapDialSwitch of config.tapDialSwitches) {
+    // Create button rules
+    await addTapDialSwitchButton(
+      ButtonType.Button1,
+      tapDialSwitch,
+      config,
+      bridge,
+    )
+    await addTapDialSwitchButton(
+      ButtonType.Button2,
+      tapDialSwitch,
+      config,
+      bridge,
+    )
+    await addTapDialSwitchButton(
+      ButtonType.Button3,
+      tapDialSwitch,
+      config,
+      bridge,
+    )
+    await addTapDialSwitchButton(
+      ButtonType.Button4,
+      tapDialSwitch,
+      config,
+      bridge,
+    )
+
+    // Create behavior script
+    const group = config.getResourceById(tapDialSwitch.dial.group)! as
+      | ExtendedRoom
+      | ExtendedZone
+    await bridge.configureTapDial(
+      tapDialSwitch.idV2!,
+      group.idV2!,
+      group.defaultSceneIdV2!,
+      group.groupType!,
+    )
+
+    // Update tap dial switch name
+    await bridge.updateTapDialSwitchProperties(
+      tapDialSwitch.switchIdV1!,
+      tapDialSwitch.dialIdV1!,
+      tapDialSwitch.idV2!,
+      tapDialSwitch.name,
+    )
+    Logger.info(
+      Color.Green,
+      `Tap dial switch '${tapDialSwitch.name}' was configured`,
+    )
+  }
+
   Logger.info(Color.Yellow, 'Done! 🙌')
 }
 
 async function addWallSwitchButton(
-  type: ButtonType,
+  button: ButtonType,
   wallSwitch: ExtendedWallSwitch,
   config: Config,
   bridge: Bridge,
 ) {
-  const button =
-    type === ButtonType.Button1 ? wallSwitch.button1 : wallSwitch.button2
-  if (!button) {
+  const configButton =
+    button === ButtonType.Button1 ? wallSwitch.button1 : wallSwitch.button2
+  if (!configButton) {
     return
   }
-  const group = config.getResourceById(button.group)! as
+  const group = config.getResourceById(configButton.group)! as
     | ExtendedRoom
     | ExtendedZone
-  await bridge.configureWallSwitchButton(
-    type,
+  await bridge.configureAccessoryButton(
+    AccessoryType.WallSwitch,
+    button,
     wallSwitch.idV1!,
     wallSwitch.name,
+    group.idV1!,
+    group.defaultSceneIdV1!,
+  )
+}
+
+async function addTapDialSwitchButton(
+  button: ButtonType,
+  tapDialSwitch: ExtendedTapDialSwitch,
+  config: Config,
+  bridge: Bridge,
+) {
+  let configButton
+  switch (button) {
+    case ButtonType.Button1:
+      configButton = tapDialSwitch.button1
+      break
+    case ButtonType.Button2:
+      configButton = tapDialSwitch.button2
+      break
+    case ButtonType.Button3:
+      configButton = tapDialSwitch.button3
+      break
+    case ButtonType.Button4:
+      configButton = tapDialSwitch.button4
+      break
+    default:
+      throw new Error(`Unsupported button type: '${button}'`)
+  }
+  const group = config.getResourceById(configButton.group)! as
+    | ExtendedRoom
+    | ExtendedZone
+  await bridge.configureAccessoryButton(
+    AccessoryType.TapDialSwitch,
+    button,
+    tapDialSwitch.switchIdV1!,
+    tapDialSwitch.name,
     group.idV1!,
     group.defaultSceneIdV1!,
   )

@@ -80,6 +80,12 @@ export class ApiV1 {
     return await this.#httpsClient.delete(uri)
   }
 
+  async updateSensor(id: string, sensor: UpdatedSensor) {
+    Logger.info(`[API v1] Updating sensor '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/${id}`
+    return await this.#httpsClient.put(uri, sensor)
+  }
+
   async updateDaylightSensorConfig(id: string, config: DaylightSensorConfig) {
     Logger.info(`[API v1] Updating daylight sensor '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors/${id}/config`
@@ -101,6 +107,30 @@ export class ApiV1 {
   async deleteRule(id: string) {
     Logger.info(`[API v1] Deleting rule '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
+
+  async getResourcelinks() {
+    Logger.info(`[API v1] Retrieving resource links ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/resourcelinks`
+    return await this.#httpsClient.get<ResourcelinksV1>(uri)
+  }
+
+  async deleteResourcelink(id: string) {
+    Logger.info(`[API v1] Deleting resource link '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/resourcelinks/${id}`
+    return await this.#httpsClient.delete(uri)
+  }
+
+  async getScenes() {
+    Logger.info(`[API v1] Retrieving scenes ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/scenes`
+    return await this.#httpsClient.get<ScenesV1>(uri)
+  }
+
+  async deleteScene(id: string) {
+    Logger.info(`[API v1] Deleting scene '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/scenes/${id}`
     return await this.#httpsClient.delete(uri)
   }
 }
@@ -158,7 +188,7 @@ export interface NewSensors {
 
 export type SensorId = string
 export interface SensorV1 {
-  uniqueid: string
+  uniqueid?: string
   type: string
 }
 export interface SensorsV1 {
@@ -170,6 +200,10 @@ export interface DaylightSensorConfig {
   lat: string
   sunriseoffset: number
   sunsetoffset: number
+}
+
+export interface UpdatedSensor {
+  name: string
 }
 
 //
@@ -204,4 +238,26 @@ export interface Condition {
   address: string
   operator: string
   value?: string
+}
+
+//
+// Resourcelinks
+//
+export type ResourcelinkId = string
+export interface ResourcelinkV1 {
+  name: string
+}
+export interface ResourcelinksV1 {
+  [key: ResourcelinkId]: ResourcelinkV1
+}
+
+//
+// Scenes
+//
+export type SceneId = string
+export interface SceneV1 {
+  name: string
+}
+export interface ScenesV1 {
+  [key: SceneId]: SceneV1
 }

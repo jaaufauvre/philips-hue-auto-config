@@ -325,7 +325,27 @@ export enum RoomType {
 }
 
 export interface TapDialSwitch {
+    /**
+     * Configuration for the first tap dial switch button
+     */
+    button1: TapDialSwitchButton1;
+    /**
+     * Configuration for the second tap dial switch button
+     */
+    button2: TapDialSwitchButton2;
+    /**
+     * Configuration for the third tap dial switch button
+     */
+    button3: Button3;
+    /**
+     * Configuration for the forth tap dial switch button
+     */
+    button4:  Button4;
     comment?: string;
+    /**
+     * Configuration for the dial
+     */
+    dial: Dial;
     /**
      * Uniquely identify the tap dial switch in this configuration
      */
@@ -345,15 +365,65 @@ export interface TapDialSwitch {
     serial?: string;
 }
 
+/**
+ * Configuration for the first tap dial switch button
+ */
+export interface TapDialSwitchButton1 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the second tap dial switch button
+ */
+export interface TapDialSwitchButton2 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the third tap dial switch button
+ */
+export interface Button3 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the forth tap dial switch button
+ */
+export interface Button4 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the dial
+ */
+export interface Dial {
+    /**
+     * An ID of room or zone the dial controls
+     */
+    group: string;
+}
+
 export interface WallSwitch {
     /**
      * Configuration for the first wall switch button
      */
-    button1: Button1;
+    button1: WallSwitchButton1;
     /**
      * Configuration for the second wall switch button
      */
-    button2?: Button2;
+    button2?: WallSwitchButton2;
     comment?: string;
     /**
      * Uniquely identify the wall switch in this configuration
@@ -376,7 +446,7 @@ export interface WallSwitch {
 /**
  * Configuration for the first wall switch button
  */
-export interface Button1 {
+export interface WallSwitchButton1 {
     /**
      * An ID of room or zone the button controls
      */
@@ -386,7 +456,7 @@ export interface Button1 {
 /**
  * Configuration for the second wall switch button
  */
-export interface Button2 {
+export interface WallSwitchButton2 {
     /**
      * An ID of room or zone the button controls
      */
@@ -646,25 +716,45 @@ const typeMap: any = {
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
     ], false),
     "TapDialSwitch": o([
+        { json: "button1", js: "button1", typ: r("TapDialSwitchButton1") },
+        { json: "button2", js: "button2", typ: r("TapDialSwitchButton2") },
+        { json: "button3", js: "button3", typ: r("Button3") },
+        { json: "button4", js: "button4", typ: r("Button4") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "dial", js: "dial", typ: r("Dial") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
+    "TapDialSwitchButton1": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "TapDialSwitchButton2": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "Button3": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "Button4": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "Dial": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
     "WallSwitch": o([
-        { json: "button1", js: "button1", typ: r("Button1") },
-        { json: "button2", js: "button2", typ: u(undefined, r("Button2")) },
+        { json: "button1", js: "button1", typ: r("WallSwitchButton1") },
+        { json: "button2", js: "button2", typ: u(undefined, r("WallSwitchButton2")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "mode", js: "mode", typ: r("Mode") },
         { json: "name", js: "name", typ: "" },
     ], false),
-    "Button1": o([
+    "WallSwitchButton1": o([
         { json: "group", js: "group", typ: "" },
     ], false),
-    "Button2": o([
+    "WallSwitchButton2": o([
         { json: "group", js: "group", typ: "" },
     ], false),
     "Zone": o([

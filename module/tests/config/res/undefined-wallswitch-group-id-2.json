@@ -1,5 +1,5 @@
 {
-  "name": "A config referencing an undefined room ID",
+  "name": "A config referencing an undefined room ID for wall switch button 2",
   "bridge": {
     "long": "",
     "lat": ""

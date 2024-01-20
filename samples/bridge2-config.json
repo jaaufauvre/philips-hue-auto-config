@@ -295,10 +295,16 @@
   ],
   "motion-sensors": [
     {
+      "id": "hall_up_sensor",
+      "mac": "00:17:88:01:0b:47:7b:62-02-0406",
+      "serial": "0B477B62",
+      "name": "Sensor hall. up"
+    },
+    {
       "id": "hall_down_sensor",
       "mac": "00:17:88:01:0b:58:00:7c-02-0406",
       "serial": "0B58007C",
-      "name": "Motion sensor hallway down"
+      "name": "Sensor hall. down"
     }
   ],
   "dimmer-switches": [
@@ -309,22 +315,10 @@
       "name": "Dimmer toilet"
     },
     {
-      "id": "bathroom_dimmer",
-      "mac": "00:17:88:01:0c:b2:e7:35-01-fc00",
-      "serial": "82CCD6",
-      "name": "Dimmer bathroom"
-    },
-    {
       "id": "savannah_dimmer",
       "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
       "serial": "0517BA",
       "name": "Dimmer Savannah"
-    },
-    {
-      "id": "bedroom_dimmer",
-      "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
-      "serial": "2381C6",
-      "name": "Dimmer bedroom"
     },
     {
       "id": "kids_bathroom_dimmer",
@@ -336,9 +330,24 @@
   "tap-dial-switches": [
     {
       "id": "tv_dial",
-      "mac": "00:17:88:01:0d:ea:cf:3e-01-fc00-0014",
+      "mac": "00:17:88:01:0d:ea:cf:3e-01-fc00",
       "serial": "806995",
-      "name": "Tap dial TV room"
+      "name": "Tap dial TV room",
+      "button1": {
+        "group": "tv_room"
+      },
+      "button2": {
+        "group": "tv_room"
+      },
+      "button3": {
+        "group": "tv_room"
+      },
+      "button4": {
+        "group": "tv_room"
+      },
+      "dial": {
+        "group": "tv_room"
+      }
     }
   ],
   "wall-switches": [
@@ -363,7 +372,7 @@
     {
       "id": "hall_down_up_ws",
       "mac": "00:17:88:01:0c:54:44:da-01-fc00",
-      "name": "Switch hallway down/up",
+      "name": "Switch hall. down/up",
       "mode": "switch_dual_rocker",
       "button1": {
         "group": "hallway_up"
@@ -375,7 +384,7 @@
     {
       "id": "hall_down_toilet_ws",
       "mac": "00:17:88:01:0c:53:df:28-01-fc00",
-      "name": "Switch hallway down/toilet",
+      "name": "Switch hall. down/toilet",
       "mode": "switch_dual_rocker",
       "button1": {
         "group": "toilet"
@@ -396,7 +405,7 @@
     {
       "id": "hall_up_bathroom_ws",
       "mac": "00:17:88:01:0c:54:44:dd-01-fc00",
-      "name": "Switch hallway up/bathroom",
+      "name": "Switch hall. up/bathroom",
       "mode": "switch_dual_rocker",
       "button1": {
         "group": "kids_bathroom"
@@ -408,7 +417,7 @@
     {
       "id": "hall_up_attic_ws",
       "mac": "00:17:88:01:0c:54:44:ec-01-fc00",
-      "name": "Switch hallway up/attic",
+      "name": "Switch hall. up/attic",
       "mode": "switch_single_rocker",
       "button1": {
         "group": "hallway_up"

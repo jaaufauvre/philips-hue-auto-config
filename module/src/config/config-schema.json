@@ -376,7 +376,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 26,
+            "maxLength": 25,
             "description": "A name for the motion sensor",
             "examples": ["My motion sensor"]
           },
@@ -404,7 +404,7 @@
             "type": "string",
             "pattern": "^[a-f0-9-:]+$",
             "description": "MAC address, required for uniquely identifying tap dial switches added to a bridge",
-            "examples": ["00:17:88:01:0d:e0:03:c0-fc00-0014"]
+            "examples": ["00:17:88:01:0d:e0:03:c0-fc00"]
           },
           "serial": {
             "type": "string",
@@ -416,15 +416,89 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 26,
+            "maxLength": 25,
             "description": "A name for the tap dial switch",
             "examples": ["My tap dial"]
+          },
+          "button1": {
+            "type": "object",
+            "description": "Configuration for the first tap dial switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button2": {
+            "type": "object",
+            "description": "Configuration for the second tap dial switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button3": {
+            "type": "object",
+            "description": "Configuration for the third tap dial switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button4": {
+            "type": "object",
+            "description": "Configuration for the forth tap dial switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "dial": {
+            "type": "object",
+            "description": "Configuration for the dial",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the dial controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
           },
           "comment": {
             "type": "string"
           }
         },
-        "required": ["id", "mac", "name"]
+        "required": [
+          "id",
+          "mac",
+          "name",
+          "button1",
+          "button2",
+          "button3",
+          "button4",
+          "dial"
+        ]
       }
     },
     "dimmer-switches": {
@@ -456,7 +530,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 26,
+            "maxLength": 25,
             "description": "A name for the dimmer switch",
             "examples": ["My dimmer"]
           },
@@ -489,7 +563,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 26,
+            "maxLength": 25,
             "description": "A name for the wall switch",
             "examples": ["My wall switch"]
           },

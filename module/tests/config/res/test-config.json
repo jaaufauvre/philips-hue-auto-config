@@ -58,9 +58,24 @@
   "tap-dial-switches": [
     {
       "id": "3",
-      "mac": "00:17:88:01:0b:21:3b:c6-fc00-0014",
+      "mac": "00:17:88:01:0b:21:3b:c6-fc00",
       "serial": "0B213BC6",
-      "name": "Tap dial"
+      "name": "Tap dial",
+      "button1": {
+        "group": "room"
+      },
+      "button2": {
+        "group": "zone1"
+      },
+      "button3": {
+        "group": "room"
+      },
+      "button4": {
+        "group": "zone2"
+      },
+      "dial": {
+        "group": "room"
+      }
     }
   ],
   "wall-switches": [

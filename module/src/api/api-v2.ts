@@ -131,6 +131,12 @@ export class ApiV2 {
     const uri = `${this.#getBaseUrl()}/scene/${id}`
     return await this.#httpsClient.put(uri, scene)
   }
+
+  async createBehaviorInstance(behavior: NewBehaviorInstance) {
+    Logger.info(`[API v2] Creating behavior instance ...`)
+    const uri = `${this.#getBaseUrl()}/behavior_instance`
+    return await this.#httpsClient.post(uri, behavior)
+  }
 }
 
 //
@@ -252,7 +258,7 @@ export interface UpdatedDevice {
 
 export interface DeviceMetadata {
   name: string
-  archetype: string
+  archetype?: string
 }
 
 export interface DeviceMode {
@@ -299,13 +305,11 @@ export interface CreatedScenes {
 
 export interface SceneAction {
   target: Resource
-  action: Action
-}
-
-export interface Action {
-  on: On
-  dimming: Dimming
-  color_temperature: ColorTemperature
+  action: {
+    on: On
+    dimming: Dimming
+    color_temperature: ColorTemperature
+  }
 }
 
 export interface ColorTemperature {
@@ -327,4 +331,53 @@ export interface SceneMetadata {
 
 export interface Recall {
   action: string
+}
+
+//
+// Behaviors
+//
+export interface NewBehaviorInstance {
+  type: string
+  enabled: boolean
+  script_id: string
+  configuration: BehaviorConfiguration
+}
+
+export interface BehaviorConfiguration {
+  device: Resource
+  button1: ButtonBehaviorConfiguration
+  button2: ButtonBehaviorConfiguration
+  button3: ButtonBehaviorConfiguration
+  button4: ButtonBehaviorConfiguration
+  rotary: RotaryBehaviorConfiguration
+}
+
+export interface ButtonBehaviorConfiguration {
+  on_short_release: {
+    action: string
+  }
+  on_long_press: {
+    action: string
+  }
+  where: Where[]
+}
+
+export interface Where {
+  group: Resource
+}
+
+export interface RotaryBehaviorConfiguration {
+  on_dim_off: {
+    action: string
+  }
+  on_dim_on: {
+    recall_single: RecallSingle[]
+  }
+  where: Where[]
+}
+
+export interface RecallSingle {
+  action: {
+    recall: Resource
+  }
 }

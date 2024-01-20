@@ -65,6 +65,14 @@ describe('Config', () => {
       expect(e.message).toBe("Undefined identifier: 'group2'!")
     }
   })
+  test('should throw Error when duplicated ID', () => {
+    try {
+      new Config('./tests/config/res/duplicated-id.json')
+      fail()
+    } catch (e: any) {
+      expect(e.message).toBe('Identifiers must be unique!')
+    }
+  })
   test('should throw Error when invalid config', () => {
     try {
       new Config('./tests/config/res/invalid-config.json')
@@ -91,9 +99,7 @@ describe('Config', () => {
       '00:17:88:01:0b:ab:cd:ef-02-0406',
     )
     expect(config1.tapDialSwitches![0].serial).toBe('0B123456')
-    expect(config1.tapDialSwitches![0].mac).toBe(
-      '00:17:88:01:0b:12:34:56-fc00-0014',
-    )
+    expect(config1.tapDialSwitches![0].mac).toBe('00:17:88:01:0b:12:34:56-fc00')
     expect(config1.wallSwitches![0].mac).toBe('00:17:88:01:0c:22:1e:81-01-fc00')
     expect(config1.dimmerSwitches![0].serial).toBe('98C27F')
     expect(config1.dimmerSwitches![0].mac).toBe(
@@ -114,9 +120,7 @@ describe('Config', () => {
       '00:17:88:01:0b:33:69:d4-02-0406',
     )
     expect(config2.tapDialSwitches![0].serial).toBe('0B8A906D')
-    expect(config2.tapDialSwitches![0].mac).toBe(
-      '00:17:88:01:0b:8a:90:6d-fc00-0014',
-    )
+    expect(config2.tapDialSwitches![0].mac).toBe('00:17:88:01:0b:8a:90:6d-fc00')
     expect(config2.wallSwitches![0].mac).toBe('00:17:88:01:0c:ba:ba:ba-01-fc00')
     expect(config2.dimmerSwitches![0].serial).toBe('006644')
     expect(config2.dimmerSwitches![0].mac).toBe(
@@ -133,9 +137,7 @@ describe('Config', () => {
     expect(config.motionSensors![0].serial).toBe('0B98C27F')
     expect(config.motionSensors![0].mac).toBe('00:17:88:01:0b:98:c2:7f-02-0406')
     expect(config.tapDialSwitches![0].serial).toBe('0B213BC6')
-    expect(config.tapDialSwitches![0].mac).toBe(
-      '00:17:88:01:0b:21:3b:c6-fc00-0014',
-    )
+    expect(config.tapDialSwitches![0].mac).toBe('00:17:88:01:0b:21:3b:c6-fc00')
     expect(config.wallSwitches![0].mac).toBe('00:17:88:01:0c:11:11:11-01-fc00')
     expect(config.dimmerSwitches![0].serial).toBe('ABCDEF')
     expect(config.dimmerSwitches![0].mac).toBe(
@@ -174,6 +176,16 @@ describe('Config', () => {
       config.getResourceById('00:17:88:01:0c:11:11:11-01-fc00')!.name,
     ).toBe('Wall switch')
   })
+  test('should return tap dial switch resource by ID', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('3')!.name).toBe('Tap dial')
+  })
+  test('should return tap dial switch resource by mac address', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('00:17:88:01:0b:21:3b:c6-fc00')!.name).toBe(
+      'Tap dial',
+    )
+  })
   test('should return room lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
     expect(config.getRoomLights(config.rooms[0]).length).toBe(2)
@@ -183,3 +195,7 @@ describe('Config', () => {
     expect(config.getZoneLights(config.zones![0]).length).toBe(1)
   })
 })
+
+function fail() {
+  expect(`Test failed`).toBeFalsy()
+}

@@ -391,16 +391,10 @@
   ],
   "motion-sensors": [
     {
-      "id": "hall_up_sensor",
-      "mac": "00:17:88:01:0b:47:7b:62-02-0406",
-      "serial": "0B477B62",
-      "name": "Motion sensor hallway up"
-    },
-    {
       "id": "kitchen_sensor",
       "mac": "00:17:88:01:0b:58:02:6a-02-0406",
       "serial": "0B58026A",
-      "name": "Motion sensor kitchen"
+      "name": "Sensor kitchen"
     }
   ],
   "dimmer-switches": [
@@ -409,14 +403,41 @@
       "mac": "00:17:88:01:0b:e3:88:a9-01-fc00",
       "serial": "D328A0",
       "name": "Dimmer Aaliya"
+    },
+    {
+      "id": "bathroom_dimmer",
+      "mac": "00:17:88:01:0c:b2:e7:35-01-fc00",
+      "serial": "82CCD6",
+      "name": "Dimmer bathroom"
+    },
+    {
+      "id": "bedroom_dimmer",
+      "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
+      "serial": "2381C6",
+      "name": "Dimmer bedroom"
     }
   ],
   "tap-dial-switches": [
     {
       "id": "kitchen_dial",
-      "mac": "00:17:88:01:0d:a2:09:21-01-fc00-0014",
+      "mac": "00:17:88:01:0d:a2:09:21-01-fc00",
       "serial": "0057DB",
-      "name": "Tap dial kitchen"
+      "name": "Tap dial kitchen",
+      "button1": {
+        "group": "kitchen"
+      },
+      "button2": {
+        "group": "kitchen"
+      },
+      "button3": {
+        "group": "dining"
+      },
+      "button4": {
+        "group": "kitchen"
+      },
+      "dial": {
+        "group": "kitchen"
+      }
     }
   ],
   "wall-switches": [

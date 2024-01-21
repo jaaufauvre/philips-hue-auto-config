@@ -4,10 +4,11 @@
 
 ## Overview
 
-This project allows to describe and automatically restore a Philips Hue Bridge configuration.
+This project allows to describe and automatically apply a Philips Hue Bridge configuration.
 
 It can be used to:
-* Factory-reset a Hue Bridge and restore its previous configuration
+* Reduce the amount of time spent on manual configuration
+* Factory-reset a Hue Bridge and restore its previous configuration at any time
 * Move a configuration to another Hue Bridge 
 * Split an existing configuration across two Hue Bridges
 

@@ -63,6 +63,13 @@ export interface ExtendedDimmerSwitch extends DimmerSwitch {
   idV2?: string
 }
 
+export interface ExtendedMotionSensor extends MotionSensor {
+  presenceIdV1?: string
+  lightIdV1?: string
+  temperatureIdV1?: string
+  idV2?: string
+}
+
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
   bridge: Bridge
@@ -71,7 +78,7 @@ class Config implements ConfigGen {
   name?: string
   rooms: ExtendedRoom[]
   zones: ExtendedZone[]
-  motionSensors: MotionSensor[]
+  motionSensors: ExtendedMotionSensor[]
   tapDialSwitches: ExtendedTapDialSwitch[]
   dimmerSwitches: ExtendedDimmerSwitch[]
   wallSwitches: ExtendedWallSwitch[]
@@ -110,6 +117,7 @@ class Config implements ConfigGen {
     this.#validateWallSwitchConfig()
     this.#validateTapDialSwitchConfig()
     this.#validateDimmerSwitchConfig()
+    this.#validateMotionSensorConfig()
   }
 
   getResourceById(id: string) {
@@ -124,10 +132,22 @@ class Config implements ConfigGen {
           _.includes([wallSwitch.id, wallSwitch.mac], id),
         ),
         _.find(this.tapDialSwitches, (tapDialSwitch) =>
-          _.includes([tapDialSwitch.id, tapDialSwitch.mac], id),
+          _.includes(
+            [tapDialSwitch.id, tapDialSwitch.serial, tapDialSwitch.mac],
+            id,
+          ),
         ),
         _.find(this.dimmerSwitches, (dimmerSwitch) =>
-          _.includes([dimmerSwitch.id, dimmerSwitch.mac], id),
+          _.includes(
+            [dimmerSwitch.id, dimmerSwitch.serial, dimmerSwitch.mac],
+            id,
+          ),
+        ),
+        _.find(this.motionSensors, (motionSensor) =>
+          _.includes(
+            [motionSensor.id, motionSensor.serial, motionSensor.mac],
+            id,
+          ),
         ),
       ],
       (resource) => resource !== undefined,
@@ -209,8 +229,7 @@ class Config implements ConfigGen {
     return newSerial
   }
 
-  // Examples: "00:17:88:01:0c:ab:cd:ef-0b" (lights) or "00:17:88:01:0b:ab:cd:ef-02-0406" (sensors).
-  // Only the 6 last hex numbers are encrypted.
+  // Examples: "00:17:88:01:0c:ab:cd:ef-0b". Only the 6 last hex numbers are encrypted.
   #decryptMac(xorKey: string, mac: string) {
     let newMac = mac.substring(0, 15)
     let count: number = 0
@@ -283,6 +302,12 @@ class Config implements ConfigGen {
       this.#checkResourceDefined(dimmerSwitch.button2.group)
       this.#checkResourceDefined(dimmerSwitch.button3.group)
       this.#checkResourceDefined(dimmerSwitch.button4.group)
+    })
+  }
+
+  #validateMotionSensorConfig() {
+    this.motionSensors.forEach((motionSensor) => {
+      this.#checkResourceDefined(motionSensor.group)
     })
   }
 

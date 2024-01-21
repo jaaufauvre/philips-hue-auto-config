@@ -296,15 +296,17 @@
   "motion-sensors": [
     {
       "id": "hall_up_sensor",
-      "mac": "00:17:88:01:0b:47:7b:62-02-0406",
+      "mac": "00:17:88:01:0b:47:7b:62-02",
       "serial": "0B477B62",
-      "name": "Sensor hall. up"
+      "name": "Sensor hall. up",
+      "group": "hallway_up"
     },
     {
       "id": "hall_down_sensor",
-      "mac": "00:17:88:01:0b:58:00:7c-02-0406",
+      "mac": "00:17:88:01:0b:58:00:7c-02",
       "serial": "0B58007C",
-      "name": "Sensor hall. down"
+      "name": "Sensor hall. down",
+      "group": "hallway_down"
     }
   ],
   "dimmer-switches": [

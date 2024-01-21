@@ -380,11 +380,16 @@
             "description": "A name for the motion sensor",
             "examples": ["My motion sensor"]
           },
+          "group": {
+            "type": "string",
+            "description": "An ID of room or zone the motion sensor controls",
+            "examples": ["office"]
+          },
           "comment": {
             "type": "string"
           }
         },
-        "required": ["id", "mac", "name"]
+        "required": ["id", "mac", "name", "group"]
       }
     },
     "tap-dial-switches": {

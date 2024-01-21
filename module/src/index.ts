@@ -6,6 +6,7 @@
   ExtendedTapDialSwitch,
   ExtendedZone,
   ExtendedDimmerSwitch,
+  ExtendedMotionSensor,
 } from './config/config'
 import { Logger, Color } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
@@ -19,7 +20,7 @@ main().catch((e) => {
 
 async function main() {
   Logger.setDebug(false)
-  Logger.info(Color.Yellow, 'Starting ...')
+  Logger.info(Color.Yellow, '🤖 Starting ...')
 
   // Inputs
   const providedBridgeIp = process.env.npm_config_bridge as string
@@ -221,6 +222,29 @@ async function main() {
       Logger.info(
         Color.Green,
         `Tap dial switch '${tapDialSwitch.name}' was added with IDs: '${tapDialSwitch.dialIdV1}', '${tapDialSwitch.switchIdV1}' (v1) and '${tapDialSwitch.idV2}' (v2)`,
+      )
+    },
+  )
+
+  // Add motion sensors
+  const motionSensorIds = config.motionSensors.map((motionSensor) => ({
+    type: AccessoryType.MotionSensor,
+    mac: motionSensor.mac,
+    name: motionSensor.name,
+  }))
+  _.forEach(
+    await bridge.addMotionSensors(motionSensorIds),
+    (motionSensorId) => {
+      const motionSensor = config.getResourceById(
+        motionSensorId.mac,
+      )! as ExtendedMotionSensor
+      motionSensor.presenceIdV1 = motionSensorId.presence_id_v1
+      motionSensor.lightIdV1 = motionSensorId.light_id_v1
+      motionSensor.temperatureIdV1 = motionSensorId.temperature_id_v1
+      motionSensor.idV2 = motionSensorId.id_v2
+      Logger.info(
+        Color.Green,
+        `Motion sensor '${motionSensor.name}' was added with IDs: '${motionSensor.presenceIdV1}', '${motionSensor.lightIdV1}', '${motionSensor.temperatureIdV1}' (v1) and '${motionSensor.idV2}' (v2)`,
       )
     },
   )

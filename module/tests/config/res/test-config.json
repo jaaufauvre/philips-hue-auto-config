@@ -47,6 +47,10 @@
     {
       "id": "ds_room2",
       "name": "Room 2 for dimmer switch"
+    },
+    {
+      "id": "ms_room",
+      "name": "Room for motion sensor"
     }
   ],
   "zones": [
@@ -77,7 +81,7 @@
   ],
   "lights": [
     {
-      "id": "0",
+      "id": "light1",
       "mac": "00:17:88:01:0c:22:1e:81-0b",
       "serial": "99A53A",
       "name": "Light 1",
@@ -85,13 +89,13 @@
       "zones": ["light_zone"]
     },
     {
-      "id": "1",
+      "id": "light2",
       "mac": "00:17:88:01:0c:11:2d:b2-0b",
       "name": "Light 2",
       "room": "room"
     },
     {
-      "id": "6",
+      "id": "light3",
       "mac": "00:00:00:00:00:00:00:00-00",
       "name": "Light 3",
       "room": "room"
@@ -99,15 +103,16 @@
   ],
   "motion-sensors": [
     {
-      "id": "2",
-      "mac": "00:17:88:01:0b:98:c2:7f-02-0406",
+      "id": "motionsensor",
+      "mac": "00:17:88:01:0b:98:c2:7f-02",
       "serial": "0B98C27F",
-      "name": "Motion sensor"
+      "name": "Motion sensor",
+      "group": "ms_room"
     }
   ],
   "tap-dial-switches": [
     {
-      "id": "3",
+      "id": "dial",
       "mac": "00:17:88:01:0b:21:3b:c6-fc00",
       "serial": "0B213BC6",
       "name": "Tap dial",
@@ -130,7 +135,7 @@
   ],
   "wall-switches": [
     {
-      "id": "4",
+      "id": "wallswitch",
       "mac": "00:17:88:01:0c:11:11:11-01-fc00",
       "name": "Wall switch",
       "mode": "switch_dual_rocker",
@@ -144,7 +149,7 @@
   ],
   "dimmer-switches": [
     {
-      "id": "5",
+      "id": "dimmerswitch",
       "mac": "00:17:88:01:0b:22:22:22-01-fc00",
       "serial": "ABCDEF",
       "name": "Dimmer switch",

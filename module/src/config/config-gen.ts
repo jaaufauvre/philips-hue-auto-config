@@ -292,6 +292,10 @@ export enum LightType {
 export interface MotionSensor {
     comment?: string;
     /**
+     * An ID of room or zone the motion sensor controls
+     */
+    group: string;
+    /**
      * Uniquely identify the motion sensor in this configuration
      */
     id: string;
@@ -776,6 +780,7 @@ const typeMap: any = {
     ], false),
     "MotionSensor": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "group", js: "group", typ: "" },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },

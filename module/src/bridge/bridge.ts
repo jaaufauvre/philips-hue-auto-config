@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import type from 'typia'
 import { Discovery } from '../api/discovery'
 import _ from 'lodash'
-import { ApiV1, CreateUserSuccess } from '../api/api-v1'
+import { ApiV1, CreateUserSuccess, SensorsV1 } from '../api/api-v1'
 import { ApiV2, Device } from '../api/api-v2'
 
 export class Bridge {
@@ -307,16 +307,16 @@ export class Bridge {
     Logger.table(accessoryIdList)
     // All all
     await this.#searchAccessories(accessoryIdList)
-    // Find resource IDs
+    // Find created IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#apiv2!.getDevices()
     const finalIdList = _.cloneDeep(accessoryIdList)
     _.forEach(finalIdList, (accessoryId) => {
-      accessoryId.id_v1 = _.find(Object.keys(sensorsV1), (key) => {
-        const value = sensorsV1[key]
-        const uniqueId = value.uniqueid
-        return uniqueId != null && uniqueId === accessoryId.mac
-      })
+      accessoryId.id_v1 = this.#findSensorIdByAddressAndType(
+        sensorsV1,
+        accessoryId.mac,
+        'ZLLSwitch',
+      )
       const accessory = _.find(
         devicesV2.data,
         (device) => device.id_v1 === `/sensors/${accessoryId.id_v1}`,
@@ -331,36 +331,65 @@ export class Bridge {
   ): Promise<TapDialSwitchIdentifiers[]> {
     Logger.info('Adding tap dial switches:')
     Logger.table(tapDialSwitchIdList)
-    // All all tap dial switches
+    // All all
     await this.#searchAccessories(tapDialSwitchIdList)
-    // Find tap dial resource IDs
+    // Find created IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#apiv2!.getDevices()
     const finalIdList = _.cloneDeep(tapDialSwitchIdList)
     _.forEach(finalIdList, (tapDialSwitchId) => {
-      tapDialSwitchId.switch_id_v1 = _.find(Object.keys(sensorsV1), (key) => {
-        const value = sensorsV1[key]
-        const uniqueId = value.uniqueid
-        return (
-          uniqueId != null &&
-          uniqueId.startsWith(tapDialSwitchId.mac) &&
-          sensorsV1[key].type === 'ZLLSwitch'
-        )
-      })
-      tapDialSwitchId.dial_id_v1 = _.find(Object.keys(sensorsV1), (key) => {
-        const value = sensorsV1[key]
-        const uniqueId = value.uniqueid
-        return (
-          uniqueId != null &&
-          uniqueId.startsWith(tapDialSwitchId.mac) &&
-          value.type === 'ZLLRelativeRotary'
-        )
-      })
+      tapDialSwitchId.switch_id_v1 = this.#findSensorIdByAddressAndType(
+        sensorsV1,
+        tapDialSwitchId.mac,
+        'ZLLSwitch',
+      )
+      tapDialSwitchId.dial_id_v1 = this.#findSensorIdByAddressAndType(
+        sensorsV1,
+        tapDialSwitchId.mac,
+        'ZLLRelativeRotary',
+      )
       const tapDialSwitch = _.find(
         devicesV2.data,
         (device) => device.id_v1 === `/sensors/${tapDialSwitchId.dial_id_v1}`,
       )
       tapDialSwitchId.id_v2 = tapDialSwitch!.id
+    })
+    return finalIdList
+  }
+
+  async addMotionSensors(
+    motionSensorIdList: MotionSensorIdentifiers[],
+  ): Promise<MotionSensorIdentifiers[]> {
+    Logger.info('Adding motion sensors:')
+    Logger.table(motionSensorIdList)
+    // All all
+    await this.#searchAccessories(motionSensorIdList)
+    // Find created IDs
+    const sensorsV1 = await this.#getSensors()
+    const devicesV2 = await this.#apiv2!.getDevices()
+    const finalIdList = _.cloneDeep(motionSensorIdList)
+    _.forEach(finalIdList, (motionSensorId) => {
+      motionSensorId.light_id_v1 = this.#findSensorIdByAddressAndType(
+        sensorsV1,
+        motionSensorId.mac,
+        'ZLLLightLevel',
+      )
+      motionSensorId.presence_id_v1 = this.#findSensorIdByAddressAndType(
+        sensorsV1,
+        motionSensorId.mac,
+        'ZLLPresence',
+      )
+      motionSensorId.temperature_id_v1 = this.#findSensorIdByAddressAndType(
+        sensorsV1,
+        motionSensorId.mac,
+        'ZLLTemperature',
+      )
+      const motionSensor = _.find(
+        devicesV2.data,
+        (device) =>
+          device.id_v1 === `/sensors/${motionSensorId.presence_id_v1}`,
+      )
+      motionSensorId.id_v2 = motionSensor!.id
     })
     return finalIdList
   }
@@ -629,6 +658,22 @@ export class Bridge {
     await this.#apiv2!.createBehaviorInstance(behavior)
   }
 
+  #findSensorIdByAddressAndType(
+    sensorsV1: SensorsV1,
+    macAddress: string,
+    type: string,
+  ) {
+    return _.find(Object.keys(sensorsV1), (key) => {
+      const value = sensorsV1[key]
+      const uniqueId = value.uniqueid
+      return (
+        uniqueId != null &&
+        uniqueId.startsWith(macAddress) &&
+        sensorsV1[key].type === type
+      )
+    })
+  }
+
   async #hasMissingLights(lightIdList: LightIdentifiers[]) {
     return _.some(await this.#findMissingLights(lightIdList))
   }
@@ -651,11 +696,11 @@ export class Bridge {
   async #searchAccessories(accessoryIdList: AccessoryIdentifiers[]) {
     for (const accessoryId of accessoryIdList) {
       const name = accessoryId.name
-      this.#triggerSensorSearch(name, accessoryId.type)
+      await this.#triggerSensorSearch(name, accessoryId.type)
       Logger.info(`Searching for '${name}'`)
       while (!(await this.#hasSensor(accessoryId.mac))) {
         if (!(await this.#isScanningSensors())) {
-          this.#triggerSensorSearch(name, accessoryId.type)
+          await this.#triggerSensorSearch(name, accessoryId.type)
         }
         Logger.info(Color.DarkBlue, 'Scan is in progress ...')
         await this.#wait(10000)
@@ -669,19 +714,25 @@ export class Bridge {
       case AccessoryType.WallSwitch:
         Logger.info(
           Color.Purple,
-          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
+          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. Press and hold the "reset" button in case it doesn't show up after a few minutes.`,
         )
         break
       case AccessoryType.TapDialSwitch:
         Logger.info(
           Color.Purple,
-          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. Reset the device in case it doesn't show up after a few minutes.`,
+          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. Press and hold the "setup" button in case it doesn't show up after a few minutes.`,
         )
         break
       case AccessoryType.DimmerSwitch:
         Logger.info(
           Color.Purple,
-          `[Dimmer switch] Now, press and hold the on/off button of '${name}' for 3 seconds. Reset the device in case it doesn't show up after a few minutes.`,
+          `[Dimmer switch] Now, press and hold the "on/off" button of '${name}' for 3 seconds. Press and hold the "setup" button in case it doesn't show up after a few minutes.`,
+        )
+        break
+      case AccessoryType.MotionSensor:
+        Logger.info(
+          Color.Purple,
+          `[Motion sensor] Now, wait or press the "setup" button of '${name}' for a few seconds`,
         )
         break
       default:
@@ -714,7 +765,9 @@ export class Bridge {
 
   async #hasSensor(mac: string): Promise<boolean> {
     const sensors = await this.#apiv1!.getSensors()
-    return _.some(Object.values(sensors), (sensor) => sensor.uniqueid === mac)
+    return _.some(Object.values(sensors), (sensor) =>
+      sensor.uniqueid?.startsWith(mac),
+    )
   }
 
   async #getSensors(types?: string[]) {
@@ -772,6 +825,14 @@ export type TapDialSwitchIdentifiers = Identifiers & {
   id_v2?: string
 }
 
+export type MotionSensorIdentifiers = Identifiers & {
+  type: AccessoryType
+  presence_id_v1?: string
+  light_id_v1?: string
+  temperature_id_v1?: string
+  id_v2?: string
+}
+
 export enum ButtonType {
   Button1 = 1,
   Button2 = 2,
@@ -783,4 +844,5 @@ export enum AccessoryType {
   WallSwitch = 'Wall switch',
   TapDialSwitch = 'Tap dial switch',
   DimmerSwitch = 'Dimmer switch',
+  MotionSensor = 'Motion sensor',
 }

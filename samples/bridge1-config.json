@@ -392,9 +392,10 @@
   "motion-sensors": [
     {
       "id": "kitchen_sensor",
-      "mac": "00:17:88:01:0b:58:02:6a-02-0406",
+      "mac": "00:17:88:01:0b:58:02:6a-02",
       "serial": "0B58026A",
-      "name": "Sensor kitchen"
+      "name": "Sensor kitchen",
+      "group": "kitchen"
     }
   ],
   "dimmer-switches": [

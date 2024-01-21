@@ -1,10 +1,11 @@
 import { Config } from '../../src/config/config'
+import fs from 'fs'
 
 describe('Config', () => {
   test('should throw Error when undefined config file path', () => {
     try {
       new Config(undefined)
-      fail()
+      fail('An error was expected')
     } catch (e: any) {
       expect(e.message).toBe('No config provided. Use the --config option!')
     }
@@ -12,7 +13,7 @@ describe('Config', () => {
   test('should throw Error when null config file path', () => {
     try {
       new Config(null)
-      fail()
+      fail('An error was expected')
     } catch (e: any) {
       expect(e.message).toBe('No config provided. Use the --config option!')
     }
@@ -20,55 +21,53 @@ describe('Config', () => {
   test('should throw Error when config file not found', () => {
     try {
       new Config('c:/somefile.json')
-      fail()
+      fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe('c:/somefile.json not found!')
+      expect(e.message).toBe('Could not parse config!')
     }
   })
   test('should throw Error when invalid JSON', () => {
     try {
       new Config('./tests/config/res/not-a-json.txt')
-      fail()
+      fail('An error was expected')
     } catch (e: any) {
       expect(e.message).toBe('Could not parse config!')
     }
   })
   test('should throw Error when light room ID not defined', () => {
     try {
-      new Config('./tests/config/res/undefined-light-room-id.json')
-      fail()
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(json.replace('"room": "light_room"', '"room": "unknown_room"'))
+      fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe("Undefined identifier: 'room1'!")
+      expect(e.message).toBe("Undefined identifier: 'unknown_room'!")
     }
   })
   test('should throw Error when light zone ID not defined', () => {
     try {
-      new Config('./tests/config/res/undefined-light-zone-id.json')
-      fail()
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace('"zones": ["light_zone"]', '"zones": ["unknown_zone"]'),
+      )
+      fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe("Undefined identifier: 'zone1'!")
-    }
-  })
-  test('should throw Error when wall switch button 1 group ID not defined', () => {
-    try {
-      new Config('./tests/config/res/undefined-wallswitch-group-id-1.json')
-      fail()
-    } catch (e: any) {
-      expect(e.message).toBe("Undefined identifier: 'group1'!")
-    }
-  })
-  test('should throw Error when wall switch button 2 group ID not defined', () => {
-    try {
-      new Config('./tests/config/res/undefined-wallswitch-group-id-2.json')
-      fail()
-    } catch (e: any) {
-      expect(e.message).toBe("Undefined identifier: 'group2'!")
+      expect(e.message).toBe("Undefined identifier: 'unknown_zone'!")
     }
   })
   test('should throw Error when duplicated ID', () => {
     try {
-      new Config('./tests/config/res/duplicated-id.json')
-      fail()
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(json.replace('"id": "room"', '"id": "light_zone"'))
+      fail('An error was expected')
     } catch (e: any) {
       expect(e.message).toBe('Identifiers must be unique!')
     }
@@ -76,11 +75,44 @@ describe('Config', () => {
   test('should throw Error when invalid config', () => {
     try {
       new Config('./tests/config/res/invalid-config.json')
-      fail()
+      fail('An error was expected')
     } catch (e: any) {
       expect(e.message).toContain('Config is invalid. Errors:')
     }
   })
+  it.each`
+    device               | what          | original_group_id
+    ${'Dimmer switch'}   | ${'button 1'} | ${'ds_room1'}
+    ${'Dimmer switch'}   | ${'button 2'} | ${'ds_zone1'}
+    ${'Dimmer switch'}   | ${'button 3'} | ${'ds_room2'}
+    ${'Dimmer switch'}   | ${'button 4'} | ${'ds_zone2'}
+    ${'Wall switch'}     | ${'button 1'} | ${'ws_room'}
+    ${'Wall switch'}     | ${'button 2'} | ${'ws_zone'}
+    ${'Tap dial switch'} | ${'button 1'} | ${'ts_room1'}
+    ${'Tap dial switch'} | ${'button 2'} | ${'ts_zone1'}
+    ${'Tap dial switch'} | ${'button 3'} | ${'ts_room2'}
+    ${'Tap dial switch'} | ${'button 4'} | ${'ts_zone2'}
+    ${'Tap dial switch'} | ${'dial'}     | ${'ts_room3'}
+  `(
+    'should throw Error when group ID not defined for $device $what',
+    ({ device, what, original_group_id }) => {
+      console.log(
+        `should throw Error when group ID not defined for ${device} ${what}`,
+      )
+      try {
+        const json = fs.readFileSync(
+          './tests/config/res/test-config.json',
+          'utf-8',
+        )
+        new Config(
+          json.replace(`"group": "${original_group_id}"`, `"group": "unknown"`),
+        )
+        fail('An error was expected')
+      } catch (e: any) {
+        expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+      }
+    },
+  )
   test('should print config', () => {
     new Config('./tests/config/res/test-config.json').print()
   })
@@ -164,7 +196,7 @@ describe('Config', () => {
   })
   test('should return zone resource by ID', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getResourceById('zone2')!.name).toBe('Zone 2')
+    expect(config.getResourceById('light_zone')!.name).toBe('Zone for light')
   })
   test('should return wall switch resource by ID', () => {
     const config = new Config('./tests/config/res/test-config.json')
@@ -186,6 +218,16 @@ describe('Config', () => {
       'Tap dial',
     )
   })
+  test('should return dimmer switch resource by ID', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getResourceById('5')!.name).toBe('Dimmer switch')
+  })
+  test('should return dimmer switch resource by mac address', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(
+      config.getResourceById('00:17:88:01:0b:22:22:22-01-fc00')!.name,
+    ).toBe('Dimmer switch')
+  })
   test('should return room lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
     expect(config.getRoomLights(config.rooms[0]).length).toBe(2)
@@ -196,6 +238,6 @@ describe('Config', () => {
   })
 })
 
-function fail() {
-  expect(`Test failed`).toBeFalsy()
+function fail(msg: string) {
+  expect(`Test failed: ${msg}`).toBeFalsy()
 }

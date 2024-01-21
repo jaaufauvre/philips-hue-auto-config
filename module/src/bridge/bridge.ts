@@ -300,27 +300,28 @@ export class Bridge {
     await this.#apiv2!.updateScene(idV2, { recall: { action: 'active' } })
   }
 
-  async addWallSwitches(
-    wallSwitchIdList: WallSwitchIdentifiers[],
-  ): Promise<WallSwitchIdentifiers[]> {
-    Logger.info('Adding wall switches ...')
-    // All all wall switches
-    await this.#addAccessories(wallSwitchIdList, AccessoryType.WallSwitch)
-    // Find wall switch resource IDs
+  async addAccessories(
+    accessoryIdList: AccessoryIdentifiers[],
+  ): Promise<AccessoryIdentifiers[]> {
+    Logger.info('Adding accessories:')
+    Logger.table(accessoryIdList)
+    // All all
+    await this.#searchAccessories(accessoryIdList)
+    // Find resource IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#apiv2!.getDevices()
-    const finalIdList = _.cloneDeep(wallSwitchIdList)
-    _.forEach(finalIdList, (wallSwitchId) => {
-      wallSwitchId.id_v1 = _.find(Object.keys(sensorsV1), (key) => {
+    const finalIdList = _.cloneDeep(accessoryIdList)
+    _.forEach(finalIdList, (accessoryId) => {
+      accessoryId.id_v1 = _.find(Object.keys(sensorsV1), (key) => {
         const value = sensorsV1[key]
         const uniqueId = value.uniqueid
-        return uniqueId != null && uniqueId === wallSwitchId.mac
+        return uniqueId != null && uniqueId === accessoryId.mac
       })
-      const wallSwitch = _.find(
+      const accessory = _.find(
         devicesV2.data,
-        (device) => device.id_v1 === `/sensors/${wallSwitchId.id_v1}`,
+        (device) => device.id_v1 === `/sensors/${accessoryId.id_v1}`,
       )
-      wallSwitchId.id_v2 = wallSwitch!.id
+      accessoryId.id_v2 = accessory!.id
     })
     return finalIdList
   }
@@ -328,9 +329,10 @@ export class Bridge {
   async addTapDialSwitches(
     tapDialSwitchIdList: TapDialSwitchIdentifiers[],
   ): Promise<TapDialSwitchIdentifiers[]> {
-    Logger.info('Adding tap dial switches ...')
+    Logger.info('Adding tap dial switches:')
+    Logger.table(tapDialSwitchIdList)
     // All all tap dial switches
-    await this.#addAccessories(tapDialSwitchIdList, AccessoryType.TapDialSwitch)
+    await this.#searchAccessories(tapDialSwitchIdList)
     // Find tap dial resource IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#apiv2!.getDevices()
@@ -377,6 +379,16 @@ export class Bridge {
     await this.#apiv2!.updateDevice(idV2, device)
   }
 
+  async updateDimmerSwitchProperties(idV2: string, name: string) {
+    Logger.info(`Updating dimmer switch '${idV2}'`)
+    const device = {
+      metadata: {
+        name: name,
+      },
+    }
+    await this.#apiv2!.updateDevice(idV2, device)
+  }
+
   async updateTapDialSwitchProperties(
     switchIdV1: string,
     dialIdV1: string,
@@ -406,79 +418,147 @@ export class Bridge {
     sceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring accessory '${idV1}' to control group '${groupIdV1}', scene: '${sceneIdV1}', button: '${button}'`,
+      `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}', scene: '${sceneIdV1}'`,
     )
-    let onEvent, offEvent
+    let onAndOff = false,
+      brighten = false,
+      darken = false
+    let onEvent, offEvent, brightenEvent, darkenEvent
     switch (type) {
+      case AccessoryType.DimmerSwitch:
+        brighten = button === ButtonType.Button2
+        darken = button === ButtonType.Button3
+        onAndOff = !brighten && !darken
+        onEvent = offEvent = brightenEvent = darkenEvent = `${button}000` // initial_press
+        break
       case AccessoryType.WallSwitch:
-        onEvent = `${button}000` // initial_press
-        offEvent = `${button}000` // initial_press
+        onAndOff = true
+        onEvent = offEvent = `${button}000` // initial_press
         break
       case AccessoryType.TapDialSwitch:
+        onAndOff = true
         onEvent = `${button}000` // initial_press
         offEvent = `${button}010` // long_press
         break
       default:
         throw new Error(`Unsupported accessory type: '${type}'`)
     }
-    const switchOnRule = {
-      name: `${name} #${button} ON`,
-      conditions: [
-        {
-          address: `/sensors/${idV1}/state/buttonevent`,
-          operator: 'eq',
-          value: onEvent,
-        },
-        {
-          address: `/sensors/${idV1}/state/lastupdated`,
-          operator: 'dx',
-        },
-        {
-          address: `/groups/${groupIdV1}/state/any_on`,
-          operator: 'eq',
-          value: 'false',
-        },
-      ],
-      actions: [
-        {
-          address: `/groups/${groupIdV1}/action`,
-          method: 'PUT',
-          body: {
-            scene: `${sceneIdV1}`,
+    if (brighten) {
+      const brightenRule = {
+        name: `${name} +`,
+        conditions: [
+          {
+            address: `/sensors/${idV1}/state/buttonevent`,
+            operator: 'eq',
+            value: brightenEvent,
           },
-        },
-      ],
-    }
-    const switchOffRule = {
-      name: `${name} #${button} OFF`,
-      conditions: [
-        {
-          address: `/sensors/${idV1}/state/buttonevent`,
-          operator: 'eq',
-          value: offEvent,
-        },
-        {
-          address: `/sensors/${idV1}/state/lastupdated`,
-          operator: 'dx',
-        },
-        {
-          address: `/groups/${groupIdV1}/state/any_on`,
-          operator: 'eq',
-          value: 'true',
-        },
-      ],
-      actions: [
-        {
-          address: `/groups/${groupIdV1}/action`,
-          method: 'PUT',
-          body: {
-            on: false,
+          {
+            address: `/sensors/${idV1}/state/lastupdated`,
+            operator: 'dx',
           },
-        },
-      ],
+        ],
+        actions: [
+          {
+            address: `/groups/${groupIdV1}/action`,
+            method: 'PUT',
+            body: {
+              transitiontime: 10,
+              bri_inc: 51,
+            },
+          },
+        ],
+      }
+      await this.#apiv1!.createRule(brightenRule)
     }
-    await this.#apiv1!.createRule(switchOnRule)
-    await this.#apiv1!.createRule(switchOffRule)
+
+    if (darken) {
+      const darkenRule = {
+        name: `${name} -`,
+        conditions: [
+          {
+            address: `/sensors/${idV1}/state/buttonevent`,
+            operator: 'eq',
+            value: darkenEvent,
+          },
+          {
+            address: `/sensors/${idV1}/state/lastupdated`,
+            operator: 'dx',
+          },
+        ],
+        actions: [
+          {
+            address: `/groups/${groupIdV1}/action`,
+            method: 'PUT',
+            body: {
+              transitiontime: 10,
+              bri_inc: -51,
+            },
+          },
+        ],
+      }
+      await this.#apiv1!.createRule(darkenRule)
+    }
+
+    if (onAndOff) {
+      const switchOnRule = {
+        name: `${name} #${button} ON`,
+        conditions: [
+          {
+            address: `/sensors/${idV1}/state/buttonevent`,
+            operator: 'eq',
+            value: onEvent,
+          },
+          {
+            address: `/sensors/${idV1}/state/lastupdated`,
+            operator: 'dx',
+          },
+          {
+            address: `/groups/${groupIdV1}/state/any_on`,
+            operator: 'eq',
+            value: 'false',
+          },
+        ],
+        actions: [
+          {
+            address: `/groups/${groupIdV1}/action`,
+            method: 'PUT',
+            body: {
+              scene: `${sceneIdV1}`,
+            },
+          },
+        ],
+      }
+      const switchOffRule = {
+        name: `${name} #${button} OFF`,
+        conditions: [
+          {
+            address: `/sensors/${idV1}/state/buttonevent`,
+            operator: 'eq',
+            value: offEvent,
+          },
+          {
+            address: `/sensors/${idV1}/state/lastupdated`,
+            operator: 'dx',
+          },
+          {
+            address: `/groups/${groupIdV1}/state/any_on`,
+            operator: 'eq',
+            value: 'true',
+          },
+        ],
+        actions: [
+          {
+            address: `/groups/${groupIdV1}/action`,
+            method: 'PUT',
+            body: {
+              on: false,
+            },
+          },
+        ],
+      }
+      await this.#apiv1!.createRule(switchOnRule)
+      await this.#apiv1!.createRule(switchOffRule)
+    }
   }
 
   async configureTapDial(
@@ -568,14 +648,14 @@ export class Bridge {
     return missingLightIds
   }
 
-  async #addAccessories(accessoryIdList: Identifiers[], type: AccessoryType) {
+  async #searchAccessories(accessoryIdList: AccessoryIdentifiers[]) {
     for (const accessoryId of accessoryIdList) {
       const name = accessoryId.name
-      this.#triggerSensorSearch(name, type)
+      this.#triggerSensorSearch(name, accessoryId.type)
       Logger.info(`Searching for '${name}'`)
       while (!(await this.#hasSensor(accessoryId.mac))) {
         if (!(await this.#isScanningSensors())) {
-          this.#triggerSensorSearch(name, type)
+          this.#triggerSensorSearch(name, accessoryId.type)
         }
         Logger.info(Color.DarkBlue, 'Scan is in progress ...')
         await this.#wait(10000)
@@ -589,13 +669,19 @@ export class Bridge {
       case AccessoryType.WallSwitch:
         Logger.info(
           Color.Purple,
-          `Now, toggle (on/off) each button of wall switch '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
+          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. Reset the device in case it doesn't show up after a few minutes.`,
         )
         break
       case AccessoryType.TapDialSwitch:
         Logger.info(
           Color.Purple,
-          `Now, press button #1 of tap dial switch '${name}' for 3 seconds. Reset the device in case it doesn't show up after a few minutes.`,
+          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. Reset the device in case it doesn't show up after a few minutes.`,
+        )
+        break
+      case AccessoryType.DimmerSwitch:
+        Logger.info(
+          Color.Purple,
+          `[Dimmer switch] Now, press and hold the on/off button of '${name}' for 3 seconds. Reset the device in case it doesn't show up after a few minutes.`,
         )
         break
       default:
@@ -663,12 +749,24 @@ export type LightIdentifiers = Identifiers & {
   ownerId?: string
 }
 
+export type AccessoryIdentifiers = Identifiers & {
+  type: AccessoryType
+  id_v1?: string
+  id_v2?: string
+}
+
 export type WallSwitchIdentifiers = Identifiers & {
   id_v1?: string
   id_v2?: string
 }
 
+export type DimmerSwitchIdentifiers = Identifiers & {
+  id_v1?: string
+  id_v2?: string
+}
+
 export type TapDialSwitchIdentifiers = Identifiers & {
+  type: AccessoryType
   dial_id_v1?: string
   switch_id_v1?: string
   id_v2?: string
@@ -682,6 +780,7 @@ export enum ButtonType {
 }
 
 export enum AccessoryType {
-  WallSwitch,
-  TapDialSwitch,
+  WallSwitch = 'Wall switch',
+  TapDialSwitch = 'Tap dial switch',
+  DimmerSwitch = 'Dimmer switch',
 }

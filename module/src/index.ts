@@ -5,6 +5,7 @@
   ExtendedWallSwitch,
   ExtendedTapDialSwitch,
   ExtendedZone,
+  ExtendedDimmerSwitch,
 } from './config/config'
 import { Logger, Color } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
@@ -176,25 +177,35 @@ async function main() {
   }
   Logger.info(Color.Green, `Updated power up behavior for all lights`)
 
-  // Add wall switches
+  // Add wall switches and dimmer switches
   const wallSwitchIds = config.wallSwitches.map((wallSwitch) => ({
     mac: wallSwitch.mac,
     name: wallSwitch.name,
+    type: AccessoryType.WallSwitch,
   }))
-  _.forEach(await bridge.addWallSwitches(wallSwitchIds), (wallSwitchId) => {
-    const wallSwitch = config.getResourceById(
-      wallSwitchId.mac,
-    )! as ExtendedWallSwitch
-    wallSwitch.idV1 = wallSwitchId.id_v1
-    wallSwitch.idV2 = wallSwitchId.id_v2
-    Logger.info(
-      Color.Green,
-      `Wall switch '${wallSwitch.name}' was added with IDs: '${wallSwitch.idV1}' (v1) and '${wallSwitch.idV2}' (v2)`,
-    )
-  })
+  const dimmerSwitchIds = config.dimmerSwitches.map((dimmerSwitch) => ({
+    mac: dimmerSwitch.mac,
+    name: dimmerSwitch.name,
+    type: AccessoryType.DimmerSwitch,
+  }))
+  _.forEach(
+    await bridge.addAccessories(_.concat(wallSwitchIds, dimmerSwitchIds)),
+    (accessoryId) => {
+      const accessory = config.getResourceById(accessoryId.mac)! as
+        | ExtendedWallSwitch
+        | ExtendedDimmerSwitch
+      accessory.idV1 = accessoryId.id_v1
+      accessory.idV2 = accessoryId.id_v2
+      Logger.info(
+        Color.Green,
+        `${accessoryId.type} '${accessory.name}' was added with IDs: '${accessory.idV1}' (v1) and '${accessory.idV2}' (v2)`,
+      )
+    },
+  )
 
   // Add tap dial switches
   const tapDialSwitchIds = config.tapDialSwitches.map((tapDialSwitch) => ({
+    type: AccessoryType.TapDialSwitch,
     mac: tapDialSwitch.mac,
     name: tapDialSwitch.name,
   }))
@@ -227,6 +238,45 @@ async function main() {
       wallSwitch.mode,
     )
     Logger.info(Color.Green, `Wall switch '${wallSwitch.name}' was configured`)
+  }
+
+  // Configure dimmer switches
+  for (const dimmerSwitch of config.dimmerSwitches) {
+    // Create button rules
+    await addDimmerSwitchButton(
+      ButtonType.Button1,
+      dimmerSwitch,
+      config,
+      bridge,
+    )
+    await addDimmerSwitchButton(
+      ButtonType.Button2,
+      dimmerSwitch,
+      config,
+      bridge,
+    )
+    await addDimmerSwitchButton(
+      ButtonType.Button3,
+      dimmerSwitch,
+      config,
+      bridge,
+    )
+    await addDimmerSwitchButton(
+      ButtonType.Button4,
+      dimmerSwitch,
+      config,
+      bridge,
+    )
+
+    // Update dimmer switch name
+    await bridge.updateDimmerSwitchProperties(
+      dimmerSwitch.idV2!,
+      dimmerSwitch.name,
+    )
+    Logger.info(
+      Color.Green,
+      `Dimmer switch '${dimmerSwitch.name}' was configured`,
+    )
   }
 
   // Configure tap dial switches
@@ -339,6 +389,42 @@ async function addTapDialSwitchButton(
     button,
     tapDialSwitch.switchIdV1!,
     tapDialSwitch.name,
+    group.idV1!,
+    group.defaultSceneIdV1!,
+  )
+}
+
+async function addDimmerSwitchButton(
+  button: ButtonType,
+  dimmerSwitch: ExtendedDimmerSwitch,
+  config: Config,
+  bridge: Bridge,
+) {
+  let configButton
+  switch (button) {
+    case ButtonType.Button1:
+      configButton = dimmerSwitch.button1
+      break
+    case ButtonType.Button2:
+      configButton = dimmerSwitch.button2
+      break
+    case ButtonType.Button3:
+      configButton = dimmerSwitch.button3
+      break
+    case ButtonType.Button4:
+      configButton = dimmerSwitch.button4
+      break
+    default:
+      throw new Error(`Unsupported button type: '${button}'`)
+  }
+  const group = config.getResourceById(configButton.group)! as
+    | ExtendedRoom
+    | ExtendedZone
+  await bridge.configureAccessoryButton(
+    AccessoryType.DimmerSwitch,
+    button,
+    dimmerSwitch.idV1!,
+    dimmerSwitch.name,
     group.idV1!,
     group.defaultSceneIdV1!,
   )

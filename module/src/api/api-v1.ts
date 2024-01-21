@@ -232,6 +232,8 @@ export interface Action {
 export interface Body {
   scene?: string
   on?: boolean
+  transitiontime?: number
+  bri_inc?: number
 }
 
 export interface Condition {

@@ -124,6 +124,22 @@ export interface Scene {
 }
 
 export interface DimmerSwitch {
+    /**
+     * Configuration for the first dimmer switch button
+     */
+    button1: DimmerSwitchButton1;
+    /**
+     * Configuration for the second dimmer switch button
+     */
+    button2: DimmerSwitchButton2;
+    /**
+     * Configuration for the third dimmer switch button
+     */
+    button3: DimmerSwitchButton3;
+    /**
+     * Configuration for the forth dimmer switch button
+     */
+    button4:  DimmerSwitchButton4;
     comment?: string;
     /**
      * Uniquely identify the dimmer switch in this configuration
@@ -142,6 +158,46 @@ export interface DimmerSwitch {
      * switches
      */
     serial?: string;
+}
+
+/**
+ * Configuration for the first dimmer switch button
+ */
+export interface DimmerSwitchButton1 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the second dimmer switch button
+ */
+export interface DimmerSwitchButton2 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the third dimmer switch button
+ */
+export interface DimmerSwitchButton3 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
+}
+
+/**
+ * Configuration for the forth dimmer switch button
+ */
+export interface DimmerSwitchButton4 {
+    /**
+     * An ID of room or zone the button controls
+     */
+    group: string;
 }
 
 export interface Light {
@@ -336,11 +392,11 @@ export interface TapDialSwitch {
     /**
      * Configuration for the third tap dial switch button
      */
-    button3: Button3;
+    button3: TapDialSwitchButton3;
     /**
      * Configuration for the forth tap dial switch button
      */
-    button4:  Button4;
+    button4:  TapDialSwitchButton4;
     comment?: string;
     /**
      * Configuration for the dial
@@ -388,7 +444,7 @@ export interface TapDialSwitchButton2 {
 /**
  * Configuration for the third tap dial switch button
  */
-export interface Button3 {
+export interface TapDialSwitchButton3 {
     /**
      * An ID of room or zone the button controls
      */
@@ -398,7 +454,7 @@ export interface Button3 {
 /**
  * Configuration for the forth tap dial switch button
  */
-export interface Button4 {
+export interface TapDialSwitchButton4 {
     /**
      * An ID of room or zone the button controls
      */
@@ -686,11 +742,27 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
     ], false),
     "DimmerSwitch": o([
+        { json: "button1", js: "button1", typ: r("DimmerSwitchButton1") },
+        { json: "button2", js: "button2", typ: r("DimmerSwitchButton2") },
+        { json: "button3", js: "button3", typ: r("DimmerSwitchButton3") },
+        { json: "button4", js: "button4", typ: r("DimmerSwitchButton4") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
+    ], false),
+    "DimmerSwitchButton1": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "DimmerSwitchButton2": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "DimmerSwitchButton3": o([
+        { json: "group", js: "group", typ: "" },
+    ], false),
+    "DimmerSwitchButton4": o([
+        { json: "group", js: "group", typ: "" },
     ], false),
     "Light": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -718,8 +790,8 @@ const typeMap: any = {
     "TapDialSwitch": o([
         { json: "button1", js: "button1", typ: r("TapDialSwitchButton1") },
         { json: "button2", js: "button2", typ: r("TapDialSwitchButton2") },
-        { json: "button3", js: "button3", typ: r("Button3") },
-        { json: "button4", js: "button4", typ: r("Button4") },
+        { json: "button3", js: "button3", typ: r("TapDialSwitchButton3") },
+        { json: "button4", js: "button4", typ: r("TapDialSwitchButton4") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "dial", js: "dial", typ: r("Dial") },
         { json: "id", js: "id", typ: "" },
@@ -733,10 +805,10 @@ const typeMap: any = {
     "TapDialSwitchButton2": o([
         { json: "group", js: "group", typ: "" },
     ], false),
-    "Button3": o([
+    "TapDialSwitchButton3": o([
         { json: "group", js: "group", typ: "" },
     ], false),
-    "Button4": o([
+    "TapDialSwitchButton4": o([
         { json: "group", js: "group", typ: "" },
     ], false),
     "Dial": o([

@@ -312,19 +312,55 @@
       "id": "toilet_dimmer",
       "mac": "00:17:88:01:0d:be:6c:a9-01-fc00",
       "serial": "299347",
-      "name": "Dimmer toilet"
+      "name": "Dimmer toilet",
+      "button1": {
+        "group": "toilet"
+      },
+      "button2": {
+        "group": "toilet"
+      },
+      "button3": {
+        "group": "toilet"
+      },
+      "button4": {
+        "group": "toilet"
+      }
     },
     {
       "id": "savannah_dimmer",
       "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
       "serial": "0517BA",
-      "name": "Dimmer Savannah"
+      "name": "Dimmer Savannah",
+      "button1": {
+        "group": "bedroom_sav"
+      },
+      "button2": {
+        "group": "bedroom_sav"
+      },
+      "button3": {
+        "group": "bedroom_sav"
+      },
+      "button4": {
+        "group": "bedroom_sav"
+      }
     },
     {
       "id": "kids_bathroom_dimmer",
       "mac": "00:17:88:01:0b:ec:d1:41-01-fc00",
       "serial": "61E40B",
-      "name": "Dimmer kids bathroom"
+      "name": "Dimmer kids bathroom",
+      "button1": {
+        "group": "kids_bathroom"
+      },
+      "button2": {
+        "group": "kids_bathroom"
+      },
+      "button3": {
+        "group": "kids_bathroom"
+      },
+      "button4": {
+        "group": "kids_bathroom"
+      }
     }
   ],
   "tap-dial-switches": [

@@ -402,19 +402,55 @@
       "id": "aaliya_dimmer",
       "mac": "00:17:88:01:0b:e3:88:a9-01-fc00",
       "serial": "D328A0",
-      "name": "Dimmer Aaliya"
+      "name": "Dimmer Aaliya",
+      "button1": {
+        "group": "bedroom_aaliya"
+      },
+      "button2": {
+        "group": "bedroom_aaliya"
+      },
+      "button3": {
+        "group": "bedroom_aaliya"
+      },
+      "button4": {
+        "group": "bedroom_aaliya"
+      }
     },
     {
       "id": "bathroom_dimmer",
       "mac": "00:17:88:01:0c:b2:e7:35-01-fc00",
       "serial": "82CCD6",
-      "name": "Dimmer bathroom"
+      "name": "Dimmer bathroom",
+      "button1": {
+        "group": "bathroom"
+      },
+      "button2": {
+        "group": "bathroom"
+      },
+      "button3": {
+        "group": "bathroom"
+      },
+      "button4": {
+        "group": "bathroom"
+      }
     },
     {
       "id": "bedroom_dimmer",
       "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
       "serial": "2381C6",
-      "name": "Dimmer bedroom"
+      "name": "Dimmer bedroom",
+      "button1": {
+        "group": "bedroom"
+      },
+      "button2": {
+        "group": "bedroom"
+      },
+      "button3": {
+        "group": "bedroom"
+      },
+      "button4": {
+        "group": "bedroom"
+      }
     }
   ],
   "tap-dial-switches": [

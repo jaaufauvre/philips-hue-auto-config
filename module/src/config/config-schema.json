@@ -534,11 +534,71 @@
             "description": "A name for the dimmer switch",
             "examples": ["My dimmer"]
           },
+          "button1": {
+            "type": "object",
+            "description": "Configuration for the first dimmer switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button2": {
+            "type": "object",
+            "description": "Configuration for the second dimmer switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button3": {
+            "type": "object",
+            "description": "Configuration for the third dimmer switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
+          "button4": {
+            "type": "object",
+            "description": "Configuration for the forth dimmer switch button",
+            "additionalProperties": false,
+            "properties": {
+              "group": {
+                "type": "string",
+                "description": "An ID of room or zone the button controls",
+                "examples": ["office"]
+              }
+            },
+            "required": ["group"]
+          },
           "comment": {
             "type": "string"
           }
         },
-        "required": ["id", "mac", "name"]
+        "required": [
+          "id",
+          "mac",
+          "name",
+          "button1",
+          "button2",
+          "button3",
+          "button4"
+        ]
       }
     },
     "wall-switches": {

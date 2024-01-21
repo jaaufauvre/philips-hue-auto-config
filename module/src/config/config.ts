@@ -58,6 +58,11 @@ export interface ExtendedTapDialSwitch extends TapDialSwitch {
   idV2?: string
 }
 
+export interface ExtendedDimmerSwitch extends DimmerSwitch {
+  idV1?: string
+  idV2?: string
+}
+
 class Config implements ConfigGen {
   private _internalConfig: ConfigGen
   bridge: Bridge
@@ -68,20 +73,21 @@ class Config implements ConfigGen {
   zones: ExtendedZone[]
   motionSensors: MotionSensor[]
   tapDialSwitches: ExtendedTapDialSwitch[]
-  dimmerSwitches: DimmerSwitch[]
+  dimmerSwitches: ExtendedDimmerSwitch[]
   wallSwitches: ExtendedWallSwitch[]
 
-  constructor(configFilePath: any, xorKey?: string) {
-    if (!configFilePath) {
+  constructor(configFileOrJson: any, xorKey?: string) {
+    if (!configFileOrJson) {
       throw Error('No config provided. Use the --config option!')
     }
-    if (!fs.existsSync(configFilePath)) {
-      throw Error(configFilePath + ' not found!')
+    let content: string
+    if (fs.existsSync(configFileOrJson)) {
+      content = fs.readFileSync(configFileOrJson, 'utf-8')
+    } else {
+      content = configFileOrJson
     }
     try {
-      this._internalConfig = JSON.parse(
-        fs.readFileSync(configFilePath, 'utf-8'),
-      )
+      this._internalConfig = JSON.parse(content)
     } catch {
       throw Error('Could not parse config!')
     }
@@ -103,6 +109,7 @@ class Config implements ConfigGen {
     this.#validateLightConfig()
     this.#validateWallSwitchConfig()
     this.#validateTapDialSwitchConfig()
+    this.#validateDimmerSwitchConfig()
   }
 
   getResourceById(id: string) {
@@ -118,6 +125,9 @@ class Config implements ConfigGen {
         ),
         _.find(this.tapDialSwitches, (tapDialSwitch) =>
           _.includes([tapDialSwitch.id, tapDialSwitch.mac], id),
+        ),
+        _.find(this.dimmerSwitches, (dimmerSwitch) =>
+          _.includes([dimmerSwitch.id, dimmerSwitch.mac], id),
         ),
       ],
       (resource) => resource !== undefined,
@@ -264,6 +274,15 @@ class Config implements ConfigGen {
       this.#checkResourceDefined(tapDialSwitch.button3.group)
       this.#checkResourceDefined(tapDialSwitch.button4.group)
       this.#checkResourceDefined(tapDialSwitch.dial.group)
+    })
+  }
+
+  #validateDimmerSwitchConfig() {
+    this.dimmerSwitches.forEach((dimmerSwitch) => {
+      this.#checkResourceDefined(dimmerSwitch.button1.group)
+      this.#checkResourceDefined(dimmerSwitch.button2.group)
+      this.#checkResourceDefined(dimmerSwitch.button3.group)
+      this.#checkResourceDefined(dimmerSwitch.button4.group)
     })
   }
 

@@ -100,10 +100,19 @@ export class ApiV2 {
     return await this.#httpsClient.get<Devices>(uri)
   }
 
-  async updateDevice(id: string, device: UpdatedDevice) {
+  async getDevice(id: string): Promise<Devices> {
+    Logger.info(`[API v2] Retrieving device ...`)
+    const uri = `${this.#getBaseUrl()}/device/${id}`
+    return await this.#httpsClient.get<Devices>(uri)
+  }
+
+  async updateDevice(
+    id: string,
+    device: UpdatedDevice,
+  ): Promise<UpdatedDevice> {
     Logger.info(`[API v2] Updating device '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/device/${id}`
-    return await this.#httpsClient.put(uri, device)
+    return await this.#httpsClient.put<UpdatedDevice>(uri, device)
   }
 
   async deleteDevice(id: string) {
@@ -249,9 +258,12 @@ export interface Device {
   id_v1: string
   type: 'device'
   services: Resource[]
+  metadata: DeviceMetadata
+  device_mode?: DeviceMode
 }
 
 export interface UpdatedDevice {
+  errors?: any[]
   metadata: DeviceMetadata
   device_mode?: DeviceMode
 }

@@ -3,8 +3,15 @@ import crypto from 'crypto'
 import type from 'typia'
 import { Discovery } from '../api/discovery'
 import _ from 'lodash'
-import { ApiV1, CreateUserSuccess, SensorsV1 } from '../api/api-v1'
-import { ApiV2, Device } from '../api/api-v2'
+import {
+  Action,
+  ApiV1,
+  CreateUserSuccess,
+  NewRule,
+  RuleV1,
+  SensorsV1,
+} from '../api/api-v1'
+import { ApiV2, Device, UpdatedDevice } from '../api/api-v2'
 
 export class Bridge {
   #apiv1?: ApiV1
@@ -231,7 +238,7 @@ export class Bridge {
         archetype: type ?? 'unknown_archetype',
       },
     }
-    await this.#apiv2!.updateDevice(lightOwnerIdV2, device)
+    await this.#updateDevice(lightOwnerIdV2, device)
   }
 
   async updateLightPowerUp(idV2: string, preset: string) {
@@ -405,7 +412,13 @@ export class Bridge {
         mode: mode,
       },
     }
-    await this.#apiv2!.updateDevice(idV2, device)
+    await this.#updateDevice(idV2, device)
+    while (
+      (await this.#apiv2!.getDevice(idV2)).data[0].device_mode?.mode !== mode
+    ) {
+      Logger.info('Wall switch update is in progress ...')
+      this.#wait(5000)
+    }
   }
 
   async updateDimmerSwitchProperties(idV2: string, name: string) {
@@ -415,7 +428,7 @@ export class Bridge {
         name: name,
       },
     }
-    await this.#apiv2!.updateDevice(idV2, device)
+    await this.#updateDevice(idV2, device)
   }
 
   async updateTapDialSwitchProperties(
@@ -433,9 +446,43 @@ export class Bridge {
     const sensor = {
       name: name,
     }
-    await this.#apiv2!.updateDevice(idV2, device)
+    await this.#updateDevice(idV2, device)
     await this.#apiv1!.updateSensor(dialIdV1, sensor)
     await this.#apiv1!.updateSensor(switchIdV1, sensor)
+  }
+
+  async updateMotionSensorProperties(
+    temperatureIdV1: string,
+    lightIdV1: string,
+    presenceIdV1: string,
+    idV2: string,
+    name: string,
+  ) {
+    Logger.info(`Updating motion sensor '${idV2}'`)
+    const device = {
+      metadata: {
+        name: name,
+      },
+    }
+    const temperatureSensor = {
+      name: name,
+    }
+    const lightSensor = {
+      name: name,
+      config: {
+        tholddark: 20000, // Medium
+      },
+    }
+    const presenceSensor = {
+      name: name,
+      config: {
+        sensitivity: 4, // Very high
+      },
+    }
+    await this.#updateDevice(idV2, device)
+    await this.#apiv1!.updateSensor(temperatureIdV1, temperatureSensor)
+    await this.#apiv1!.updateSensor(lightIdV1, lightSensor)
+    await this.#apiv1!.updateSensor(presenceIdV1, presenceSensor)
   }
 
   async configureAccessoryButton(
@@ -449,9 +496,9 @@ export class Bridge {
     Logger.info(
       `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}', scene: '${sceneIdV1}'`,
     )
-    let onAndOff = false,
-      brighten = false,
-      darken = false
+    let onAndOff = false
+    let brighten = false
+    let darken = false
     let onEvent, offEvent, brightenEvent, darkenEvent
     switch (type) {
       case AccessoryType.DimmerSwitch:
@@ -474,7 +521,7 @@ export class Bridge {
     }
     if (brighten) {
       const brightenRule = {
-        name: `${name} +`,
+        name: `${name} lum. +`,
         conditions: [
           {
             address: `/sensors/${idV1}/state/buttonevent`,
@@ -497,12 +544,12 @@ export class Bridge {
           },
         ],
       }
-      await this.#apiv1!.createRule(brightenRule)
+      await this.#createRule(brightenRule)
     }
 
     if (darken) {
       const darkenRule = {
-        name: `${name} -`,
+        name: `${name} lum. -`,
         conditions: [
           {
             address: `/sensors/${idV1}/state/buttonevent`,
@@ -525,12 +572,12 @@ export class Bridge {
           },
         ],
       }
-      await this.#apiv1!.createRule(darkenRule)
+      await this.#createRule(darkenRule)
     }
 
     if (onAndOff) {
       const switchOnRule = {
-        name: `${name} #${button} ON`,
+        name: `${name} #${button} on`,
         conditions: [
           {
             address: `/sensors/${idV1}/state/buttonevent`,
@@ -558,7 +605,7 @@ export class Bridge {
         ],
       }
       const switchOffRule = {
-        name: `${name} #${button} OFF`,
+        name: `${name} #${button} off`,
         conditions: [
           {
             address: `/sensors/${idV1}/state/buttonevent`,
@@ -585,8 +632,8 @@ export class Bridge {
           },
         ],
       }
-      await this.#apiv1!.createRule(switchOnRule)
-      await this.#apiv1!.createRule(switchOffRule)
+      await this.#createRule(switchOnRule)
+      await this.#createRule(switchOffRule)
     }
   }
 
@@ -656,6 +703,196 @@ export class Bridge {
       },
     }
     await this.#apiv2!.createBehaviorInstance(behavior)
+  }
+
+  async configureMotionSensor(
+    lightIdV1: string,
+    presenceIdV1: string,
+    name: string,
+    groupIdV1: string,
+    sceneIdV1: string,
+  ) {
+    Logger.info(
+      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${groupIdV1}', scene: '${sceneIdV1}'`,
+    )
+
+    // Create a virtual switch for the motion sensor
+    const virtualSwitchSensor = {
+      state: {
+        flag: true, // Enabled
+      },
+      config: {
+        on: true,
+        reachable: true,
+      },
+      name: `${name} helper`,
+      type: 'CLIPGenericFlag',
+      modelid: 'PHILIPSHUEAUTOCONFIG',
+      manufacturername: 'philips-hue-auto-config',
+      swversion: '1.0',
+      uniqueid: 'motion-sensor-virtual-switch',
+      recycle: false,
+    }
+    const virtualSwitchSensorId = (
+      await this.#apiv1!.createSensor(virtualSwitchSensor)
+    ).at(0)!.success.id
+    const virtualSwitchOffAction = {
+      address: `/sensors/${virtualSwitchSensorId}/state`,
+      method: 'PUT',
+      body: {
+        flag: false,
+      },
+    }
+    const virtualSwitchOnAction = {
+      address: `/sensors/${virtualSwitchSensorId}/state`,
+      method: 'PUT',
+      body: {
+        flag: true,
+      },
+    }
+    const virtualSwitchOnCondition = {
+      address: `/sensors/${virtualSwitchSensorId}/state/flag`,
+      operator: 'eq',
+      value: 'true',
+    }
+    const virtualSwitchOffCondition = {
+      address: `/sensors/${virtualSwitchSensorId}/state/flag`,
+      operator: 'eq',
+      value: 'false',
+    }
+
+    // Update accessory rules to disable the motion sensor when group is switched on (manual intervention)
+    const rules = await this.#apiv1!.getRules()
+    for (const ruleId of Object.keys(rules)) {
+      const rule = rules[ruleId]
+      const isGroupRule = _.some(
+        rule.actions,
+        (action) => action.address === `/groups/${groupIdV1}/action`,
+      )
+      if (!isGroupRule) {
+        continue
+      }
+      const isSwitchOffGroupRule = _.some(
+        rule.actions,
+        (action) =>
+          action.address === `/groups/${groupIdV1}/action` &&
+          action.body.on !== undefined &&
+          !action.body.on,
+      )
+      if (isSwitchOffGroupRule) {
+        continue
+      }
+      rule.owner = undefined
+      rule.recycle = undefined
+      rule.created = undefined
+      rule.lasttriggered = undefined
+      rule.timestriggered = undefined
+      rule.actions = _.concat<Action>([virtualSwitchOffAction], rule.actions)
+      await this.#updateRule(ruleId, rule)
+    }
+
+    // On motion, recall a group scene
+    const onMotionRule = {
+      name: `${name} motion`,
+      conditions: [
+        virtualSwitchOnCondition,
+        {
+          address: `/sensors/${presenceIdV1}/state/presence`,
+          operator: 'eq',
+          value: 'true',
+        },
+        {
+          address: `/sensors/${presenceIdV1}/state/presence`,
+          operator: 'dx',
+        },
+        {
+          address: `/sensors/${lightIdV1}/state/dark`,
+          operator: 'eq',
+          value: 'true',
+        },
+      ],
+      actions: [
+        {
+          address: `/groups/${groupIdV1}/action`,
+          method: 'PUT',
+          body: {
+            scene: `${sceneIdV1}`,
+          },
+        },
+      ],
+    }
+    await this.#createRule(onMotionRule)
+
+    // When no motion, transition to group off
+    const noMotionRule = {
+      name: `${name} ∅`,
+      conditions: [
+        virtualSwitchOnCondition,
+        {
+          address: `/sensors/${presenceIdV1}/state/presence`,
+          operator: 'eq',
+          value: 'false',
+        },
+        {
+          address: `/sensors/${presenceIdV1}/state/presence`,
+          operator: 'ddx',
+          value: 'PT00:00:15', // After ~30s
+        },
+      ],
+      actions: [
+        {
+          address: `/groups/${groupIdV1}/action`,
+          method: 'PUT',
+          body: {
+            on: false,
+          },
+        },
+      ],
+    }
+    await this.#createRule(noMotionRule)
+
+    // When group switched on (manual intervention), disable the motion sensor
+    const disableSensorRule = {
+      name: `${name} off`,
+      conditions: [
+        virtualSwitchOnCondition,
+        {
+          address: `/groups/${groupIdV1}/state/any_on`,
+          operator: 'eq',
+          value: 'true',
+        },
+        {
+          address: `/groups/${groupIdV1}/state/any_on`,
+          operator: 'dx',
+        },
+        {
+          address: `/sensors/${presenceIdV1}/state/presence`,
+          operator: 'eq',
+          value: 'false', // Not because of the sensor
+        },
+      ],
+      actions: [virtualSwitchOffAction],
+    }
+    await this.#createRule(disableSensorRule)
+
+    // After group switched off, enable the motion sensor again
+    const enableSensorRule = {
+      name: `${name} on`,
+      conditions: [
+        virtualSwitchOffCondition,
+        {
+          address: `/groups/${groupIdV1}/state/any_on`,
+          operator: 'eq',
+          value: 'false',
+        },
+        {
+          address: `/groups/${groupIdV1}/state/any_on`,
+          operator: 'dx',
+        },
+      ],
+      actions: [virtualSwitchOnAction],
+    }
+    await this.#createRule(enableSensorRule)
   }
 
   #findSensorIdByAddressAndType(
@@ -778,6 +1015,33 @@ export class Bridge {
       }
     }
     return sensors
+  }
+
+  async #createRule(rule: NewRule) {
+    const rules = await this.#apiv1!.createRule(rule)
+    if (_.find(rules, (r) => r.error != null)) {
+      throw Error(
+        `Couldn't create rule. Errors: ${JSON.stringify(rules, null, 2)}`,
+      )
+    }
+  }
+
+  async #updateRule(id: string, rule: RuleV1) {
+    const rules = await this.#apiv1!.updateRule(id, rule)
+    if (_.find(rules, (r) => r.error != null)) {
+      throw Error(
+        `Couldn't update rule '${id}'. Errors: ${JSON.stringify(rules, null, 2)}`,
+      )
+    }
+  }
+
+  async #updateDevice(id: string, device: UpdatedDevice) {
+    const updatedDevice = await this.#apiv2!.updateDevice(id, device)
+    if (updatedDevice.errors && updatedDevice.errors.length > 0) {
+      throw Error(
+        `Couldn't update device '${id}'. Errors: ${JSON.stringify(updatedDevice.errors, null, 2)}`,
+      )
+    }
   }
 
   #isBridge(device: Device) {

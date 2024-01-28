@@ -186,7 +186,7 @@ class Config implements ConfigGen {
     if (!isConfigValid) {
       const errors = ajv.compile(schema).errors
       throw Error(
-        `Config is invalid. Errors:${JSON.stringify(errors, null, 2)}`,
+        `Config is invalid. Errors: ${JSON.stringify(errors, null, 2)}`,
       )
     }
   }

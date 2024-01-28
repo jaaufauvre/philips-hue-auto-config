@@ -68,6 +68,12 @@ export class ApiV1 {
     return await this.#httpsClient.get<NewSensors>(uri)
   }
 
+  async createSensor(sensor: NewSensor): Promise<CreatedSensor[]> {
+    Logger.info(`[API v1] Creating sensor ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors`
+    return await this.#httpsClient.post<CreatedSensor[]>(uri, sensor)
+  }
+
   async getSensors() {
     Logger.info(`[API v1] Retrieving sensors ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/sensors`
@@ -98,10 +104,16 @@ export class ApiV1 {
     return await this.#httpsClient.get<RulesV1>(uri)
   }
 
-  async createRule(rule: NewRule) {
+  async createRule(rule: NewRule): Promise<CreatedRule[]> {
     Logger.info(`[API v1] Creating rule ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules`
-    return await this.#httpsClient.post(uri, rule)
+    return await this.#httpsClient.post<CreatedRule[]>(uri, rule)
+  }
+
+  async updateRule(id: string, rule: RuleV1): Promise<UpdatedRule[]> {
+    Logger.info(`[API v1] Updating rule ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules/${id}`
+    return await this.#httpsClient.put<UpdatedRule[]>(uri, rule)
   }
 
   async deleteRule(id: string) {
@@ -202,6 +214,29 @@ export interface DaylightSensorConfig {
   sunsetoffset: number
 }
 
+export interface NewSensor {
+  state: {
+    flag: boolean
+  }
+  config: {
+    on: boolean
+    reachable: boolean
+  }
+  name: string
+  type: string
+  modelid: string
+  manufacturername: string
+  swversion: string
+  uniqueid: string
+  recycle: boolean
+}
+
+export interface CreatedSensor {
+  success: {
+    id: string
+  }
+}
+
 export interface UpdatedSensor {
   name: string
 }
@@ -212,6 +247,13 @@ export interface UpdatedSensor {
 export type RuleId = string
 export interface RuleV1 {
   name: string
+  conditions: Condition[]
+  actions: Action[]
+  owner?: string
+  recycle?: boolean
+  created?: string
+  lasttriggered?: string
+  timestriggered?: number
 }
 export interface RulesV1 {
   [key: RuleId]: RuleV1
@@ -221,6 +263,14 @@ export interface NewRule {
   name: string
   conditions: Condition[]
   actions: Action[]
+}
+
+export interface CreatedRule {
+  error: any
+}
+
+export interface UpdatedRule {
+  error: any
 }
 
 export interface Action {
@@ -234,12 +284,14 @@ export interface Body {
   on?: boolean
   transitiontime?: number
   bri_inc?: number
+  status?: number
+  flag?: boolean
 }
 
 export interface Condition {
   address: string
   operator: string
-  value?: string
+  value?: string | number
 }
 
 //

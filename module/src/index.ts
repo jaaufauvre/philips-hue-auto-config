@@ -190,7 +190,7 @@ async function main() {
     type: AccessoryType.DimmerSwitch,
   }))
   _.forEach(
-    await bridge.addAccessories(_.concat(wallSwitchIds, dimmerSwitchIds)),
+    await bridge.addAccessories(_.concat(dimmerSwitchIds, wallSwitchIds)),
     (accessoryId) => {
       const accessory = config.getResourceById(accessoryId.mac)! as
         | ExtendedWallSwitch
@@ -352,6 +352,34 @@ async function main() {
     Logger.info(
       Color.Green,
       `Tap dial switch '${tapDialSwitch.name}' was configured`,
+    )
+  }
+
+  // Configure motion sensors
+  for (const motionSensor of config.motionSensors) {
+    // Create motion sensor rules
+    const group = config.getResourceById(motionSensor.group)! as
+      | ExtendedRoom
+      | ExtendedZone
+    await bridge.configureMotionSensor(
+      motionSensor.lightIdV1!,
+      motionSensor.presenceIdV1!,
+      motionSensor.name,
+      group.idV1!,
+      group.defaultSceneIdV1!,
+    )
+
+    // Update motion sensor name
+    await bridge.updateMotionSensorProperties(
+      motionSensor.temperatureIdV1!,
+      motionSensor.lightIdV1!,
+      motionSensor.presenceIdV1!,
+      motionSensor.idV2!,
+      motionSensor.name,
+    )
+    Logger.info(
+      Color.Green,
+      `Motion sensor '${motionSensor.name}' was configured`,
     )
   }
 

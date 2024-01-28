@@ -47,6 +47,7 @@ The program will:
 9. Set a default power-on behavior for all lights
 10. Search for accessories and add them to the bridge
 11. Configure accessories to activate the "Default" scene of a room or a zone
+12. Automatically disable motion sensors when the controlled room or a zone is switched on manually
 
 ## References
 

@@ -470,7 +470,7 @@ export class Bridge {
     const lightSensor = {
       name: name,
       config: {
-        tholddark: 20000, // Medium
+        tholddark: 25000, // Medium
       },
     }
     const presenceSensor = {
@@ -496,7 +496,9 @@ export class Bridge {
     Logger.info(
       `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}', scene: '${sceneIdV1}'`,
     )
-    let onAndOff = false
+    let on = false
+    let off = false
+    let change = false
     let brighten = false
     let darken = false
     let onEvent, offEvent, brightenEvent, darkenEvent
@@ -504,15 +506,15 @@ export class Bridge {
       case AccessoryType.DimmerSwitch:
         brighten = button === ButtonType.Button2
         darken = button === ButtonType.Button3
-        onAndOff = !brighten && !darken
+        on = off = !brighten && !darken
         onEvent = offEvent = brightenEvent = darkenEvent = `${button}000` // initial_press
         break
       case AccessoryType.WallSwitch:
-        onAndOff = true
+        on = off = true
         onEvent = offEvent = `${button}000` // initial_press
         break
       case AccessoryType.TapDialSwitch:
-        onAndOff = true
+        change = off = true
         onEvent = `${button}000` // initial_press
         offEvent = `${button}010` // long_press
         break
@@ -575,7 +577,7 @@ export class Bridge {
       await this.#createRule(darkenRule)
     }
 
-    if (onAndOff) {
+    if (on) {
       const switchOnRule = {
         name: `${name} #${button} on`,
         conditions: [
@@ -604,6 +606,10 @@ export class Bridge {
           },
         ],
       }
+      await this.#createRule(switchOnRule)
+    }
+
+    if (off) {
       const switchOffRule = {
         name: `${name} #${button} off`,
         conditions: [
@@ -632,8 +638,34 @@ export class Bridge {
           },
         ],
       }
-      await this.#createRule(switchOnRule)
       await this.#createRule(switchOffRule)
+    }
+
+    if (change) {
+      const changeRule = {
+        name: `${name} #${button}`,
+        conditions: [
+          {
+            address: `/sensors/${idV1}/state/buttonevent`,
+            operator: 'eq',
+            value: onEvent,
+          },
+          {
+            address: `/sensors/${idV1}/state/lastupdated`,
+            operator: 'dx',
+          },
+        ],
+        actions: [
+          {
+            address: `/groups/${groupIdV1}/action`,
+            method: 'PUT',
+            body: {
+              scene: `${sceneIdV1}`,
+            },
+          },
+        ],
+      }
+      await this.#createRule(changeRule)
     }
   }
 

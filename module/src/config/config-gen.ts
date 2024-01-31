@@ -69,33 +69,15 @@ export interface Bridge {
  */
 export interface Defaults {
     /**
-     * A default brightness percentage for lights
-     */
-    brigthness: number;
-    /**
-     * A default color temperature for lights
-     */
-    "color-temperature": ColorTemperature;
-    /**
      * What lights should do when powered on by a classic light switch or after a power outage.
      * "last_on_state": last-used color and brightness. "safety": warm white, full brightness.
      * "powerfail": stays off or turn back on.
      */
     "powerup-behavior": PowerupBehavior;
     /**
-     * A default scene for room and zones
+     * Default scenes for room and zones
      */
-    scene: Scene;
-}
-
-/**
- * A default color temperature for lights
- */
-export interface ColorTemperature {
-    /**
-     * A color temperature in mirek
-     */
-    mirek: number;
+    scenes: Scenes;
 }
 
 /**
@@ -110,17 +92,40 @@ export enum PowerupBehavior {
 }
 
 /**
- * A default scene for room and zones
+ * Default scenes for room and zones
  */
+export interface Scenes {
+    day:                    Scene;
+    "motion-sensor-day"?:   Scene;
+    "motion-sensor-night"?: Scene;
+    night:                  Scene;
+}
+
 export interface Scene {
+    /**
+     * A default brightness percentage for lights
+     */
+    brigthness:          number;
+    "color-temperature": ColorTemperature;
     /**
      * The ID of a 'public_image' resource for the scene
      */
-    imageId: string;
+    "image-id": string;
     /**
      * A name for the scene
      */
     name: string;
+    [property: string]: any;
+}
+
+/**
+ * A default color temperature for lights
+ */
+export interface ColorTemperature {
+    /**
+     * A color temperature in mirek
+     */
+    mirek: number;
 }
 
 export interface DimmerSwitch {
@@ -733,17 +738,23 @@ const typeMap: any = {
         { json: "long", js: "long", typ: "" },
     ], false),
     "Defaults": o([
-        { json: "brigthness", js: "brigthness", typ: 3.14 },
-        { json: "color-temperature", js: "color-temperature", typ: r("ColorTemperature") },
         { json: "powerup-behavior", js: "powerup-behavior", typ: r("PowerupBehavior") },
-        { json: "scene", js: "scene", typ: r("Scene") },
+        { json: "scenes", js: "scenes", typ: r("Scenes") },
     ], false),
-    "ColorTemperature": o([
-        { json: "mirek", js: "mirek", typ: 3.14 },
+    "Scenes": o([
+        { json: "day", js: "day", typ: r("Scene") },
+        { json: "motion-sensor-day", js: "motion-sensor-day", typ: u(undefined, r("Scene")) },
+        { json: "motion-sensor-night", js: "motion-sensor-night", typ: u(undefined, r("Scene")) },
+        { json: "night", js: "night", typ: r("Scene") },
     ], false),
     "Scene": o([
-        { json: "imageId", js: "imageId", typ: "" },
+        { json: "brigthness", js: "brigthness", typ: 3.14 },
+        { json: "color-temperature", js: "color-temperature", typ: r("ColorTemperature") },
+        { json: "image-id", js: "image-id", typ: "" },
         { json: "name", js: "name", typ: "" },
+    ], "any"),
+    "ColorTemperature": o([
+        { json: "mirek", js: "mirek", typ: 3.14 },
     ], false),
     "DimmerSwitch": o([
         { json: "button1", js: "button1", typ: r("DimmerSwitchButton1") },

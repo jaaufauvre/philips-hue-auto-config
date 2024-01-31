@@ -13,6 +13,7 @@ import {
   Room,
   Zone,
   Defaults,
+  Scene,
 } from './config-gen'
 import _ from 'lodash'
 
@@ -31,21 +32,17 @@ export interface ExtendedLight extends Light {
   ownerId?: string
 }
 
-export interface ExtendedRoom extends Room {
+class ExtendedGroup {
   idV1?: string
   idV2?: string
-  defaultSceneIdV1?: string
-  defaultSceneIdV2?: string
-  groupType?: 'room'
+  sceneIdsV1?: Map<Scene, string>
+  sceneIdsV2?: Map<Scene, string>
+  groupType?: string
 }
 
-export interface ExtendedZone extends Zone {
-  idV1?: string
-  idV2?: string
-  defaultSceneIdV1?: string
-  defaultSceneIdV2?: string
-  groupType?: 'zone'
-}
+export interface ExtendedRoom extends Room, ExtendedGroup {}
+
+export interface ExtendedZone extends Zone, ExtendedGroup {}
 
 export interface ExtendedWallSwitch extends WallSwitch {
   idV1?: string
@@ -111,6 +108,10 @@ class Config implements ConfigGen {
     this.wallSwitches = this._internalConfig['wall-switches'] ?? []
     _.forEach(this.rooms, (room) => (room.groupType = 'room'))
     _.forEach(this.zones, (zone) => (zone.groupType = 'zone'))
+    _.forEach(_.concat<ExtendedGroup>(this.zones, this.rooms), (group) => {
+      group.sceneIdsV1 = new Map<Scene, string>()
+      group.sceneIdsV2 = new Map<Scene, string>()
+    })
     this.#decrypt(xorKey)
     this.#validateUniqueIds()
     this.#validateLightConfig()
@@ -154,12 +155,13 @@ class Config implements ConfigGen {
     )
   }
 
-  getRoomLights(room: Room): ExtendedLight[] {
-    return _.filter(this.lights, (light) => room.id === light.room)
-  }
-
-  getZoneLights(zone: Zone): ExtendedLight[] {
-    return _.filter(this.lights, (light) => _.includes(light.zones, zone.id))
+  getGroupLights(
+    group: Room | Zone | ExtendedRoom | ExtendedZone,
+  ): ExtendedLight[] {
+    return _.filter(
+      this.lights,
+      (light) => group.id === light.room || _.includes(light.zones, group.id),
+    )
   }
 
   print() {
@@ -309,6 +311,13 @@ class Config implements ConfigGen {
     this.motionSensors.forEach((motionSensor) => {
       this.#checkResourceDefined(motionSensor.group)
     })
+    if (
+      this.motionSensors.length > 0 &&
+      (!this.defaults.scenes['motion-sensor-day'] ||
+        !this.defaults.scenes['motion-sensor-night'])
+    ) {
+      throw new Error('Missing motion sensor scene definition!')
+    }
   }
 
   #checkResourceDefined(id: string) {

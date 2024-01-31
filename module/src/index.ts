@@ -11,6 +11,7 @@
 import { Logger, Color } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import _ from 'lodash'
+import { Scene } from './config/config-gen'
 
 main().catch((e) => {
   if (e instanceof Error) {
@@ -126,46 +127,16 @@ async function main() {
     }
   }
 
-  // Create "Default" scenes in rooms and zones
-  const brightness = config.defaults.brigthness
-  const mirek = config.defaults['color-temperature'].mirek
-  const sceneImageId = config.defaults.scene.imageId
-  const sceneName = config.defaults.scene.name
-  for (const room of config.rooms) {
-    const sceneIds = await bridge.addScene(
-      sceneName,
-      room.idV2!,
-      room.groupType!,
-      _.map(config.getRoomLights(room), (light) => light.idV2!),
-      brightness,
-      mirek,
-      sceneImageId,
-    )
-    room.defaultSceneIdV1 = sceneIds[0]
-    room.defaultSceneIdV2 = sceneIds[1]
-    await bridge.activateScene(room.defaultSceneIdV2!)
-    Logger.info(
-      Color.Green,
-      `Default scene was created for room '${room.name}' with IDs: '${room.defaultSceneIdV1}' (v1) and '${room.defaultSceneIdV2}' (v2)`,
-    )
-  }
-  for (const zone of config.zones) {
-    const zoneIds = await bridge.addScene(
-      sceneName,
-      zone.idV2!,
-      zone.groupType!,
-      _.map(config.getZoneLights(zone), (light) => light.idV2!),
-      brightness,
-      mirek,
-      sceneImageId,
-    )
-    zone.defaultSceneIdV1 = zoneIds[0]
-    zone.defaultSceneIdV2 = zoneIds[1]
-    await bridge.activateScene(zone.defaultSceneIdV2!)
-    Logger.info(
-      Color.Green,
-      `Default scene was created for zone '${zone.name}' with with IDs: '${zone.defaultSceneIdV1}' (v1) and '${zone.defaultSceneIdV2}' (v2)`,
-    )
+  // Create default scenes in rooms and zones
+  const dayScene = config.defaults.scenes.day
+  const nightScene = config.defaults.scenes.night
+  for (const group of _.concat<ExtendedRoom | ExtendedZone>(
+    config.rooms,
+    config.zones,
+  )) {
+    await addScene(dayScene, group, config, bridge)
+    await addScene(nightScene, group, config, bridge)
+    await bridge.activateScene(group.sceneIdsV2!.get(nightScene)!)
   }
 
   // Set lights behavior at power on
@@ -338,7 +309,7 @@ async function main() {
     await bridge.configureTapDial(
       tapDialSwitch.idV2!,
       group.idV2!,
-      group.defaultSceneIdV2!,
+      group.sceneIdsV2!.get(dayScene)!,
       group.groupType!,
     )
 
@@ -366,7 +337,7 @@ async function main() {
       motionSensor.presenceIdV1!,
       motionSensor.name,
       group.idV1!,
-      group.defaultSceneIdV1!,
+      group.sceneIdsV1!.get(dayScene)!,
     )
 
     // Update motion sensor name
@@ -406,7 +377,7 @@ async function addWallSwitchButton(
     wallSwitch.idV1!,
     wallSwitch.name,
     group.idV1!,
-    group.defaultSceneIdV1!,
+    group.sceneIdsV1!.get(config.defaults.scenes.day)!,
   )
 }
 
@@ -442,7 +413,7 @@ async function addTapDialSwitchButton(
     tapDialSwitch.switchIdV1!,
     tapDialSwitch.name,
     group.idV1!,
-    group.defaultSceneIdV1!,
+    group.sceneIdsV1!.get(config.defaults.scenes.day)!,
   )
 }
 
@@ -478,6 +449,29 @@ async function addDimmerSwitchButton(
     dimmerSwitch.idV1!,
     dimmerSwitch.name,
     group.idV1!,
-    group.defaultSceneIdV1!,
+    group.sceneIdsV1!.get(config.defaults.scenes.day)!,
+  )
+}
+
+async function addScene(
+  scene: Scene,
+  group: ExtendedRoom | ExtendedZone,
+  config: Config,
+  bridge: Bridge,
+) {
+  const sceneIds = await bridge.addScene(
+    scene.name,
+    group.idV2!,
+    group.groupType!,
+    _.map(config.getGroupLights(group), (light) => light.idV2!),
+    scene.brigthness,
+    scene['color-temperature'].mirek,
+    scene['image-id'],
+  )
+  group.sceneIdsV1!.set(scene, sceneIds[0])
+  group.sceneIdsV2!.set(scene, sceneIds[1])
+  Logger.info(
+    Color.Green,
+    `Scene '${scene.name}' was created for ${group.groupType} '${group.name}' with IDs: '${group.sceneIdsV1!.get(scene)}' (v1) and '${group.sceneIdsV2!.get(scene)}' (v2)`,
   )
 }

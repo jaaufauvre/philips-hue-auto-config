@@ -214,12 +214,12 @@ describe('Config', () => {
 
   test('should return room lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getRoomLights(config.rooms[0]).length).toBe(2)
+    expect(config.getGroupLights(config.rooms[0]).length).toBe(2)
   })
 
   test('should return zone lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getZoneLights(config.zones![0]).length).toBe(1)
+    expect(config.getGroupLights(config.zones![0]).length).toBe(1)
   })
 })
 

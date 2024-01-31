@@ -4,17 +4,6 @@
     "long": "6.266155W",
     "lat": "53.350140N"
   },
-  "defaults": {
-    "scene": {
-      "name": "Default",
-      "imageId": "732ff1d9-76a7-4630-aad0-c8acc499bb0b"
-    },
-    "color-temperature": {
-      "mirek": 323
-    },
-    "brigthness": 100,
-    "powerup-behavior": "powerfail"
-  },
   "rooms": [
     {
       "id": "kitchen",
@@ -547,5 +536,42 @@
         "group": "bedroom"
       }
     }
-  ]
+  ],
+  "defaults": {
+    "powerup-behavior": "powerfail",
+    "scenes": {
+      "day": {
+        "name": "Day",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "color-temperature": {
+          "mirek": 323
+        },
+        "brigthness": 100
+      },
+      "night": {
+        "name": "Night",
+        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+        "color-temperature": {
+          "mirek": 500
+        },
+        "brigthness": 30
+      },
+      "motion-sensor-day": {
+        "name": "Motion sensor day",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "color-temperature": {
+          "mirek": 323
+        },
+        "brigthness": 80
+      },
+      "motion-sensor-night": {
+        "name": "Motion sensor night",
+        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+        "color-temperature": {
+          "mirek": 500
+        },
+        "brigthness": 18
+      }
+    }
+  }
 }

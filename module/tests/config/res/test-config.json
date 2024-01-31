@@ -4,17 +4,6 @@
     "long": "0W",
     "lat": "0N"
   },
-  "defaults": {
-    "scene": {
-      "name": "My scene",
-      "imageId": "732ff1d9-76a7-4630-aad0-c8acc499bb0b"
-    },
-    "color-temperature": {
-      "mirek": 323
-    },
-    "brigthness": 90,
-    "powerup-behavior": "safety"
-  },
   "rooms": [
     {
       "id": "room",
@@ -166,5 +155,42 @@
         "group": "ds_zone2"
       }
     }
-  ]
+  ],
+  "defaults": {
+    "powerup-behavior": "safety",
+    "scenes": {
+      "day": {
+        "name": "1",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "color-temperature": {
+          "mirek": 500
+        },
+        "brigthness": 100
+      },
+      "night": {
+        "name": "2",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "color-temperature": {
+          "mirek": 500
+        },
+        "brigthness": 100
+      },
+      "motion-sensor-day": {
+        "name": "3",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "color-temperature": {
+          "mirek": 500
+        },
+        "brigthness": 100
+      },
+      "motion-sensor-night": {
+        "name": "4",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "color-temperature": {
+          "mirek": 500
+        },
+        "brigthness": 100
+      }
+    }
+  }
 }

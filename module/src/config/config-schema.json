@@ -3,6 +3,49 @@
   "title": "A schema for a Hue Bridge configuration",
   "type": "object",
   "additionalProperties": false,
+  "definitions": {
+    "scene": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "A name for the scene",
+          "examples": ["Default"]
+        },
+        "image-id": {
+          "type": "string",
+          "description": "The ID of a 'public_image' resource for the scene",
+          "examples": ["732ff1d9-76a7-4630-aad0-c8acc499bb0b"]
+        },
+        "color-temperature": {
+          "$ref": "#/definitions/color-temperature"
+        },
+        "brigthness": {
+          "type": "number",
+          "description": "A default brightness percentage for lights",
+          "minimum": 1,
+          "maximum": 100,
+          "examples": ["90"]
+        }
+      },
+      "required": ["name", "image-id", "color-temperature", "brigthness"]
+    },
+    "color-temperature": {
+      "type": "object",
+      "description": "A default color temperature for lights",
+      "additionalProperties": false,
+      "properties": {
+        "mirek": {
+          "type": "number",
+          "minimum": 153,
+          "maximum": 500,
+          "description": "A color temperature in mirek",
+          "examples": [223]
+        }
+      },
+      "required": ["mirek"]
+    }
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -31,58 +74,33 @@
       "description": "Default settings to apply to lights and scenes",
       "additionalProperties": false,
       "properties": {
-        "scene": {
-          "type": "object",
-          "description": "A default scene for room and zones",
-          "additionalProperties": false,
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "A name for the scene",
-              "examples": ["Default"]
-            },
-            "imageId": {
-              "type": "string",
-              "description": "The ID of a 'public_image' resource for the scene",
-              "examples": ["732ff1d9-76a7-4630-aad0-c8acc499bb0b"]
-            }
-          },
-          "required": ["name", "imageId"]
-        },
-        "color-temperature": {
-          "type": "object",
-          "description": "A default color temperature for lights",
-          "additionalProperties": false,
-          "properties": {
-            "mirek": {
-              "type": "number",
-              "minimum": 153,
-              "maximum": 500,
-              "description": "A color temperature in mirek",
-              "examples": [223]
-            }
-          },
-          "required": ["mirek"]
-        },
-        "brigthness": {
-          "type": "number",
-          "description": "A default brightness percentage for lights",
-          "minimum": 1,
-          "maximum": 100,
-          "examples": ["90"]
-        },
         "powerup-behavior": {
           "type": "string",
           "description": "What lights should do when powered on by a classic light switch or after a power outage. \"last_on_state\": last-used color and brightness. \"safety\": warm white, full brightness. \"powerfail\": stays off or turn back on.",
           "enum": ["safety", "last_on_state", "powerfail"]
+        },
+        "scenes": {
+          "type": "object",
+          "description": "Default scenes for room and zones",
+          "additionalProperties": false,
+          "properties": {
+            "day": {
+              "$ref": "#/definitions/scene"
+            },
+            "night": {
+              "$ref": "#/definitions/scene"
+            },
+            "motion-sensor-day": {
+              "$ref": "#/definitions/scene"
+            },
+            "motion-sensor-night": {
+              "$ref": "#/definitions/scene"
+            }
+          },
+          "required": ["day", "night"]
         }
       },
-      "required": [
-        "color-temperature",
-        "brigthness",
-        "powerup-behavior",
-        "scene"
-      ]
+      "required": ["powerup-behavior", "scenes"]
     },
     "rooms": {
       "type": "array",

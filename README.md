@@ -43,11 +43,13 @@ The program will:
 5. Add the bridge location for sunset/sunrise detection
 6. Create rooms and zones
 7. Search for lights (from their serial and MAC address) and add them to rooms and zones
-8. Create a "Default" scene in each room and zone
+8. Create default "_Day_" and "_Night_" scenes for each room and zone
 9. Set a default power-on behavior for all lights
 10. Search for accessories and add them to the bridge
-11. Configure accessories to activate the "Default" scene of a room or a zone
-12. Automatically disable motion sensors when the controlled room or a zone is switched on manually
+11. Configure accessories to activate scenes according to sunset/sunrise
+12. Create default "_Motion sensor day_" and "_Motion sensor night_" scenes in each room or zone controlled by a motion sensor
+13. Configure motion sensors to activate scenes according to sunset/sunrise
+13. Automatically disable motion sensors when the controlled room or zone is switched on manually
 
 ## References
 

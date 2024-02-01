@@ -136,7 +136,7 @@ async function main() {
   )) {
     await addScene(dayScene, group, config, bridge)
     await addScene(nightScene, group, config, bridge)
-    await bridge.activateScene(group.sceneIdsV2!.get(nightScene)!)
+    await bridge.activateScene(group.sceneIdsV2!.get(dayScene)!)
   }
 
   // Set lights behavior at power on
@@ -328,16 +328,24 @@ async function main() {
 
   // Configure motion sensors
   for (const motionSensor of config.motionSensors) {
-    // Create motion sensor rules
     const group = config.getResourceById(motionSensor.group)! as
       | ExtendedRoom
       | ExtendedZone
+
+    // Create default scenes
+    const dayScene = config.defaults.scenes['motion-sensor-day']!
+    const nightScene = config.defaults.scenes['motion-sensor-night']!
+    await addScene(dayScene, group, config, bridge)
+    await addScene(nightScene, group, config, bridge)
+
+    // Create motion sensor rules
     await bridge.configureMotionSensor(
       motionSensor.lightIdV1!,
       motionSensor.presenceIdV1!,
       motionSensor.name,
       group.idV1!,
       group.sceneIdsV1!.get(dayScene)!,
+      group.sceneIdsV1!.get(nightScene)!,
     )
 
     // Update motion sensor name
@@ -378,6 +386,7 @@ async function addWallSwitchButton(
     wallSwitch.name,
     group.idV1!,
     group.sceneIdsV1!.get(config.defaults.scenes.day)!,
+    group.sceneIdsV1!.get(config.defaults.scenes.night)!,
   )
 }
 
@@ -414,6 +423,7 @@ async function addTapDialSwitchButton(
     tapDialSwitch.name,
     group.idV1!,
     group.sceneIdsV1!.get(config.defaults.scenes.day)!,
+    group.sceneIdsV1!.get(config.defaults.scenes.night)!,
   )
 }
 
@@ -450,6 +460,7 @@ async function addDimmerSwitchButton(
     dimmerSwitch.name,
     group.idV1!,
     group.sceneIdsV1!.get(config.defaults.scenes.day)!,
+    group.sceneIdsV1!.get(config.defaults.scenes.night)!,
   )
 }
 

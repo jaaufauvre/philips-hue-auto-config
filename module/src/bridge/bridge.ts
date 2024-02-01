@@ -443,12 +443,15 @@ export class Bridge {
         name: name,
       },
     }
-    const sensor = {
-      name: name,
+    const dialSensor = {
+      name: `${name} (R)`,
     }
+    const switchSensor = {
+      name: `${name} (S)`,
+    }
+    await this.#apiv1!.updateSensor(dialIdV1, dialSensor)
+    await this.#apiv1!.updateSensor(switchIdV1, switchSensor)
     await this.#updateDevice(idV2, device)
-    await this.#apiv1!.updateSensor(dialIdV1, sensor)
-    await this.#apiv1!.updateSensor(switchIdV1, sensor)
   }
 
   async updateMotionSensorProperties(
@@ -465,24 +468,24 @@ export class Bridge {
       },
     }
     const temperatureSensor = {
-      name: name,
+      name: `${name} (T)`,
     }
     const lightSensor = {
-      name: name,
+      name: `${name} (L)`,
       config: {
         tholddark: 25000, // Medium
       },
     }
     const presenceSensor = {
-      name: name,
+      name: `${name} (P)`,
       config: {
         sensitivity: 4, // Very high
       },
     }
-    await this.#updateDevice(idV2, device)
     await this.#apiv1!.updateSensor(temperatureIdV1, temperatureSensor)
     await this.#apiv1!.updateSensor(lightIdV1, lightSensor)
     await this.#apiv1!.updateSensor(presenceIdV1, presenceSensor)
+    await this.#updateDevice(idV2, device)
   }
 
   async configureAccessoryButton(
@@ -491,10 +494,11 @@ export class Bridge {
     idV1: string,
     name: string,
     groupIdV1: string,
-    sceneIdV1: string,
+    daySceneIdV1: string,
+    nightSceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}', scene: '${sceneIdV1}'`,
+      `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}'.`,
     )
     let on = false
     let off = false
@@ -578,7 +582,10 @@ export class Bridge {
     }
 
     if (on) {
-      const switchOnRule = {
+      const daylightSensorId = Object.keys(
+        await this.#getSensors(['Daylight']),
+      )[0]
+      const switchOnBaseRule: NewRule = {
         name: `${name} #${button} on`,
         conditions: [
           {
@@ -595,18 +602,26 @@ export class Bridge {
             operator: 'eq',
             value: 'false',
           },
+          {
+            address: `/sensors/${daylightSensorId}/state/daylight`,
+            operator: 'eq',
+            value: '{placeholder}',
+          },
         ],
         actions: [
           {
             address: `/groups/${groupIdV1}/action`,
             method: 'PUT',
             body: {
-              scene: `${sceneIdV1}`,
+              scene: '{placeholder}',
             },
           },
         ],
       }
-      await this.#createRule(switchOnRule)
+      await this.#createRule(this.#toDayRule(switchOnBaseRule, daySceneIdV1))
+      await this.#createRule(
+        this.#toNightRule(switchOnBaseRule, nightSceneIdV1),
+      )
     }
 
     if (off) {
@@ -642,7 +657,10 @@ export class Bridge {
     }
 
     if (change) {
-      const changeRule = {
+      const daylightSensorId = Object.keys(
+        await this.#getSensors(['Daylight']),
+      )[0]
+      const changeBaseRule: NewRule = {
         name: `${name} #${button}`,
         conditions: [
           {
@@ -654,29 +672,35 @@ export class Bridge {
             address: `/sensors/${idV1}/state/lastupdated`,
             operator: 'dx',
           },
+          {
+            address: `/sensors/${daylightSensorId}/state/daylight`,
+            operator: 'eq',
+            value: '{placeholder}',
+          },
         ],
         actions: [
           {
             address: `/groups/${groupIdV1}/action`,
             method: 'PUT',
             body: {
-              scene: `${sceneIdV1}`,
+              scene: '{placeholder}',
             },
           },
         ],
       }
-      await this.#createRule(changeRule)
+      await this.#createRule(this.#toDayRule(changeBaseRule, daySceneIdV1))
+      await this.#createRule(this.#toNightRule(changeBaseRule, nightSceneIdV1))
     }
   }
 
   async configureTapDial(
     idV2: string,
     groupIdV2: string,
-    sceneIdV2: string,
+    daySceneIdV2: string,
     groupType: string,
   ) {
     Logger.info(
-      `Configuring dial '${idV2}' to control group '${groupIdV2}', scene: '${sceneIdV2}'`,
+      `Configuring dial '${idV2}' to control group '${groupIdV2}', scene: '${daySceneIdV2}'`,
     )
     const button = {
       on_short_release: {
@@ -716,7 +740,7 @@ export class Bridge {
               {
                 action: {
                   recall: {
-                    rid: sceneIdV2,
+                    rid: daySceneIdV2,
                     rtype: 'scene',
                   },
                 },
@@ -742,10 +766,11 @@ export class Bridge {
     presenceIdV1: string,
     name: string,
     groupIdV1: string,
-    sceneIdV1: string,
+    daySceneIdV1: string,
+    nightSceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${groupIdV1}', scene: '${sceneIdV1}'`,
+      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${groupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}'.`,
     )
 
     // Create a virtual switch for the motion sensor
@@ -823,9 +848,12 @@ export class Bridge {
       await this.#updateRule(ruleId, rule)
     }
 
-    // On motion, recall a group scene
-    const onMotionRule = {
-      name: `${name} motion`,
+    // On motion, recall a group scene (day or night scene)
+    const daylightSensorId = Object.keys(
+      await this.#getSensors(['Daylight']),
+    )[0]
+    const onMotionBaseRule: NewRule = {
+      name: `${name} on`,
       conditions: [
         virtualSwitchOnCondition,
         {
@@ -842,22 +870,28 @@ export class Bridge {
           operator: 'eq',
           value: 'true',
         },
+        {
+          address: `/sensors/${daylightSensorId}/state/daylight`,
+          operator: 'eq',
+          value: '{placeholder}',
+        },
       ],
       actions: [
         {
           address: `/groups/${groupIdV1}/action`,
           method: 'PUT',
           body: {
-            scene: `${sceneIdV1}`,
+            scene: '{placeholder}',
           },
         },
       ],
     }
-    await this.#createRule(onMotionRule)
+    await this.#createRule(this.#toDayRule(onMotionBaseRule, daySceneIdV1))
+    await this.#createRule(this.#toNightRule(onMotionBaseRule, nightSceneIdV1))
 
     // When no motion, transition to group off
     const noMotionRule = {
-      name: `${name} ∅`,
+      name: `${name} off`,
       conditions: [
         virtualSwitchOnCondition,
         {
@@ -885,7 +919,7 @@ export class Bridge {
 
     // When group switched on (manual intervention), disable the motion sensor
     const disableSensorRule = {
-      name: `${name} off`,
+      name: `${name} disab.`,
       conditions: [
         virtualSwitchOnCondition,
         {
@@ -909,7 +943,7 @@ export class Bridge {
 
     // After group switched off, enable the motion sensor again
     const enableSensorRule = {
-      name: `${name} on`,
+      name: `${name} enab.`,
       conditions: [
         virtualSwitchOffCondition,
         {
@@ -925,6 +959,28 @@ export class Bridge {
       actions: [virtualSwitchOnAction],
     }
     await this.#createRule(enableSensorRule)
+  }
+
+  #toNightRule(baseRule: NewRule, nightSceneIdV1: string) {
+    const nightRule = _.cloneDeep(baseRule)
+    _.find(nightRule.conditions, (condition) =>
+      condition.address.includes('daylight'),
+    )!.value = 'false'
+    _.find(nightRule.actions, (action) =>
+      action.address.includes('/action'),
+    )!.body.scene = nightSceneIdV1
+    return nightRule
+  }
+
+  #toDayRule(baseRule: NewRule, daySceneIdV1: string) {
+    const dayRule = _.cloneDeep(baseRule)
+    _.find(dayRule.conditions, (condition) =>
+      condition.address.includes('daylight'),
+    )!.value = 'true'
+    _.find(dayRule.actions, (action) =>
+      action.address.includes('/action'),
+    )!.body.scene = daySceneIdV1
+    return dayRule
   }
 
   #findSensorIdByAddressAndType(

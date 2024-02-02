@@ -319,8 +319,8 @@ export interface SceneAction {
   target: Resource
   action: {
     on: On
-    dimming: Dimming
-    color_temperature: ColorTemperature
+    dimming?: Dimming
+    color_temperature?: ColorTemperature
   }
 }
 

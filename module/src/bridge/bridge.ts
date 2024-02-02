@@ -256,12 +256,13 @@ export class Bridge {
     groupIdV2: string,
     groupType: string,
     lightIds: string[],
+    smartPlugIds: string[],
     brightness: number,
     mirek: number,
     imageId: string,
   ) {
     Logger.info(`Adding scene '${name}' to ${groupType} '${groupIdV2}'`)
-    const actions = _.map(lightIds, (id) => {
+    const lightOnActions = _.map(lightIds, (id) => {
       return {
         target: {
           rid: id,
@@ -280,6 +281,19 @@ export class Bridge {
         },
       }
     })
+    const smartPlugOnActions = _.map(smartPlugIds, (id) => {
+      return {
+        target: {
+          rid: id,
+          rtype: 'light',
+        },
+        action: {
+          on: {
+            on: true,
+          },
+        },
+      }
+    })
     const created = await this.#apiv2!.createScene({
       type: 'scene',
       metadata: {
@@ -293,7 +307,7 @@ export class Bridge {
         rid: groupIdV2,
         rtype: groupType,
       },
-      actions: actions,
+      actions: _.concat(smartPlugOnActions, lightOnActions),
     })
 
     const idV2 = created.data[0].rid

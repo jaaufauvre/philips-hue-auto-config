@@ -160,7 +160,20 @@ class Config implements ConfigGen {
   ): ExtendedLight[] {
     return _.filter(
       this.lights,
-      (light) => group.id === light.room || _.includes(light.zones, group.id),
+      (light) =>
+        !light['smart-plug'] &&
+        (group.id === light.room || _.includes(light.zones, group.id)),
+    )
+  }
+
+  getGroupSmartPlugs(
+    group: Room | Zone | ExtendedRoom | ExtendedZone,
+  ): ExtendedLight[] {
+    return _.filter(
+      this.lights,
+      (light) =>
+        light['smart-plug'] === true &&
+        (group.id === light.room || _.includes(light.zones, group.id)),
     )
   }
 

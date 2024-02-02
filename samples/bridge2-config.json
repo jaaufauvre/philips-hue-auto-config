@@ -175,6 +175,7 @@
       "serial": "1E4560",
       "name": "Savannah bed light",
       "type": "plug",
+      "smart-plug": true,
       "room": "bedroom_sav",
       "zones": [
         "bridge",
@@ -188,6 +189,7 @@
       "serial": "33221A",
       "name": "Savannah shelves light",
       "type": "plug",
+      "smart-plug": true,
       "room": "bedroom_sav",
       "zones": [
         "bridge",

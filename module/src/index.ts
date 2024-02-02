@@ -475,6 +475,7 @@ async function addScene(
     group.idV2!,
     group.groupType!,
     _.map(config.getGroupLights(group), (light) => light.idV2!),
+    _.map(config.getGroupSmartPlugs(group), (plug) => plug.idV2!),
     scene.brigthness,
     scene['color-temperature'].mirek,
     scene['image-id'],

@@ -228,6 +228,10 @@ export interface Light {
      */
     serial?: string;
     /**
+     * If the light is controlled by a smart plug
+     */
+    "smart-plug"?: boolean;
+    /**
      * The type of light. See 'archetype' here:
      * https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_light_get
      */
@@ -786,6 +790,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "room", js: "room", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
+        { json: "smart-plug", js: "smart-plug", typ: u(undefined, true) },
         { json: "type", js: "type", typ: u(undefined, r("LightType")) },
         { json: "zones", js: "zones", typ: u(undefined, a("")) },
     ], false),

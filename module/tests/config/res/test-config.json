@@ -87,7 +87,8 @@
       "id": "light3",
       "mac": "00:00:00:00:00:00:00:00-00",
       "name": "Light 3",
-      "room": "room"
+      "room": "room",
+      "smart-plug": true
     }
   ],
   "motion-sensors": [

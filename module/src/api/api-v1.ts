@@ -50,6 +50,12 @@ export class ApiV1 {
     return await this.#httpsClient.get<LightsV1>(uri)
   }
 
+  async updateLightState(id: string, state: LightState) {
+    Logger.info(`[API v1] Updating light '${id}' state ...`)
+    const uri = `${this.#getBaseUrl()}/light/${id}/state`
+    return await this.#httpsClient.put(uri, state)
+  }
+
   async deleteLight(id: string) {
     Logger.info(`[API v1] Deleting light '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights/${id}`
@@ -189,6 +195,9 @@ export interface LightV1 {
 }
 export interface LightsV1 {
   [key: LightId]: LightV1
+}
+export interface LightState {
+  on: boolean
 }
 
 //

@@ -344,6 +344,11 @@
               "ceiling_tube"
             ]
           },
+          "smart-plug": {
+            "type": "boolean",
+            "description": "If the light is controlled by a smart plug",
+            "examples": [true]
+          },
           "room": {
             "type": "string",
             "description": "ID of a room the light belongs to",

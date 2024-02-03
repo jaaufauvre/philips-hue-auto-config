@@ -1,6 +1,7 @@
 {
   "name": "A test config",
   "bridge": {
+    "name": "Bridge",
     "long": "0W",
     "lat": "0N"
   },

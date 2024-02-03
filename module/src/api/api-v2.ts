@@ -259,6 +259,7 @@ export interface Device {
   type: 'device'
   services: Resource[]
   metadata: DeviceMetadata
+  product_data: DeviceProductData
   device_mode?: DeviceMode
 }
 
@@ -271,6 +272,10 @@ export interface UpdatedDevice {
 export interface DeviceMetadata {
   name: string
   archetype?: string
+}
+
+export interface DeviceProductData {
+  product_name: string
 }
 
 export interface DeviceMode {

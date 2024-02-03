@@ -64,7 +64,7 @@ export class Bridge {
     for (const ruleId of Object.keys(await this.#apiv1!.getRules())) {
       await this.#apiv1!.deleteRule(ruleId)
     }
-    for (const device of (await this.#apiv2!.getDevices()).data) {
+    for (const device of (await this.#getDevices()).data) {
       if (!this.#isBridge(device)) {
         await this.#apiv2!.deleteDevice(device.id)
       }
@@ -115,6 +115,17 @@ export class Bridge {
         await this.#apiv1!.deleteSensor(id)
       }
     }
+  }
+
+  async updateBridgeName(name: string) {
+    Logger.info(`Updating bridge name to ${name} ...`)
+    const bridgeId = (await this.#getDevices(['Hue Bridge'])).data[0].id
+    const device = {
+      metadata: {
+        name: name,
+      },
+    }
+    await this.#updateDevice(bridgeId, device)
   }
 
   async updateBridgeLocation(lat: string, long: string) {
@@ -359,7 +370,7 @@ export class Bridge {
     await this.#searchAccessories(accessoryIdList)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
-    const devicesV2 = await this.#apiv2!.getDevices()
+    const devicesV2 = await this.#getDevices()
     const finalIdList = _.cloneDeep(accessoryIdList)
     _.forEach(finalIdList, (accessoryId) => {
       accessoryId.id_v1 = this.#findSensorIdByAddressAndType(
@@ -385,7 +396,7 @@ export class Bridge {
     await this.#searchAccessories(tapDialSwitchIdList)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
-    const devicesV2 = await this.#apiv2!.getDevices()
+    const devicesV2 = await this.#getDevices()
     const finalIdList = _.cloneDeep(tapDialSwitchIdList)
     _.forEach(finalIdList, (tapDialSwitchId) => {
       tapDialSwitchId.switch_id_v1 = this.#findSensorIdByAddressAndType(
@@ -416,7 +427,7 @@ export class Bridge {
     await this.#searchAccessories(motionSensorIdList)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
-    const devicesV2 = await this.#apiv2!.getDevices()
+    const devicesV2 = await this.#getDevices()
     const finalIdList = _.cloneDeep(motionSensorIdList)
     _.forEach(finalIdList, (motionSensorId) => {
       motionSensorId.light_id_v1 = this.#findSensorIdByAddressAndType(
@@ -1146,6 +1157,22 @@ export class Bridge {
       }
     }
     return sensors
+  }
+
+  async #getDevices(productNames?: string[]) {
+    const devices = await this.#apiv2!.getDevices()
+    if (devices.errors.length > 0) {
+      throw Error(
+        `Couldn't retrieve devices. Errors: ${JSON.stringify(devices.errors, null, 2)}`,
+      )
+    }
+    if (productNames) {
+      _.remove(
+        devices.data,
+        (device) => !_.includes(productNames, device.product_data.product_name),
+      )
+    }
+    return devices
   }
 
   async #createRule(rule: NewRule) {

@@ -62,9 +62,12 @@ async function main() {
   await bridge.resetBridge()
   Logger.info(Color.Green, `All bridge resources were deleted`)
 
-  // Update bridge location
+  // Update bridge name & location
   const lat = config.bridge.lat
   const long = config.bridge.long
+  const name = config.bridge.name
+  await bridge.updateBridgeName(name)
+  Logger.info(Color.Green, `Bridge name is: ${name}`)
   await bridge.updateBridgeLocation(lat, long)
   Logger.info(Color.Green, `Bridge location is: ${lat}, ${long}`)
 

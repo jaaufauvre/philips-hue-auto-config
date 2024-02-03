@@ -56,6 +56,11 @@
       "description": "Additional bridge configuration",
       "additionalProperties": false,
       "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the bridge",
+          "examples": ["My bridge"]
+        },
         "lat": {
           "type": "string",
           "description": "The bridge latitude",
@@ -67,7 +72,7 @@
           "examples": ["6.266155W"]
         }
       },
-      "required": ["lat", "long"]
+      "required": ["name", "lat", "long"]
     },
     "defaults": {
       "type": "object",

@@ -1,6 +1,7 @@
 {
   "name": "Simple config",
   "bridge": {
+    "name": "My bridge",
     "long": "74.0060W",
     "lat": "40.7128N"
   },

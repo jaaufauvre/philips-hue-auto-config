@@ -62,6 +62,10 @@ export interface Bridge {
      * The bridge longitude
      */
     long: string;
+    /**
+     * Name of the bridge
+     */
+    name: string;
 }
 
 /**
@@ -740,6 +744,7 @@ const typeMap: any = {
     "Bridge": o([
         { json: "lat", js: "lat", typ: "" },
         { json: "long", js: "long", typ: "" },
+        { json: "name", js: "name", typ: "" },
     ], false),
     "Defaults": o([
         { json: "powerup-behavior", js: "powerup-behavior", typ: r("PowerupBehavior") },

@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Authorization & Config",
+			"name": "Authorization",
 			"item": [
 				{
 					"name": "Press link button and create user (v1)",
@@ -53,119 +53,6 @@
 							],
 							"path": [
 								"api"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read devices",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200)\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/device",
-							"protocol": "https",
-							"host": [
-								"{{bridge}}"
-							],
-							"path": [
-								"clip",
-								"v2",
-								"resource",
-								"device"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read bridge",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200)\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/bridge",
-							"protocol": "https",
-							"host": [
-								"{{bridge}}"
-							],
-							"path": [
-								"clip",
-								"v2",
-								"resource",
-								"bridge"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read config (v1)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200)\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"devicetype\":\"Postman\", \r\n    \"generateclientkey\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/config",
-							"protocol": "https",
-							"host": [
-								"{{bridge}}"
-							],
-							"path": [
-								"api",
-								"{{username}}",
-								"config"
 							]
 						}
 					},
@@ -254,6 +141,139 @@
 								"config",
 								"whitelist",
 								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Config",
+			"item": [
+				{
+					"name": "Read config (v1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"devicetype\":\"Postman\", \r\n    \"generateclientkey\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/config",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"config"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bridge",
+			"item": [
+				{
+					"name": "Update bridge name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"Custom Name\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device/ee9385af-fcd0-46e6-917f-878aa003bbf5",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device",
+								"ee9385af-fcd0-46e6-917f-878aa003bbf5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read bridge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/bridge",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"bridge"
 							]
 						}
 					},
@@ -395,6 +415,45 @@
 			]
 		},
 		{
+			"name": "Devices",
+			"item": [
+				{
+					"name": "Read devices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/device",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"device"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Lights",
 			"item": [
 				{
@@ -444,7 +503,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/light/0988e3dd-3686-4231-acc8-a5fc76556570",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -454,7 +513,7 @@
 								"v2",
 								"resource",
 								"light",
-								"{{lightId}}"
+								"0988e3dd-3686-4231-acc8-a5fc76556570"
 							]
 						}
 					},
@@ -466,7 +525,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/lights/11",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -475,7 +534,7 @@
 								"api",
 								"{{username}}",
 								"lights",
-								"{{lightIdV1}}"
+								"11"
 							]
 						}
 					},
@@ -487,7 +546,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/lights/11",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -496,7 +555,7 @@
 								"api",
 								"{{username}}",
 								"lights",
-								"{{lightIdV1}}"
+								"11"
 							]
 						}
 					},
@@ -517,7 +576,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/light/0988e3dd-3686-4231-acc8-a5fc76556570",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -527,7 +586,7 @@
 								"v2",
 								"resource",
 								"light",
-								"{{lightId}}"
+								"0988e3dd-3686-4231-acc8-a5fc76556570"
 							]
 						}
 					},
@@ -548,7 +607,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/light/0988e3dd-3686-4231-acc8-a5fc76556570",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -558,7 +617,38 @@
 								"v2",
 								"resource",
 								"light",
-								"{{lightId}}"
+								"0988e3dd-3686-4231-acc8-a5fc76556570"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Switch light off (v1)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"on\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/lights/11/state",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"lights",
+								"11",
+								"state"
 							]
 						}
 					},
@@ -571,7 +661,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"{{lightId}}\",\r\n    \"metadata\": {\r\n        \"archetype\": \"plug\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"metadata\": {\r\n        \"archetype\": \"plug\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -579,7 +669,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/light/0988e3dd-3686-4231-acc8-a5fc76556570",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -589,7 +679,7 @@
 								"v2",
 								"resource",
 								"light",
-								"{{lightId}}"
+								"0988e3dd-3686-4231-acc8-a5fc76556570"
 							]
 						}
 					},
@@ -602,7 +692,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"powerup\": {\r\n                \"preset\": \"safety\",\r\n                \"dimming\": {\r\n                    \"mode\": \"dimming\",\r\n                    \"dimming\": {\r\n                        \"brightness\": 100.0\r\n                    }\r\n                },\r\n                \"color\": {\r\n                    \"mode\": \"color_temperature\",\r\n                    \"color_temperature\": {\r\n                        \"mirek\": 366\r\n                    }\r\n                }\r\n            }\r\n}",
+							"raw": "{\r\n    \"powerup\": {\r\n        \"preset\": \"safety\",\r\n        \"dimming\": {\r\n            \"mode\": \"dimming\",\r\n            \"dimming\": {\r\n                \"brightness\": 100.0\r\n            }\r\n        },\r\n        \"color\": {\r\n            \"mode\": \"color_temperature\",\r\n            \"color_temperature\": {\r\n                \"mirek\": 366\r\n            }\r\n        }\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -610,7 +700,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/light/{{lightId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/light/0988e3dd-3686-4231-acc8-a5fc76556570",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -620,7 +710,7 @@
 								"v2",
 								"resource",
 								"light",
-								"{{lightId}}"
+								"0988e3dd-3686-4231-acc8-a5fc76556570"
 							]
 						}
 					},
@@ -641,7 +731,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/lights/{{lightIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/lights/11",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -650,7 +740,7 @@
 								"api",
 								"{{username}}",
 								"lights",
-								"{{lightIdV1}}"
+								"11"
 							]
 						}
 					},
@@ -764,7 +854,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/motion/{{motionId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/motion/05da0dd7-9bda-43e8-8641-5cad79ef69bc",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -774,7 +864,7 @@
 								"v2",
 								"resource",
 								"motion",
-								"{{motionId}}"
+								"05da0dd7-9bda-43e8-8641-5cad79ef69bc"
 							]
 						}
 					},
@@ -786,7 +876,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{motionIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/98",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -795,7 +885,7 @@
 								"api",
 								"{{username}}",
 								"sensors",
-								"{{motionIdV1}}"
+								"98"
 							]
 						}
 					},
@@ -833,7 +923,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Button 1\",\r\n    \"status\": \"enabled\",\r\n    \"conditions\": [\r\n        {\r\n            \"address\": \"/sensors/86/state/buttonevent\",\r\n            \"operator\": \"eq\",\r\n            \"value\": \"1000\"\r\n        },\r\n        {\r\n            \"address\": \"/sensors/86/state/lastupdated\",\r\n            \"operator\": \"dx\"\r\n        }\r\n    ],\r\n    \"actions\": [\r\n        {\r\n            \"address\": \"/groups/81/action\",\r\n            \"method\": \"PUT\",\r\n            \"body\": {\r\n                \"scene\": \"kZjlhjR47sArGjDr\"\r\n            }\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"name\": \"Motion Sensor Office OFF\",\r\n    \"conditions\": [\r\n        {\r\n            \"address\": \"/sensors/165/state/presence\",\r\n            \"operator\": \"eq\",\r\n            \"value\": \"false\"\r\n        },\r\n        {\r\n            \"address\": \"/sensors/165/state/presence\",\r\n            \"operator\": \"ddx\",\r\n            \"value\": \"PT00:00:15\"\r\n        }\r\n    ],\r\n    \"actions\": [\r\n        {\r\n            \"address\": \"/groups/81/action\",\r\n            \"method\": \"PUT\",\r\n            \"body\": {\r\n                \"on\": false,\r\n                \"transitiontime\": 50\r\n            }\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -841,7 +931,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/rules/1",
+							"raw": "https://{{bridge}}/api/{{username}}/rules/20",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -850,7 +940,7 @@
 								"api",
 								"{{username}}",
 								"rules",
-								"1"
+								"20"
 							]
 						}
 					},
@@ -900,7 +990,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/rules/3",
+							"raw": "https://{{bridge}}/api/{{username}}/rules/17",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -909,7 +999,7 @@
 								"api",
 								"{{username}}",
 								"rules",
-								"3"
+								"17"
 							]
 						}
 					},
@@ -967,7 +1057,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/scene/{{sceneId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/scene/0975b435-fe7c-4d71-8fd0-590c2318131c",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -977,7 +1067,7 @@
 								"v2",
 								"resource",
 								"scene",
-								"{{sceneId}}"
+								"0975b435-fe7c-4d71-8fd0-590c2318131c"
 							]
 						}
 					},
@@ -989,7 +1079,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/scenes/{{sceneIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/scenes/0j-RH70gKr-Cf-Bj",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -998,7 +1088,7 @@
 								"api",
 								"{{username}}",
 								"scenes",
-								"{{sceneIdV1}}"
+								"0j-RH70gKr-Cf-Bj"
 							]
 						}
 					},
@@ -1019,7 +1109,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/scene/{{sceneId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/scene/0975b435-fe7c-4d71-8fd0-590c2318131c",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1029,7 +1119,7 @@
 								"v2",
 								"resource",
 								"scene",
-								"{{sceneId}}"
+								"0975b435-fe7c-4d71-8fd0-590c2318131c"
 							]
 						}
 					},
@@ -1088,7 +1178,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/device/{{tapDialId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/device/f143d5ac-b2ef-4bd1-9b3d-1279db783901",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1098,7 +1188,7 @@
 								"v2",
 								"resource",
 								"device",
-								"{{tapDialId}}"
+								"f143d5ac-b2ef-4bd1-9b3d-1279db783901"
 							]
 						}
 					},
@@ -1141,7 +1231,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{tapDialIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/119",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1150,7 +1240,7 @@
 								"api",
 								"{{username}}",
 								"sensors",
-								"{{tapDialIdV1}}"
+								"119"
 							]
 						}
 					},
@@ -1188,7 +1278,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/device/{{dimmerId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/device/0d513010-6aef-4e78-aa7f-b336f88c24cb",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1198,7 +1288,7 @@
 								"v2",
 								"resource",
 								"device",
-								"{{dimmerId}}"
+								"0d513010-6aef-4e78-aa7f-b336f88c24cb"
 							]
 						}
 					},
@@ -1210,7 +1300,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{dimmerIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/109",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1219,7 +1309,7 @@
 								"api",
 								"{{username}}",
 								"sensors",
-								"{{dimmerIdV1}}"
+								"109"
 							]
 						}
 					},
@@ -1257,7 +1347,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/device/{{wallSwitchId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/device/38e0073e-6b08-4d13-8cfa-7bdfd43aad62",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1267,7 +1357,7 @@
 								"v2",
 								"resource",
 								"device",
-								"{{wallSwitchId}}"
+								"38e0073e-6b08-4d13-8cfa-7bdfd43aad62"
 							]
 						}
 					},
@@ -1288,7 +1378,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/device/{{wallSwitchId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/device/38e0073e-6b08-4d13-8cfa-7bdfd43aad62",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1298,7 +1388,7 @@
 								"v2",
 								"resource",
 								"device",
-								"{{wallSwitchId}}"
+								"38e0073e-6b08-4d13-8cfa-7bdfd43aad62"
 							]
 						}
 					},
@@ -1310,7 +1400,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/sensors/{{wallSwitchIdV1}}",
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/114",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1319,7 +1409,7 @@
 								"api",
 								"{{username}}",
 								"sensors",
-								"{{wallSwitchIdV1}}"
+								"114"
 							]
 						}
 					},
@@ -1330,6 +1420,38 @@
 		{
 			"name": "Rooms",
 			"item": [
+				{
+					"name": "Get groups (v1)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"children\": [\r\n    {\r\n      \"rid\": \"faa096ca-2a06-42ea-8ca3-6a9f93d62b15\", // Light owner ID\r\n      \"rtype\": \"device\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/groups",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"groups"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Add light to room",
 					"request": {
@@ -1345,7 +1467,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/room/{{roomId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/room/7c9d9d18-ec73-41e4-9218-3fbbcd269393",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1355,7 +1477,7 @@
 								"v2",
 								"resource",
 								"room",
-								"{{roomId}}"
+								"7c9d9d18-ec73-41e4-9218-3fbbcd269393"
 							]
 						}
 					},
@@ -1381,7 +1503,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/zone/{{zoneId}}",
+							"raw": "https://{{bridge}}/clip/v2/resource/zone/d3b8f689-59d2-4989-adb0-f280ff047d8d",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1391,7 +1513,7 @@
 								"v2",
 								"resource",
 								"zone",
-								"{{zoneId}}"
+								"d3b8f689-59d2-4989-adb0-f280ff047d8d"
 							]
 						}
 					},
@@ -1457,6 +1579,56 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single sensor (v1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/79",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"api",
+								"{{username}}",
+								"sensors",
+								"79"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create sensor (v1)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": {\r\n        \"status\": 1,\r\n        \"lastupdated\": \"none\"\r\n    },\r\n    \"config\": {\r\n        \"on\": true,\r\n        \"reachable\": true\r\n    },\r\n    \"name\": \"Sensor office helper\",\r\n    \"type\": \"CLIPGenericStatus\",\r\n    \"modelid\": \"PHILIPSHUEAUTOCONFIG\",\r\n    \"manufacturername\": \"philips-hue-auto-config\",\r\n    \"swversion\": \"1.0\",\r\n    \"uniqueid\": \"motion-sensor-activity-helper\",\r\n    \"recycle\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "https://{{bridge}}/api/{{username}}/sensors",
 							"protocol": "https",

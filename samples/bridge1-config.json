@@ -423,24 +423,6 @@
       "button4": {
         "group": "bathroom"
       }
-    },
-    {
-      "id": "bedroom_dimmer",
-      "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
-      "serial": "2381C6",
-      "name": "Dimmer bedroom",
-      "button1": {
-        "group": "bedroom"
-      },
-      "button2": {
-        "group": "bedroom"
-      },
-      "button3": {
-        "group": "bedroom"
-      },
-      "button4": {
-        "group": "bedroom"
-      }
     }
   ],
   "tap-dial-switches": [
@@ -463,6 +445,27 @@
       },
       "dial": {
         "group": "kitchen"
+      }
+    },
+    {
+      "id": "bedroom_dial",
+      "mac": "00:17:88:01:0d:ea:cf:3e-01-fc00",
+      "serial": "806995",
+      "name": "Tap dial bedroom",
+      "button1": {
+        "group": "bedroom"
+      },
+      "button2": {
+        "group": "bedroom"
+      },
+      "button3": {
+        "group": "bedroom"
+      },
+      "button4": {
+        "group": "bedroom"
+      },
+      "dial": {
+        "group": "bedroom"
       }
     }
   ],

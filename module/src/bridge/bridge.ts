@@ -562,7 +562,7 @@ export class Bridge {
         break
       case AccessoryType.TapDialSwitch:
         change = off = true
-        onEvent = `${button}000` // initial_press
+        onEvent = `${button}002` // short_release
         offEvent = `${button}010` // long_press
         break
       default:

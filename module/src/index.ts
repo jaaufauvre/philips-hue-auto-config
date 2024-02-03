@@ -362,6 +362,10 @@ async function main() {
     )
   }
 
+  // Delete unassigned lights and added accessories that were not in the config
+  await bridge.deleteUnexpectedLights(config.getAllResourceMacs())
+  await bridge.deleteUnexpectedAccessories(config.getAllResourceMacs())
+
   Logger.info(Color.Yellow, 'Done! 🙌')
 }
 

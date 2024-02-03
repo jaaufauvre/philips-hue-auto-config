@@ -155,6 +155,21 @@ class Config implements ConfigGen {
     )
   }
 
+  getAllResourceMacs() {
+    return _.map(
+      _.concat<{
+        mac: string
+      }>(
+        this.lights,
+        this.motionSensors,
+        this.dimmerSwitches,
+        this.wallSwitches,
+        this.tapDialSwitches,
+      ),
+      (resource) => resource.mac,
+    )
+  }
+
   getGroupLights(
     group: Room | Zone | ExtendedRoom | ExtendedZone,
   ): ExtendedLight[] {

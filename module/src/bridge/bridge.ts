@@ -80,6 +80,43 @@ export class Bridge {
     }
   }
 
+  async deleteUnexpectedLights(excludedMacAddresses: string[]) {
+    while (await this.#isScanningLights()) {
+      Logger.info(Color.DarkBlue, 'Waiting for light scan to end ...')
+      await this.#wait(10000)
+    }
+    const lightsV1 = await this.#apiv1!.getLights()
+    for (const id of Object.keys(lightsV1)) {
+      const light = lightsV1[id]
+      if (!_.includes(excludedMacAddresses, light.uniqueid)) {
+        Logger.info(`Deleting unexpected light '${light.uniqueid}' ...`)
+        await this.#apiv1!.deleteLight(id)
+      }
+    }
+  }
+
+  async deleteUnexpectedAccessories(excludedMacAddresses: string[]) {
+    excludedMacAddresses.push('motion-sensor-virtual-switch') // Virtual motion sensor switch
+    while (await this.#isScanningSensors()) {
+      Logger.info(Color.DarkBlue, 'Waiting for accessory scan to end ...')
+      await this.#wait(10000)
+    }
+    const sensorsV1 = await this.#apiv1!.getSensors()
+    for (const id of Object.keys(sensorsV1)) {
+      const sensor = sensorsV1[id]
+      if (
+        !_.some(
+          excludedMacAddresses,
+          (macAddress) =>
+            !sensor.uniqueid || sensor.uniqueid.startsWith(macAddress),
+        )
+      ) {
+        Logger.info(`Deleting unexpected sensor '${sensor.uniqueid}' ...`)
+        await this.#apiv1!.deleteSensor(id)
+      }
+    }
+  }
+
   async updateBridgeLocation(lat: string, long: string) {
     Logger.info('Updating bridge location ...')
     const daylightSensorId = Object.keys(
@@ -163,24 +200,16 @@ export class Bridge {
         await this.#apiv1!.searchLights({ deviceid: [serial] })
         while (
           (await this.#isScanningLights()) &&
-          !(await this.#hasLight(missingLightId.mac))
+          !(await this.#hasLight(missingLightId.mac)) &&
+          (await this.#hasMissingLights(lightIdList))
         ) {
           Logger.info(Color.DarkBlue, 'Scan with serial is in progress ...')
           await this.#wait(10000)
         }
       }
     }
-    // All lights were found
-    const macAddresses = lightIdList.map((lightId) => lightId.mac)
+    // Find created IDs
     const lightsV1 = await this.#apiv1!.getLights()
-    for (const id of Object.keys(lightsV1)) {
-      if (!_.includes(macAddresses, lightsV1[id].uniqueid)) {
-        // A light was found and was not listed in the config, we delete it from the bridge
-        Logger.info(`Deleting light '${id}' (not declared in the config) ...`)
-        await this.#apiv1!.deleteLight(id)
-      }
-    }
-    // Find light resource IDs
     const lightsV2 = await this.#apiv2!.getLights()
     const finalLightIdList = _.cloneDeep(lightIdList)
     _.forEach(finalLightIdList, (lightId) => {

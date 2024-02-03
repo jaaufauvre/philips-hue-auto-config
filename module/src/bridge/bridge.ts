@@ -192,7 +192,7 @@ export class Bridge {
           Logger.warn(
             `Light ${missingLightId.mac} wasn't found and no serial was provided`,
           )
-          break
+          continue
         }
         // Search one by one by serial
         const serial = missingLightId.serial

@@ -52,8 +52,12 @@ export class Bridge {
   }
 
   async resetBridge() {
-    for (const light of (await this.#apiv2!.getLights()).data) {
-      await this.#apiv2!.deleteDevice(light.owner.rid)
+    for (const ruleId of Object.keys(await this.#apiv1!.getRules())) {
+      await this.#apiv1!.deleteRule(ruleId)
+    }
+    for (const behaviorInstance of (await this.#apiv2!.getBehaviorInstances())
+      .data) {
+      await this.#apiv2!.deleteBehaviorInstance(behaviorInstance.id)
     }
     for (const room of (await this.#apiv2!.getRooms()).data) {
       await this.#apiv2!.deleteRoom(room.id)
@@ -61,8 +65,18 @@ export class Bridge {
     for (const zone of (await this.#apiv2!.getZones()).data) {
       await this.#apiv2!.deleteZone(zone.id)
     }
-    for (const ruleId of Object.keys(await this.#apiv1!.getRules())) {
-      await this.#apiv1!.deleteRule(ruleId)
+    for (const linkId of Object.keys(await this.#apiv1!.getResourcelinks())) {
+      await this.#apiv1!.deleteResourcelink(linkId)
+    }
+    for (const sceneId of Object.keys(await this.#apiv1!.getScenes())) {
+      await this.#apiv1!.deleteScene(sceneId)
+    }
+  }
+
+  async resetBridgeWithDevices() {
+    await this.resetBridge()
+    for (const light of (await this.#apiv2!.getLights()).data) {
+      await this.#apiv2!.deleteDevice(light.owner.rid)
     }
     for (const device of (await this.#getDevices()).data) {
       if (!this.#isBridge(device)) {
@@ -71,12 +85,6 @@ export class Bridge {
     }
     for (const sensorId of Object.keys(await this.#apiv1!.getSensors())) {
       await this.#apiv1!.deleteSensor(sensorId)
-    }
-    for (const linkId of Object.keys(await this.#apiv1!.getResourcelinks())) {
-      await this.#apiv1!.deleteResourcelink(linkId)
-    }
-    for (const sceneId of Object.keys(await this.#apiv1!.getScenes())) {
-      await this.#apiv1!.deleteScene(sceneId)
     }
   }
 
@@ -183,6 +191,7 @@ export class Bridge {
     lightIdList: LightIdentifiers[],
   ): Promise<LightIdentifiers[]> {
     Logger.info('Adding lights ...')
+    Logger.table(lightIdList)
 
     while (await this.#hasMissingLights(lightIdList)) {
       // Search without serial
@@ -457,21 +466,22 @@ export class Bridge {
 
   async updateWallSwitchProperties(idV2: string, name: string, mode: string) {
     Logger.info(`Updating wall switch '${idV2}', mode '${mode}'`)
+    while (await this.#isWallSwitchUpdating(idV2)) {
+      Logger.info(`Wall switch '${idV2}' isn't ready ...`)
+      await this.#wait(5000)
+    }
     const device = {
       metadata: {
         name: name,
-        archetype: 'unknown_archetype',
       },
       device_mode: {
         mode: mode,
       },
     }
-    await this.#updateDevice(idV2, device)
-    while (
-      (await this.#apiv2!.getDevice(idV2)).data[0].device_mode?.mode !== mode
-    ) {
-      Logger.info('Wall switch update is in progress ...')
-      this.#wait(5000)
+    while (!(await this.#isWallSwitchUpdated(idV2, mode, name))) {
+      await this.#updateDevice(idV2, device)
+      Logger.info(`Wall switch '${idV2}' update is in progress ...`)
+      await this.#wait(5000)
     }
   }
 
@@ -1088,30 +1098,32 @@ export class Bridge {
   }
 
   async #triggerSensorSearch(name: string, type: AccessoryType) {
+    const instuctionMsg =
+      'Instructions/troubleshooting: https://github.com/jaaufauvre/philips-hue-auto-config?tab=readme-ov-file#troubleshooting'
     await this.#apiv1!.searchSensors()
     switch (type) {
       case AccessoryType.WallSwitch:
         Logger.info(
           Color.Purple,
-          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. Press and hold the "reset" button in case it doesn't show up after a few minutes.`,
+          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. ${instuctionMsg}`,
         )
         break
       case AccessoryType.TapDialSwitch:
         Logger.info(
           Color.Purple,
-          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. Press and hold the "setup" button in case it doesn't show up after a few minutes.`,
+          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. ${instuctionMsg}`,
         )
         break
       case AccessoryType.DimmerSwitch:
         Logger.info(
           Color.Purple,
-          `[Dimmer switch] Now, press and hold the "on/off" button of '${name}' for 3 seconds. Press and hold the "setup" button in case it doesn't show up after a few minutes.`,
+          `[Dimmer switch] Now, press and hold the "on/off" button of '${name}' for 3 seconds. ${instuctionMsg}`,
         )
         break
       case AccessoryType.MotionSensor:
         Logger.info(
           Color.Purple,
-          `[Motion sensor] Now, wait or press the "setup" button of '${name}' for a few seconds`,
+          `[Motion sensor] Now, press the "setup" button of '${name}'. ${instuctionMsg}`,
         )
         break
       default:
@@ -1121,6 +1133,21 @@ export class Bridge {
 
   async #isScanningSensors(): Promise<boolean> {
     return (await this.#apiv1!.getNewSensors()).lastscan === 'active'
+  }
+
+  async #isWallSwitchUpdating(idV2: string): Promise<boolean> {
+    return (
+      (await this.#apiv2!.getDevice(idV2)).data[0].device_mode?.status !== 'set'
+    )
+  }
+
+  async #isWallSwitchUpdated(
+    idV2: string,
+    mode: string,
+    name: string,
+  ): Promise<boolean> {
+    const device = (await this.#apiv2!.getDevice(idV2)).data[0]
+    return device.device_mode?.mode === mode && device.metadata.name === name
   }
 
   async #isScanningLights(): Promise<boolean> {

@@ -141,10 +141,22 @@ export class ApiV2 {
     return await this.#httpsClient.put(uri, scene)
   }
 
+  async getBehaviorInstances(): Promise<BehaviorInstances> {
+    Logger.info(`[API v2] Retrieving behavior instances ...`)
+    const uri = `${this.#getBaseUrl()}/behavior_instance`
+    return await this.#httpsClient.get<BehaviorInstances>(uri)
+  }
+
   async createBehaviorInstance(behavior: NewBehaviorInstance) {
     Logger.info(`[API v2] Creating behavior instance ...`)
     const uri = `${this.#getBaseUrl()}/behavior_instance`
     return await this.#httpsClient.post(uri, behavior)
+  }
+
+  async deleteBehaviorInstance(id: string) {
+    Logger.info(`[API v2] Deleting behavior instance '${id}' ...`)
+    const uri = `${this.#getBaseUrl()}/behavior_instance/${id}`
+    return await this.#httpsClient.delete(uri)
   }
 }
 
@@ -280,6 +292,7 @@ export interface DeviceProductData {
 
 export interface DeviceMode {
   mode: string
+  status?: string
 }
 
 //
@@ -353,6 +366,16 @@ export interface Recall {
 //
 // Behaviors
 //
+export interface BehaviorInstances {
+  data: BehaviorInstance[]
+  errors: any[]
+}
+
+export interface BehaviorInstance {
+  id: string
+  type: 'behavior_instance'
+}
+
 export interface NewBehaviorInstance {
   type: string
   enabled: boolean

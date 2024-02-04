@@ -27,6 +27,7 @@ async function main() {
   const providedBridgeIp = process.env.npm_config_bridge as string
   const providedAppKey = process.env.npm_config_appkey as string
   const configPath = process.env.npm_config_config as string
+  const deleteDevices = process.env.npm_config_delete_devices as string
   const configEncryptionKey = process.env.npm_config_xor as string
 
   // Configuration
@@ -59,7 +60,13 @@ async function main() {
   }
 
   // Reset
-  await bridge.resetBridge()
+  if (deleteDevices) {
+    Logger.info('Deleting bridge resources and devices')
+    await bridge.resetBridgeWithDevices()
+  } else {
+    Logger.info('Deleting bridge resources')
+    await bridge.resetBridge()
+  }
   Logger.info(Color.Green, `All bridge resources were deleted`)
 
   // Update bridge name & location

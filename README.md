@@ -29,8 +29,9 @@ The configuration must adhere to [config-schema.json](./module/src/config/config
 3. Run: `npm run start --config=../samples/your-config.json`
 
 Additional options:
-* `--bridge=192.168.1.25` - Will skip Hue Bridge discovery and use the provided IP address instead
-* `--appkey=AXYvXm9Bf5b…PZPW40TEM` - Will use the provided authentication key instead of creating a new one
+* `--bridge={ip}` - Skip Hue Bridge discovery and use the provided IP address instead
+* `--appkey={key}` - Use the provided authentication key instead of creating a new one
+* `--delete_devices` - Delete lights and accessories from the bridge
 
 ## Program steps
 
@@ -39,7 +40,7 @@ The program will:
 1. Load and check the input configuration
 2. Search for the bridge that was pressed
 3. Create a bridge user and authentication key
-4. Delete bridge resources (if any)
+4. Delete bridge resources
 5. Add the bridge location for sunset/sunrise detection
 6. Create rooms and zones
 7. Search for lights (from their serial and MAC address) and add them to rooms and zones

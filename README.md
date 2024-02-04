@@ -51,6 +51,50 @@ The program will:
 13. Configure motion sensors to activate scenes according to sunset/sunrise
 13. Automatically disable motion sensors when the controlled room or zone is switched on manually
 
+## Troubleshooting
+
+### Lights
+
+<p>
+ <img src="./res/add-lights.png" width="300px"/>
+ <img src="./res/no-lights-found.png" width="300px"/>
+</p>
+
+> _Sometimes an issue with a Philips Hue smart light can be fixed by factory resetting it with the Philips Hue dimmer switch:_
+> 1. _Power cycle the light: switch it off, wait 15 seconds, and switch it back on._
+> 2. _Hold the Hue dimmer switch within six inches of the light._
+> 3. _Press and hold both the “ON” and the “OFF” button for at least 10 seconds until the LED indicator on the switch turns green._
+
+Source: https://www.philips-hue.com/en-us/explore-hue/blog/dimmer-switch-installation
+
+### Wall switches
+
+<p>
+ <img src="./res/add-wall-switch.png" width="300px"/>
+ <img src="./res/wall-switch-troubleshooting.png" width="300px"/>
+</p>
+
+### Dimmer switches
+
+<p>
+ <img src="./res/connect-dimmer-switch.png" width="300px"/>
+ <img src="./res/dimmer-switch-troubleshooting.png" width="300px"/>
+</p>
+
+### Motion sensors
+
+<p>
+ <img src="./res/activate-sensor.png" width="300px"/>
+ <img src="./res/sensor-get-help.png" width="300px"/>
+</p>
+
+### Tap dial switches
+
+<p>
+ <img src="./res/add-tap-dial-switch.png" width="300px"/>
+ <img src="./res/tap-dial-switch-get-help.png" width="300px"/>
+</p>
+
 ## References
 
 * https://developers.meethue.com/develop/hue-api/

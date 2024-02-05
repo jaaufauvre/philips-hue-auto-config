@@ -151,6 +151,12 @@ export class ApiV1 {
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/scenes/${id}`
     return await this.#httpsClient.delete(uri)
   }
+
+  async getGroups() {
+    Logger.info(`[API v1] Retrieving groups ...`)
+    const uri = `${this.#getBaseUrl()}/${this.#appKey}/groups`
+    return await this.#httpsClient.get<GroupsV1>(uri)
+  }
 }
 
 //
@@ -209,8 +215,9 @@ export interface NewSensors {
 
 export type SensorId = string
 export interface SensorV1 {
-  uniqueid?: string
   type: string
+  uniqueid?: string
+  modelid?: string
 }
 export interface SensorsV1 {
   [key: SensorId]: SensorV1
@@ -323,4 +330,16 @@ export interface SceneV1 {
 }
 export interface ScenesV1 {
   [key: SceneId]: SceneV1
+}
+
+//
+// Groups
+//
+export type GroupId = string
+export interface GroupV1 {
+  name: string
+  lights: LightId[]
+}
+export interface GroupsV1 {
+  [key: GroupId]: GroupV1
 }

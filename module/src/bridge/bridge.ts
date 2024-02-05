@@ -71,6 +71,12 @@ export class Bridge {
     for (const sceneId of Object.keys(await this.#apiv1!.getScenes())) {
       await this.#apiv1!.deleteScene(sceneId)
     }
+    const flagSensorsV1 = await this.#getSensors(['CLIPGenericFlag'])
+    for (const sensorId of Object.keys(flagSensorsV1)) {
+      if (flagSensorsV1[sensorId].modelid === 'PHILIPSHUEAUTOCONFIG') {
+        await this.#apiv1!.deleteSensor(sensorId)
+      }
+    }
   }
 
   async resetBridgeWithDevices() {
@@ -83,7 +89,7 @@ export class Bridge {
         await this.#apiv2!.deleteDevice(device.id)
       }
     }
-    for (const sensorId of Object.keys(await this.#apiv1!.getSensors())) {
+    for (const sensorId of Object.keys(await this.#getSensors())) {
       await this.#apiv1!.deleteSensor(sensorId)
     }
   }
@@ -108,7 +114,7 @@ export class Bridge {
       Logger.info(Color.DarkBlue, 'Waiting for accessory scan to end ...')
       await this.#wait(10000)
     }
-    const sensorsV1 = await this.#apiv1!.getSensors()
+    const sensorsV1 = await this.#getSensors()
     for (const id of Object.keys(sensorsV1)) {
       const sensor = sensorsV1[id]
       if (
@@ -137,9 +143,7 @@ export class Bridge {
 
   async updateBridgeLocation(lat: string, long: string) {
     Logger.info('Updating bridge location ...')
-    const daylightSensorId = Object.keys(
-      await this.#getSensors(['Daylight']),
-    )[0]
+    const daylightSensorId = await this.#getDaylightSensorId()
     await this.#apiv1!.updateDaylightSensorConfig(daylightSensorId, {
       long: long,
       lat: lat,
@@ -645,9 +649,7 @@ export class Bridge {
     }
 
     if (on) {
-      const daylightSensorId = Object.keys(
-        await this.#getSensors(['Daylight']),
-      )[0]
+      const daylightSensorId = await this.#getDaylightSensorId()
       const switchOnBaseRule: NewRule = {
         name: `${name} #${button} on`,
         conditions: [
@@ -720,9 +722,7 @@ export class Bridge {
     }
 
     if (change) {
-      const daylightSensorId = Object.keys(
-        await this.#getSensors(['Daylight']),
-      )[0]
+      const daylightSensorId = await this.#getDaylightSensorId()
       const changeBaseRule: NewRule = {
         name: `${name} #${button}`,
         conditions: [
@@ -829,12 +829,12 @@ export class Bridge {
     lightIdV1: string,
     presenceIdV1: string,
     name: string,
-    groupIdV1: string,
+    sensorGroupIdV1: string,
     daySceneIdV1: string,
     nightSceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${groupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}'.`,
+      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${sensorGroupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}'.`,
     )
 
     // Create a virtual switch for the motion sensor
@@ -882,25 +882,28 @@ export class Bridge {
       value: 'false',
     }
 
-    // Update accessory rules to disable the motion sensor when group is switched on (manual intervention)
+    // Update accessory rules to disable the motion sensor when
+    // at least a light from the same group is switched on (manual intervention)
     const rules = await this.#apiv1!.getRules()
+    const groups = await this.#apiv1!.getGroups()
     for (const ruleId of Object.keys(rules)) {
       const rule = rules[ruleId]
-      const isGroupRule = _.some(
-        rule.actions,
-        (action) => action.address === `/groups/${groupIdV1}/action`,
-      )
-      if (!isGroupRule) {
+      if (
+        !this.#isSwitchOnSceneRule(rule) ||
+        this.#isSwitchOffGroupRule(rule)
+      ) {
         continue
       }
-      const isSwitchOffGroupRule = _.some(
-        rule.actions,
-        (action) =>
-          action.address === `/groups/${groupIdV1}/action` &&
-          action.body.on !== undefined &&
-          !action.body.on,
-      )
-      if (isSwitchOffGroupRule) {
+      const ruleGroupIdV1 = this.#getRuleGroup(rule)
+      if (!ruleGroupIdV1) {
+        continue
+      }
+      const sameLights =
+        _.intersection(
+          groups[ruleGroupIdV1].lights,
+          groups[sensorGroupIdV1].lights,
+        ).length > 0
+      if (!sameLights) {
         continue
       }
       rule.owner = undefined
@@ -913,9 +916,7 @@ export class Bridge {
     }
 
     // On motion, recall a group scene (day or night scene)
-    const daylightSensorId = Object.keys(
-      await this.#getSensors(['Daylight']),
-    )[0]
+    const daylightSensorId = await this.#getDaylightSensorId()
     const onMotionBaseRule: NewRule = {
       name: `${name} on`,
       conditions: [
@@ -942,7 +943,7 @@ export class Bridge {
       ],
       actions: [
         {
-          address: `/groups/${groupIdV1}/action`,
+          address: `/groups/${sensorGroupIdV1}/action`,
           method: 'PUT',
           body: {
             scene: '{placeholder}',
@@ -971,7 +972,7 @@ export class Bridge {
       ],
       actions: [
         {
-          address: `/groups/${groupIdV1}/action`,
+          address: `/groups/${sensorGroupIdV1}/action`,
           method: 'PUT',
           body: {
             on: false,
@@ -987,12 +988,12 @@ export class Bridge {
       conditions: [
         virtualSwitchOnCondition,
         {
-          address: `/groups/${groupIdV1}/state/any_on`,
+          address: `/groups/${sensorGroupIdV1}/state/any_on`,
           operator: 'eq',
           value: 'true',
         },
         {
-          address: `/groups/${groupIdV1}/state/any_on`,
+          address: `/groups/${sensorGroupIdV1}/state/any_on`,
           operator: 'dx',
         },
         {
@@ -1011,18 +1012,47 @@ export class Bridge {
       conditions: [
         virtualSwitchOffCondition,
         {
-          address: `/groups/${groupIdV1}/state/any_on`,
+          address: `/groups/${sensorGroupIdV1}/state/any_on`,
           operator: 'eq',
           value: 'false',
         },
         {
-          address: `/groups/${groupIdV1}/state/any_on`,
+          address: `/groups/${sensorGroupIdV1}/state/any_on`,
           operator: 'dx',
         },
       ],
       actions: [virtualSwitchOnAction],
     }
     await this.#createRule(enableSensorRule)
+  }
+
+  #getRuleGroup(rule: RuleV1) {
+    for (const action of rule.actions) {
+      const match = action.address.match(/\/groups\/(\d+)\/action/)
+      if (match) {
+        return match[1]
+      }
+    }
+  }
+
+  #isSwitchOffGroupRule(rule: RuleV1) {
+    const actionPattern = /^\/groups\/\d+\/action$/
+    return _.some(
+      rule.actions,
+      (action) =>
+        actionPattern.test(action.address) &&
+        action.body.on !== undefined &&
+        !action.body.on,
+    )
+  }
+
+  #isSwitchOnSceneRule(rule: RuleV1) {
+    const actionPattern = /^\/groups\/\d+\/action$/
+    return _.some(
+      rule.actions,
+      (action) =>
+        actionPattern.test(action.address) && action.body.scene !== undefined,
+    )
   }
 
   #toNightRule(baseRule: NewRule, nightSceneIdV1: string) {
@@ -1170,10 +1200,14 @@ export class Bridge {
   }
 
   async #hasSensor(mac: string): Promise<boolean> {
-    const sensors = await this.#apiv1!.getSensors()
+    const sensors = await this.#getSensors()
     return _.some(Object.values(sensors), (sensor) =>
       sensor.uniqueid?.startsWith(mac),
     )
+  }
+
+  async #getDaylightSensorId() {
+    return Object.keys(await this.#getSensors(['Daylight']))[0]
   }
 
   async #getSensors(types?: string[]) {

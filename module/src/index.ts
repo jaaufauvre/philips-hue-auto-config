@@ -350,6 +350,7 @@ async function main() {
 
     // Create motion sensor rules
     await bridge.configureMotionSensor(
+      motionSensor.mac,
       motionSensor.lightIdV1!,
       motionSensor.presenceIdV1!,
       motionSensor.name,

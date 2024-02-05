@@ -104,7 +104,6 @@ export class Bridge {
   }
 
   async deleteUnexpectedAccessories(excludedMacAddresses: string[]) {
-    excludedMacAddresses.push('motion-sensor-virtual-switch') // Virtual motion sensor switch
     while (await this.#isScanningSensors()) {
       Logger.info(Color.DarkBlue, 'Waiting for accessory scan to end ...')
       await this.#wait(10000)
@@ -280,7 +279,7 @@ export class Bridge {
     name: string,
     type?: string,
   ) {
-    Logger.info(`Updating metadata for device '${lightOwnerIdV2}'`)
+    Logger.info(`Updating metadata for light owner '${lightOwnerIdV2}'`)
     const device = {
       metadata: {
         name: name,
@@ -826,6 +825,7 @@ export class Bridge {
   }
 
   async configureMotionSensor(
+    macAddress: string,
     lightIdV1: string,
     presenceIdV1: string,
     name: string,
@@ -851,7 +851,7 @@ export class Bridge {
       modelid: 'PHILIPSHUEAUTOCONFIG',
       manufacturername: 'philips-hue-auto-config',
       swversion: '1.0',
-      uniqueid: 'motion-sensor-virtual-switch',
+      uniqueid: `${macAddress}-switch`,
       recycle: false,
     }
     const virtualSwitchSensorId = (

@@ -41,7 +41,7 @@ The program will:
 2. Search for the bridge that was pressed
 3. Create a bridge user and authentication key
 4. Delete bridge resources
-5. Add the bridge location for sunset/sunrise detection
+5. Set the bridge location for sunset/sunrise detection
 6. Create rooms and zones
 7. Search for lights (from their serial and MAC address) and add them to rooms and zones
 8. Create default "_Day_" and "_Night_" scenes for each room and zone
@@ -87,6 +87,10 @@ Source: https://www.philips-hue.com/en-us/explore-hue/blog/dimmer-switch-install
 <p>
  <img src="./res/activate-sensor.png" width="300px"/>
  <img src="./res/sensor-get-help.png" width="300px"/>
+</p>
+<p>
+ <img src="./res/activate-outdoor-sensor.png" width="300px"/>
+ <img src="./res/outdoor-sensor-get-help.png" width="300px"/>
 </p>
 
 ### Tap dial switches

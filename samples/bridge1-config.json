@@ -30,6 +30,11 @@
       "id": "bedroom",
       "name": "Bedroom",
       "type": "bedroom"
+    },
+    {
+      "id": "garden",
+      "name": "Garden",
+      "type": "garden"
     }
   ],
   "zones": [
@@ -377,6 +382,18 @@
         "bridge",
         "upstairs"
       ]
+    },
+    {
+      "id": "garden_light",
+      "mac": "00:17:88:01:0d:b6:f6:ec-0b",
+      "serial": "A89E98",
+      "name": "Floodlight garden",
+      "type": "wall_lantern",
+      "room": "garden",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
     }
   ],
   "motion-sensors": [
@@ -386,6 +403,13 @@
       "serial": "0B58026A",
       "name": "Sensor kitchen",
       "group": "kitchen"
+    },
+    {
+      "id": "garden_sensor",
+      "mac": "00:17:88:01:0c:4b:13:c7-02",
+      "serial": "0C4B13C7",
+      "name": "Sensor garden",
+      "group": "garden"
     }
   ],
   "dimmer-switches": [
@@ -508,9 +532,12 @@
       "id": "kitchen_garden_ws",
       "mac": "00:17:88:01:0c:55:dc:46-01-fc00",
       "name": "Switch kitchen/garden",
-      "mode": "switch_single_rocker",
+      "mode": "switch_dual_rocker",
       "button1": {
-        "group": "dining"
+        "group": "garden"
+      },
+      "button2": {
+        "group": "cooking"
       }
     },
     {

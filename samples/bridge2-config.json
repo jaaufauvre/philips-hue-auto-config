@@ -40,6 +40,11 @@
       "id": "bedroom_sav",
       "name": "Savannah's bedroom",
       "type": "kids_bedroom"
+    },
+    {
+      "id": "front_door",
+      "name": "Front door",
+      "type": "front_door"
     }
   ],
   "zones": [
@@ -283,6 +288,18 @@
         "upstairs"
       ],
       "comment": "Close to bedrooms"
+    },
+    {
+      "id": "front_door_spot",
+      "mac": "00:17:88:01:0d:c2:16:06-0b",
+      "serial": "F1EFB4",
+      "name": "Front door spot",
+      "type": "recessed_ceiling",
+      "room": "front_door",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
     }
   ],
   "motion-sensors": [
@@ -299,6 +316,13 @@
       "serial": "0B58007C",
       "name": "Sensor hall. down",
       "group": "hallway_down"
+    },
+    {
+      "id": "front_door_sensor",
+      "mac": "00:17:88:01:0c:4b:1e:e7-02",
+      "serial": "0C4B1EE7",
+      "name": "Sensor front door",
+      "group": "front_door"
     }
   ],
   "dimmer-switches": [

@@ -540,7 +540,7 @@ export class Bridge {
     const lightSensor = {
       name: `${name} (L)`,
       config: {
-        tholddark: 25000, // Medium
+        tholddark: 20000, // Medium
       },
     }
     const presenceSensor = {

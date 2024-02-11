@@ -148,8 +148,8 @@ export class Bridge {
     await this.#apiv1!.updateDaylightSensorConfig(daylightSensorId, {
       long: long,
       lat: lat,
-      sunriseoffset: -30, // "daylight" value is "true" 30min before sunrise
-      sunsetoffset: 30, // "daylight" value is "false" 30min after sunset
+      sunriseoffset: 0, // "daylight" value is "true" at sunrise
+      sunsetoffset: 60, // "daylight" value is "false" 60 min after sunset
     })
   }
 

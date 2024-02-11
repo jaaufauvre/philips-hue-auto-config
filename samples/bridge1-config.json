@@ -571,38 +571,310 @@
   "defaults": {
     "powerup-behavior": "powerfail",
     "scenes": {
+      "default": {
+        "name": "Default",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "light-action": {
+          "id": "default_action",
+          "mirek": 323,
+          "brigthness": 100
+        }
+      },
       "day": {
         "name": "Day",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 323
-        },
-        "brigthness": 100
+        "light-action": {
+          "id": "default_day_action",
+          "mirek": 323,
+          "brigthness": 100
+        }
       },
       "night": {
         "name": "Night",
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 30
+        "light-action": {
+          "id": "default_night_action",
+          "mirek": 500,
+          "brigthness": 30
+        }
       },
       "motion-sensor-day": {
         "name": "Motion sensor day",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 323
-        },
-        "brigthness": 80
+        "light-action": {
+          "id": "default_sensor_day_action",
+          "mirek": 323,
+          "brigthness": 70
+        }
       },
       "motion-sensor-night": {
         "name": "Motion sensor night",
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 20
+        "light-action": {
+          "id": "default_sensor_night_action",
+          "mirek": 500,
+          "brigthness": 20
+        }
       }
     }
-  }
+  },
+  "scenes": [
+    {
+      "id": "garden_sensor_day_scene",
+      "groups": [
+        "garden"
+      ],
+      "name": "Motion sensor day",
+      "type": "sensor_day",
+      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "actions": [
+        {
+          "target": "garden_light",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
+      "id": "garden_sensor_night_scene",
+      "groups": [
+        "garden"
+      ],
+      "name": "Motion sensor night",
+      "type": "sensor_night",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "actions": [
+        {
+          "target": "garden_light",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_day_scene",
+      "groups": [
+        "bathroom"
+      ],
+      "name": "Day",
+      "type": "day",
+      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "actions": [
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "bathroom_blue_day"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "bathroom_spot_day"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "bathroom_spot_day"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_night_scene",
+      "groups": [
+        "bathroom"
+      ],
+      "name": "Night",
+      "type": "night",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "actions": [
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "bathroom_blue_night"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "bathroom_spot_night"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "bathroom_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "hallowen_scene",
+      "groups": [
+        "kitchen",
+        "office",
+        "bedroom_aaliya",
+        "bathroom",
+        "bedroom",
+        "garden",
+        "bridge"
+      ],
+      "name": "Hallowen 🦇",
+      "type": "custom",
+      "image-id": "b5f5a765-8f72-4aef-af99-90a116818ad4",
+      "actions": [
+        {
+          "target": "garden_light",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "kitchen_pendant_left",
+          "light-action": "hallowen_filament_kitchen_white"
+        },
+        {
+          "target": "kitchen_pendant_right",
+          "light-action": "hallowen_filament_kitchen_white"
+        },
+        {
+          "target": "kitchen_spot_1",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_2",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_3",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_4",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_5",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_6",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_7",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_8",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_spot_9",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "kitchen_gradient",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "kitchen_ceiling",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "aaliya_signe",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "aaliya_desk",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "aaliya_ceiling",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "bedroom_candle_left",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "bedroom_candle_right",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "bedroom_ceiling_1",
+          "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "bedroom_ceiling_2",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "bedroom_shade",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "office_ceiling",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "office_desk",
+          "light-action": "hallowen_white"
+        }
+      ]
+    }
+  ],
+  "light-actions": [
+    {
+      "id": "default",
+      "mirek": 323,
+      "brigthness": 100
+    },
+    {
+      "id": "bathroom_blue_day",
+      "color": {
+        "x": 0.1534,
+        "y": 0.0539
+      },
+      "brigthness": 100
+    },
+    {
+      "id": "bathroom_spot_day",
+      "mirek": 304,
+      "brigthness": 100
+    },
+    {
+      "id": "bathroom_blue_night",
+      "color": {
+        "x": 0.1534,
+        "y": 0.0539
+      },
+      "brigthness": 40
+    },
+    {
+      "id": "bathroom_spot_night",
+      "mirek": 304,
+      "brigthness": 40
+    },
+    {
+      "id": "hallowen_red",
+      "color": {
+        "x": 0.6799,
+        "y": 0.3027
+      },
+      "brigthness": 100
+    },
+    {
+      "id": "hallowen_low_white",
+      "mirek": 153,
+      "brigthness": 5
+    },
+    {
+      "id": "hallowen_filament_kitchen_white",
+      "mirek": 153,
+      "brigthness": 1
+    },
+    {
+      "id": "hallowen_white",
+      "mirek": 153,
+      "brigthness": 15
+    }
+  ]
 }

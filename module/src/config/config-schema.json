@@ -4,46 +4,181 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
-    "scene": {
+    "scene-name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32,
+      "description": "A scene name",
+      "examples": ["Default"]
+    },
+    "scene-image-id": {
+      "type": "string",
+      "description": "The ID of a 'public_image' resource for the scene",
+      "examples": ["732ff1d9-76a7-4630-aad0-c8acc499bb0b"]
+    },
+    "mirek": {
+      "type": "number",
+      "minimum": 153,
+      "maximum": 500,
+      "description": "A color temperature in mirek",
+      "examples": [223]
+    },
+    "color": {
       "type": "object",
+      "additionalProperties": false,
+      "description": "A CIE XY gamut position",
       "properties": {
+        "x": {
+          "type": "number",
+          "description": "X position in color gamut",
+          "minimum": 0,
+          "maximum": 1,
+          "examples": [0.1534]
+        },
+        "y": {
+          "type": "number",
+          "description": "Y position in color gamut",
+          "minimum": 0,
+          "maximum": 1,
+          "examples": [0.0539]
+        }
+      },
+      "required": ["x", "y"]
+    },
+    "light-action": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "An action to execute on one or many lights",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Uniquely identify the action in this configuration",
+          "examples": ["blue_action"]
+        },
         "name": {
           "type": "string",
-          "description": "A name for the scene",
-          "examples": ["Default"]
+          "description": "A name for the action",
+          "minLength": 1,
+          "maxLength": 32,
+          "examples": ["Blue light"]
         },
-        "image-id": {
-          "type": "string",
-          "description": "The ID of a 'public_image' resource for the scene",
-          "examples": ["732ff1d9-76a7-4630-aad0-c8acc499bb0b"]
+        "color": {
+          "$ref": "#/definitions/color"
         },
-        "color-temperature": {
-          "$ref": "#/definitions/color-temperature"
+        "mirek": {
+          "$ref": "#/definitions/mirek"
         },
         "brigthness": {
           "type": "number",
-          "description": "A default brightness percentage for lights",
+          "description": "A brightness percentage for lights",
           "minimum": 1,
           "maximum": 100,
-          "examples": ["90"]
+          "examples": [90]
+        },
+        "comment": {
+          "type": "string"
         }
       },
-      "required": ["name", "image-id", "color-temperature", "brigthness"]
+      "oneOf": [
+        {
+          "required": ["id"]
+        },
+        {
+          "required": ["id", "color", "brightness"],
+          "not": {
+            "required": ["mirek"]
+          }
+        },
+        {
+          "required": ["id", "mirek", "brightness"],
+          "not": {
+            "required": ["color"]
+          }
+        }
+      ],
+      "required": ["id"]
     },
-    "color-temperature": {
+    "scene": {
       "type": "object",
-      "description": "A default color temperature for lights",
       "additionalProperties": false,
       "properties": {
-        "mirek": {
-          "type": "number",
-          "minimum": 153,
-          "maximum": 500,
-          "description": "A color temperature in mirek",
-          "examples": [223]
+        "id": {
+          "type": "string",
+          "description": "Uniquely identify the scene in this configuration",
+          "examples": ["kitchen_blue"]
+        },
+        "groups": {
+          "type": "array",
+          "description": "Rooms or zones in which to create the scene",
+          "items": {
+            "type": "string",
+            "description": "An ID of room or zone",
+            "examples": ["kitchen"]
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/scene-name"
+        },
+        "type": {
+          "type": "string",
+          "description": "A type of scene",
+          "enum": [
+            "default",
+            "day",
+            "night",
+            "sensor_day",
+            "sensor_night",
+            "custom"
+          ],
+          "examples": ["day"]
+        },
+        "image-id": {
+          "$ref": "#/definitions/scene-image-id"
+        },
+        "actions": {
+          "type": "array",
+          "description": "A list of target lights and actions",
+          "uniqueItemProperties": ["target"],
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "target": {
+                "type": "string",
+                "description": "A target light ID",
+                "examples": ["kitchen_bulb"]
+              },
+              "light-action": {
+                "type": "string",
+                "description": "The ID of an action to execute on the light",
+                "examples": ["kitchen_blue"]
+              }
+            },
+            "required": ["target", "light-action"]
+          }
+        },
+        "comment": {
+          "type": "string"
         }
       },
-      "required": ["mirek"]
+      "required": ["id", "groups", "name", "type", "actions"]
+    },
+    "default-scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/scene-name"
+        },
+        "image-id": {
+          "$ref": "#/definitions/scene-image-id"
+        },
+        "light-action": {
+          "description": "An action executed on all lights",
+          "$ref": "#/definitions/light-action"
+        }
+      },
+      "required": ["name", "light-action"]
     }
   },
   "properties": {
@@ -59,6 +194,8 @@
         "name": {
           "type": "string",
           "description": "Name of the bridge",
+          "minLength": 1,
+          "maxLength": 32,
           "examples": ["My bridge"]
         },
         "lat": {
@@ -89,20 +226,23 @@
           "description": "Default scenes for room and zones",
           "additionalProperties": false,
           "properties": {
+            "default": {
+              "$ref": "#/definitions/default-scene"
+            },
             "day": {
-              "$ref": "#/definitions/scene"
+              "$ref": "#/definitions/default-scene"
             },
             "night": {
-              "$ref": "#/definitions/scene"
+              "$ref": "#/definitions/default-scene"
             },
             "motion-sensor-day": {
-              "$ref": "#/definitions/scene"
+              "$ref": "#/definitions/default-scene"
             },
             "motion-sensor-night": {
-              "$ref": "#/definitions/scene"
+              "$ref": "#/definitions/default-scene"
             }
           },
-          "required": ["day", "night"]
+          "required": ["default", "day", "night"]
         }
       },
       "required": ["powerup-behavior", "scenes"]
@@ -696,6 +836,22 @@
           }
         },
         "required": ["id", "mac", "name", "mode", "button1"]
+      }
+    },
+    "light-actions": {
+      "type": "array",
+      "uniqueItemProperties": ["id"],
+      "description": "A list of light actions defining scenes",
+      "items": {
+        "$ref": "#/definitions/light-action"
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "uniqueItemProperties": ["id"],
+      "description": "A list of scenes",
+      "items": {
+        "$ref": "#/definitions/scene"
       }
     }
   },

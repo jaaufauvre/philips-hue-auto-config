@@ -339,11 +339,19 @@ export interface SceneAction {
     on: On
     dimming?: Dimming
     color_temperature?: ColorTemperature
+    color?: Color
   }
 }
 
 export interface ColorTemperature {
   mirek: number
+}
+
+export interface Color {
+  xy: {
+    x: number
+    y: number
+  }
 }
 
 export interface Dimming {
@@ -356,7 +364,7 @@ export interface On {
 
 export interface SceneMetadata {
   name: string
-  image: Resource
+  image?: Resource
 }
 
 export interface Recall {

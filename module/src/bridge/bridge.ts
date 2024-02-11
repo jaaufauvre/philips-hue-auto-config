@@ -11,7 +11,8 @@ import {
   RuleV1,
   SensorsV1,
 } from '../api/api-v1'
-import { ApiV2, Device, UpdatedDevice } from '../api/api-v2'
+import { ApiV2, Device, SceneAction, UpdatedDevice } from '../api/api-v2'
+import { LightAction } from '../config/config-gen'
 
 export class Bridge {
   #apiv1?: ApiV1
@@ -307,61 +308,37 @@ export class Bridge {
     name: string,
     groupIdV2: string,
     groupType: string,
-    lightIds: string[],
-    smartPlugIds: string[],
-    brightness: number,
-    mirek: number,
-    imageId: string,
+    lightActions: Map<string, LightAction | undefined>,
+    imageId?: string,
   ) {
     Logger.info(`Adding scene '${name}' to ${groupType} '${groupIdV2}'`)
-    const lightOnActions = _.map(lightIds, (id) => {
-      return {
-        target: {
-          rid: id,
-          rtype: 'light',
-        },
-        action: {
-          on: {
-            on: true,
-          },
-          dimming: {
-            brightness: brightness,
-          },
-          color_temperature: {
-            mirek: mirek,
-          },
-        },
+    let image
+    if (imageId) {
+      image = {
+        rid: imageId,
+        rtype: 'public_image',
       }
-    })
-    const smartPlugOnActions = _.map(smartPlugIds, (id) => {
-      return {
-        target: {
-          rid: id,
-          rtype: 'light',
-        },
-        action: {
-          on: {
-            on: true,
-          },
-        },
-      }
+    }
+    const actions: SceneAction[] = []
+    lightActions.forEach((lightAction, lightId) => {
+      actions.push(
+        lightAction
+          ? this.#getSceneAction(lightId, lightAction)
+          : this.#getOffSceneAction(lightId),
+      )
     })
     const created = await this.#apiv2!.createScene({
       type: 'scene',
       metadata: {
         name: name,
-        image: {
-          rid: imageId,
-          rtype: 'public_image',
-        },
+        image: image,
       },
       group: {
         rid: groupIdV2,
         rtype: groupType,
       },
-      actions: _.concat(smartPlugOnActions, lightOnActions),
+      actions: actions,
     })
-
     const idV2 = created.data[0].rid
     const sceneIdV1 = (await this.#apiv2!.getScene(idV2)).data[0].id_v1 // "/scenes/FVQmKmwq2L-adLtW"
     const idV1 = sceneIdV1.replace('/scenes/', '')
@@ -1115,7 +1092,6 @@ export class Bridge {
   async #searchAccessories(accessoryIdList: AccessoryIdentifiers[]) {
     for (const accessoryId of accessoryIdList) {
       const name = accessoryId.name
-      await this.#triggerSensorSearch(name, accessoryId.type)
       Logger.info(`Searching for '${name}'`)
       while (!(await this.#hasSensor(accessoryId.mac))) {
         if (!(await this.#isScanningSensors())) {
@@ -1270,6 +1246,64 @@ export class Bridge {
   #wait(ms: number) {
     Logger.debug(`Waiting for ${ms} ms...`)
     return new Promise((res) => setTimeout(res, ms))
+  }
+
+  #lightActionToColor(lightAction: LightAction) {
+    if (lightAction.color) {
+      return {
+        xy: {
+          x: lightAction.color.x,
+          y: lightAction.color.y,
+        },
+      }
+    }
+  }
+
+  #lightActionToColorTemperature(lightAction: LightAction) {
+    if (lightAction.mirek) {
+      return {
+        mirek: lightAction.mirek,
+      }
+    }
+  }
+
+  #lightActionToDimming(lightAction: LightAction) {
+    if (lightAction.brigthness) {
+      return {
+        brightness: lightAction.brigthness,
+      }
+    }
+  }
+
+  #getOffSceneAction(lightId: string): SceneAction {
+    return {
+      target: {
+        rid: lightId,
+        rtype: 'light',
+      },
+      action: {
+        on: {
+          on: false,
+        },
+      },
+    }
+  }
+
+  #getSceneAction(lightId: string, lightAction: LightAction): SceneAction {
+    return {
+      target: {
+        rid: lightId,
+        rtype: 'light',
+      },
+      action: {
+        on: {
+          on: true,
+        },
+        dimming: this.#lightActionToDimming(lightAction),
+        color_temperature: this.#lightActionToColorTemperature(lightAction),
+        color: this.#lightActionToColor(lightAction),
+      },
+    }
   }
 }
 

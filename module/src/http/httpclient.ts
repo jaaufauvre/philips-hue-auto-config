@@ -76,7 +76,7 @@ class HttpClient {
       return await action()
     } catch (e: any) {
       if (axios.isAxiosError(e)) {
-        Logger.debug('Error:', e.toJSON())
+        Logger.warn('Error:', e.toJSON())
         throw Error(
           `An error occurred when sending HTTP request. Code: '${e.code}', message: '${e.message}'.`,
         )

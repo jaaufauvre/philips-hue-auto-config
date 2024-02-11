@@ -127,6 +127,67 @@ describe('Config', () => {
     },
   )
 
+  test('should throw Error when scene group ID(s) not defined', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(`"groups": ["scene_zone"]`, `"groups": ["unknown"]`),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+    }
+  })
+
+  test('should throw Error when action target ID not defined', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(json.replace(`"target": "scene_light"`, `"target": "unknown"`))
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+    }
+  })
+
+  test('should throw Error when light action ID not defined', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(
+          `"light-action": "scene_action"`,
+          `"light-action": "unknown"`,
+        ),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+    }
+  })
+
+  test('should throw Error when motion sensor and missing motion sensor scene', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      const obj = JSON.parse(json)
+      delete obj['defaults']['scenes']['motion-sensor-night']
+      new Config(JSON.stringify(obj))
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe('Missing motion sensor scene definition!')
+    }
+  })
+
   test('should decrypt serials and MAC addresses when XOR key provided', () => {
     const config1 = new Config(
       './tests/config/res/test-config.json',
@@ -203,6 +264,8 @@ describe('Config', () => {
     ${'dimmer switch'} | ${'dimmerswitch'}                    | ${'Dimmer switch'}
     ${'dimmer switch'} | ${'ABCDEF'}                          | ${'Dimmer switch'}
     ${'dimmer switch'} | ${'00:17:88:01:0b:22:22:22-01-fc00'} | ${'Dimmer switch'}
+    ${'scene'}         | ${'scene'}                           | ${'Scene'}
+    ${'scene action'}  | ${'scene_action'}                    | ${'Action'}
   `(
     'should return $resource "$expected_name" for ID "$id"',
     ({ resource, id, expected_name }) => {
@@ -212,16 +275,19 @@ describe('Config', () => {
     },
   )
 
-  test('should return room lights and smart plugs', () => {
+  test('should return a list of resource mac addresses', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getGroupLights(config.rooms[0]).length).toBe(1)
-    expect(config.getGroupSmartPlugs(config.rooms[0]).length).toBe(1)
+    expect(config.getAllResourceMacs().length).toBe(8)
   })
 
-  test('should return zone lights and smart plugs', () => {
+  test('should return room lights', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getGroupLights(config.rooms[0]).length).toBe(2)
+  })
+
+  test('should return zone lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
     expect(config.getGroupLights(config.zones![0]).length).toBe(1)
-    expect(config.getGroupSmartPlugs(config.zones![0]).length).toBe(0)
   })
 })
 

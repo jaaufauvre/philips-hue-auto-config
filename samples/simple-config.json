@@ -30,22 +30,60 @@
   "defaults": {
     "powerup-behavior": "powerfail",
     "scenes": {
+      "default": {
+        "name": "Default",
+        "light-action": {
+          "id": "default_action",
+          "mirek": 323,
+          "brigthness": 100
+        }
+      },
       "day": {
         "name": "Day",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 323
-        },
-        "brigthness": 100
+        "light-action": {
+          "id": "default_day_action",
+          "mirek": 323,
+          "brigthness": 100
+        }
       },
       "night": {
         "name": "Night",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 30
+        "light-action": {
+          "id": "default_night_action",
+          "mirek": 500,
+          "brigthness": 30
+        }
       }
     }
-  }
+  },
+  "scenes": [
+    {
+      "id": "my_bedroom_blue_scene",
+      "groups": [
+        "my_bedroom"
+      ],
+      "name": "Blue scene",
+      "type": "custom",
+      "actions": [
+        {
+          "target": "ceiling",
+          "light-action": "blue_action"
+        },
+        {
+          "target": "bed_table",
+          "light-action": "blue_action"
+        }
+      ]
+    }
+  ],
+  "light-actions": [
+    {
+      "id": "blue_action",
+      "color": {
+        "x": 0.1534,
+        "y": 0.0539
+      },
+      "brigthness": 100
+    }
+  ]
 }

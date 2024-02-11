@@ -67,6 +67,10 @@
     {
       "id": "ds_zone2",
       "name": "Zone 2 for dimmer switch"
+    },
+    {
+      "id": "scene_zone",
+      "name": "Zone for scene"
     }
   ],
   "lights": [
@@ -90,6 +94,12 @@
       "name": "Light 3",
       "room": "room",
       "smart-plug": true
+    },
+    {
+      "id": "scene_light",
+      "mac": "00:00:00:00:00:00:00:00-01",
+      "name": "Scene light",
+      "room": "scene_zone"
     }
   ],
   "motion-sensors": [
@@ -161,38 +171,72 @@
   "defaults": {
     "powerup-behavior": "safety",
     "scenes": {
-      "day": {
-        "name": "1",
+      "default": {
+        "name": "Default",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 100
+        "light-action": {
+          "id": "default_action",
+          "mirek": 500,
+          "brigthness": 100
+        }
+      },
+      "day": {
+        "name": "Day scene",
+        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "light-action": {
+          "id": "day_action",
+          "mirek": 500,
+          "brigthness": 100
+        }
       },
       "night": {
-        "name": "2",
+        "name": "Night scene",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 100
+        "light-action": {
+          "id": "night_action",
+          "color": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "brigthness": 100
+        }
       },
       "motion-sensor-day": {
-        "name": "3",
+        "name": "Sensor day scene",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 100
+        "light-action": {
+          "id": "sensor_day_action"
+        }
       },
       "motion-sensor-night": {
-        "name": "4",
+        "name": "Sensor night scene",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "color-temperature": {
-          "mirek": 500
-        },
-        "brigthness": 100
+        "light-action": {
+          "id": "sensor_night_action",
+          "mirek": 500,
+          "brigthness": 100
+        }
       }
     }
-  }
+  },
+  "scenes": [
+    {
+      "id": "scene",
+      "groups": ["scene_zone"],
+      "name": "Scene",
+      "type": "custom",
+      "actions": [
+        {
+          "target": "scene_light",
+          "light-action": "scene_action"
+        }
+      ]
+    }
+  ],
+  "light-actions": [
+    {
+      "id": "scene_action",
+      "name": "Action"
+    }
+  ]
 }

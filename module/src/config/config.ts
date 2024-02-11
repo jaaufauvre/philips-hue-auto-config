@@ -14,6 +14,8 @@ import {
   Zone,
   Defaults,
   Scene,
+  LightAction,
+  SceneType,
 } from './config-gen'
 import _ from 'lodash'
 
@@ -32,12 +34,17 @@ export interface ExtendedLight extends Light {
   ownerId?: string
 }
 
+export enum GroupType {
+  Room = 'room',
+  Zone = 'zone',
+}
+
 class ExtendedGroup {
   idV1?: string
   idV2?: string
-  sceneIdsV1?: Map<Scene, string>
-  sceneIdsV2?: Map<Scene, string>
-  groupType?: string
+  sceneIdsV1?: Map<SceneType, string>
+  sceneIdsV2?: Map<SceneType, string>
+  groupType?: GroupType
 }
 
 export interface ExtendedRoom extends Room, ExtendedGroup {}
@@ -67,7 +74,7 @@ export interface ExtendedMotionSensor extends MotionSensor {
   idV2?: string
 }
 
-class Config implements ConfigGen {
+export class Config implements ConfigGen {
   private _internalConfig: ConfigGen
   bridge: Bridge
   lights: ExtendedLight[]
@@ -79,6 +86,8 @@ class Config implements ConfigGen {
   tapDialSwitches: ExtendedTapDialSwitch[]
   dimmerSwitches: ExtendedDimmerSwitch[]
   wallSwitches: ExtendedWallSwitch[]
+  scenes: Scene[]
+  lightActions: LightAction[]
 
   constructor(configFileOrJson: any, xorKey?: string) {
     if (!configFileOrJson) {
@@ -106,12 +115,14 @@ class Config implements ConfigGen {
     this.tapDialSwitches = this._internalConfig['tap-dial-switches'] ?? []
     this.dimmerSwitches = this._internalConfig['dimmer-switches'] ?? []
     this.wallSwitches = this._internalConfig['wall-switches'] ?? []
-    _.forEach(this.rooms, (room) => (room.groupType = 'room'))
-    _.forEach(this.zones, (zone) => (zone.groupType = 'zone'))
+    _.forEach(this.rooms, (room) => (room.groupType = GroupType.Room))
+    _.forEach(this.zones, (zone) => (zone.groupType = GroupType.Zone))
     _.forEach(_.concat<ExtendedGroup>(this.zones, this.rooms), (group) => {
-      group.sceneIdsV1 = new Map<Scene, string>()
-      group.sceneIdsV2 = new Map<Scene, string>()
+      group.sceneIdsV1 = new Map<SceneType, string>()
+      group.sceneIdsV2 = new Map<SceneType, string>()
     })
+    this.scenes = this._internalConfig.scenes ?? []
+    this.lightActions = this._internalConfig['light-actions'] ?? []
     this.#decrypt(xorKey)
     this.#validateUniqueIds()
     this.#validateLightConfig()
@@ -119,6 +130,7 @@ class Config implements ConfigGen {
     this.#validateTapDialSwitchConfig()
     this.#validateDimmerSwitchConfig()
     this.#validateMotionSensorConfig()
+    this.#validateSceneConfig()
   }
 
   getResourceById(id: string) {
@@ -150,6 +162,8 @@ class Config implements ConfigGen {
             id,
           ),
         ),
+        _.find(this.lightActions, (lightAction) => lightAction.id === id),
+        _.find(this.scenes, (scene) => scene.id === id),
       ],
       (resource) => resource !== undefined,
     )
@@ -175,20 +189,7 @@ class Config implements ConfigGen {
   ): ExtendedLight[] {
     return _.filter(
       this.lights,
-      (light) =>
-        !light['smart-plug'] &&
-        (group.id === light.room || _.includes(light.zones, group.id)),
-    )
-  }
-
-  getGroupSmartPlugs(
-    group: Room | Zone | ExtendedRoom | ExtendedZone,
-  ): ExtendedLight[] {
-    return _.filter(
-      this.lights,
-      (light) =>
-        light['smart-plug'] === true &&
-        (group.id === light.room || _.includes(light.zones, group.id)),
+      (light) => group.id === light.room || _.includes(light.zones, group.id),
     )
   }
 
@@ -203,6 +204,8 @@ class Config implements ConfigGen {
     Logger.info(`${copy.tapDialSwitches.length} tap dial switch(es)`)
     Logger.info(`${copy.dimmerSwitches.length} dimmer switch(es)`)
     Logger.info(`${copy.wallSwitches.length} wall switch(es)`)
+    Logger.info(`${copy.scenes.length} scene(s)`)
+    Logger.info(`${copy.lightActions.length} light action(s)`)
   }
 
   #validate() {
@@ -292,6 +295,8 @@ class Config implements ConfigGen {
       this.motionSensors,
       this.dimmerSwitches,
       this.wallSwitches,
+      this.scenes,
+      this.lightActions,
     )
     if (all.length != _.uniqBy(all, (i) => i.id).length) {
       throw new Error('Identifiers must be unique!')
@@ -348,11 +353,21 @@ class Config implements ConfigGen {
     }
   }
 
+  #validateSceneConfig() {
+    this.scenes.forEach((scene) => {
+      scene.groups.forEach((group) => {
+        this.#checkResourceDefined(group)
+      })
+      scene.actions.forEach((action) => {
+        this.#checkResourceDefined(action.target)
+        this.#checkResourceDefined(action['light-action'])
+      })
+    })
+  }
+
   #checkResourceDefined(id: string) {
     if (!this.getResourceById(id)) {
       throw Error(`Undefined identifier: '${id}'!`)
     }
   }
 }
-
-export { Config, Light, MotionSensor, Room, Zone }

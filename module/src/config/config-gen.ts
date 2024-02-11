@@ -21,6 +21,10 @@ export interface ConfigGen {
      */
     "dimmer-switches"?: DimmerSwitch[];
     /**
+     * A list of light actions defining scenes
+     */
+    "light-actions"?: LightAction[];
+    /**
      * A list of lights and smart plugs
      */
     lights: Light[];
@@ -36,6 +40,10 @@ export interface ConfigGen {
      * A list of rooms
      */
     rooms: Room[];
+    /**
+     * A list of scenes
+     */
+    scenes?: Scene[];
     /**
      * A list of tap dial switches
      */
@@ -99,37 +107,57 @@ export enum PowerupBehavior {
  * Default scenes for room and zones
  */
 export interface Scenes {
-    day:                    Scene;
-    "motion-sensor-day"?:   Scene;
-    "motion-sensor-night"?: Scene;
-    night:                  Scene;
+    day:                    DefaultScene;
+    default:                DefaultScene;
+    "motion-sensor-day"?:   DefaultScene;
+    "motion-sensor-night"?: DefaultScene;
+    night:                  DefaultScene;
 }
 
-export interface Scene {
+export interface DefaultScene {
+    "image-id"?: string;
     /**
-     * A default brightness percentage for lights
+     * An action executed on all lights
      */
-    brigthness:          number;
-    "color-temperature": ColorTemperature;
-    /**
-     * The ID of a 'public_image' resource for the scene
-     */
-    "image-id": string;
-    /**
-     * A name for the scene
-     */
-    name: string;
-    [property: string]: any;
+    "light-action": LightAction;
+    name:           string;
 }
 
 /**
- * A default color temperature for lights
+ * An action executed on all lights
+ *
+ * An action to execute on one or many lights
  */
-export interface ColorTemperature {
+export interface LightAction {
     /**
-     * A color temperature in mirek
+     * A brightness percentage for lights
      */
-    mirek: number;
+    brigthness?: number;
+    color?:      Color;
+    comment?:    string;
+    /**
+     * Uniquely identify the action in this configuration
+     */
+    id:     string;
+    mirek?: number;
+    /**
+     * A name for the action
+     */
+    name?: string;
+}
+
+/**
+ * A CIE XY gamut position
+ */
+export interface Color {
+    /**
+     * X position in color gamut
+     */
+    x: number;
+    /**
+     * Y position in color gamut
+     */
+    y: number;
 }
 
 export interface DimmerSwitch {
@@ -395,6 +423,51 @@ export enum RoomType {
     TopFloor = "top_floor",
     Tv = "tv",
     Upstairs = "upstairs",
+}
+
+export interface Scene {
+    /**
+     * A list of target lights and actions
+     */
+    actions:  Action[];
+    comment?: string;
+    /**
+     * Rooms or zones in which to create the scene
+     */
+    groups: string[];
+    /**
+     * Uniquely identify the scene in this configuration
+     */
+    id:          string;
+    "image-id"?: string;
+    name:        string;
+    /**
+     * A type of scene
+     */
+    type: SceneType;
+}
+
+export interface Action {
+    /**
+     * The ID of an action to execute on the light
+     */
+    "light-action": string;
+    /**
+     * A target light ID
+     */
+    target: string;
+}
+
+/**
+ * A type of scene
+ */
+export enum SceneType {
+    Custom = "custom",
+    Day = "day",
+    Default = "default",
+    Night = "night",
+    SensorDay = "sensor_day",
+    SensorNight = "sensor_night",
 }
 
 export interface TapDialSwitch {
@@ -733,10 +806,12 @@ const typeMap: any = {
         { json: "bridge", js: "bridge", typ: r("Bridge") },
         { json: "defaults", js: "defaults", typ: r("Defaults") },
         { json: "dimmer-switches", js: "dimmer-switches", typ: u(undefined, a(r("DimmerSwitch"))) },
+        { json: "light-actions", js: "light-actions", typ: u(undefined, a(r("LightAction"))) },
         { json: "lights", js: "lights", typ: a(r("Light")) },
         { json: "motion-sensors", js: "motion-sensors", typ: u(undefined, a(r("MotionSensor"))) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "rooms", js: "rooms", typ: a(r("Room")) },
+        { json: "scenes", js: "scenes", typ: u(undefined, a(r("Scene"))) },
         { json: "tap-dial-switches", js: "tap-dial-switches", typ: u(undefined, a(r("TapDialSwitch"))) },
         { json: "wall-switches", js: "wall-switches", typ: u(undefined, a(r("WallSwitch"))) },
         { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
@@ -751,19 +826,28 @@ const typeMap: any = {
         { json: "scenes", js: "scenes", typ: r("Scenes") },
     ], false),
     "Scenes": o([
-        { json: "day", js: "day", typ: r("Scene") },
-        { json: "motion-sensor-day", js: "motion-sensor-day", typ: u(undefined, r("Scene")) },
-        { json: "motion-sensor-night", js: "motion-sensor-night", typ: u(undefined, r("Scene")) },
-        { json: "night", js: "night", typ: r("Scene") },
+        { json: "day", js: "day", typ: r("DefaultScene") },
+        { json: "default", js: "default", typ: r("DefaultScene") },
+        { json: "motion-sensor-day", js: "motion-sensor-day", typ: u(undefined, r("DefaultScene")) },
+        { json: "motion-sensor-night", js: "motion-sensor-night", typ: u(undefined, r("DefaultScene")) },
+        { json: "night", js: "night", typ: r("DefaultScene") },
     ], false),
-    "Scene": o([
-        { json: "brigthness", js: "brigthness", typ: 3.14 },
-        { json: "color-temperature", js: "color-temperature", typ: r("ColorTemperature") },
-        { json: "image-id", js: "image-id", typ: "" },
+    "DefaultScene": o([
+        { json: "image-id", js: "image-id", typ: u(undefined, "") },
+        { json: "light-action", js: "light-action", typ: r("LightAction") },
         { json: "name", js: "name", typ: "" },
-    ], "any"),
-    "ColorTemperature": o([
-        { json: "mirek", js: "mirek", typ: 3.14 },
+    ], false),
+    "LightAction": o([
+        { json: "brigthness", js: "brigthness", typ: u(undefined, 3.14) },
+        { json: "color", js: "color", typ: u(undefined, r("Color")) },
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: "" },
+        { json: "mirek", js: "mirek", typ: u(undefined, 3.14) },
+        { json: "name", js: "name", typ: u(undefined, "") },
+    ], false),
+    "Color": o([
+        { json: "x", js: "x", typ: 3.14 },
+        { json: "y", js: "y", typ: 3.14 },
     ], false),
     "DimmerSwitch": o([
         { json: "button1", js: "button1", typ: r("DimmerSwitchButton1") },
@@ -812,6 +896,19 @@ const typeMap: any = {
         { json: "id", js: "id", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
+    ], false),
+    "Scene": o([
+        { json: "actions", js: "actions", typ: a(r("Action")) },
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "groups", js: "groups", typ: a("") },
+        { json: "id", js: "id", typ: "" },
+        { json: "image-id", js: "image-id", typ: u(undefined, "") },
+        { json: "name", js: "name", typ: "" },
+        { json: "type", js: "type", typ: r("SceneType") },
+    ], false),
+    "Action": o([
+        { json: "light-action", js: "light-action", typ: "" },
+        { json: "target", js: "target", typ: "" },
     ], false),
     "TapDialSwitch": o([
         { json: "button1", js: "button1", typ: r("TapDialSwitchButton1") },
@@ -958,6 +1055,14 @@ const typeMap: any = {
         "top_floor",
         "tv",
         "upstairs",
+    ],
+    "SceneType": [
+        "custom",
+        "day",
+        "default",
+        "night",
+        "sensor_day",
+        "sensor_night",
     ],
     "Mode": [
         "switch_dual_rocker",

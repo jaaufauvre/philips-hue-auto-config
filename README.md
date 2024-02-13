@@ -26,7 +26,7 @@ The configuration must adhere to [config-schema.json](./module/src/config/config
 
 1. Run: `cd module && npm install` 
 2. Reset the Hue Bridge, then press the button in the centre of the Hue Bridge
-3. Run: `npm run start --config=../samples/your-config.json`
+3. Run: `npm run start --config=./your-config.json`
 
 Additional options:
 * `--bridge={ip}` - Skip Hue Bridge discovery and use the provided IP address instead
@@ -44,13 +44,14 @@ The program will:
 5. Set the bridge location for sunset/sunrise detection
 6. Create rooms and zones
 7. Search for lights (from their serial and MAC address) and add them to rooms and zones
-8. Create default "_Day_" and "_Night_" scenes for each room and zone
-9. Set a default power-on behavior for all lights
-10. Search for accessories and add them to the bridge
-11. Configure accessories to activate scenes according to sunset/sunrise
-12. Create default "_Motion sensor day_" and "_Motion sensor night_" scenes in each room or zone controlled by a motion sensor
-13. Configure motion sensors to activate scenes according to sunset/sunrise
-13. Automatically disable motion sensors when the controlled room or zone is switched on manually
+8. Create scenes in rooms and zones
+9. When missing, create default "day" and "night" scenes in rooms and zones
+10. Set a default power-on behavior for all lights
+11. Search for accessories and add them to the bridge
+12. Configure accessories to activate scenes according to sunset/sunrise
+13. When missing, create default "motion sensor day" and "motion sensor night" scenes in rooms or zones controlled by a motion sensor
+14. Configure motion sensors to activate scenes according to sunset/sunrise
+15. Automatically disable motion sensors when the controlled room or zone is switched on manually
 
 ## Troubleshooting
 

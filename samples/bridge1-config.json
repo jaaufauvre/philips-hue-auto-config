@@ -650,6 +650,21 @@
       ]
     },
     {
+      "id": "garden_night_scene",
+      "groups": [
+        "garden"
+      ],
+      "name": "Night",
+      "type": "night",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "actions": [
+        {
+          "target": "garden_light",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
       "id": "bathroom_day_scene",
       "groups": [
         "bathroom"
@@ -692,6 +707,94 @@
         {
           "target": "bathroom_spot_right",
           "light-action": "bathroom_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_red_scene",
+      "groups": [
+        "bathroom"
+      ],
+      "name": "Red",
+      "type": "custom",
+      "actions": [
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "bathroom_red"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "bathroom_spot_day"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "bathroom_spot_day"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_green_scene",
+      "groups": [
+        "bathroom"
+      ],
+      "name": "Green",
+      "type": "custom",
+      "actions": [
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "bathroom_green"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "bathroom_spot_day"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "bathroom_spot_day"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_pink_scene",
+      "groups": [
+        "bathroom"
+      ],
+      "name": "Pink",
+      "type": "custom",
+      "actions": [
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "bathroom_pink"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "bathroom_spot_day"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "bathroom_spot_day"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_orange_scene",
+      "groups": [
+        "bathroom"
+      ],
+      "name": "Orange",
+      "type": "custom",
+      "actions": [
+        {
+          "target": "bathroom_ceiling",
+          "light-action": "bathroom_orange"
+        },
+        {
+          "target": "bathroom_spot_left",
+          "light-action": "bathroom_spot_day"
+        },
+        {
+          "target": "bathroom_spot_right",
+          "light-action": "bathroom_spot_day"
         }
       ]
     },
@@ -852,6 +955,38 @@
       "id": "bathroom_spot_night",
       "mirek": 304,
       "brigthness": 40
+    },
+    {
+      "id": "bathroom_red",
+      "color": {
+        "x": 0.6664,
+        "y": 0.2982
+      },
+      "brigthness": 100
+    },
+    {
+      "id": "bathroom_orange",
+      "color": {
+        "x": 0.5978,
+        "y": 0.3786
+      },
+      "brigthness": 100
+    },
+    {
+      "id": "bathroom_pink",
+      "color": {
+        "x": 0.3081,
+        "y": 0.1655
+      },
+      "brigthness": 100
+    },
+    {
+      "id": "bathroom_green",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brigthness": 100
     },
     {
       "id": "hallowen_red",

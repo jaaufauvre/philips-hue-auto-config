@@ -458,10 +458,10 @@
       "name": "Switch hall. up/bathroom",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "kids_bathroom"
+        "group": "hallway_up"
       },
       "button2": {
-        "group": "hallway_up"
+        "group": "kids_bathroom"
       }
     },
     {

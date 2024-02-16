@@ -506,7 +506,7 @@
     },
     {
       "id": "kitchen_ws_left",
-      "mac": "00:17:88:01:0c:55:de:c5-01-fc00",
+      "mac": "00:17:88:01:0c:55:dc:5d-01-fc00",
       "name": "Switch kitchen L",
       "mode": "switch_dual_rocker",
       "button1": {
@@ -518,7 +518,7 @@
     },
     {
       "id": "kitchen_ws_right",
-      "mac": "00:17:88:01:0c:55:dc:5d-01-fc00",
+      "mac": "00:17:88:01:0c:55:de:c5-01-fc00",
       "name": "Switch kitchen R",
       "mode": "switch_dual_rocker",
       "button1": {

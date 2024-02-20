@@ -308,21 +308,30 @@
       "mac": "00:17:88:01:0b:47:7b:62-02",
       "serial": "0B477B62",
       "name": "Sensor hall. up",
-      "group": "hallway_up"
+      "motion": {
+        "group": "hallway_up"
+      }
     },
     {
       "id": "hall_down_sensor",
       "mac": "00:17:88:01:0b:58:00:7c-02",
       "serial": "0B58007C",
       "name": "Sensor hall. down",
-      "group": "hallway_down"
+      "motion": {
+        "group": "hallway_down"
+      }
     },
     {
       "id": "front_door_sensor",
       "mac": "00:17:88:01:0c:4b:1e:e7-02",
       "serial": "0C4B1EE7",
       "name": "Sensor front door",
-      "group": "front_door"
+      "motion": {
+        "group": "front_door",
+        "scenes": {
+          "default": "front_door_sensor_scene"
+        }
+      }
     }
   ],
   "dimmer-switches": [
@@ -332,7 +341,12 @@
       "serial": "299347",
       "name": "Dimmer toilet",
       "button1": {
-        "group": "toilet"
+        "group": "toilet",
+        "scenes": {
+          "day": "toilet_day_scene",
+          "night": "toilet_night_scene",
+          "evening": "toilet_evening_scene"
+        }
       },
       "button2": {
         "group": "toilet"
@@ -341,7 +355,10 @@
         "group": "toilet"
       },
       "button4": {
-        "group": "toilet"
+        "group": "toilet",
+        "scenes": {
+          "default": "toilet_red_scene"
+        }
       }
     },
     {
@@ -368,7 +385,12 @@
       "serial": "61E40B",
       "name": "Dimmer kids bathroom",
       "button1": {
-        "group": "kids_bathroom"
+        "group": "kids_bathroom",
+        "scenes": {
+          "day": "bathroom_day_scene",
+          "night": "bathroom_night_scene",
+          "evening": "bathroom_evening_scene"
+        }
       },
       "button2": {
         "group": "kids_bathroom"
@@ -377,7 +399,10 @@
         "group": "kids_bathroom"
       },
       "button4": {
-        "group": "kids_bathroom"
+        "group": "kids_bathroom",
+        "scenes": {
+          "default": "bathroom_red_scene"
+        }
       }
     },
     {
@@ -437,7 +462,12 @@
       "name": "Switch hall. down/toilet",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "toilet"
+        "group": "toilet",
+        "scenes": {
+          "day": "toilet_day_scene",
+          "night": "toilet_night_scene",
+          "evening": "toilet_evening_scene"
+        }
       },
       "button2": {
         "group": "hallway_down"
@@ -461,7 +491,12 @@
         "group": "hallway_up"
       },
       "button2": {
-        "group": "kids_bathroom"
+        "group": "kids_bathroom",
+        "scenes": {
+          "day": "bathroom_day_scene",
+          "night": "bathroom_night_scene",
+          "evening": "bathroom_evening_scene"
+        }
       }
     },
     {
@@ -477,17 +512,9 @@
   "defaults": {
     "powerup-behavior": "powerfail",
     "scenes": {
-      "default": {
-        "name": "Default",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "light-action": {
-          "id": "default_action",
-          "mirek": 323,
-          "brigthness": 100
-        }
-      },
       "day": {
-        "name": "Day",
+        "id": "default-day-scene",
+        "name": "Day (default)",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
           "id": "default_day_action",
@@ -496,7 +523,8 @@
         }
       },
       "night": {
-        "name": "Night",
+        "id": "default-night-scene",
+        "name": "Night (default)",
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
         "light-action": {
           "id": "default_night_action",
@@ -504,8 +532,19 @@
           "brigthness": 30
         }
       },
+      "evening": {
+        "id": "default-evening-scene",
+        "name": "Evening (default)",
+        "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
+        "light-action": {
+          "id": "default_evening_action",
+          "mirek": 400,
+          "brigthness": 40
+        }
+      },
       "motion-sensor-day": {
-        "name": "Motion sensor day",
+        "id": "default-sensor-day-scene",
+        "name": "Sensor day (default)",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
           "id": "default_sensor_day_action",
@@ -514,40 +553,34 @@
         }
       },
       "motion-sensor-night": {
-        "name": "Motion sensor night",
+        "id": "default-sensor-night-scene",
+        "name": "Sensor night (default)",
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
         "light-action": {
           "id": "default_sensor_night_action",
           "mirek": 500,
-          "brigthness": 20
+          "brigthness": 10
+        }
+      },
+      "motion-sensor-evening": {
+        "id": "default-sensor-evening-scene",
+        "name": "Sensor evening (default)",
+        "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
+        "light-action": {
+          "id": "default_sensor_evening_action",
+          "mirek": 500,
+          "brigthness": 25
         }
       }
     }
   },
   "scenes": [
     {
-      "id": "front_door_sensor_day_scene",
+      "id": "front_door_sensor_scene",
       "groups": [
         "front_door"
       ],
-      "name": "Motion sensor day",
-      "type": "sensor_day",
-      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-      "actions": [
-        {
-          "target": "front_door_spot",
-          "light-action": "default"
-        }
-      ]
-    },
-    {
-      "id": "front_door_sensor_night_scene",
-      "groups": [
-        "front_door"
-      ],
-      "name": "Motion sensor night",
-      "type": "sensor_night",
-      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "name": "Sensor",
       "actions": [
         {
           "target": "front_door_spot",
@@ -560,9 +593,7 @@
       "groups": [
         "toilet"
       ],
-      "name": "Day",
-      "type": "day",
-      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "name": "Blue (Day)",
       "actions": [
         {
           "target": "toilet_ceiling",
@@ -583,9 +614,28 @@
       "groups": [
         "toilet"
       ],
-      "name": "Night",
-      "type": "night",
-      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "name": "Blue (Night)",
+      "actions": [
+        {
+          "target": "toilet_ceiling",
+          "light-action": "toilet_blue_night"
+        },
+        {
+          "target": "toilet_spot_left",
+          "light-action": "toilet_spot_night"
+        },
+        {
+          "target": "toilet_spot_right",
+          "light-action": "toilet_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "toilet_evening_scene",
+      "groups": [
+        "toilet"
+      ],
+      "name": "Blue (Evening)",
       "actions": [
         {
           "target": "toilet_ceiling",
@@ -607,7 +657,6 @@
         "toilet"
       ],
       "name": "Red",
-      "type": "custom",
       "actions": [
         {
           "target": "toilet_ceiling",
@@ -629,7 +678,6 @@
         "toilet"
       ],
       "name": "Green",
-      "type": "custom",
       "actions": [
         {
           "target": "toilet_ceiling",
@@ -651,7 +699,6 @@
         "toilet"
       ],
       "name": "Pink",
-      "type": "custom",
       "actions": [
         {
           "target": "toilet_ceiling",
@@ -673,7 +720,6 @@
         "toilet"
       ],
       "name": "Orange",
-      "type": "custom",
       "actions": [
         {
           "target": "toilet_ceiling",
@@ -694,9 +740,7 @@
       "groups": [
         "kids_bathroom"
       ],
-      "name": "Day",
-      "type": "day",
-      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "name": "Blue (Day)",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
@@ -713,13 +757,32 @@
       ]
     },
     {
+      "id": "bathroom_evening_scene",
+      "groups": [
+        "kids_bathroom"
+      ],
+      "name": "Blue (Evening)",
+      "actions": [
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "bathroom_blue_evening"
+        },
+        {
+          "target": "kids_bathroom_spot_left",
+          "light-action": "bathroom_spot_evening"
+        },
+        {
+          "target": "kids_bathroom_spot_right",
+          "light-action": "bathroom_spot_evening"
+        }
+      ]
+    },
+    {
       "id": "bathroom_night_scene",
       "groups": [
         "kids_bathroom"
       ],
-      "name": "Night",
-      "type": "night",
-      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "name": "Blue (Night)",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
@@ -741,7 +804,6 @@
         "kids_bathroom"
       ],
       "name": "Red",
-      "type": "custom",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
@@ -763,7 +825,6 @@
         "kids_bathroom"
       ],
       "name": "Green",
-      "type": "custom",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
@@ -785,7 +846,6 @@
         "kids_bathroom"
       ],
       "name": "Pink",
-      "type": "custom",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
@@ -807,7 +867,6 @@
         "kids_bathroom"
       ],
       "name": "Orange",
-      "type": "custom",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
@@ -837,7 +896,6 @@
         "bridge"
       ],
       "name": "Hallowen 🦇",
-      "type": "custom",
       "image-id": "b5f5a765-8f72-4aef-af99-90a116818ad4",
       "actions": [
         {
@@ -992,7 +1050,7 @@
       "brigthness": 100
     },
     {
-      "id": "bathroom_blue_night",
+      "id": "bathroom_blue_evening",
       "color": {
         "x": 0.1534,
         "y": 0.0539
@@ -1000,9 +1058,22 @@
       "brigthness": 40
     },
     {
-      "id": "bathroom_spot_night",
+      "id": "bathroom_spot_evening",
       "mirek": 304,
       "brigthness": 40
+    },
+    {
+      "id": "bathroom_blue_night",
+      "color": {
+        "x": 0.1534,
+        "y": 0.0539
+      },
+      "brigthness": 25
+    },
+    {
+      "id": "bathroom_spot_night",
+      "mirek": 304,
+      "brigthness": 25
     },
     {
       "id": "bathroom_red",

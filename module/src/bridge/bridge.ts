@@ -540,9 +540,10 @@ export class Bridge {
     groupIdV1: string,
     daySceneIdV1: string,
     nightSceneIdV1: string,
+    eveningSceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}'.`,
+      `Configuring ${type} '${idV1}', button '${button}' to control group '${groupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}', evening scene: '${eveningSceneIdV1}'.`,
     )
     let on = false
     let off = false
@@ -664,6 +665,9 @@ export class Bridge {
       await this.#createRule(
         this.#toNightRule(switchOnBaseRule, nightSceneIdV1),
       )
+      await this.#createRule(
+        this.#toEveningRule(switchOnBaseRule, eveningSceneIdV1),
+      )
     }
 
     if (off) {
@@ -730,6 +734,9 @@ export class Bridge {
       }
       await this.#createRule(this.#toDayRule(changeBaseRule, daySceneIdV1))
       await this.#createRule(this.#toNightRule(changeBaseRule, nightSceneIdV1))
+      await this.#createRule(
+        this.#toEveningRule(changeBaseRule, eveningSceneIdV1),
+      )
     }
   }
 
@@ -809,9 +816,10 @@ export class Bridge {
     sensorGroupIdV1: string,
     daySceneIdV1: string,
     nightSceneIdV1: string,
+    eveningSceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${sensorGroupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}'.`,
+      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${sensorGroupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}', evening scene: '${eveningSceneIdV1}'.`,
     )
 
     // Create a virtual switch for the motion sensor
@@ -930,6 +938,9 @@ export class Bridge {
     }
     await this.#createRule(this.#toDayRule(onMotionBaseRule, daySceneIdV1))
     await this.#createRule(this.#toNightRule(onMotionBaseRule, nightSceneIdV1))
+    await this.#createRule(
+      this.#toEveningRule(onMotionBaseRule, eveningSceneIdV1),
+    )
 
     // When no motion, transition to group off
     const noMotionRule = {
@@ -1032,6 +1043,28 @@ export class Bridge {
     )
   }
 
+  /**
+   * Daylight false + local time between 6pm and 10pm
+   */
+  #toEveningRule(baseRule: NewRule, eveningSceneIdV1: string) {
+    const eveningRule = _.cloneDeep(baseRule)
+    _.find(eveningRule.conditions, (condition) =>
+      condition.address.includes('daylight'),
+    )!.value = 'false'
+    _.find(eveningRule.actions, (action) =>
+      action.address.includes('/action'),
+    )!.body.scene = eveningSceneIdV1
+    eveningRule.conditions.push({
+      address: '/config/localtime',
+      operator: 'in',
+      value: 'T06:00:00/T22:00:00',
+    })
+    return eveningRule
+  }
+
+  /**
+   * Daylight false + not the evening
+   */
   #toNightRule(baseRule: NewRule, nightSceneIdV1: string) {
     const nightRule = _.cloneDeep(baseRule)
     _.find(nightRule.conditions, (condition) =>
@@ -1040,9 +1073,17 @@ export class Bridge {
     _.find(nightRule.actions, (action) =>
       action.address.includes('/action'),
     )!.body.scene = nightSceneIdV1
+    nightRule.conditions.push({
+      address: '/config/localtime',
+      operator: 'not in',
+      value: 'T06:00:00/T22:00:00',
+    })
     return nightRule
   }
 
+  /**
+   * Daylight true
+   */
   #toDayRule(baseRule: NewRule, daySceneIdV1: string) {
     const dayRule = _.cloneDeep(baseRule)
     _.find(dayRule.conditions, (condition) =>

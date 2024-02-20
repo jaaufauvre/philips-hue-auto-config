@@ -13,16 +13,20 @@ import { Logger, Color } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import _ from 'lodash'
 import {
+  AccessoryConfig,
   DefaultScene,
   LightAction,
   Scene,
-  SceneType,
 } from './config/config-gen'
+
+const bridge = new Bridge()
+let config: Config
 
 main().catch((e) => {
   if (e instanceof Error) {
     Logger.error(e.message)
   } else Logger.error(e)
+  throw e
 })
 
 async function main() {
@@ -37,7 +41,7 @@ async function main() {
   const configEncryptionKey = process.env.npm_config_xor as string
 
   // Configuration
-  const config = new Config(configPath, configEncryptionKey)
+  config = new Config(configPath, configEncryptionKey)
   config.print()
 
   // Discovery?
@@ -53,7 +57,6 @@ async function main() {
   }
 
   // User/app key creation?
-  const bridge = new Bridge()
   if (providedAppKey && providedBridgeIp) {
     Logger.info(
       `Provided app key for bridge ${providedBridgeIp}: '${providedAppKey}'`,
@@ -149,7 +152,7 @@ async function main() {
       const group = config.getResourceById(groupId) as
         | ExtendedRoom
         | ExtendedZone
-      await addScene(group, scene, config, bridge)
+      await addScene(group, scene)
     }
   }
 
@@ -158,43 +161,20 @@ async function main() {
     config.rooms,
     config.zones,
   )) {
-    await addDefaultScene(
-      group,
-      config.defaults.scenes.default,
-      SceneType.Default,
-      config,
-      bridge,
-    )
-    if (!group.sceneIdsV2!.has(SceneType.Day)) {
-      await addDefaultScene(
-        group,
-        config.defaults.scenes.day,
-        SceneType.Day,
-        config,
-        bridge,
-      )
-    }
-    if (!group.sceneIdsV2!.has(SceneType.Night)) {
-      await addDefaultScene(
-        group,
-        config.defaults.scenes.night,
-        SceneType.Night,
-        config,
-        bridge,
-      )
-    }
+    await addDefaultScene(group, config.defaults.scenes.day)
+    await addDefaultScene(group, config.defaults.scenes.evening)
+    await addDefaultScene(group, config.defaults.scenes.night)
     if (group.groupType === GroupType.Room) {
-      await bridge.activateScene(group.sceneIdsV2!.get(SceneType.Day)!)
+      await bridge.activateScene(
+        group.sceneIdsV2!.get(config.defaults.scenes.day.id)!,
+      )
     }
   }
 
   // Set lights behavior at power on
   for (const light of config.lights) {
     const lightId = light.idV2!
-    await bridge.updateLightPowerUp(
-      lightId,
-      config.defaults['powerup-behavior'],
-    )
+    await bridge.updateLightPowerUp(lightId, config.defaults.powerupBehavior)
   }
   Logger.info(Color.Green, `Updated power up behavior for all lights`)
 
@@ -272,8 +252,20 @@ async function main() {
   // Configure wall switches
   for (const wallSwitch of config.wallSwitches) {
     // Create button rules
-    await addWallSwitchButton(ButtonType.Button1, wallSwitch, config, bridge)
-    await addWallSwitchButton(ButtonType.Button2, wallSwitch, config, bridge)
+    await addAccessoryButton(
+      AccessoryType.WallSwitch,
+      ButtonType.Button1,
+      wallSwitch.button1,
+      wallSwitch.idV1!,
+      wallSwitch.name,
+    )
+    await addAccessoryButton(
+      AccessoryType.WallSwitch,
+      ButtonType.Button2,
+      wallSwitch.button2,
+      wallSwitch.idV1!,
+      wallSwitch.name,
+    )
 
     // Update wall switch name and mode
     await bridge.updateWallSwitchProperties(
@@ -287,29 +279,33 @@ async function main() {
   // Configure dimmer switches
   for (const dimmerSwitch of config.dimmerSwitches) {
     // Create button rules
-    await addDimmerSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.DimmerSwitch,
       ButtonType.Button1,
-      dimmerSwitch,
-      config,
-      bridge,
+      dimmerSwitch.button1,
+      dimmerSwitch.idV1!,
+      dimmerSwitch.name,
     )
-    await addDimmerSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.DimmerSwitch,
       ButtonType.Button2,
-      dimmerSwitch,
-      config,
-      bridge,
+      dimmerSwitch.button2,
+      dimmerSwitch.idV1!,
+      dimmerSwitch.name,
     )
-    await addDimmerSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.DimmerSwitch,
       ButtonType.Button3,
-      dimmerSwitch,
-      config,
-      bridge,
+      dimmerSwitch.button3,
+      dimmerSwitch.idV1!,
+      dimmerSwitch.name,
     )
-    await addDimmerSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.DimmerSwitch,
       ButtonType.Button4,
-      dimmerSwitch,
-      config,
-      bridge,
+      dimmerSwitch.button4,
+      dimmerSwitch.idV1!,
+      dimmerSwitch.name,
     )
 
     // Update dimmer switch name
@@ -326,29 +322,33 @@ async function main() {
   // Configure tap dial switches
   for (const tapDialSwitch of config.tapDialSwitches) {
     // Create button rules
-    await addTapDialSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.TapDialSwitch,
       ButtonType.Button1,
-      tapDialSwitch,
-      config,
-      bridge,
+      tapDialSwitch.button1,
+      tapDialSwitch.switchIdV1!,
+      tapDialSwitch.name,
     )
-    await addTapDialSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.TapDialSwitch,
       ButtonType.Button2,
-      tapDialSwitch,
-      config,
-      bridge,
+      tapDialSwitch.button2,
+      tapDialSwitch.switchIdV1!,
+      tapDialSwitch.name,
     )
-    await addTapDialSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.TapDialSwitch,
       ButtonType.Button3,
-      tapDialSwitch,
-      config,
-      bridge,
+      tapDialSwitch.button3,
+      tapDialSwitch.switchIdV1!,
+      tapDialSwitch.name,
     )
-    await addTapDialSwitchButton(
+    await addAccessoryButton(
+      AccessoryType.TapDialSwitch,
       ButtonType.Button4,
-      tapDialSwitch,
-      config,
-      bridge,
+      tapDialSwitch.button4,
+      tapDialSwitch.switchIdV1!,
+      tapDialSwitch.name,
     )
 
     // Create behavior script
@@ -358,7 +358,7 @@ async function main() {
     await bridge.configureTapDial(
       tapDialSwitch.idV2!,
       group.idV2!,
-      group.sceneIdsV2!.get(SceneType.Day)!,
+      group.sceneIdsV2!.get(config.getDaySceneId(tapDialSwitch.dial))!,
       group.groupType!,
     )
 
@@ -377,29 +377,14 @@ async function main() {
 
   // Configure motion sensors
   for (const motionSensor of config.motionSensors) {
-    const group = config.getResourceById(motionSensor.group)! as
+    const group = config.getResourceById(motionSensor.motion.group)! as
       | ExtendedRoom
       | ExtendedZone
 
     // Create default scenes
-    if (!group.sceneIdsV2!.has(SceneType.SensorDay)) {
-      await addDefaultScene(
-        group,
-        config.defaults.scenes['motion-sensor-day']!,
-        SceneType.SensorDay,
-        config,
-        bridge,
-      )
-    }
-    if (!group.sceneIdsV2!.has(SceneType.SensorNight)) {
-      await addDefaultScene(
-        group,
-        config.defaults.scenes['motion-sensor-night']!,
-        SceneType.SensorNight,
-        config,
-        bridge,
-      )
-    }
+    await addDefaultScene(group, config.defaults.scenes.motionSensorDay!)
+    await addDefaultScene(group, config.defaults.scenes.motionSensorNight!)
+    await addDefaultScene(group, config.defaults.scenes.motionSensorEvening!)
 
     // Create motion sensor rules
     await bridge.configureMotionSensor(
@@ -408,8 +393,11 @@ async function main() {
       motionSensor.presenceIdV1!,
       motionSensor.name,
       group.idV1!,
-      group.sceneIdsV1!.get(SceneType.SensorDay)!,
-      group.sceneIdsV1!.get(SceneType.SensorNight)!,
+      group.sceneIdsV1!.get(config.getSensorDaySceneId(motionSensor.motion))!,
+      group.sceneIdsV1!.get(config.getSensorNightSceneId(motionSensor.motion))!,
+      group.sceneIdsV1!.get(
+        config.getSensorEveningSceneId(motionSensor.motion),
+      )!,
     )
 
     // Update motion sensor name & default settings
@@ -433,163 +421,72 @@ async function main() {
   Logger.info(Color.Yellow, 'Done! 🙌')
 }
 
-async function addWallSwitchButton(
+async function addAccessoryButton(
+  accessoryType: AccessoryType,
   button: ButtonType,
-  wallSwitch: ExtendedWallSwitch,
-  config: Config,
-  bridge: Bridge,
+  buttonConfig: AccessoryConfig | undefined,
+  accessoryIdV1: string,
+  accessoryName: string,
 ) {
-  const configButton =
-    button === ButtonType.Button1 ? wallSwitch.button1 : wallSwitch.button2
-  if (!configButton) {
+  if (!buttonConfig) {
     return
   }
-  const group = config.getResourceById(configButton.group)! as
+  const group = config.getResourceById(buttonConfig.group)! as
     | ExtendedRoom
     | ExtendedZone
   await bridge.configureAccessoryButton(
-    AccessoryType.WallSwitch,
+    accessoryType,
     button,
-    wallSwitch.idV1!,
-    wallSwitch.name,
+    accessoryIdV1,
+    accessoryName,
     group.idV1!,
-    group.sceneIdsV1!.get(SceneType.Day)!,
-    group.sceneIdsV1!.get(SceneType.Night)!,
-  )
-}
-
-async function addTapDialSwitchButton(
-  button: ButtonType,
-  tapDialSwitch: ExtendedTapDialSwitch,
-  config: Config,
-  bridge: Bridge,
-) {
-  let configButton
-  switch (button) {
-    case ButtonType.Button1:
-      configButton = tapDialSwitch.button1
-      break
-    case ButtonType.Button2:
-      configButton = tapDialSwitch.button2
-      break
-    case ButtonType.Button3:
-      configButton = tapDialSwitch.button3
-      break
-    case ButtonType.Button4:
-      configButton = tapDialSwitch.button4
-      break
-    default:
-      throw new Error(`Unsupported button type: '${button}'`)
-  }
-  const group = config.getResourceById(configButton.group)! as
-    | ExtendedRoom
-    | ExtendedZone
-  await bridge.configureAccessoryButton(
-    AccessoryType.TapDialSwitch,
-    button,
-    tapDialSwitch.switchIdV1!,
-    tapDialSwitch.name,
-    group.idV1!,
-    group.sceneIdsV1!.get(SceneType.Day)!,
-    group.sceneIdsV1!.get(SceneType.Night)!,
-  )
-}
-
-async function addDimmerSwitchButton(
-  button: ButtonType,
-  dimmerSwitch: ExtendedDimmerSwitch,
-  config: Config,
-  bridge: Bridge,
-) {
-  let configButton
-  switch (button) {
-    case ButtonType.Button1:
-      configButton = dimmerSwitch.button1
-      break
-    case ButtonType.Button2:
-      configButton = dimmerSwitch.button2
-      break
-    case ButtonType.Button3:
-      configButton = dimmerSwitch.button3
-      break
-    case ButtonType.Button4:
-      configButton = dimmerSwitch.button4
-      break
-    default:
-      throw new Error(`Unsupported button type: '${button}'`)
-  }
-  const group = config.getResourceById(configButton.group)! as
-    | ExtendedRoom
-    | ExtendedZone
-  await bridge.configureAccessoryButton(
-    AccessoryType.DimmerSwitch,
-    button,
-    dimmerSwitch.idV1!,
-    dimmerSwitch.name,
-    group.idV1!,
-    group.sceneIdsV1!.get(SceneType.Day)!,
-    group.sceneIdsV1!.get(SceneType.Night)!,
+    group.sceneIdsV1!.get(config.getDaySceneId(buttonConfig))!,
+    group.sceneIdsV1!.get(config.getNightSceneId(buttonConfig))!,
+    group.sceneIdsV1!.get(config.getEveningSceneId(buttonConfig))!,
   )
 }
 
 async function addDefaultScene(
   group: ExtendedRoom | ExtendedZone,
   defaultScene: DefaultScene,
-  sceneType: SceneType,
-  config: Config,
-  bridge: Bridge,
 ) {
   const lights = config.getGroupLights(group)
-  const lightAction = defaultScene['light-action']
+  const lightAction = defaultScene.lightAction
   const smartPlugAction = { id: 'smart-plug-on' }
   const lightActions = new Map()
   _.mapValues(lights, (light: ExtendedLight) => {
     lightActions.set(
       light.idV2!,
-      light['smart-plug'] ? smartPlugAction : lightAction,
+      light.smartPlug ? smartPlugAction : lightAction,
     )
   })
   await createScene(
+    defaultScene.id,
     defaultScene.name,
-    sceneType,
     group,
     lightActions,
-    bridge,
-    defaultScene['image-id'],
+    defaultScene.imageID,
   )
 }
 
-async function addScene(
-  group: ExtendedRoom | ExtendedZone,
-  scene: Scene,
-  config: Config,
-  bridge: Bridge,
-) {
+async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
   const lights = config.getGroupLights(group)
   const lightActions = new Map()
   _.mapValues(lights, (light: ExtendedLight) => {
     const action = _.find(scene.actions, (action) => action.target === light.id)
     const lightAction = action
-      ? (config.getResourceById(action['light-action']) as LightAction)
+      ? (config.getResourceById(action.lightAction) as LightAction)
       : undefined // Off
     lightActions.set(light.idV2!, lightAction)
   })
-  await createScene(
-    scene.name,
-    scene.type,
-    group,
-    lightActions,
-    bridge,
-    scene['image-id'],
-  )
+  await createScene(scene.id, scene.name, group, lightActions, scene.imageID)
 }
 
 async function createScene(
+  id: string,
   name: string,
-  type: SceneType,
   group: ExtendedRoom | ExtendedZone,
   lightActions: Map<string, LightAction>,
-  bridge: Bridge,
   imageId?: string,
 ) {
   const sceneIds = await bridge.addScene(
@@ -601,12 +498,10 @@ async function createScene(
   )
   const sceneIdV1 = sceneIds[0]
   const sceneIdV2 = sceneIds[1]
-  if (SceneType.Custom !== type) {
-    group.sceneIdsV1!.set(type, sceneIdV1)
-    group.sceneIdsV2!.set(type, sceneIdV2)
-  }
+  group.sceneIdsV1!.set(id, sceneIdV1)
+  group.sceneIdsV2!.set(id, sceneIdV2)
   Logger.info(
     Color.Green,
-    `Scene '${name}', type '${type}' was created for ${group.groupType} '${group.name}' with IDs: '${sceneIdV1}' (v1) and '${sceneIdV2}' (v2)`,
+    `Scene '${name}' was created for ${group.groupType} '${group.name}' with IDs: '${sceneIdV1}' (v1) and '${sceneIdV2}' (v2)`,
   )
 }

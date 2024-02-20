@@ -19,11 +19,11 @@ export interface ConfigGen {
     /**
      * A list of dimmer switches
      */
-    "dimmer-switches"?: DimmerSwitch[];
+    dimmerSwitches?: DimmerSwitch[];
     /**
      * A list of light actions defining scenes
      */
-    "light-actions"?: LightAction[];
+    lightActions?: LightAction[];
     /**
      * A list of lights and smart plugs
      */
@@ -31,7 +31,7 @@ export interface ConfigGen {
     /**
      * A list of motion sensors
      */
-    "motion-sensors"?: MotionSensor[];
+    motionSensors?: MotionSensor[];
     /**
      * A name for this config
      */
@@ -47,11 +47,11 @@ export interface ConfigGen {
     /**
      * A list of tap dial switches
      */
-    "tap-dial-switches"?: TapDialSwitch[];
+    tapDialSwitches?: TapDialSwitch[];
     /**
      * A list of wall switches
      */
-    "wall-switches"?: WallSwitch[];
+    wallSwitches?: WallSwitch[];
     /**
      * A list of zones
      */
@@ -85,7 +85,7 @@ export interface Defaults {
      * "last_on_state": last-used color and brightness. "safety": warm white, full brightness.
      * "powerfail": stays off or turn back on.
      */
-    "powerup-behavior": PowerupBehavior;
+    powerupBehavior: PowerupBehavior;
     /**
      * Default scenes for room and zones
      */
@@ -107,20 +107,22 @@ export enum PowerupBehavior {
  * Default scenes for room and zones
  */
 export interface Scenes {
-    day:                    DefaultScene;
-    default:                DefaultScene;
-    "motion-sensor-day"?:   DefaultScene;
-    "motion-sensor-night"?: DefaultScene;
-    night:                  DefaultScene;
+    day:                  DefaultScene;
+    evening:              DefaultScene;
+    motionSensorDay?:     DefaultScene;
+    motionSensorEvening?: DefaultScene;
+    motionSensorNight?:   DefaultScene;
+    night:                DefaultScene;
 }
 
 export interface DefaultScene {
-    "image-id"?: string;
+    id:       string;
+    imageID?: string;
     /**
      * An action executed on all lights
      */
-    "light-action": LightAction;
-    name:           string;
+    lightAction: LightAction;
+    name:        string;
 }
 
 /**
@@ -161,22 +163,10 @@ export interface Color {
 }
 
 export interface DimmerSwitch {
-    /**
-     * Configuration for the first dimmer switch button
-     */
-    button1: DimmerSwitchButton1;
-    /**
-     * Configuration for the second dimmer switch button
-     */
-    button2: DimmerSwitchButton2;
-    /**
-     * Configuration for the third dimmer switch button
-     */
-    button3: DimmerSwitchButton3;
-    /**
-     * Configuration for the forth dimmer switch button
-     */
-    button4:  DimmerSwitchButton4;
+    button1:  AccessoryConfig;
+    button2:  AccessoryConfig;
+    button3:  AccessoryConfig;
+    button4:  AccessoryConfig;
     comment?: string;
     /**
      * Uniquely identify the dimmer switch in this configuration
@@ -198,43 +188,24 @@ export interface DimmerSwitch {
 }
 
 /**
- * Configuration for the first dimmer switch button
+ * Configuration for an accessory controlling a group
  */
-export interface DimmerSwitchButton1 {
+export interface AccessoryConfig {
     /**
-     * An ID of room or zone the button controls
+     * An ID of the room or zone being controlled
      */
-    group: string;
+    group:   string;
+    scenes?: ConfigScenes;
 }
 
 /**
- * Configuration for the second dimmer switch button
+ * Scenes for a room or zone being controlled
  */
-export interface DimmerSwitchButton2 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the third dimmer switch button
- */
-export interface DimmerSwitchButton3 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the forth dimmer switch button
- */
-export interface DimmerSwitchButton4 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
+export interface ConfigScenes {
+    day?:     string;
+    default?: string;
+    evening?: string;
+    night?:   string;
 }
 
 export interface Light {
@@ -262,7 +233,7 @@ export interface Light {
     /**
      * If the light is controlled by a smart plug
      */
-    "smart-plug"?: boolean;
+    smartPlug?: boolean;
     /**
      * The type of light. See 'archetype' here:
      * https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_light_get
@@ -333,17 +304,14 @@ export enum LightType {
 export interface MotionSensor {
     comment?: string;
     /**
-     * An ID of room or zone the motion sensor controls
-     */
-    group: string;
-    /**
      * Uniquely identify the motion sensor in this configuration
      */
     id: string;
     /**
      * MAC address, required for uniquely identifying motion sensors added to a bridge
      */
-    mac: string;
+    mac:    string;
+    motion: AccessoryConfig;
     /**
      * A name for the motion sensor
      */
@@ -434,64 +402,30 @@ export interface Scene {
     /**
      * Rooms or zones in which to create the scene
      */
-    groups: string[];
-    /**
-     * Uniquely identify the scene in this configuration
-     */
-    id:          string;
-    "image-id"?: string;
-    name:        string;
-    /**
-     * A type of scene
-     */
-    type: SceneType;
+    groups:   string[];
+    id:       string;
+    imageID?: string;
+    name:     string;
 }
 
 export interface Action {
     /**
      * The ID of an action to execute on the light
      */
-    "light-action": string;
+    lightAction: string;
     /**
      * A target light ID
      */
     target: string;
 }
 
-/**
- * A type of scene
- */
-export enum SceneType {
-    Custom = "custom",
-    Day = "day",
-    Default = "default",
-    Night = "night",
-    SensorDay = "sensor_day",
-    SensorNight = "sensor_night",
-}
-
 export interface TapDialSwitch {
-    /**
-     * Configuration for the first tap dial switch button
-     */
-    button1: TapDialSwitchButton1;
-    /**
-     * Configuration for the second tap dial switch button
-     */
-    button2: TapDialSwitchButton2;
-    /**
-     * Configuration for the third tap dial switch button
-     */
-    button3: TapDialSwitchButton3;
-    /**
-     * Configuration for the forth tap dial switch button
-     */
-    button4:  TapDialSwitchButton4;
+    button1:  AccessoryConfig;
+    button2:  AccessoryConfig;
+    button3:  AccessoryConfig;
+    button4:  AccessoryConfig;
     comment?: string;
-    /**
-     * Configuration for the dial
-     */
-    dial: Dial;
+    dial:     AccessoryConfig;
     /**
      * Uniquely identify the tap dial switch in this configuration
      */
@@ -511,65 +445,9 @@ export interface TapDialSwitch {
     serial?: string;
 }
 
-/**
- * Configuration for the first tap dial switch button
- */
-export interface TapDialSwitchButton1 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the second tap dial switch button
- */
-export interface TapDialSwitchButton2 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the third tap dial switch button
- */
-export interface TapDialSwitchButton3 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the forth tap dial switch button
- */
-export interface TapDialSwitchButton4 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the dial
- */
-export interface Dial {
-    /**
-     * An ID of room or zone the dial controls
-     */
-    group: string;
-}
-
 export interface WallSwitch {
-    /**
-     * Configuration for the first wall switch button
-     */
-    button1: WallSwitchButton1;
-    /**
-     * Configuration for the second wall switch button
-     */
-    button2?: WallSwitchButton2;
+    button1:  AccessoryConfig;
+    button2?: AccessoryConfig;
     comment?: string;
     /**
      * Uniquely identify the wall switch in this configuration
@@ -587,26 +465,6 @@ export interface WallSwitch {
      * A name for the wall switch
      */
     name: string;
-}
-
-/**
- * Configuration for the first wall switch button
- */
-export interface WallSwitchButton1 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
-}
-
-/**
- * Configuration for the second wall switch button
- */
-export interface WallSwitchButton2 {
-    /**
-     * An ID of room or zone the button controls
-     */
-    group: string;
 }
 
 /**
@@ -805,15 +663,15 @@ const typeMap: any = {
     "ConfigGen": o([
         { json: "bridge", js: "bridge", typ: r("Bridge") },
         { json: "defaults", js: "defaults", typ: r("Defaults") },
-        { json: "dimmer-switches", js: "dimmer-switches", typ: u(undefined, a(r("DimmerSwitch"))) },
-        { json: "light-actions", js: "light-actions", typ: u(undefined, a(r("LightAction"))) },
+        { json: "dimmer-switches", js: "dimmerSwitches", typ: u(undefined, a(r("DimmerSwitch"))) },
+        { json: "light-actions", js: "lightActions", typ: u(undefined, a(r("LightAction"))) },
         { json: "lights", js: "lights", typ: a(r("Light")) },
-        { json: "motion-sensors", js: "motion-sensors", typ: u(undefined, a(r("MotionSensor"))) },
+        { json: "motion-sensors", js: "motionSensors", typ: u(undefined, a(r("MotionSensor"))) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "rooms", js: "rooms", typ: a(r("Room")) },
         { json: "scenes", js: "scenes", typ: u(undefined, a(r("Scene"))) },
-        { json: "tap-dial-switches", js: "tap-dial-switches", typ: u(undefined, a(r("TapDialSwitch"))) },
-        { json: "wall-switches", js: "wall-switches", typ: u(undefined, a(r("WallSwitch"))) },
+        { json: "tap-dial-switches", js: "tapDialSwitches", typ: u(undefined, a(r("TapDialSwitch"))) },
+        { json: "wall-switches", js: "wallSwitches", typ: u(undefined, a(r("WallSwitch"))) },
         { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
     ], false),
     "Bridge": o([
@@ -822,19 +680,21 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
     ], false),
     "Defaults": o([
-        { json: "powerup-behavior", js: "powerup-behavior", typ: r("PowerupBehavior") },
+        { json: "powerup-behavior", js: "powerupBehavior", typ: r("PowerupBehavior") },
         { json: "scenes", js: "scenes", typ: r("Scenes") },
     ], false),
     "Scenes": o([
         { json: "day", js: "day", typ: r("DefaultScene") },
-        { json: "default", js: "default", typ: r("DefaultScene") },
-        { json: "motion-sensor-day", js: "motion-sensor-day", typ: u(undefined, r("DefaultScene")) },
-        { json: "motion-sensor-night", js: "motion-sensor-night", typ: u(undefined, r("DefaultScene")) },
+        { json: "evening", js: "evening", typ: r("DefaultScene") },
+        { json: "motion-sensor-day", js: "motionSensorDay", typ: u(undefined, r("DefaultScene")) },
+        { json: "motion-sensor-evening", js: "motionSensorEvening", typ: u(undefined, r("DefaultScene")) },
+        { json: "motion-sensor-night", js: "motionSensorNight", typ: u(undefined, r("DefaultScene")) },
         { json: "night", js: "night", typ: r("DefaultScene") },
     ], false),
     "DefaultScene": o([
-        { json: "image-id", js: "image-id", typ: u(undefined, "") },
-        { json: "light-action", js: "light-action", typ: r("LightAction") },
+        { json: "id", js: "id", typ: "" },
+        { json: "image-id", js: "imageID", typ: u(undefined, "") },
+        { json: "light-action", js: "lightAction", typ: r("LightAction") },
         { json: "name", js: "name", typ: "" },
     ], false),
     "LightAction": o([
@@ -850,27 +710,25 @@ const typeMap: any = {
         { json: "y", js: "y", typ: 3.14 },
     ], false),
     "DimmerSwitch": o([
-        { json: "button1", js: "button1", typ: r("DimmerSwitchButton1") },
-        { json: "button2", js: "button2", typ: r("DimmerSwitchButton2") },
-        { json: "button3", js: "button3", typ: r("DimmerSwitchButton3") },
-        { json: "button4", js: "button4", typ: r("DimmerSwitchButton4") },
+        { json: "button1", js: "button1", typ: r("AccessoryConfig") },
+        { json: "button2", js: "button2", typ: r("AccessoryConfig") },
+        { json: "button3", js: "button3", typ: r("AccessoryConfig") },
+        { json: "button4", js: "button4", typ: r("AccessoryConfig") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
-    "DimmerSwitchButton1": o([
+    "AccessoryConfig": o([
         { json: "group", js: "group", typ: "" },
+        { json: "scenes", js: "scenes", typ: u(undefined, r("ConfigScenes")) },
     ], false),
-    "DimmerSwitchButton2": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "DimmerSwitchButton3": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "DimmerSwitchButton4": o([
-        { json: "group", js: "group", typ: "" },
+    "ConfigScenes": o([
+        { json: "day", js: "day", typ: u(undefined, "") },
+        { json: "default", js: "default", typ: u(undefined, "") },
+        { json: "evening", js: "evening", typ: u(undefined, "") },
+        { json: "night", js: "night", typ: u(undefined, "") },
     ], false),
     "Light": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -879,15 +737,15 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "room", js: "room", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
-        { json: "smart-plug", js: "smart-plug", typ: u(undefined, true) },
+        { json: "smart-plug", js: "smartPlug", typ: u(undefined, true) },
         { json: "type", js: "type", typ: u(undefined, r("LightType")) },
         { json: "zones", js: "zones", typ: u(undefined, a("")) },
     ], false),
     "MotionSensor": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
-        { json: "group", js: "group", typ: "" },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
+        { json: "motion", js: "motion", typ: r("AccessoryConfig") },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
@@ -902,55 +760,33 @@ const typeMap: any = {
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "groups", js: "groups", typ: a("") },
         { json: "id", js: "id", typ: "" },
-        { json: "image-id", js: "image-id", typ: u(undefined, "") },
+        { json: "image-id", js: "imageID", typ: u(undefined, "") },
         { json: "name", js: "name", typ: "" },
-        { json: "type", js: "type", typ: r("SceneType") },
     ], false),
     "Action": o([
-        { json: "light-action", js: "light-action", typ: "" },
+        { json: "light-action", js: "lightAction", typ: "" },
         { json: "target", js: "target", typ: "" },
     ], false),
     "TapDialSwitch": o([
-        { json: "button1", js: "button1", typ: r("TapDialSwitchButton1") },
-        { json: "button2", js: "button2", typ: r("TapDialSwitchButton2") },
-        { json: "button3", js: "button3", typ: r("TapDialSwitchButton3") },
-        { json: "button4", js: "button4", typ: r("TapDialSwitchButton4") },
+        { json: "button1", js: "button1", typ: r("AccessoryConfig") },
+        { json: "button2", js: "button2", typ: r("AccessoryConfig") },
+        { json: "button3", js: "button3", typ: r("AccessoryConfig") },
+        { json: "button4", js: "button4", typ: r("AccessoryConfig") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
-        { json: "dial", js: "dial", typ: r("Dial") },
+        { json: "dial", js: "dial", typ: r("AccessoryConfig") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
-    "TapDialSwitchButton1": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "TapDialSwitchButton2": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "TapDialSwitchButton3": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "TapDialSwitchButton4": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "Dial": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
     "WallSwitch": o([
-        { json: "button1", js: "button1", typ: r("WallSwitchButton1") },
-        { json: "button2", js: "button2", typ: u(undefined, r("WallSwitchButton2")) },
+        { json: "button1", js: "button1", typ: r("AccessoryConfig") },
+        { json: "button2", js: "button2", typ: u(undefined, r("AccessoryConfig")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "mac", js: "mac", typ: "" },
         { json: "mode", js: "mode", typ: r("Mode") },
         { json: "name", js: "name", typ: "" },
-    ], false),
-    "WallSwitchButton1": o([
-        { json: "group", js: "group", typ: "" },
-    ], false),
-    "WallSwitchButton2": o([
-        { json: "group", js: "group", typ: "" },
     ], false),
     "Zone": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -1055,14 +891,6 @@ const typeMap: any = {
         "top_floor",
         "tv",
         "upstairs",
-    ],
-    "SceneType": [
-        "custom",
-        "day",
-        "default",
-        "night",
-        "sensor_day",
-        "sensor_night",
     ],
     "Mode": [
         "switch_dual_rocker",

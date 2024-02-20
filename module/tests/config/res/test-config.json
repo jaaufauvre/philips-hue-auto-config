@@ -99,16 +99,45 @@
       "id": "scene_light",
       "mac": "00:00:00:00:00:00:00:00-01",
       "name": "Scene light",
-      "room": "scene_zone"
+      "room": "room",
+      "zones": ["scene_zone"]
     }
   ],
   "motion-sensors": [
     {
-      "id": "motionsensor",
+      "id": "motion_sensor",
       "mac": "00:17:88:01:0b:98:c2:7f-02",
       "serial": "0B98C27F",
       "name": "Motion sensor",
-      "group": "ms_room"
+      "motion": {
+        "group": "ms_room"
+      }
+    },
+    {
+      "id": "motion_sensor2",
+      "mac": "00:00:00:00:00:00:00:00-02",
+      "serial": "00000002",
+      "name": "Motion sensor 2",
+      "motion": {
+        "group": "ms_room",
+        "scenes": {
+          "default": "scene"
+        }
+      }
+    },
+    {
+      "id": "motion_sensor3",
+      "mac": "00:00:00:00:00:00:00:00-03",
+      "serial": "00000003",
+      "name": "Motion sensor 3",
+      "motion": {
+        "group": "ms_room",
+        "scenes": {
+          "day": "day_scene",
+          "night": "night_scene",
+          "evening": "evening_scene"
+        }
+      }
     }
   ],
   "tap-dial-switches": [
@@ -161,28 +190,27 @@
         "group": "ds_zone1"
       },
       "button3": {
-        "group": "ds_room2"
+        "group": "ds_room2",
+        "scenes": {
+          "day": "day_scene",
+          "night": "night_scene",
+          "evening": "evening_scene"
+        }
       },
       "button4": {
-        "group": "ds_zone2"
+        "group": "ds_zone2",
+        "scenes": {
+          "default": "scene"
+        }
       }
     }
   ],
   "defaults": {
     "powerup-behavior": "safety",
     "scenes": {
-      "default": {
-        "name": "Default",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "light-action": {
-          "id": "default_action",
-          "mirek": 500,
-          "brigthness": 100
-        }
-      },
       "day": {
+        "id": "default-day-scene",
         "name": "Day scene",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
           "id": "day_action",
           "mirek": 500,
@@ -190,8 +218,9 @@
         }
       },
       "night": {
+        "id": "default-night-scene",
         "name": "Night scene",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
         "light-action": {
           "id": "night_action",
           "color": {
@@ -201,20 +230,36 @@
           "brigthness": 100
         }
       },
+      "evening": {
+        "id": "default-evening-scene",
+        "name": "Evening",
+        "light-action": {
+          "id": "evening_action",
+          "mirek": 400,
+          "brigthness": 40
+        }
+      },
       "motion-sensor-day": {
+        "id": "default-sensor-day-scene",
         "name": "Sensor day scene",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
           "id": "sensor_day_action"
         }
       },
       "motion-sensor-night": {
+        "id": "default-sensor-night-scene",
         "name": "Sensor night scene",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
           "id": "sensor_night_action",
           "mirek": 500,
           "brigthness": 100
+        }
+      },
+      "motion-sensor-evening": {
+        "id": "default-sensor-evening-scene",
+        "name": "Sensor evening scene",
+        "light-action": {
+          "id": "sensor_evening_action"
         }
       }
     }
@@ -224,13 +269,30 @@
       "id": "scene",
       "groups": ["scene_zone"],
       "name": "Scene",
-      "type": "custom",
       "actions": [
         {
           "target": "scene_light",
           "light-action": "scene_action"
         }
       ]
+    },
+    {
+      "id": "day_scene",
+      "groups": ["scene_zone"],
+      "name": "Day scene",
+      "actions": []
+    },
+    {
+      "id": "night_scene",
+      "groups": ["scene_zone"],
+      "name": "Night scene",
+      "actions": []
+    },
+    {
+      "id": "evening_scene",
+      "groups": ["scene_zone"],
+      "name": "Evening scene",
+      "actions": []
     }
   ],
   "light-actions": [

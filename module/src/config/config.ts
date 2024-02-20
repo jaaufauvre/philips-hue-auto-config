@@ -15,7 +15,8 @@ import {
   Defaults,
   Scene,
   LightAction,
-  SceneType,
+  Convert,
+  AccessoryConfig,
 } from './config-gen'
 import _ from 'lodash'
 
@@ -42,8 +43,8 @@ export enum GroupType {
 class ExtendedGroup {
   idV1?: string
   idV2?: string
-  sceneIdsV1?: Map<SceneType, string>
-  sceneIdsV2?: Map<SceneType, string>
+  sceneIdsV1?: Map<string, string>
+  sceneIdsV2?: Map<string, string>
   groupType?: GroupType
 }
 
@@ -99,30 +100,30 @@ export class Config implements ConfigGen {
     } else {
       content = configFileOrJson
     }
+    this.#validate(content)
     try {
-      this._internalConfig = JSON.parse(content)
-    } catch {
-      throw Error('Could not parse config!')
+      this._internalConfig = Convert.toConfigGen(content)
+    } catch (e) {
+      throw Error(`Couldn't load configuration: ${e}`)
     }
-    this.#validate()
     this.bridge = this._internalConfig.bridge
     this.lights = this._internalConfig.lights
     this.defaults = this._internalConfig.defaults
     this.rooms = this._internalConfig.rooms
     this.zones = this._internalConfig.zones ?? []
     this.name = this._internalConfig.name
-    this.motionSensors = this._internalConfig['motion-sensors'] ?? []
-    this.tapDialSwitches = this._internalConfig['tap-dial-switches'] ?? []
-    this.dimmerSwitches = this._internalConfig['dimmer-switches'] ?? []
-    this.wallSwitches = this._internalConfig['wall-switches'] ?? []
+    this.motionSensors = this._internalConfig.motionSensors ?? []
+    this.tapDialSwitches = this._internalConfig.tapDialSwitches ?? []
+    this.dimmerSwitches = this._internalConfig.dimmerSwitches ?? []
+    this.wallSwitches = this._internalConfig.wallSwitches ?? []
     _.forEach(this.rooms, (room) => (room.groupType = GroupType.Room))
     _.forEach(this.zones, (zone) => (zone.groupType = GroupType.Zone))
     _.forEach(_.concat<ExtendedGroup>(this.zones, this.rooms), (group) => {
-      group.sceneIdsV1 = new Map<SceneType, string>()
-      group.sceneIdsV2 = new Map<SceneType, string>()
+      group.sceneIdsV1 = new Map<string, string>()
+      group.sceneIdsV2 = new Map<string, string>()
     })
     this.scenes = this._internalConfig.scenes ?? []
-    this.lightActions = this._internalConfig['light-actions'] ?? []
+    this.lightActions = this._internalConfig.lightActions ?? []
     this.#decrypt(xorKey)
     this.#validateUniqueIds()
     this.#validateLightConfig()
@@ -184,6 +185,54 @@ export class Config implements ConfigGen {
     )
   }
 
+  getDaySceneId(config: AccessoryConfig) {
+    return (
+      config.scenes?.day ??
+      config.scenes?.default ??
+      this.defaults.scenes.day.id
+    )
+  }
+
+  getNightSceneId(config: AccessoryConfig) {
+    return (
+      config.scenes?.night ??
+      config.scenes?.default ??
+      this.defaults.scenes.night.id
+    )
+  }
+
+  getEveningSceneId(config: AccessoryConfig) {
+    return (
+      config.scenes?.evening ??
+      config.scenes?.default ??
+      this.defaults.scenes.evening.id
+    )
+  }
+
+  getSensorDaySceneId(config: AccessoryConfig) {
+    return (
+      config.scenes?.day ??
+      config.scenes?.default ??
+      this.defaults.scenes.motionSensorDay!.id
+    )
+  }
+
+  getSensorNightSceneId(config: AccessoryConfig) {
+    return (
+      config.scenes?.night ??
+      config.scenes?.default ??
+      this.defaults.scenes.motionSensorNight!.id
+    )
+  }
+
+  getSensorEveningSceneId(config: AccessoryConfig) {
+    return (
+      config.scenes?.evening ??
+      config.scenes?.default ??
+      this.defaults.scenes.motionSensorEvening!.id
+    )
+  }
+
   getGroupLights(
     group: Room | Zone | ExtendedRoom | ExtendedZone,
   ): ExtendedLight[] {
@@ -208,14 +257,14 @@ export class Config implements ConfigGen {
     Logger.info(`${copy.lightActions.length} light action(s)`)
   }
 
-  #validate() {
-    Logger.info(`Validating config '${this._internalConfig.name}' ...`)
+  #validate(content: string) {
+    Logger.info(`Validating config ...`)
     const ajv = new Ajv()
     AjvKeywords(ajv)
     const schema = JSON.parse(
       fs.readFileSync('./src/config/config-schema.json', 'utf-8'),
     )
-    const isConfigValid = ajv.compile<Config>(schema)(this._internalConfig)
+    const isConfigValid = ajv.compile<Config>(schema)(JSON.parse(content))
     if (!isConfigValid) {
       const errors = ajv.compile(schema).errors
       throw Error(
@@ -287,6 +336,7 @@ export class Config implements ConfigGen {
   }
 
   #validateUniqueIds() {
+    const defaultScenes = this.defaults.scenes
     const all = _.concat<Identifiable>(
       this.lights,
       this.rooms,
@@ -297,7 +347,16 @@ export class Config implements ConfigGen {
       this.wallSwitches,
       this.scenes,
       this.lightActions,
+      [defaultScenes.day, defaultScenes.night, defaultScenes.evening],
     )
+    const defaultSensorDayScene = defaultScenes.motionSensorDay
+    if (defaultSensorDayScene) {
+      all.push(defaultSensorDayScene)
+    }
+    const defaultSensorNightScene = defaultScenes.motionSensorNight
+    if (defaultSensorNightScene) {
+      all.push(defaultSensorNightScene)
+    }
     if (all.length != _.uniqBy(all, (i) => i.id).length) {
       throw new Error('Identifiers must be unique!')
     }
@@ -306,48 +365,47 @@ export class Config implements ConfigGen {
   #validateLightConfig() {
     this.lights.forEach((light) => {
       light.zones?.forEach((zone) => {
-        this.#checkResourceDefined(zone)
+        this.#checkZoneDefined(zone)
       })
-      this.#checkResourceDefined(light.room)
+      this.#checkRoomDefined(light.room)
     })
   }
 
   #validateWallSwitchConfig() {
     this.wallSwitches.forEach((wallSwitch) => {
-      this.#checkResourceDefined(wallSwitch.button1.group)
-      if (wallSwitch.button2) {
-        this.#checkResourceDefined(wallSwitch.button2.group)
-      }
+      this.#checkAccessoryConfig(wallSwitch.button1)
+      this.#checkAccessoryConfig(wallSwitch.button2)
     })
   }
 
   #validateTapDialSwitchConfig() {
     this.tapDialSwitches.forEach((tapDialSwitch) => {
-      this.#checkResourceDefined(tapDialSwitch.button1.group)
-      this.#checkResourceDefined(tapDialSwitch.button2.group)
-      this.#checkResourceDefined(tapDialSwitch.button3.group)
-      this.#checkResourceDefined(tapDialSwitch.button4.group)
-      this.#checkResourceDefined(tapDialSwitch.dial.group)
+      this.#checkAccessoryConfig(tapDialSwitch.button1)
+      this.#checkAccessoryConfig(tapDialSwitch.button2)
+      this.#checkAccessoryConfig(tapDialSwitch.button3)
+      this.#checkAccessoryConfig(tapDialSwitch.button4)
+      this.#checkAccessoryConfig(tapDialSwitch.dial)
     })
   }
 
   #validateDimmerSwitchConfig() {
     this.dimmerSwitches.forEach((dimmerSwitch) => {
-      this.#checkResourceDefined(dimmerSwitch.button1.group)
-      this.#checkResourceDefined(dimmerSwitch.button2.group)
-      this.#checkResourceDefined(dimmerSwitch.button3.group)
-      this.#checkResourceDefined(dimmerSwitch.button4.group)
+      this.#checkAccessoryConfig(dimmerSwitch.button1)
+      this.#checkAccessoryConfig(dimmerSwitch.button2)
+      this.#checkAccessoryConfig(dimmerSwitch.button3)
+      this.#checkAccessoryConfig(dimmerSwitch.button4)
     })
   }
 
   #validateMotionSensorConfig() {
     this.motionSensors.forEach((motionSensor) => {
-      this.#checkResourceDefined(motionSensor.group)
+      this.#checkAccessoryConfig(motionSensor.motion)
     })
     if (
       this.motionSensors.length > 0 &&
-      (!this.defaults.scenes['motion-sensor-day'] ||
-        !this.defaults.scenes['motion-sensor-night'])
+      (!this.defaults.scenes.motionSensorDay ||
+        !this.defaults.scenes.motionSensorNight ||
+        !this.defaults.scenes.motionSensorEvening)
     ) {
       throw new Error('Missing motion sensor scene definition!')
     }
@@ -356,18 +414,56 @@ export class Config implements ConfigGen {
   #validateSceneConfig() {
     this.scenes.forEach((scene) => {
       scene.groups.forEach((group) => {
-        this.#checkResourceDefined(group)
+        this.#checkGroupDefined(group)
       })
       scene.actions.forEach((action) => {
-        this.#checkResourceDefined(action.target)
-        this.#checkResourceDefined(action['light-action'])
+        this.#checkLightDefined(action.target)
+        this.#checkResourceDefined(action.lightAction)
       })
     })
   }
 
-  #checkResourceDefined(id: string) {
+  #checkAccessoryConfig(config: AccessoryConfig | undefined) {
+    if (!config) {
+      return
+    }
+    this.#checkGroupDefined(config.group)
+    this.#checkResourceDefined(config.scenes?.day)
+    this.#checkResourceDefined(config.scenes?.night)
+    this.#checkResourceDefined(config.scenes?.evening)
+    this.#checkResourceDefined(config.scenes?.default)
+  }
+
+  #checkResourceDefined(id: string | undefined) {
+    if (!id) {
+      return
+    }
     if (!this.getResourceById(id)) {
-      throw Error(`Undefined identifier: '${id}'!`)
+      throw Error(`Undefined resource identifier: '${id}'!`)
+    }
+  }
+
+  #checkGroupDefined(id: string) {
+    if (!_.find(_.concat(this.zones, this.rooms), (group) => group.id === id)) {
+      throw Error(`Undefined group identifier: '${id}'!`)
+    }
+  }
+
+  #checkZoneDefined(id: string) {
+    if (!_.find(this.zones, (zone) => zone.id === id)) {
+      throw Error(`Undefined zone identifier: '${id}'!`)
+    }
+  }
+
+  #checkRoomDefined(id: string) {
+    if (!_.find(this.rooms, (room) => room.id === id)) {
+      throw Error(`Undefined room identifier: '${id}'!`)
+    }
+  }
+
+  #checkLightDefined(id: string) {
+    if (!_.find(this.lights, (light) => light.id === id)) {
+      throw Error(`Undefined light identifier: '${id}'!`)
     }
   }
 }

@@ -525,7 +525,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/lights/11",
+							"raw": "https://{{bridge}}/api/{{username}}/lights/19",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -534,7 +534,7 @@
 								"api",
 								"{{username}}",
 								"lights",
-								"11"
+								"19"
 							]
 						}
 					},
@@ -1124,6 +1124,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create scene",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"actions\": [\r\n    {\r\n      \"target\": {\r\n        \"rid\": \"4bb6761d-56cb-47ac-8583-b0a205229b75\",\r\n        \"rtype\": \"light\"\r\n      },\r\n      \"action\": {\r\n        \"on\": {\r\n          \"on\": true\r\n        },\r\n        \"dimming\": {\r\n          \"brightness\": 70.0\r\n        },\r\n        \"color\": {\r\n          \"xy\": {\r\n            \"x\": 0.1534,\r\n            \"y\": 0.0539\r\n          }\r\n        }\r\n      }\r\n    },\r\n    {\r\n      \"target\": {\r\n        \"rid\": \"4dff1403-76e1-4a78-a6a9-f21b1a8fe760\",\r\n        \"rtype\": \"light\"\r\n      },\r\n      \"action\": {\r\n        \"on\": {\r\n          \"on\": true\r\n        },\r\n        \"dimming\": {\r\n          \"brightness\": 50.0\r\n        },\r\n        \"color_temperature\": {\r\n          \"mirek\": 304\r\n        }\r\n      }\r\n    },\r\n    {\r\n      \"target\": {\r\n        \"rid\": \"dacc124e-981e-46ad-bf1a-923b0b88776a\",\r\n        \"rtype\": \"light\"\r\n      },\r\n      \"action\": {\r\n        \"on\": {\r\n          \"on\": true\r\n        },\r\n        \"dimming\": {\r\n          \"brightness\": 50.0\r\n        },\r\n        \"color_temperature\": {\r\n          \"mirek\": 304\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"metadata\": {\r\n    \"name\": \"Blue\"\r\n  },\r\n  \"group\": {\r\n    \"rid\": \"ac6fba67-98f3-44be-8a11-e01f180be591\",\r\n    \"rtype\": \"room\"\r\n  },\r\n  \"type\": \"scene\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{bridge}}/clip/v2/resource/scene",
+							"protocol": "https",
+							"host": [
+								"{{bridge}}"
+							],
+							"path": [
+								"clip",
+								"v2",
+								"resource",
+								"scene"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1231,7 +1261,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://{{bridge}}/api/{{username}}/sensors/119",
+							"raw": "https://{{bridge}}/api/{{username}}/sensors/24",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1240,7 +1270,7 @@
 								"api",
 								"{{username}}",
 								"sensors",
-								"119"
+								"24"
 							]
 						}
 					},
@@ -1370,7 +1400,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"Office WS\"\r\n    },\r\n    \"device_mode\": {\r\n        \"mode\": \"switch_dual_rocker\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"metadata\": {\r\n        \"name\": \"Switch kitchen / garden\"\r\n    },\r\n    \"device_mode\": {\r\n        \"mode\": \"switch_dual_rocker\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1378,7 +1408,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{bridge}}/clip/v2/resource/device/38e0073e-6b08-4d13-8cfa-7bdfd43aad62",
+							"raw": "https://{{bridge}}/clip/v2/resource/device/b418f438-0497-44e0-a385-6d8e9193bf9f",
 							"protocol": "https",
 							"host": [
 								"{{bridge}}"
@@ -1388,7 +1418,7 @@
 								"v2",
 								"resource",
 								"device",
-								"38e0073e-6b08-4d13-8cfa-7bdfd43aad62"
+								"b418f438-0497-44e0-a385-6d8e9193bf9f"
 							]
 						}
 					},

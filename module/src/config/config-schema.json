@@ -4,6 +4,13 @@
   "type": "object",
   "additionalProperties": false,
   "definitions": {
+    "scene-id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Uniquely identify a scene in this configuration",
+      "examples": ["kitchen_blue"]
+    },
     "scene-name": {
       "type": "string",
       "minLength": 1,
@@ -52,6 +59,8 @@
       "properties": {
         "id": {
           "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
           "description": "Uniquely identify the action in this configuration",
           "examples": ["blue_action"]
         },
@@ -103,9 +112,7 @@
       "additionalProperties": false,
       "properties": {
         "id": {
-          "type": "string",
-          "description": "Uniquely identify the scene in this configuration",
-          "examples": ["kitchen_blue"]
+          "$ref": "#/definitions/scene-id"
         },
         "groups": {
           "type": "array",
@@ -118,19 +125,6 @@
         },
         "name": {
           "$ref": "#/definitions/scene-name"
-        },
-        "type": {
-          "type": "string",
-          "description": "A type of scene",
-          "enum": [
-            "default",
-            "day",
-            "night",
-            "sensor_day",
-            "sensor_night",
-            "custom"
-          ],
-          "examples": ["day"]
         },
         "image-id": {
           "$ref": "#/definitions/scene-image-id"
@@ -161,12 +155,15 @@
           "type": "string"
         }
       },
-      "required": ["id", "groups", "name", "type", "actions"]
+      "required": ["id", "groups", "name", "actions"]
     },
     "default-scene": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "id": {
+          "$ref": "#/definitions/scene-id"
+        },
         "name": {
           "$ref": "#/definitions/scene-name"
         },
@@ -178,7 +175,56 @@
           "$ref": "#/definitions/light-action"
         }
       },
-      "required": ["name", "light-action"]
+      "required": ["id", "name", "light-action"]
+    },
+    "config-scenes": {
+      "type": "object",
+      "description": "Scenes for a room or zone being controlled",
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/scene-id"
+        },
+        "day": {
+          "$ref": "#/definitions/scene-id"
+        },
+        "night": {
+          "$ref": "#/definitions/scene-id"
+        },
+        "evening": {
+          "$ref": "#/definitions/scene-id"
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["default"],
+          "not": {
+            "required": ["day", "night", "evening"]
+          }
+        },
+        {
+          "required": ["day", "night", "evening"],
+          "not": {
+            "required": ["default"]
+          }
+        }
+      ]
+    },
+    "accessory-config": {
+      "type": "object",
+      "description": "Configuration for an accessory controlling a group",
+      "additionalProperties": false,
+      "properties": {
+        "group": {
+          "type": "string",
+          "description": "An ID of the room or zone being controlled",
+          "examples": ["office"]
+        },
+        "scenes": {
+          "$ref": "#/definitions/config-scenes"
+        }
+      },
+      "required": ["group"]
     }
   },
   "properties": {
@@ -226,13 +272,13 @@
           "description": "Default scenes for room and zones",
           "additionalProperties": false,
           "properties": {
-            "default": {
-              "$ref": "#/definitions/default-scene"
-            },
             "day": {
               "$ref": "#/definitions/default-scene"
             },
             "night": {
+              "$ref": "#/definitions/default-scene"
+            },
+            "evening": {
               "$ref": "#/definitions/default-scene"
             },
             "motion-sensor-day": {
@@ -240,9 +286,12 @@
             },
             "motion-sensor-night": {
               "$ref": "#/definitions/default-scene"
+            },
+            "motion-sensor-evening": {
+              "$ref": "#/definitions/default-scene"
             }
           },
-          "required": ["default", "day", "night"]
+          "required": ["day", "night", "evening"]
         }
       },
       "required": ["powerup-behavior", "scenes"]
@@ -258,6 +307,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the room in this configuration",
             "examples": ["my_bedroom"]
           },
@@ -334,6 +385,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the zone in this configuration",
             "examples": ["my_upstairs_zone"]
           },
@@ -409,6 +462,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the light in this configuration",
             "examples": ["my_light"]
           },
@@ -525,6 +580,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the motion sensor in this configuration",
             "examples": ["my_sensor"]
           },
@@ -548,16 +605,14 @@
             "description": "A name for the motion sensor",
             "examples": ["My motion sensor"]
           },
-          "group": {
-            "type": "string",
-            "description": "An ID of room or zone the motion sensor controls",
-            "examples": ["office"]
+          "motion": {
+            "$ref": "#/definitions/accessory-config"
           },
           "comment": {
             "type": "string"
           }
         },
-        "required": ["id", "mac", "name", "group"]
+        "required": ["id", "mac", "name", "motion"]
       }
     },
     "tap-dial-switches": {
@@ -570,6 +625,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the tap dial switch in this configuration",
             "examples": ["my_dial"]
           },
@@ -594,69 +651,19 @@
             "examples": ["My tap dial"]
           },
           "button1": {
-            "type": "object",
-            "description": "Configuration for the first tap dial switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button2": {
-            "type": "object",
-            "description": "Configuration for the second tap dial switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button3": {
-            "type": "object",
-            "description": "Configuration for the third tap dial switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button4": {
-            "type": "object",
-            "description": "Configuration for the forth tap dial switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "dial": {
-            "type": "object",
-            "description": "Configuration for the dial",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the dial controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "comment": {
             "type": "string"
@@ -684,6 +691,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the dimmer switch in this configuration",
             "examples": ["my_dimmer"]
           },
@@ -708,56 +717,16 @@
             "examples": ["My dimmer"]
           },
           "button1": {
-            "type": "object",
-            "description": "Configuration for the first dimmer switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button2": {
-            "type": "object",
-            "description": "Configuration for the second dimmer switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button3": {
-            "type": "object",
-            "description": "Configuration for the third dimmer switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button4": {
-            "type": "object",
-            "description": "Configuration for the forth dimmer switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "comment": {
             "type": "string"
@@ -784,6 +753,8 @@
         "properties": {
           "id": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "description": "Uniquely identify the wall switch in this configuration",
             "examples": ["my_wall_switch"]
           },
@@ -806,30 +777,10 @@
             "enum": ["switch_single_rocker", "switch_dual_rocker"]
           },
           "button1": {
-            "type": "object",
-            "description": "Configuration for the first wall switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "button2": {
-            "type": "object",
-            "description": "Configuration for the second wall switch button",
-            "additionalProperties": false,
-            "properties": {
-              "group": {
-                "type": "string",
-                "description": "An ID of room or zone the button controls",
-                "examples": ["office"]
-              }
-            },
-            "required": ["group"]
+            "$ref": "#/definitions/accessory-config"
           },
           "comment": {
             "type": "string"

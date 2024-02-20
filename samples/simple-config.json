@@ -30,16 +30,9 @@
   "defaults": {
     "powerup-behavior": "powerfail",
     "scenes": {
-      "default": {
-        "name": "Default",
-        "light-action": {
-          "id": "default_action",
-          "mirek": 323,
-          "brigthness": 100
-        }
-      },
       "day": {
-        "name": "Day",
+        "id": "default_day_scene",
+        "name": "Day (default)",
         "light-action": {
           "id": "default_day_action",
           "mirek": 323,
@@ -47,11 +40,21 @@
         }
       },
       "night": {
-        "name": "Night",
+        "id": "default_night_scene",
+        "name": "Night (default)",
         "light-action": {
           "id": "default_night_action",
           "mirek": 500,
-          "brigthness": 30
+          "brigthness": 25
+        }
+      },
+      "evening": {
+        "id": "default_evening_scene",
+        "name": "Evening (default)",
+        "light-action": {
+          "id": "default_evening_action",
+          "mirek": 500,
+          "brigthness": 50
         }
       }
     }
@@ -63,7 +66,6 @@
         "my_bedroom"
       ],
       "name": "Blue scene",
-      "type": "custom",
       "actions": [
         {
           "target": "ceiling",

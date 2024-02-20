@@ -29,7 +29,9 @@ describe('Config', () => {
       new Config('c:/somefile.json')
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe('Could not parse config!')
+      expect(e.message).toBe(
+        'Unexpected token \'c\', "c:/somefile.json" is not valid JSON',
+      )
     }
   })
 
@@ -38,7 +40,30 @@ describe('Config', () => {
       new Config('./tests/config/res/not-a-json.txt')
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe('Could not parse config!')
+      expect(e.message).toBe(
+        "Unexpected token 'T', \"This isn't a JSON\" is not valid JSON",
+      )
+    }
+  })
+
+  test('should check `uniqueItemProperties` (AJV)', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(
+          '"name": "Zone for wall switch"',
+          '"name": "Zone for light"',
+        ),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toContain('Config is invalid')
+      expect(e.message).toContain(
+        'must pass \\"uniqueItemProperties\\" keyword validation',
+      )
     }
   })
 
@@ -51,7 +76,7 @@ describe('Config', () => {
       new Config(json.replace('"room": "light_room"', '"room": "unknown_room"'))
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe("Undefined identifier: 'unknown_room'!")
+      expect(e.message).toBe("Undefined room identifier: 'unknown_room'!")
     }
   })
 
@@ -66,7 +91,7 @@ describe('Config', () => {
       )
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe("Undefined identifier: 'unknown_zone'!")
+      expect(e.message).toBe("Undefined zone identifier: 'unknown_zone'!")
     }
   })
 
@@ -88,7 +113,8 @@ describe('Config', () => {
       new Config('./tests/config/res/invalid-config.json')
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toContain('Config is invalid. Errors:')
+      expect(e.message).toContain('Config is invalid')
+      expect(e.message).toContain("must have required property 'bridge'")
     }
   })
 
@@ -122,7 +148,7 @@ describe('Config', () => {
         )
         fail('An error was expected')
       } catch (e: any) {
-        expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+        expect(e.message).toBe(`Undefined group identifier: 'unknown'!`)
       }
     },
   )
@@ -138,7 +164,7 @@ describe('Config', () => {
       )
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+      expect(e.message).toBe(`Undefined group identifier: 'unknown'!`)
     }
   })
 
@@ -151,7 +177,7 @@ describe('Config', () => {
       new Config(json.replace(`"target": "scene_light"`, `"target": "unknown"`))
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+      expect(e.message).toBe(`Undefined light identifier: 'unknown'!`)
     }
   })
 
@@ -169,7 +195,7 @@ describe('Config', () => {
       )
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe(`Undefined identifier: 'unknown'!`)
+      expect(e.message).toBe(`Undefined resource identifier: 'unknown'!`)
     }
   })
 
@@ -258,7 +284,7 @@ describe('Config', () => {
     ${'tap dial'}      | ${'dial'}                            | ${'Tap dial'}
     ${'tap dial'}      | ${'0B213BC6'}                        | ${'Tap dial'}
     ${'tap dial'}      | ${'00:17:88:01:0b:21:3b:c6-fc00'}    | ${'Tap dial'}
-    ${'motion sensor'} | ${'motionsensor'}                    | ${'Motion sensor'}
+    ${'motion sensor'} | ${'motion_sensor'}                   | ${'Motion sensor'}
     ${'motion sensor'} | ${'0B98C27F'}                        | ${'Motion sensor'}
     ${'motion sensor'} | ${'00:17:88:01:0b:98:c2:7f-02'}      | ${'Motion sensor'}
     ${'dimmer switch'} | ${'dimmerswitch'}                    | ${'Dimmer switch'}
@@ -277,17 +303,59 @@ describe('Config', () => {
 
   test('should return a list of resource mac addresses', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getAllResourceMacs().length).toBe(8)
+    expect(config.getAllResourceMacs().length).toBe(10)
   })
 
   test('should return room lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getGroupLights(config.rooms[0]).length).toBe(2)
+    expect(config.getGroupLights(config.rooms[0]).length).toBe(3)
   })
 
   test('should return zone lights', () => {
     const config = new Config('./tests/config/res/test-config.json')
     expect(config.getGroupLights(config.zones![0]).length).toBe(1)
+  })
+
+  test('should return default scenes for accessory configs when no scenes defined', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    const dimmerButton = config.dimmerSwitches[0].button1
+    expect(config.getDaySceneId(dimmerButton)).toBe('default-day-scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('default-night-scene')
+    expect(config.getEveningSceneId(dimmerButton)).toBe('default-evening-scene')
+    const sensorMotion = config.motionSensors[0].motion
+    expect(config.getSensorDaySceneId(sensorMotion)).toBe(
+      'default-sensor-day-scene',
+    )
+    expect(config.getSensorNightSceneId(sensorMotion)).toBe(
+      'default-sensor-night-scene',
+    )
+    expect(config.getSensorEveningSceneId(sensorMotion)).toBe(
+      'default-sensor-evening-scene',
+    )
+  })
+
+  test('should return default scene for accessory configs when default scene defined', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    const dimmerButton = config.dimmerSwitches[0].button4
+    expect(config.getDaySceneId(dimmerButton)).toBe('scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('scene')
+    expect(config.getEveningSceneId(dimmerButton)).toBe('scene')
+    const sensorMotion = config.motionSensors[1].motion
+    expect(config.getSensorDaySceneId(sensorMotion)).toBe('scene')
+    expect(config.getSensorNightSceneId(sensorMotion)).toBe('scene')
+    expect(config.getSensorEveningSceneId(sensorMotion)).toBe('scene')
+  })
+
+  test('should return scenes for accessory configs when scenes defined', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    const dimmerButton = config.dimmerSwitches[0].button3
+    expect(config.getDaySceneId(dimmerButton)).toBe('day_scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('night_scene')
+    expect(config.getEveningSceneId(dimmerButton)).toBe('evening_scene')
+    const sensorMotion = config.motionSensors[2].motion
+    expect(config.getSensorDaySceneId(sensorMotion)).toBe('day_scene')
+    expect(config.getSensorNightSceneId(sensorMotion)).toBe('night_scene')
+    expect(config.getSensorEveningSceneId(sensorMotion)).toBe('evening_scene')
   })
 })
 

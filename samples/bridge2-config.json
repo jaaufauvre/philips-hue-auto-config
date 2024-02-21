@@ -329,7 +329,7 @@
       "motion": {
         "group": "front_door",
         "scenes": {
-          "default": "front_door_sensor_scene"
+          "unique": "front_door_sensor_scene"
         }
       }
     }
@@ -357,7 +357,7 @@
       "button4": {
         "group": "toilet",
         "scenes": {
-          "default": "toilet_red_scene"
+          "unique": "toilet_red_scene"
         }
       }
     },
@@ -401,7 +401,7 @@
       "button4": {
         "group": "kids_bathroom",
         "scenes": {
-          "default": "bathroom_red_scene"
+          "unique": "bathroom_red_scene"
         }
       }
     },

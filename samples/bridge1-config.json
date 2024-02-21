@@ -410,11 +410,11 @@
       "id": "garden_sensor",
       "mac": "00:17:88:01:0c:4b:13:c7-02",
       "serial": "0C4B13C7",
-      "name": "Sensor",
+      "name": "Sensor garden",
       "motion": {
         "group": "garden",
         "scenes": {
-          "default": "garden_sensor_scene"
+          "unique": "garden_sensor_scene"
         }
       }
     }
@@ -460,7 +460,7 @@
       "button4": {
         "group": "bathroom",
         "scenes": {
-          "default": "bathroom_red_scene"
+          "unique": "bathroom_red_scene"
         }
       }
     }
@@ -474,13 +474,13 @@
       "button1": {
         "group": "kitchen",
         "scenes": {
-          "default": "kitchen_breakfast"
+          "unique": "kitchen_breakfast"
         }
       },
       "button2": {
         "group": "kitchen",
         "scenes": {
-          "default": "kitchen_dinner"
+          "unique": "kitchen_dinner"
         }
       },
       "button3": {
@@ -545,13 +545,13 @@
       "button1": {
         "group": "kitchen",
         "scenes": {
-          "default": "kitchen_dinner"
+          "unique": "kitchen_dinner"
         }
       },
       "button2": {
         "group": "kitchen",
         "scenes": {
-          "default": "kitchen_breakfast"
+          "unique": "kitchen_breakfast"
         }
       }
     },
@@ -563,7 +563,7 @@
       "button1": {
         "group": "garden",
         "scenes": {
-          "default": "garden_scene"
+          "unique": "garden_scene"
         }
       },
       "button2": {
@@ -687,7 +687,7 @@
       "groups": [
         "garden"
       ],
-      "name": "Garden sensor",
+      "name": "Sensor",
       "actions": [
         {
           "target": "garden_light",

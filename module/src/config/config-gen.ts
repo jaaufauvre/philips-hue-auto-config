@@ -203,9 +203,9 @@ export interface AccessoryConfig {
  */
 export interface ConfigScenes {
     day?:     string;
-    default?: string;
     evening?: string;
     night?:   string;
+    unique?:  string;
 }
 
 export interface Light {
@@ -726,9 +726,9 @@ const typeMap: any = {
     ], false),
     "ConfigScenes": o([
         { json: "day", js: "day", typ: u(undefined, "") },
-        { json: "default", js: "default", typ: u(undefined, "") },
         { json: "evening", js: "evening", typ: u(undefined, "") },
         { json: "night", js: "night", typ: u(undefined, "") },
+        { json: "unique", js: "unique", typ: u(undefined, "") },
     ], false),
     "Light": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },

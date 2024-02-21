@@ -187,16 +187,14 @@ export class Config implements ConfigGen {
 
   getDaySceneId(config: AccessoryConfig) {
     return (
-      config.scenes?.day ??
-      config.scenes?.default ??
-      this.defaults.scenes.day.id
+      config.scenes?.day ?? config.scenes?.unique ?? this.defaults.scenes.day.id
     )
   }
 
   getNightSceneId(config: AccessoryConfig) {
     return (
       config.scenes?.night ??
-      config.scenes?.default ??
+      config.scenes?.unique ??
       this.defaults.scenes.night.id
     )
   }
@@ -204,7 +202,7 @@ export class Config implements ConfigGen {
   getEveningSceneId(config: AccessoryConfig) {
     return (
       config.scenes?.evening ??
-      config.scenes?.default ??
+      config.scenes?.unique ??
       this.defaults.scenes.evening.id
     )
   }
@@ -212,7 +210,7 @@ export class Config implements ConfigGen {
   getSensorDaySceneId(config: AccessoryConfig) {
     return (
       config.scenes?.day ??
-      config.scenes?.default ??
+      config.scenes?.unique ??
       this.defaults.scenes.motionSensorDay!.id
     )
   }
@@ -220,7 +218,7 @@ export class Config implements ConfigGen {
   getSensorNightSceneId(config: AccessoryConfig) {
     return (
       config.scenes?.night ??
-      config.scenes?.default ??
+      config.scenes?.unique ??
       this.defaults.scenes.motionSensorNight!.id
     )
   }
@@ -228,7 +226,7 @@ export class Config implements ConfigGen {
   getSensorEveningSceneId(config: AccessoryConfig) {
     return (
       config.scenes?.evening ??
-      config.scenes?.default ??
+      config.scenes?.unique ??
       this.defaults.scenes.motionSensorEvening!.id
     )
   }
@@ -431,7 +429,7 @@ export class Config implements ConfigGen {
     this.#checkResourceDefined(config.scenes?.day)
     this.#checkResourceDefined(config.scenes?.night)
     this.#checkResourceDefined(config.scenes?.evening)
-    this.#checkResourceDefined(config.scenes?.default)
+    this.#checkResourceDefined(config.scenes?.unique)
   }
 
   #checkResourceDefined(id: string | undefined) {

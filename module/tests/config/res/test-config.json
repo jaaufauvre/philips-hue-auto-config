@@ -121,7 +121,7 @@
       "motion": {
         "group": "ms_room",
         "scenes": {
-          "default": "scene"
+          "unique": "scene"
         }
       }
     },
@@ -200,7 +200,7 @@
       "button4": {
         "group": "ds_zone2",
         "scenes": {
-          "default": "scene"
+          "unique": "scene"
         }
       }
     }

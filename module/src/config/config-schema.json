@@ -182,7 +182,7 @@
       "description": "Scenes for a room or zone being controlled",
       "additionalProperties": false,
       "properties": {
-        "default": {
+        "unique": {
           "$ref": "#/definitions/scene-id"
         },
         "day": {
@@ -197,7 +197,7 @@
       },
       "oneOf": [
         {
-          "required": ["default"],
+          "required": ["unique"],
           "not": {
             "required": ["day", "night", "evening"]
           }
@@ -205,7 +205,7 @@
         {
           "required": ["day", "night", "evening"],
           "not": {
-            "required": ["default"]
+            "required": ["unique"]
           }
         }
       ]

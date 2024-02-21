@@ -149,7 +149,7 @@ export class Bridge {
       long: long,
       lat: lat,
       sunriseoffset: 0, // "daylight" value is "true" at sunrise
-      sunsetoffset: 60, // "daylight" value is "false" 60 min after sunset
+      sunsetoffset: 0, // "daylight" value is "false" at sunset
     })
   }
 
@@ -517,7 +517,7 @@ export class Bridge {
     const lightSensor = {
       name: `${name} (L)`,
       config: {
-        tholddark: 20000, // Medium
+        tholddark: 19000, // Medium
       },
     }
     const presenceSensor = {
@@ -661,12 +661,11 @@ export class Bridge {
           },
         ],
       }
-      await this.#createRule(this.#toDayRule(switchOnBaseRule, daySceneIdV1))
-      await this.#createRule(
-        this.#toNightRule(switchOnBaseRule, nightSceneIdV1),
-      )
-      await this.#createRule(
-        this.#toEveningRule(switchOnBaseRule, eveningSceneIdV1),
+      await this.#createSceneRules(
+        switchOnBaseRule,
+        daySceneIdV1,
+        eveningSceneIdV1,
+        nightSceneIdV1,
       )
     }
 
@@ -732,10 +731,11 @@ export class Bridge {
           },
         ],
       }
-      await this.#createRule(this.#toDayRule(changeBaseRule, daySceneIdV1))
-      await this.#createRule(this.#toNightRule(changeBaseRule, nightSceneIdV1))
-      await this.#createRule(
-        this.#toEveningRule(changeBaseRule, eveningSceneIdV1),
+      await this.#createSceneRules(
+        changeBaseRule,
+        daySceneIdV1,
+        eveningSceneIdV1,
+        nightSceneIdV1,
       )
     }
   }
@@ -936,10 +936,11 @@ export class Bridge {
         },
       ],
     }
-    await this.#createRule(this.#toDayRule(onMotionBaseRule, daySceneIdV1))
-    await this.#createRule(this.#toNightRule(onMotionBaseRule, nightSceneIdV1))
-    await this.#createRule(
-      this.#toEveningRule(onMotionBaseRule, eveningSceneIdV1),
+    await this.#createSceneRules(
+      onMotionBaseRule,
+      daySceneIdV1,
+      eveningSceneIdV1,
+      nightSceneIdV1,
     )
 
     // When no motion, transition to group off
@@ -1043,8 +1044,39 @@ export class Bridge {
     )
   }
 
+  async #createSceneRules(
+    baseRule: NewRule,
+    daySceneIdV1: string,
+    eveningSceneIdV1: string,
+    nightSceneIdV1: string,
+  ) {
+    if (new Set([daySceneIdV1, eveningSceneIdV1, nightSceneIdV1]).size === 1) {
+      // Same scene: one rule is enough
+      await this.#createRule(this.#toUniqueRule(baseRule, daySceneIdV1))
+    } else {
+      await this.#createRule(this.#toDaylightRule(baseRule, daySceneIdV1))
+      await this.#createRule(this.#toDaytimeRule(baseRule, daySceneIdV1))
+      await this.#createRule(this.#toEveningRule(baseRule, eveningSceneIdV1))
+      await this.#createRule(this.#toNightRule(baseRule, nightSceneIdV1))
+    }
+  }
+
   /**
-   * Daylight false + local time between 6pm and 10pm
+   * Daylight is true => day scene
+   */
+  #toDaylightRule(baseRule: NewRule, daySceneIdV1: string) {
+    const daylightRule = _.cloneDeep(baseRule)
+    _.find(daylightRule.conditions, (condition) =>
+      condition.address.includes('daylight'),
+    )!.value = 'true'
+    _.find(daylightRule.actions, (action) =>
+      action.address.includes('/action'),
+    )!.body.scene = daySceneIdV1
+    return daylightRule
+  }
+
+  /**
+   * Daylight is false and local time between 6pm and 10pm => evening scene
    */
   #toEveningRule(baseRule: NewRule, eveningSceneIdV1: string) {
     const eveningRule = _.cloneDeep(baseRule)
@@ -1057,13 +1089,13 @@ export class Bridge {
     eveningRule.conditions.push({
       address: '/config/localtime',
       operator: 'in',
-      value: 'T06:00:00/T22:00:00',
+      value: 'T18:00:00/T22:00:00',
     })
     return eveningRule
   }
 
   /**
-   * Daylight false + not the evening
+   * Daylight is false and local time between 10pm and 8am => night scene
    */
   #toNightRule(baseRule: NewRule, nightSceneIdV1: string) {
     const nightRule = _.cloneDeep(baseRule)
@@ -1075,24 +1107,40 @@ export class Bridge {
     )!.body.scene = nightSceneIdV1
     nightRule.conditions.push({
       address: '/config/localtime',
-      operator: 'not in',
-      value: 'T06:00:00/T22:00:00',
+      operator: 'in',
+      value: 'T22:00:00/T08:00:00',
     })
     return nightRule
   }
 
   /**
-   * Daylight true
+   * Daylight is false and local time between 8am and 6pm => day scene
    */
-  #toDayRule(baseRule: NewRule, daySceneIdV1: string) {
+  #toDaytimeRule(baseRule: NewRule, daySceneIdV1: string) {
     const dayRule = _.cloneDeep(baseRule)
     _.find(dayRule.conditions, (condition) =>
       condition.address.includes('daylight'),
-    )!.value = 'true'
+    )!.value = 'false'
     _.find(dayRule.actions, (action) =>
       action.address.includes('/action'),
     )!.body.scene = daySceneIdV1
+    dayRule.conditions.push({
+      address: '/config/localtime',
+      operator: 'in',
+      value: 'T08:00:00/T18:00:00',
+    })
     return dayRule
+  }
+
+  #toUniqueRule(baseRule: NewRule, uniqueSceneIdV1: string) {
+    const rule = _.cloneDeep(baseRule)
+    _.remove(rule.conditions, (condition) =>
+      condition.address.includes('daylight'),
+    )
+    _.find(rule.actions, (action) =>
+      action.address.includes('/action'),
+    )!.body.scene = uniqueSceneIdV1
+    return rule
   }
 
   #findSensorIdByAddressAndType(

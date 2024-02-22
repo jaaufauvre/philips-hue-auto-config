@@ -340,7 +340,18 @@ export interface SceneAction {
     dimming?: Dimming
     color_temperature?: ColorTemperature
     color?: Color
+    effects?: Effects
+    gradient?: Gradient
   }
+}
+
+interface Gradient {
+  points: { color: Color }[]
+  mode?: string
+}
+
+interface Effects {
+  effect: string
 }
 
 export interface ColorTemperature {

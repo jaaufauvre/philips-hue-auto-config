@@ -1348,6 +1348,14 @@ export class Bridge {
     }
   }
 
+  #lightActionToEffects(lightAction: LightAction) {
+    if (lightAction.effect) {
+      return {
+        effect: lightAction.effect,
+      }
+    }
+  }
+
   #lightActionToColorTemperature(lightAction: LightAction) {
     if (lightAction.mirek) {
       return {
@@ -1360,6 +1368,25 @@ export class Bridge {
     if (lightAction.brigthness) {
       return {
         brightness: lightAction.brigthness,
+      }
+    }
+  }
+
+  #lightActionToGradient(lightAction: LightAction) {
+    if (lightAction.gradient) {
+      const points = _.map(lightAction.gradient, (point) => {
+        return {
+          color: {
+            xy: {
+              x: point.x,
+              y: point.y,
+            },
+          },
+        }
+      })
+      return {
+        points: points,
+        mode: 'interpolated_palette_mirrored',
       }
     }
   }
@@ -1391,6 +1418,8 @@ export class Bridge {
         dimming: this.#lightActionToDimming(lightAction),
         color_temperature: this.#lightActionToColorTemperature(lightAction),
         color: this.#lightActionToColor(lightAction),
+        effects: this.#lightActionToEffects(lightAction),
+        gradient: this.#lightActionToGradient(lightAction),
       },
     }
   }

@@ -639,15 +639,15 @@
       "actions": [
         {
           "target": "toilet_ceiling",
-          "light-action": "toilet_blue_night"
+          "light-action": "toilet_blue_evening"
         },
         {
           "target": "toilet_spot_left",
-          "light-action": "toilet_spot_night"
+          "light-action": "toilet_spot_evening"
         },
         {
           "target": "toilet_spot_right",
-          "light-action": "toilet_spot_night"
+          "light-action": "toilet_spot_evening"
         }
       ]
     },
@@ -992,6 +992,19 @@
       "brigthness": 50
     },
     {
+      "id": "toilet_blue_evening",
+      "color": {
+        "x": 0.1534,
+        "y": 0.0539
+      },
+      "brigthness": 50
+    },
+    {
+      "id": "toilet_spot_evening",
+      "mirek": 304,
+      "brigthness": 40
+    },
+    {
       "id": "toilet_blue_night",
       "color": {
         "x": 0.1534,
@@ -1055,12 +1068,12 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 40
+      "brigthness": 60
     },
     {
       "id": "bathroom_spot_evening",
       "mirek": 304,
-      "brigthness": 40
+      "brigthness": 60
     },
     {
       "id": "bathroom_blue_night",

@@ -403,7 +403,12 @@
       "serial": "0B58026A",
       "name": "Sensor kitchen",
       "motion": {
-        "group": "kitchen"
+        "group": "kitchen",
+        "scenes": {
+          "day": "kitchen_sensor_day_evening_scene",
+          "evening": "kitchen_sensor_day_evening_scene",
+          "night": "kitchen_sensor_night_scene"
+        }
       }
     },
     {
@@ -474,23 +479,32 @@
       "button1": {
         "group": "kitchen",
         "scenes": {
-          "unique": "kitchen_breakfast"
+          "unique": "kitchen_breakfast_scene"
         }
       },
       "button2": {
         "group": "kitchen",
         "scenes": {
-          "unique": "kitchen_dinner"
+          "unique": "kitchen_dinner_scene"
         }
       },
       "button3": {
-        "group": "cooking"
+        "group": "cooking",
+        "scenes": {
+          "unique": "cooking_day_scene"
+        }
       },
       "button4": {
-        "group": "kitchen"
+        "group": "kitchen",
+        "scenes": {
+          "unique": "kitchen_day_scene"
+        }
       },
       "dial": {
-        "group": "kitchen"
+        "group": "kitchen",
+        "scenes": {
+          "unique": "kitchen_day_scene"
+        }
       }
     },
     {
@@ -499,19 +513,34 @@
       "serial": "806995",
       "name": "Tap dial bedroom",
       "button1": {
-        "group": "bedroom"
+        "group": "bedroom",
+        "scenes": {
+          "unique": "bedroom_night_scene"
+        }
       },
       "button2": {
-        "group": "bedroom"
+        "group": "bedroom",
+        "scenes": {
+          "unique": "bedroom_candle_scene"
+        }
       },
       "button3": {
-        "group": "bedroom"
+        "group": "bedroom",
+        "scenes": {
+          "unique": "bedroom_switch_scene"
+        }
       },
       "button4": {
-        "group": "bedroom"
+        "group": "bedroom",
+        "scenes": {
+          "unique": "bedroom_ceiling_scene"
+        }
       },
       "dial": {
-        "group": "bedroom"
+        "group": "bedroom",
+        "scenes": {
+          "unique": "bedroom_switch_scene"
+        }
       }
     }
   ],
@@ -531,10 +560,16 @@
       "name": "Switch kitchen L",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "kitchen"
+        "group": "kitchen",
+        "scenes": {
+          "unique": "kitchen_day_scene"
+        }
       },
       "button2": {
-        "group": "kitchen"
+        "group": "cooking",
+        "scenes": {
+          "unique": "cooking_day_scene"
+        }
       }
     },
     {
@@ -545,13 +580,13 @@
       "button1": {
         "group": "kitchen",
         "scenes": {
-          "unique": "kitchen_dinner"
+          "unique": "kitchen_dinner_scene"
         }
       },
       "button2": {
         "group": "kitchen",
         "scenes": {
-          "unique": "kitchen_breakfast"
+          "unique": "kitchen_breakfast_scene"
         }
       }
     },
@@ -567,7 +602,10 @@
         }
       },
       "button2": {
-        "group": "cooking"
+        "group": "cooking",
+        "scenes": {
+          "unique": "cooking_day_scene"
+        }
       }
     },
     {
@@ -599,7 +637,10 @@
       "name": "Switch bedroom",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom"
+        "group": "bedroom",
+        "scenes": {
+          "unique": "bedroom_switch_scene"
+        }
       }
     }
   ],
@@ -843,7 +884,7 @@
       ]
     },
     {
-      "id": "kitchen_breakfast",
+      "id": "kitchen_breakfast_scene",
       "groups": [
         "kitchen"
       ],
@@ -851,32 +892,24 @@
       "actions": [
         {
           "target": "kitchen_spot_2",
-          "light-action": "default"
+          "light-action": "kitchen_breakfast"
         },
         {
           "target": "kitchen_spot_3",
-          "light-action": "default"
+          "light-action": "kitchen_breakfast"
         },
         {
           "target": "kitchen_spot_5",
-          "light-action": "default"
+          "light-action": "kitchen_breakfast"
         },
         {
           "target": "kitchen_spot_6",
-          "light-action": "default"
-        },
-        {
-          "target": "kitchen_gradient",
-          "light-action": "kitchen_low"
-        },
-        {
-          "target": "kitchen_ceiling",
-          "light-action": "kitchen_low"
+          "light-action": "kitchen_breakfast"
         }
       ]
     },
     {
-      "id": "kitchen_dinner",
+      "id": "kitchen_dinner_scene",
       "groups": [
         "kitchen"
       ],
@@ -908,11 +941,159 @@
         },
         {
           "target": "kitchen_gradient",
-          "light-action": "kitchen_low"
+          "light-action": "kitchen_dinner_gradient"
         },
         {
           "target": "kitchen_ceiling",
-          "light-action": "kitchen_low"
+          "light-action": "kitchen_dinner_color"
+        }
+      ]
+    },
+    {
+      "id": "kitchen_sensor_day_evening_scene",
+      "groups": [
+        "kitchen"
+      ],
+      "name": "Sensor day/evening",
+      "actions": [
+        {
+          "target": "kitchen_pendant_left",
+          "light-action": "kitchen_filament_min"
+        },
+        {
+          "target": "kitchen_pendant_right",
+          "light-action": "kitchen_filament_min"
+        },
+        {
+          "target": "kitchen_spot_9",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_spot_8",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_spot_7",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_gradient",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_ceiling",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
+      "id": "kitchen_day_scene",
+      "groups": [
+        "kitchen"
+      ],
+      "name": "Day",
+      "actions": [
+        {
+          "target": "kitchen_pendant_left",
+          "light-action": "kitchen_filament_min"
+        },
+        {
+          "target": "kitchen_pendant_right",
+          "light-action": "kitchen_filament_min"
+        },
+        {
+          "target": "kitchen_spot_9",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_spot_8",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_spot_7",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_gradient",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_ceiling",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
+      "id": "cooking_day_scene",
+      "groups": [
+        "cooking"
+      ],
+      "name": "Day",
+      "actions": [
+        {
+          "target": "kitchen_spot_9",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_spot_8",
+          "light-action": "default"
+        },
+        {
+          "target": "kitchen_spot_7",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
+      "id": "kitchen_sensor_night_scene",
+      "groups": [
+        "kitchen"
+      ],
+      "name": "Sensor night",
+      "actions": [
+        {
+          "target": "kitchen_spot_9",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_8",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_7",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_6",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_5",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_4",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_3",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_2",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_spot_1",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_gradient",
+          "light-action": "kitchen_sensor_night"
+        },
+        {
+          "target": "kitchen_ceiling",
+          "light-action": "kitchen_sensor_night"
         }
       ]
     },
@@ -1039,6 +1220,86 @@
           "light-action": "hallowen_white"
         }
       ]
+    },
+    {
+      "id": "bedroom_night_scene",
+      "groups": [
+        "bedroom"
+      ],
+      "name": "Night",
+      "actions": [
+        {
+          "target": "bedroom_shade",
+          "light-action": "bedroom_night"
+        },
+        {
+          "target": "bedroom_candle_left",
+          "light-action": "bedroom_night"
+        },
+        {
+          "target": "bedroom_candle_right",
+          "light-action": "bedroom_night"
+        }
+      ]
+    },
+    {
+      "id": "bedroom_switch_scene",
+      "groups": [
+        "bedroom"
+      ],
+      "name": "Switch",
+      "actions": [
+        {
+          "target": "bedroom_shade",
+          "light-action": "default"
+        },
+        {
+          "target": "bedroom_candle_left",
+          "light-action": "default"
+        },
+        {
+          "target": "bedroom_candle_right",
+          "light-action": "default"
+        }
+      ]
+    },
+    {
+      "id": "bedroom_candle_scene",
+      "groups": [
+        "bedroom"
+      ],
+      "name": "Candles",
+      "actions": [
+        {
+          "target": "bedroom_shade",
+          "light-action": "bedroom_candle"
+        },
+        {
+          "target": "bedroom_candle_left",
+          "light-action": "bedroom_candle"
+        },
+        {
+          "target": "bedroom_candle_right",
+          "light-action": "bedroom_candle"
+        }
+      ]
+    },
+    {
+      "id": "bedroom_ceiling_scene",
+      "groups": [
+        "bedroom"
+      ],
+      "name": "Ceiling",
+      "actions": [
+        {
+          "target": "bedroom_ceiling_1",
+          "light-action": "default"
+        },
+        {
+          "target": "bedroom_ceiling_2",
+          "light-action": "default"
+        }
+      ]
     }
   ],
   "light-actions": [
@@ -1066,12 +1327,12 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 40
+      "brigthness": 60
     },
     {
       "id": "bathroom_spot_evening",
       "mirek": 304,
-      "brigthness": 40
+      "brigthness": 60
     },
     {
       "id": "bathroom_blue_night",
@@ -1142,14 +1403,51 @@
       "brigthness": 15
     },
     {
-      "id": "kitchen_low",
-      "mirek": 323,
+      "id": "kitchen_dinner_gradient",
+      "brigthness": 90,
+      "gradient": [
+        {
+          "x": 0.4138,
+          "y": 0.4085
+        },
+        {
+          "x": 0.6868,
+          "y": 0.3060
+        }
+      ]
+    },
+    {
+      "id": "kitchen_dinner_color",
+      "color": {
+        "x": 0.6253,
+        "y": 0.358
+      },
+      "brigthness": 85
+    },
+    {
+      "id": "kitchen_sensor_night",
+      "mirek": 500,
       "brigthness": 10
+    },
+    {
+      "id": "kitchen_breakfast",
+      "mirek": 323,
+      "brigthness": 80
     },
     {
       "id": "kitchen_filament_min",
       "mirek": 323,
       "brigthness": 1
+    },
+    {
+      "id": "bedroom_candle",
+      "effect": "candle",
+      "brigthness": 45
+    },
+    {
+      "id": "bedroom_night",
+      "mirek": 500,
+      "brigthness": 20
     }
   ]
 }

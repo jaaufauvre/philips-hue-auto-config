@@ -74,6 +74,18 @@
         "color": {
           "$ref": "#/definitions/color"
         },
+        "effect": {
+          "description": "A light effect",
+          "type": "string",
+          "enum": ["prism", "opal", "glisten", "sparkle", "fire", "candle"]
+        },
+        "gradient": {
+          "type": "array",
+          "description": "A list of color points",
+          "items": {
+            "$ref": "#/definitions/color"
+          }
+        },
         "mirek": {
           "$ref": "#/definitions/mirek"
         },
@@ -95,13 +107,25 @@
         {
           "required": ["id", "color", "brightness"],
           "not": {
-            "required": ["mirek"]
+            "required": ["mirek", "effect", "gradient"]
           }
         },
         {
           "required": ["id", "mirek", "brightness"],
           "not": {
-            "required": ["color"]
+            "required": ["color", "effect", "gradient"]
+          }
+        },
+        {
+          "required": ["id", "effect", "brightness"],
+          "not": {
+            "required": ["color", "mirek", "gradient"]
+          }
+        },
+        {
+          "required": ["id", "gradient", "brightness"],
+          "not": {
+            "required": ["color", "mirek", "effect"]
           }
         }
       ],

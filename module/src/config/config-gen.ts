@@ -138,6 +138,14 @@ export interface LightAction {
     color?:      Color;
     comment?:    string;
     /**
+     * A light effect
+     */
+    effect?: Effect;
+    /**
+     * A list of color points
+     */
+    gradient?: Color[];
+    /**
      * Uniquely identify the action in this configuration
      */
     id:     string;
@@ -160,6 +168,18 @@ export interface Color {
      * Y position in color gamut
      */
     y: number;
+}
+
+/**
+ * A light effect
+ */
+export enum Effect {
+    Candle = "candle",
+    Fire = "fire",
+    Glisten = "glisten",
+    Opal = "opal",
+    Prism = "prism",
+    Sparkle = "sparkle",
 }
 
 export interface DimmerSwitch {
@@ -701,6 +721,8 @@ const typeMap: any = {
         { json: "brigthness", js: "brigthness", typ: u(undefined, 3.14) },
         { json: "color", js: "color", typ: u(undefined, r("Color")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "effect", js: "effect", typ: u(undefined, r("Effect")) },
+        { json: "gradient", js: "gradient", typ: u(undefined, a(r("Color"))) },
         { json: "id", js: "id", typ: "" },
         { json: "mirek", js: "mirek", typ: u(undefined, 3.14) },
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -798,6 +820,14 @@ const typeMap: any = {
         "last_on_state",
         "powerfail",
         "safety",
+    ],
+    "Effect": [
+        "candle",
+        "fire",
+        "glisten",
+        "opal",
+        "prism",
+        "sparkle",
     ],
     "LightType": [
         "bollard",

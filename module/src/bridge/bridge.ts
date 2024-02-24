@@ -1095,7 +1095,7 @@ export class Bridge {
   }
 
   /**
-   * Daylight is false and local time between 10pm and 8am => night scene
+   * Daylight is false and local time between 10pm and 7am => night scene
    */
   #toNightRule(baseRule: NewRule, nightSceneIdV1: string) {
     const nightRule = _.cloneDeep(baseRule)
@@ -1108,13 +1108,13 @@ export class Bridge {
     nightRule.conditions.push({
       address: '/config/localtime',
       operator: 'in',
-      value: 'T22:00:00/T08:00:00',
+      value: 'T22:00:00/T07:00:00',
     })
     return nightRule
   }
 
   /**
-   * Daylight is false and local time between 8am and 6pm => day scene
+   * Daylight is false and local time between 7am and 6pm => day scene
    */
   #toDaytimeRule(baseRule: NewRule, daySceneIdV1: string) {
     const dayRule = _.cloneDeep(baseRule)
@@ -1127,7 +1127,7 @@ export class Bridge {
     dayRule.conditions.push({
       address: '/config/localtime',
       operator: 'in',
-      value: 'T08:00:00/T18:00:00',
+      value: 'T07:00:00/T18:00:00',
     })
     return dayRule
   }

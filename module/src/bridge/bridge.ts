@@ -555,7 +555,8 @@ export class Bridge {
       case AccessoryType.DimmerSwitch:
         brighten = button === ButtonType.Button2
         darken = button === ButtonType.Button3
-        on = off = !brighten && !darken
+        on = true
+        off = !brighten && !darken
         onEvent = offEvent = brightenEvent = darkenEvent = `${button}000` // initial_press
         break
       case AccessoryType.WallSwitch:
@@ -582,6 +583,11 @@ export class Bridge {
           {
             address: `/sensors/${idV1}/state/lastupdated`,
             operator: 'dx',
+          },
+          {
+            address: `/groups/${groupIdV1}/state/any_on`,
+            operator: 'eq',
+            value: 'true',
           },
         ],
         actions: [
@@ -610,6 +616,11 @@ export class Bridge {
           {
             address: `/sensors/${idV1}/state/lastupdated`,
             operator: 'dx',
+          },
+          {
+            address: `/groups/${groupIdV1}/state/any_on`,
+            operator: 'eq',
+            value: 'true',
           },
         ],
         actions: [

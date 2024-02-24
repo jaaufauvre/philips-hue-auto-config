@@ -146,6 +146,10 @@ export interface LightAction {
      */
     gradient?: Color[];
     /**
+     * Mode in which the points are being deployed
+     */
+    gradientMode?: GradientMode;
+    /**
      * Uniquely identify the action in this configuration
      */
     id:     string;
@@ -180,6 +184,15 @@ export enum Effect {
     Opal = "opal",
     Prism = "prism",
     Sparkle = "sparkle",
+}
+
+/**
+ * Mode in which the points are being deployed
+ */
+export enum GradientMode {
+    InterpolatedPalette = "interpolated_palette",
+    InterpolatedPaletteMirrored = "interpolated_palette_mirrored",
+    RandomPixelated = "random_pixelated",
 }
 
 export interface DimmerSwitch {
@@ -723,6 +736,7 @@ const typeMap: any = {
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "effect", js: "effect", typ: u(undefined, r("Effect")) },
         { json: "gradient", js: "gradient", typ: u(undefined, a(r("Color"))) },
+        { json: "gradient-mode", js: "gradientMode", typ: u(undefined, r("GradientMode")) },
         { json: "id", js: "id", typ: "" },
         { json: "mirek", js: "mirek", typ: u(undefined, 3.14) },
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -828,6 +842,11 @@ const typeMap: any = {
         "opal",
         "prism",
         "sparkle",
+    ],
+    "GradientMode": [
+        "interpolated_palette",
+        "interpolated_palette_mirrored",
+        "random_pixelated",
     ],
     "LightType": [
         "bollard",

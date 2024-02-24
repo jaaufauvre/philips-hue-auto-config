@@ -1386,7 +1386,7 @@ export class Bridge {
       })
       return {
         points: points,
-        mode: 'interpolated_palette_mirrored',
+        mode: lightAction.gradientMode,
       }
     }
   }

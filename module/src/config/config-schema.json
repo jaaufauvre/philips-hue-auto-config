@@ -82,9 +82,19 @@
         "gradient": {
           "type": "array",
           "description": "A list of color points",
+          "minItems": 1,
           "items": {
             "$ref": "#/definitions/color"
           }
+        },
+        "gradient-mode": {
+          "type": "string",
+          "description": "Mode in which the points are being deployed",
+          "enum": [
+            "interpolated_palette",
+            "interpolated_palette_mirrored",
+            "random_pixelated"
+          ]
         },
         "mirek": {
           "$ref": "#/definitions/mirek"
@@ -102,34 +112,43 @@
       },
       "oneOf": [
         {
-          "required": ["id"]
+          "required": ["id"],
+          "not": {
+            "required": [
+              "gradient",
+              "gradient-mode",
+              "brightness",
+              "color",
+              "mirek",
+              "effect"
+            ]
+          }
+        },
+        {
+          "required": ["id", "gradient", "gradient-mode", "brightness"],
+          "not": {
+            "required": ["color", "mirek", "effect"]
+          }
         },
         {
           "required": ["id", "color", "brightness"],
           "not": {
-            "required": ["mirek", "effect", "gradient"]
+            "required": ["mirek", "effect", "gradient", "gradient-mode"]
           }
         },
         {
           "required": ["id", "mirek", "brightness"],
           "not": {
-            "required": ["color", "effect", "gradient"]
+            "required": ["color", "effect", "gradient", "gradient-mode"]
           }
         },
         {
           "required": ["id", "effect", "brightness"],
           "not": {
-            "required": ["color", "mirek", "gradient"]
-          }
-        },
-        {
-          "required": ["id", "gradient", "brightness"],
-          "not": {
-            "required": ["color", "mirek", "effect"]
+            "required": ["color", "mirek", "gradient", "gradient-mode"]
           }
         }
-      ],
-      "required": ["id"]
+      ]
     },
     "scene": {
       "type": "object",

@@ -179,7 +179,7 @@
       "id": "savannah_plug_shelves",
       "mac": "00:17:88:01:0b:49:f0:2d-0b",
       "serial": "1E4560",
-      "name": "Savannah bed light",
+      "name": "Savannah shelves light",
       "type": "plug",
       "smart-plug": true,
       "room": "bedroom_sav",
@@ -193,7 +193,7 @@
       "id": "savannah_plug_bed",
       "mac": "00:17:88:01:0b:49:b4:8a-0b",
       "serial": "33221A",
-      "name": "Savannah shelves light",
+      "name": "Savannah bed light",
       "type": "plug",
       "smart-plug": true,
       "room": "bedroom_sav",
@@ -343,21 +343,33 @@
       "button1": {
         "group": "toilet",
         "scenes": {
-          "day": "toilet_day_scene",
-          "night": "toilet_night_scene",
-          "evening": "toilet_evening_scene"
+          "day": "toilet_blue_day_scene",
+          "night": "toilet_blue_night_scene",
+          "evening": "toilet_blue_evening_scene"
         }
       },
       "button2": {
-        "group": "toilet"
+        "group": "toilet",
+        "scenes": {
+          "day": "toilet_pink_day_scene",
+          "night": "toilet_pink_night_scene",
+          "evening": "toilet_pink_evening_scene"
+        }
       },
       "button3": {
-        "group": "toilet"
+        "group": "toilet",
+        "scenes": {
+          "day": "toilet_green_day_scene",
+          "night": "toilet_green_night_scene",
+          "evening": "toilet_green_evening_scene"
+        }
       },
       "button4": {
         "group": "toilet",
         "scenes": {
-          "unique": "toilet_red_scene"
+          "day": "toilet_red_day_scene",
+          "night": "toilet_red_night_scene",
+          "evening": "toilet_red_evening_scene"
         }
       }
     },
@@ -367,16 +379,28 @@
       "serial": "0517BA",
       "name": "Dimmer Savannah",
       "button1": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "savannah_bed_scene"
+        }
       },
       "button2": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "savannah_glitz_and_glam_scene"
+        }
       },
       "button3": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "savannah_malibu_pink_scene"
+        }
       },
       "button4": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "savannah_desk_scene"
+        }
       }
     },
     {
@@ -387,21 +411,33 @@
       "button1": {
         "group": "kids_bathroom",
         "scenes": {
-          "day": "bathroom_day_scene",
-          "night": "bathroom_night_scene",
-          "evening": "bathroom_evening_scene"
+          "day": "bathroom_blue_day_scene",
+          "night": "bathroom_blue_night_scene",
+          "evening": "bathroom_blue_evening_scene"
         }
       },
       "button2": {
-        "group": "kids_bathroom"
+        "group": "kids_bathroom",
+        "scenes": {
+          "day": "bathroom_pink_day_scene",
+          "night": "bathroom_pink_night_scene",
+          "evening": "bathroom_pink_evening_scene"
+        }
       },
       "button3": {
-        "group": "kids_bathroom"
+        "group": "kids_bathroom",
+        "scenes": {
+          "day": "bathroom_green_day_scene",
+          "night": "bathroom_green_night_scene",
+          "evening": "bathroom_green_evening_scene"
+        }
       },
       "button4": {
         "group": "kids_bathroom",
         "scenes": {
-          "unique": "bathroom_red_scene"
+          "day": "bathroom_red_day_scene",
+          "night": "bathroom_red_night_scene",
+          "evening": "bathroom_red_evening_scene"
         }
       }
     },
@@ -427,12 +463,15 @@
   "tap-dial-switches": [],
   "wall-switches": [
     {
-      "id": "tv_ws",
+      "id": "tv_room_ws",
       "mac": "00:17:88:01:0d:08:f0:76-01-fc00",
       "name": "Switch TV room",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "tv_room"
+        "group": "tv_room",
+        "scenes": {
+          "unique": "tv_room_switch_scene"
+        }
       }
     },
     {
@@ -441,7 +480,12 @@
       "name": "Switch Savannah",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "day": "savannah_day_evening_scene",
+          "evening": "savannah_day_evening_scene",
+          "night": "savannah_night_scene"
+        }
       }
     },
     {
@@ -464,9 +508,9 @@
       "button1": {
         "group": "toilet",
         "scenes": {
-          "day": "toilet_day_scene",
-          "night": "toilet_night_scene",
-          "evening": "toilet_evening_scene"
+          "day": "toilet_blue_day_scene",
+          "night": "toilet_blue_night_scene",
+          "evening": "toilet_blue_evening_scene"
         }
       },
       "button2": {
@@ -479,7 +523,10 @@
       "name": "Switch dressing",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "dressing"
+        "group": "dressing",
+        "scenes": {
+          "unique": "dressing_switch_scene"
+        }
       }
     },
     {
@@ -493,9 +540,9 @@
       "button2": {
         "group": "kids_bathroom",
         "scenes": {
-          "day": "bathroom_day_scene",
-          "night": "bathroom_night_scene",
-          "evening": "bathroom_evening_scene"
+          "day": "bathroom_blue_day_scene",
+          "night": "bathroom_blue_night_scene",
+          "evening": "bathroom_blue_evening_scene"
         }
       }
     },
@@ -584,12 +631,12 @@
       "actions": [
         {
           "target": "front_door_spot",
-          "light-action": "default"
+          "light-action": "default_day_action"
         }
       ]
     },
     {
-      "id": "toilet_day_scene",
+      "id": "toilet_blue_day_scene",
       "groups": [
         "toilet"
       ],
@@ -610,7 +657,7 @@
       ]
     },
     {
-      "id": "toilet_night_scene",
+      "id": "toilet_blue_night_scene",
       "groups": [
         "toilet"
       ],
@@ -631,7 +678,7 @@
       ]
     },
     {
-      "id": "toilet_evening_scene",
+      "id": "toilet_blue_evening_scene",
       "groups": [
         "toilet"
       ],
@@ -652,15 +699,15 @@
       ]
     },
     {
-      "id": "toilet_red_scene",
+      "id": "toilet_red_day_scene",
       "groups": [
         "toilet"
       ],
-      "name": "Red",
+      "name": "Red (Day)",
       "actions": [
         {
           "target": "toilet_ceiling",
-          "light-action": "toilet_red"
+          "light-action": "toilet_red_day"
         },
         {
           "target": "toilet_spot_left",
@@ -673,15 +720,57 @@
       ]
     },
     {
-      "id": "toilet_green_scene",
+      "id": "toilet_red_night_scene",
       "groups": [
         "toilet"
       ],
-      "name": "Green",
+      "name": "Red (Night)",
       "actions": [
         {
           "target": "toilet_ceiling",
-          "light-action": "toilet_green"
+          "light-action": "toilet_red_night"
+        },
+        {
+          "target": "toilet_spot_left",
+          "light-action": "toilet_spot_night"
+        },
+        {
+          "target": "toilet_spot_right",
+          "light-action": "toilet_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "toilet_red_evening_scene",
+      "groups": [
+        "toilet"
+      ],
+      "name": "Red (Evening)",
+      "actions": [
+        {
+          "target": "toilet_ceiling",
+          "light-action": "toilet_red_evening"
+        },
+        {
+          "target": "toilet_spot_left",
+          "light-action": "toilet_spot_evening"
+        },
+        {
+          "target": "toilet_spot_right",
+          "light-action": "toilet_spot_evening"
+        }
+      ]
+    },
+    {
+      "id": "toilet_green_day_scene",
+      "groups": [
+        "toilet"
+      ],
+      "name": "Green (Day)",
+      "actions": [
+        {
+          "target": "toilet_ceiling",
+          "light-action": "toilet_green_day"
         },
         {
           "target": "toilet_spot_left",
@@ -694,15 +783,57 @@
       ]
     },
     {
-      "id": "toilet_pink_scene",
+      "id": "toilet_green_night_scene",
       "groups": [
         "toilet"
       ],
-      "name": "Pink",
+      "name": "Green (Night)",
       "actions": [
         {
           "target": "toilet_ceiling",
-          "light-action": "toilet_pink"
+          "light-action": "toilet_green_night"
+        },
+        {
+          "target": "toilet_spot_left",
+          "light-action": "toilet_spot_night"
+        },
+        {
+          "target": "toilet_spot_right",
+          "light-action": "toilet_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "toilet_green_evening_scene",
+      "groups": [
+        "toilet"
+      ],
+      "name": "Green (Evening)",
+      "actions": [
+        {
+          "target": "toilet_ceiling",
+          "light-action": "toilet_green_evening"
+        },
+        {
+          "target": "toilet_spot_left",
+          "light-action": "toilet_spot_evening"
+        },
+        {
+          "target": "toilet_spot_right",
+          "light-action": "toilet_spot_evening"
+        }
+      ]
+    },
+    {
+      "id": "toilet_pink_day_scene",
+      "groups": [
+        "toilet"
+      ],
+      "name": "Pink (Day)",
+      "actions": [
+        {
+          "target": "toilet_ceiling",
+          "light-action": "toilet_pink_day"
         },
         {
           "target": "toilet_spot_left",
@@ -715,28 +846,49 @@
       ]
     },
     {
-      "id": "toilet_orange_scene",
+      "id": "toilet_pink_night_scene",
       "groups": [
         "toilet"
       ],
-      "name": "Orange",
+      "name": "Pink (Night)",
       "actions": [
         {
           "target": "toilet_ceiling",
-          "light-action": "toilet_orange"
+          "light-action": "toilet_pink_night"
         },
         {
           "target": "toilet_spot_left",
-          "light-action": "toilet_spot_day"
+          "light-action": "toilet_spot_night"
         },
         {
           "target": "toilet_spot_right",
-          "light-action": "toilet_spot_day"
+          "light-action": "toilet_spot_night"
         }
       ]
     },
     {
-      "id": "bathroom_day_scene",
+      "id": "toilet_pink_evening_scene",
+      "groups": [
+        "toilet"
+      ],
+      "name": "Pink (Evening)",
+      "actions": [
+        {
+          "target": "toilet_ceiling",
+          "light-action": "toilet_pink_evening"
+        },
+        {
+          "target": "toilet_spot_left",
+          "light-action": "toilet_spot_evening"
+        },
+        {
+          "target": "toilet_spot_right",
+          "light-action": "toilet_spot_evening"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_blue_day_scene",
       "groups": [
         "kids_bathroom"
       ],
@@ -757,7 +909,7 @@
       ]
     },
     {
-      "id": "bathroom_evening_scene",
+      "id": "bathroom_blue_evening_scene",
       "groups": [
         "kids_bathroom"
       ],
@@ -778,7 +930,7 @@
       ]
     },
     {
-      "id": "bathroom_night_scene",
+      "id": "bathroom_blue_night_scene",
       "groups": [
         "kids_bathroom"
       ],
@@ -799,15 +951,15 @@
       ]
     },
     {
-      "id": "bathroom_red_scene",
+      "id": "bathroom_red_day_scene",
       "groups": [
         "kids_bathroom"
       ],
-      "name": "Red",
+      "name": "Red (Day)",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
-          "light-action": "bathroom_red"
+          "light-action": "bathroom_red_day"
         },
         {
           "target": "kids_bathroom_spot_left",
@@ -820,15 +972,57 @@
       ]
     },
     {
-      "id": "bathroom_green_scene",
+      "id": "bathroom_red_evening_scene",
       "groups": [
         "kids_bathroom"
       ],
-      "name": "Green",
+      "name": "Red (Evening)",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
-          "light-action": "bathroom_green"
+          "light-action": "bathroom_red_evening"
+        },
+        {
+          "target": "kids_bathroom_spot_left",
+          "light-action": "bathroom_spot_evening"
+        },
+        {
+          "target": "kids_bathroom_spot_right",
+          "light-action": "bathroom_spot_evening"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_red_night_scene",
+      "groups": [
+        "kids_bathroom"
+      ],
+      "name": "Red (Night)",
+      "actions": [
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "bathroom_red_night"
+        },
+        {
+          "target": "kids_bathroom_spot_left",
+          "light-action": "bathroom_spot_night"
+        },
+        {
+          "target": "kids_bathroom_spot_right",
+          "light-action": "bathroom_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_green_day_scene",
+      "groups": [
+        "kids_bathroom"
+      ],
+      "name": "Green (Day)",
+      "actions": [
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "bathroom_green_day"
         },
         {
           "target": "kids_bathroom_spot_left",
@@ -841,15 +1035,57 @@
       ]
     },
     {
-      "id": "bathroom_pink_scene",
+      "id": "bathroom_green_evening_scene",
       "groups": [
         "kids_bathroom"
       ],
-      "name": "Pink",
+      "name": "Green (Evening)",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
-          "light-action": "bathroom_pink"
+          "light-action": "bathroom_green_evening"
+        },
+        {
+          "target": "kids_bathroom_spot_left",
+          "light-action": "bathroom_spot_evening"
+        },
+        {
+          "target": "kids_bathroom_spot_right",
+          "light-action": "bathroom_spot_evening"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_green_night_scene",
+      "groups": [
+        "kids_bathroom"
+      ],
+      "name": "Green (Night)",
+      "actions": [
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "bathroom_green_night"
+        },
+        {
+          "target": "kids_bathroom_spot_left",
+          "light-action": "bathroom_spot_night"
+        },
+        {
+          "target": "kids_bathroom_spot_right",
+          "light-action": "bathroom_spot_night"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_pink_day_scene",
+      "groups": [
+        "kids_bathroom"
+      ],
+      "name": "Pink (Day)",
+      "actions": [
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "bathroom_pink_day"
         },
         {
           "target": "kids_bathroom_spot_left",
@@ -862,23 +1098,44 @@
       ]
     },
     {
-      "id": "bathroom_orange_scene",
+      "id": "bathroom_pink_evening_scene",
       "groups": [
         "kids_bathroom"
       ],
-      "name": "Orange",
+      "name": "Pink (Evening)",
       "actions": [
         {
           "target": "kids_bathroom_ceiling",
-          "light-action": "bathroom_orange"
+          "light-action": "bathroom_pink_evening"
         },
         {
           "target": "kids_bathroom_spot_left",
-          "light-action": "bathroom_spot_day"
+          "light-action": "bathroom_spot_evening"
         },
         {
           "target": "kids_bathroom_spot_right",
-          "light-action": "bathroom_spot_day"
+          "light-action": "bathroom_spot_evening"
+        }
+      ]
+    },
+    {
+      "id": "bathroom_pink_night_scene",
+      "groups": [
+        "kids_bathroom"
+      ],
+      "name": "Pink (Night)",
+      "actions": [
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "bathroom_pink_night"
+        },
+        {
+          "target": "kids_bathroom_spot_left",
+          "light-action": "bathroom_spot_night"
+        },
+        {
+          "target": "kids_bathroom_spot_right",
+          "light-action": "bathroom_spot_night"
         }
       ]
     },
@@ -967,16 +1224,157 @@
           "light-action": "hallowen_low_white"
         }
       ]
+    },
+    {
+      "id": "tv_room_switch_scene",
+      "groups": [
+        "tv_room"
+      ],
+      "name": "Switch",
+      "actions": [
+        {
+          "target": "tv_gradient_left",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "tv_gradient_right",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "savannah_bed_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Bed",
+      "actions": [
+        {
+          "target": "savannah_plug_bed",
+          "light-action": "smart_plug_on"
+        }
+      ]
+    },
+    {
+      "id": "savannah_desk_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Desk",
+      "actions": [
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_signe",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "savannah_day_evening_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Switch day/evening",
+      "actions": [
+        {
+          "target": "savannah_ceiling",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "savannah_signe",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "savannah_night_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Switch night",
+      "actions": [
+        {
+          "target": "savannah_ceiling",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "savannah_signe",
+          "light-action": "default_night_action"
+        }
+      ]
+    },
+    {
+      "id": "savannah_malibu_pink_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Malibu pink",
+      "image-id": "b037f15f-f7e4-46ab-b624-45ba2886c127",
+      "actions": [
+        {
+          "target": "savannah_plug_bed",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "malibu_pink_ceiling"
+        },
+        {
+          "target": "savannah_signe",
+          "light-action": "malibu_pink_gradient"
+        }
+      ]
+    },
+    {
+      "id": "savannah_glitz_and_glam_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Glitz and glam",
+      "image-id": "df93ccf7-8928-41eb-af11-eefdcffbb06a",
+      "actions": [
+        {
+          "target": "savannah_plug_bed",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "glitz_and_glam_ceiling"
+        },
+        {
+          "target": "savannah_signe",
+          "light-action": "glitz_and_glam_gradient"
+        }
+      ]
+    },
+    {
+      "id": "dressing_switch_scene",
+      "groups": [
+        "dressing"
+      ],
+      "name": "Switch",
+      "actions": [
+        {
+          "target": "dressing_ceiling",
+          "light-action": "default_day_action"
+        }
+      ]
     }
   ],
   "light-actions": [
     {
-      "id": "default",
-      "mirek": 323,
-      "brigthness": 100
-    },
-    {
-      "id": "smart-plug-on"
+      "id": "smart_plug_on"
     },
     {
       "id": "toilet_blue_day",
@@ -987,22 +1385,12 @@
       "brigthness": 70
     },
     {
-      "id": "toilet_spot_day",
-      "mirek": 304,
-      "brigthness": 50
-    },
-    {
       "id": "toilet_blue_evening",
       "color": {
         "x": 0.1534,
         "y": 0.0539
       },
       "brigthness": 50
-    },
-    {
-      "id": "toilet_spot_evening",
-      "mirek": 304,
-      "brigthness": 40
     },
     {
       "id": "toilet_blue_night",
@@ -1013,12 +1401,7 @@
       "brigthness": 25
     },
     {
-      "id": "toilet_spot_night",
-      "mirek": 304,
-      "brigthness": 25
-    },
-    {
-      "id": "toilet_red",
+      "id": "toilet_red_day",
       "color": {
         "x": 0.6664,
         "y": 0.2982
@@ -1026,23 +1409,23 @@
       "brigthness": 70
     },
     {
-      "id": "toilet_orange",
+      "id": "toilet_red_evening",
       "color": {
-        "x": 0.5978,
-        "y": 0.3786
+        "x": 0.6664,
+        "y": 0.2982
       },
-      "brigthness": 70
+      "brigthness": 50
     },
     {
-      "id": "toilet_pink",
+      "id": "toilet_red_night",
       "color": {
-        "x": 0.3081,
-        "y": 0.1655
+        "x": 0.6664,
+        "y": 0.2982
       },
-      "brigthness": 70
+      "brigthness": 25
     },
     {
-      "id": "toilet_green",
+      "id": "toilet_green_day",
       "color": {
         "x": 0.17,
         "y": 0.6998
@@ -1050,16 +1433,66 @@
       "brigthness": 70
     },
     {
+      "id": "toilet_green_evening",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brigthness": 50
+    },
+    {
+      "id": "toilet_green_night",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brigthness": 25
+    },
+    {
+      "id": "toilet_pink_day",
+      "color": {
+        "x": 0.3081,
+        "y": 0.1655
+      },
+      "brigthness": 70
+    },
+    {
+      "id": "toilet_pink_evening",
+      "color": {
+        "x": 0.3081,
+        "y": 0.1655
+      },
+      "brigthness": 50
+    },
+    {
+      "id": "toilet_pink_night",
+      "color": {
+        "x": 0.3081,
+        "y": 0.1655
+      },
+      "brigthness": 25
+    },
+    {
+      "id": "toilet_spot_day",
+      "mirek": 304,
+      "brigthness": 50
+    },
+    {
+      "id": "toilet_spot_evening",
+      "mirek": 304,
+      "brigthness": 40
+    },
+    {
+      "id": "toilet_spot_night",
+      "mirek": 304,
+      "brigthness": 25
+    },
+    {
       "id": "bathroom_blue_day",
       "color": {
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 100
-    },
-    {
-      "id": "bathroom_spot_day",
-      "mirek": 304,
       "brigthness": 100
     },
     {
@@ -1071,11 +1504,6 @@
       "brigthness": 60
     },
     {
-      "id": "bathroom_spot_evening",
-      "mirek": 304,
-      "brigthness": 60
-    },
-    {
       "id": "bathroom_blue_night",
       "color": {
         "x": 0.1534,
@@ -1084,12 +1512,7 @@
       "brigthness": 25
     },
     {
-      "id": "bathroom_spot_night",
-      "mirek": 304,
-      "brigthness": 25
-    },
-    {
-      "id": "bathroom_red",
+      "id": "bathroom_red_day",
       "color": {
         "x": 0.6664,
         "y": 0.2982
@@ -1097,15 +1520,47 @@
       "brigthness": 100
     },
     {
-      "id": "bathroom_orange",
+      "id": "bathroom_red_evening",
       "color": {
-        "x": 0.5978,
-        "y": 0.3786
+        "x": 0.6664,
+        "y": 0.2982
+      },
+      "brigthness": 60
+    },
+    {
+      "id": "bathroom_red_night",
+      "color": {
+        "x": 0.6664,
+        "y": 0.2982
+      },
+      "brigthness": 25
+    },
+    {
+      "id": "bathroom_green_day",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
       },
       "brigthness": 100
     },
     {
-      "id": "bathroom_pink",
+      "id": "bathroom_green_evening",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brigthness": 60
+    },
+    {
+      "id": "bathroom_green_night",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brigthness": 25
+    },
+    {
+      "id": "bathroom_pink_day",
       "color": {
         "x": 0.3081,
         "y": 0.1655
@@ -1113,12 +1568,35 @@
       "brigthness": 100
     },
     {
-      "id": "bathroom_green",
+      "id": "bathroom_pink_evening",
       "color": {
-        "x": 0.17,
-        "y": 0.6998
+        "x": 0.3081,
+        "y": 0.1655
       },
+      "brigthness": 60
+    },
+    {
+      "id": "bathroom_pink_night",
+      "color": {
+        "x": 0.3081,
+        "y": 0.1655
+      },
+      "brigthness": 25
+    },
+    {
+      "id": "bathroom_spot_day",
+      "mirek": 304,
       "brigthness": 100
+    },
+    {
+      "id": "bathroom_spot_evening",
+      "mirek": 304,
+      "brigthness": 60
+    },
+    {
+      "id": "bathroom_spot_night",
+      "mirek": 304,
+      "brigthness": 25
     },
     {
       "id": "hallowen_red",
@@ -1137,6 +1615,76 @@
       "id": "hallowen_low_white",
       "mirek": 153,
       "brigthness": 5
+    },
+    {
+      "id": "malibu_pink_ceiling",
+      "color": {
+        "x": 0.1540317385167025,
+        "y": 0.07989918249272199
+      },
+      "brigthness": 80
+    },
+    {
+      "id": "malibu_pink_gradient",
+      "gradient": [
+        {
+          "x": 0.5572999999999998,
+          "y": 0.3225999999999999
+        },
+        {
+          "x": 0.45479999999999928,
+          "y": 0.24329999999999944
+        },
+        {
+          "x": 0.3677999999999997,
+          "y": 0.18389999999999988
+        },
+        {
+          "x": 0.15610986380125708,
+          "y": 0.16059974509665465
+        },
+        {
+          "x": 0.1540317385167025,
+          "y": 0.07989918249272199
+        }
+      ],
+      "gradient-mode": "interpolated_palette",
+      "brigthness": 80
+    },
+    {
+      "id": "glitz_and_glam_ceiling",
+      "color": {
+        "x": 0.4006999999999998,
+        "y": 0.2296
+      },
+      "brigthness": 50
+    },
+    {
+      "id": "glitz_and_glam_gradient",
+      "gradient": [
+        {
+          "x": 0.45,
+          "y": 0.19800000000000005
+        },
+        {
+          "x": 0.4006999999999998,
+          "y": 0.2296
+        },
+        {
+          "x": 0.4468999999999998,
+          "y": 0.27300000000000015
+        },
+        {
+          "x": 0.5564999999999994,
+          "y": 0.3924000000000001
+        },
+        {
+          "x": 0.5856,
+          "y": 0.3736
+        }
+      ],
+      "gradient-mode": "interpolated_palette",
+      "brigthness": 50
     }
   ]
 }

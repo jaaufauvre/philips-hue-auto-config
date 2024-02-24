@@ -213,6 +213,7 @@
         "name": "Day scene",
         "light-action": {
           "id": "day_action",
+          "name": "Default day action",
           "mirek": 500,
           "brigthness": 100
         }
@@ -223,6 +224,7 @@
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
         "light-action": {
           "id": "night_action",
+          "name": "Default night action",
           "color": {
             "x": 0.5,
             "y": 0.5
@@ -235,6 +237,7 @@
         "name": "Evening",
         "light-action": {
           "id": "evening_action",
+          "name": "Default evening action",
           "mirek": 400,
           "brigthness": 40
         }
@@ -243,7 +246,8 @@
         "id": "default-sensor-day-scene",
         "name": "Sensor day scene",
         "light-action": {
-          "id": "sensor_day_action"
+          "id": "sensor_day_action",
+          "name": "Default sensor day action"
         }
       },
       "motion-sensor-night": {
@@ -251,6 +255,7 @@
         "name": "Sensor night scene",
         "light-action": {
           "id": "sensor_night_action",
+          "name": "Default sensor night action",
           "mirek": 500,
           "brigthness": 100
         }
@@ -259,7 +264,8 @@
         "id": "default-sensor-evening-scene",
         "name": "Sensor evening scene",
         "light-action": {
-          "id": "sensor_evening_action"
+          "id": "sensor_evening_action",
+          "name": "Default sensor evening action"
         }
       }
     }
@@ -280,7 +286,12 @@
       "id": "day_scene",
       "groups": ["scene_zone"],
       "name": "Day scene",
-      "actions": []
+      "actions": [
+        {
+          "target": "scene_light",
+          "light-action": "day_action"
+        }
+      ]
     },
     {
       "id": "night_scene",

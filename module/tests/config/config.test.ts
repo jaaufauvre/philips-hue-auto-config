@@ -292,6 +292,12 @@ describe('Config', () => {
     ${'dimmer switch'} | ${'00:17:88:01:0b:22:22:22-01-fc00'} | ${'Dimmer switch'}
     ${'scene'}         | ${'scene'}                           | ${'Scene'}
     ${'scene action'}  | ${'scene_action'}                    | ${'Action'}
+    ${'scene action'}  | ${'day_action'}                      | ${'Default day action'}
+    ${'scene action'}  | ${'night_action'}                    | ${'Default night action'}
+    ${'scene action'}  | ${'evening_action'}                  | ${'Default evening action'}
+    ${'scene action'}  | ${'sensor_day_action'}               | ${'Default sensor day action'}
+    ${'scene action'}  | ${'sensor_night_action'}             | ${'Default sensor night action'}
+    ${'scene action'}  | ${'sensor_evening_action'}           | ${'Default sensor evening action'}
   `(
     'should return $resource "$expected_name" for ID "$id"',
     ({ resource, id, expected_name }) => {

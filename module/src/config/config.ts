@@ -124,6 +124,22 @@ export class Config implements ConfigGen {
     })
     this.scenes = this._internalConfig.scenes ?? []
     this.lightActions = this._internalConfig.lightActions ?? []
+    const defaultScenes = this.defaults.scenes
+    _.forEach(
+      [
+        defaultScenes.day,
+        defaultScenes.night,
+        defaultScenes.evening,
+        defaultScenes.motionSensorDay,
+        defaultScenes.motionSensorEvening,
+        defaultScenes.motionSensorNight,
+      ],
+      (scene) => {
+        if (scene) {
+          this.lightActions.push(scene.lightAction)
+        }
+      },
+    )
     this.#decrypt(xorKey)
     this.#validateUniqueIds()
     this.#validateLightConfig()

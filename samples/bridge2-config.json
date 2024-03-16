@@ -45,6 +45,21 @@
       "id": "front_door",
       "name": "Front door",
       "type": "front_door"
+    },
+    {
+      "id": "under_stairs",
+      "name": "Under stairs",
+      "type": "staircase"
+    },
+    {
+      "id": "utility_room",
+      "name": "Utility room",
+      "type": "laundry_room"
+    },
+    {
+      "id": "attic",
+      "name": "Attic",
+      "type": "attic"
     }
   ],
   "zones": [
@@ -300,6 +315,42 @@
         "bridge",
         "downstairs"
       ]
+    },
+    {
+      "id": "enrave_under_stairs",
+      "mac": "00:17:88:01:0d:80:90:4e-0b",
+      "serial": "16F7EB",
+      "name": "Enrave under stairs",
+      "type": "ceiling_round",
+      "room": "under_stairs",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "enrave_utility",
+      "mac": "00:17:88:01:0d:80:d9:d6-0b",
+      "serial": "C4DA00",
+      "name": "Enrave utility",
+      "type": "ceiling_round",
+      "room": "utility_room",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "enrave_attic",
+      "mac": "00:17:88:01:0d:80:3d:43-0b",
+      "serial": "FAC16D",
+      "name": "Enrave attic",
+      "type": "ceiling_round",
+      "room": "attic",
+      "zones": [
+        "bridge",
+        "upstairs"
+      ]
     }
   ],
   "motion-sensors": [
@@ -447,16 +498,30 @@
       "serial": "2381C6",
       "name": "Dimmer TV room",
       "button1": {
-        "group": "tv_room"
+        "group": "tv_room",
+        "scenes": {
+          "day": "tv_room_day_switch_scene",
+          "night": "tv_room_night_scene",
+          "evening": "tv_room_evening_scene"
+        }
       },
       "button2": {
-        "group": "tv_room"
+        "group": "tv_room",
+        "scenes": {
+          "unique": "tv_room_palm_beach_scene"
+        }
       },
       "button3": {
-        "group": "tv_room"
+        "group": "tv_room",
+        "scenes": {
+          "unique": "tv_room_soho_scene"
+        }
       },
       "button4": {
-        "group": "tv_room"
+        "group": "tv_room",
+        "scenes": {
+          "unique": "tv_room_day_switch_scene"
+        }
       }
     }
   ],
@@ -470,7 +535,7 @@
       "button1": {
         "group": "tv_room",
         "scenes": {
-          "unique": "tv_room_switch_scene"
+          "unique": "tv_room_day_switch_scene"
         }
       }
     },
@@ -550,8 +615,14 @@
       "id": "hall_up_attic_ws",
       "mac": "00:17:88:01:0c:54:44:ec-01-fc00",
       "name": "Switch hall. up/attic",
-      "mode": "switch_single_rocker",
+      "mode": "switch_dual_rocker",
       "button1": {
+        "group": "attic",
+        "scenes": {
+          "unique": "attic_scene"
+        }
+      },
+      "button2": {
         "group": "hallway_up"
       }
     }
@@ -1150,6 +1221,7 @@
         "dressing",
         "bedroom_sav",
         "front_door",
+        "utility_room",
         "bridge"
       ],
       "name": "Hallowen 🦇",
@@ -1222,15 +1294,19 @@
         {
           "target": "hall_down_2",
           "light-action": "hallowen_low_white"
+        },
+        {
+          "target": "enrave_utility",
+          "light-action": "hallowen_white"
         }
       ]
     },
     {
-      "id": "tv_room_switch_scene",
+      "id": "tv_room_day_switch_scene",
       "groups": [
         "tv_room"
       ],
-      "name": "Switch",
+      "name": "Switch / Dimmer day",
       "actions": [
         {
           "target": "tv_gradient_left",
@@ -1239,6 +1315,76 @@
         {
           "target": "tv_gradient_right",
           "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "tv_room_soho_scene",
+      "image-id": "e4ee61c3-ecdd-4005-b483-58207e693258",
+      "groups": [
+        "tv_room"
+      ],
+      "name": "Soho",
+      "actions": [
+        {
+          "target": "tv_gradient_left",
+          "light-action": "soho_gradient"
+        },
+        {
+          "target": "tv_gradient_right",
+          "light-action": "soho_gradient"
+        }
+      ]
+    },
+    {
+      "id": "tv_room_palm_beach_scene",
+      "image-id": "f44b43b1-b6d1-46e1-8c15-00d2b551b6fa",
+      "groups": [
+        "tv_room"
+      ],
+      "name": "Palm Beach",
+      "actions": [
+        {
+          "target": "tv_gradient_left",
+          "light-action": "palm_beach_gradient"
+        },
+        {
+          "target": "tv_gradient_right",
+          "light-action": "palm_beach_gradient"
+        }
+      ]
+    },
+    {
+      "id": "tv_room_evening_scene",
+      "groups": [
+        "tv_room"
+      ],
+      "name": "Dimmer evening",
+      "actions": [
+        {
+          "target": "tv_gradient_left",
+          "light-action": "default_evening_action"
+        },
+        {
+          "target": "tv_gradient_right",
+          "light-action": "default_evening_action"
+        }
+      ]
+    },
+    {
+      "id": "tv_room_night_scene",
+      "groups": [
+        "tv_room"
+      ],
+      "name": "Dimmer night",
+      "actions": [
+        {
+          "target": "tv_gradient_left",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "tv_gradient_right",
+          "light-action": "default_night_action"
         }
       ]
     },
@@ -1296,10 +1442,6 @@
       ],
       "name": "Switch night",
       "actions": [
-        {
-          "target": "savannah_ceiling",
-          "light-action": "default_night_action"
-        },
         {
           "target": "savannah_signe",
           "light-action": "default_night_action"
@@ -1367,6 +1509,19 @@
       "actions": [
         {
           "target": "dressing_ceiling",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "attic_scene",
+      "groups": [
+        "attic"
+      ],
+      "name": "Switch",
+      "actions": [
+        {
+          "target": "enrave_attic",
           "light-action": "default_day_action"
         }
       ]
@@ -1685,6 +1840,60 @@
       ],
       "gradient-mode": "interpolated_palette",
       "brigthness": 50
+    },
+    {
+      "id": "palm_beach_gradient",
+      "gradient": [
+        {
+          "x": 0.2007000000000001,
+          "y": 0.34179999999999968
+        },
+        {
+          "x": 0.2576000000000003,
+          "y": 0.3185
+        },
+        {
+          "x": 0.3887999999999997,
+          "y": 0.2997
+        },
+        {
+          "x": 0.4823999999999995,
+          "y": 0.33250000000000015
+        },
+        {
+          "x": 0.5690999999999998,
+          "y": 0.3512
+        }
+      ],
+      "gradient-mode": "interpolated_palette",
+      "brigthness": 38
+    },
+    {
+      "id": "soho_gradient",
+      "gradient": [
+        {
+          "x": 0.1916,
+          "y": 0.3953999999999996
+        },
+        {
+          "x": 0.2219,
+          "y": 0.0825
+        },
+        {
+          "x": 0.5018999999999998,
+          "y": 0.2750999999999998
+        },
+        {
+          "x": 0.5115,
+          "y": 0.3625
+        },
+        {
+          "x": 0.586541023802804,
+          "y": 0.2574681122637848
+        }
+      ],
+      "gradient-mode": "interpolated_palette",
+      "brigthness": 62
     }
   ]
 }

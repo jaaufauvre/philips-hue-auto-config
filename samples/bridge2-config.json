@@ -432,13 +432,13 @@
       "button1": {
         "group": "bedroom_sav",
         "scenes": {
-          "unique": "savannah_bed_scene"
+          "unique": "savannah_bed1_scene"
         }
       },
       "button2": {
         "group": "bedroom_sav",
         "scenes": {
-          "unique": "savannah_glitz_and_glam_scene"
+          "unique": "savannah_bed2_scene"
         }
       },
       "button3": {
@@ -624,6 +624,30 @@
       },
       "button2": {
         "group": "hallway_up"
+      }
+    },
+    {
+      "id": "utility_room_ws",
+      "mac": "00:17:88:01:0e:b3:98:2e-01-fc00",
+      "name": "Switch utility room",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "group": "utility_room",
+        "scenes": {
+          "unique": "utility_room_switch_scene"
+        }
+      }
+    },
+    {
+      "id": "under_stairs_ws",
+      "mac": "00:17:88:01:0e:b3:98:2c-01-fc00",
+      "name": "Switch under stairs",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "group": "under_stairs",
+        "scenes": {
+          "unique": "under_stairs_switch_scene"
+        }
       }
     }
   ],
@@ -1389,7 +1413,24 @@
       ]
     },
     {
-      "id": "savannah_bed_scene",
+      "id": "savannah_bed1_scene",
+      "groups": [
+        "bedroom_sav"
+      ],
+      "name": "Bed",
+      "actions": [
+        {
+          "target": "savannah_plug_bed",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "savannah_bed2_scene",
       "groups": [
         "bedroom_sav"
       ],
@@ -1475,32 +1516,6 @@
       ]
     },
     {
-      "id": "savannah_glitz_and_glam_scene",
-      "groups": [
-        "bedroom_sav"
-      ],
-      "name": "Glitz and glam",
-      "image-id": "df93ccf7-8928-41eb-af11-eefdcffbb06a",
-      "actions": [
-        {
-          "target": "savannah_plug_bed",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_ceiling",
-          "light-action": "glitz_and_glam_ceiling"
-        },
-        {
-          "target": "savannah_signe",
-          "light-action": "glitz_and_glam_gradient"
-        }
-      ]
-    },
-    {
       "id": "dressing_switch_scene",
       "groups": [
         "dressing"
@@ -1509,6 +1524,32 @@
       "actions": [
         {
           "target": "dressing_ceiling",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "utility_room_switch_scene",
+      "groups": [
+        "utility_room"
+      ],
+      "name": "Switch",
+      "actions": [
+        {
+          "target": "enrave_utility",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "under_stairs_switch_scene",
+      "groups": [
+        "under_stairs"
+      ],
+      "name": "Switch",
+      "actions": [
+        {
+          "target": "enrave_under_stairs",
           "light-action": "default_day_action"
         }
       ]

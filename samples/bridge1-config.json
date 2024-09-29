@@ -226,6 +226,32 @@
       ]
     },
     {
+      "id": "kitchen_lightstrip_left",
+      "mac": "00:17:88:01:0d:9a:d1:04-0b",
+      "serial": "AADBC6",
+      "name": "Kitchen lightstrip left",
+      "type": "hue_lightstrip",
+      "room": "kitchen",
+      "zones": [
+        "bridge",
+        "downstairs",
+        "cooking"
+      ]
+    },
+    {
+      "id": "kitchen_lightstrip_right",
+      "mac": "00:17:88:01:0d:98:01:e8-0b",
+      "serial": "7EA99D",
+      "name": "Kitchen lightstrip right",
+      "type": "hue_lightstrip",
+      "room": "kitchen",
+      "zones": [
+        "bridge",
+        "downstairs",
+        "cooking"
+      ]
+    },
+    {
       "id": "office_ceiling",
       "mac": "00:17:88:01:0d:24:74:4d-0b",
       "serial": "22E73E",
@@ -803,7 +829,7 @@
         "light-action": {
           "id": "default_sensor_night_action",
           "mirek": 500,
-          "brigthness": 10
+          "brigthness": 6
         }
       },
       "motion-sensor-evening": {
@@ -1106,19 +1132,27 @@
       "actions": [
         {
           "target": "kitchen_spot_2",
-          "light-action": "kitchen_breakfast"
+          "light-action": "kitchen_spot_breakfast"
         },
         {
           "target": "kitchen_spot_3",
-          "light-action": "kitchen_breakfast"
+          "light-action": "kitchen_spot_breakfast"
         },
         {
           "target": "kitchen_spot_5",
-          "light-action": "kitchen_breakfast"
+          "light-action": "kitchen_spot_breakfast"
         },
         {
           "target": "kitchen_spot_6",
-          "light-action": "kitchen_breakfast"
+          "light-action": "kitchen_spot_breakfast"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "kitchen_lightstrip_20"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
+          "light-action": "kitchen_lightstrip_20"
         }
       ]
     },
@@ -1159,7 +1193,15 @@
         },
         {
           "target": "kitchen_ceiling",
-          "light-action": "kitchen_dinner_color"
+          "light-action": "kitchen_dinner_color_85"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "kitchen_dinner_color_40"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
+          "light-action": "kitchen_dinner_color_40"
         }
       ]
     },
@@ -1250,6 +1292,14 @@
         {
           "target": "kitchen_ceiling",
           "light-action": "default_sensor_evening_action"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "default_sensor_evening_action"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
+          "light-action": "default_sensor_evening_action"
         }
       ]
     },
@@ -1303,6 +1353,14 @@
         {
           "target": "kitchen_ceiling",
           "light-action": "default_sensor_night_action"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "default_sensor_night_action"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
+          "light-action": "default_sensor_night_action"
         }
       ]
     },
@@ -1340,6 +1398,14 @@
         {
           "target": "kitchen_ceiling",
           "light-action": "default_day_action"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "kitchen_lightstrip_70"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
+          "light-action": "kitchen_lightstrip_70"
         }
       ]
     },
@@ -1361,6 +1427,14 @@
         {
           "target": "kitchen_spot_7",
           "light-action": "default_day_action"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "kitchen_lightstrip_55"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
+          "light-action": "kitchen_lightstrip_55"
         }
       ]
     },
@@ -1432,6 +1506,14 @@
         },
         {
           "target": "kitchen_ceiling",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "kitchen_lightstrip_left",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "kitchen_lightstrip_right",
           "light-action": "hallowen_red"
         },
         {
@@ -1868,7 +1950,7 @@
       "brigthness": 90
     },
     {
-      "id": "kitchen_dinner_color",
+      "id": "kitchen_dinner_color_85",
       "color": {
         "x": 0.6253,
         "y": 0.358
@@ -1876,9 +1958,32 @@
       "brigthness": 85
     },
     {
-      "id": "kitchen_breakfast",
+      "id": "kitchen_dinner_color_40",
+      "color": {
+        "x": 0.6253,
+        "y": 0.358
+      },
+      "brigthness": 40
+    },
+    {
+      "id": "kitchen_spot_breakfast",
       "mirek": 323,
       "brigthness": 80
+    },
+    {
+      "id": "kitchen_lightstrip_20",
+      "mirek": 323,
+      "brigthness": 20
+    },
+    {
+      "id": "kitchen_lightstrip_55",
+      "mirek": 323,
+      "brigthness": 55
+    },
+    {
+      "id": "kitchen_lightstrip_70",
+      "mirek": 323,
+      "brigthness": 70
     },
     {
       "id": "kitchen_filament_min",

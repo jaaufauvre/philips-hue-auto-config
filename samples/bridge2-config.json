@@ -701,7 +701,7 @@
         "light-action": {
           "id": "default_sensor_night_action",
           "mirek": 500,
-          "brigthness": 10
+          "brigthness": 6
         }
       },
       "motion-sensor-evening": {

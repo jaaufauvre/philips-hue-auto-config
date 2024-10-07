@@ -4,13 +4,14 @@
 
 ## Overview
 
-This project allows to describe and automatically apply a Philips Hue Bridge configuration.
+This project allows to describe a Philips Hue Bridge configuration as a JSON file and then automatically apply it.
 
 It can be used to:
 * Reduce the amount of time spent on manual configuration
 * Factory-reset a Hue Bridge and restore its previous configuration at any time
 * Move a configuration to another Hue Bridge 
 * Split an existing configuration across two Hue Bridges
+* Version-control configurations 
 
 ## Input configuration file
 

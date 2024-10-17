@@ -740,7 +740,7 @@
     },
     {
       "id": "office_ws",
-      "mac": "00:17:88:01:0d:08:f2:a0-01-fc00",
+      "mac": "00:17:88:01:0e:b2:40:ff-01-fc00",
       "name": "Switch office",
       "mode": "switch_single_rocker",
       "button1": {

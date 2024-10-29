@@ -1913,6 +1913,7 @@
     },
     {
       "id": "hallowen_red",
+      "effect": "candle",
       "color": {
         "x": 0.6799,
         "y": 0.3027
@@ -1921,16 +1922,19 @@
     },
     {
       "id": "hallowen_low_white",
+      "effect": "candle",
       "mirek": 153,
       "brigthness": 5
     },
     {
       "id": "hallowen_filament_kitchen_white",
+      "effect": "candle",
       "mirek": 153,
       "brigthness": 1
     },
     {
       "id": "hallowen_white",
+      "effect": "candle",
       "mirek": 153,
       "brigthness": 15
     },

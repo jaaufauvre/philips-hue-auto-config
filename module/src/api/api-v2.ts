@@ -341,6 +341,7 @@ export interface SceneAction {
     color_temperature?: ColorTemperature
     color?: Color
     effects?: Effects
+    effects_v2?: EffectsV2
     gradient?: Gradient
   }
 }
@@ -352,6 +353,16 @@ interface Gradient {
 
 interface Effects {
   effect: string
+}
+
+interface EffectsV2 {
+  action: {
+    effect: string
+    parameters: {
+      color?: Color
+      color_temperature?: ColorTemperature
+    }
+  }
 }
 
 export interface ColorTemperature {

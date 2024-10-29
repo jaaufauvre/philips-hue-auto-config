@@ -1359,18 +1359,38 @@ export class Bridge {
     }
   }
 
-  #lightActionToEffects(lightAction: LightAction) {
+  #lightActionToActionColor(lightAction: LightAction) {
     if (lightAction.effect) {
-      return {
-        effect: lightAction.effect,
-      }
+      return // The color should appear in the effect itself
     }
+    return this.#lightActionToColor(lightAction)
   }
 
   #lightActionToColorTemperature(lightAction: LightAction) {
     if (lightAction.mirek) {
       return {
         mirek: lightAction.mirek,
+      }
+    }
+  }
+
+  #lightActionToActionColorTemperature(lightAction: LightAction) {
+    if (lightAction.effect) {
+      return // The temperature should appear in the effect itself
+    }
+    return this.#lightActionToColorTemperature(lightAction)
+  }
+
+  #lightActionToEffectsV2(lightAction: LightAction) {
+    if (lightAction.effect) {
+      return {
+        action: {
+          effect: lightAction.effect,
+          parameters: {
+            color: this.#lightActionToColor(lightAction),
+            color_temperature: this.#lightActionToColorTemperature(lightAction),
+          },
+        },
       }
     }
   }
@@ -1427,9 +1447,10 @@ export class Bridge {
           on: true,
         },
         dimming: this.#lightActionToDimming(lightAction),
-        color_temperature: this.#lightActionToColorTemperature(lightAction),
-        color: this.#lightActionToColor(lightAction),
-        effects: this.#lightActionToEffects(lightAction),
+        color_temperature:
+          this.#lightActionToActionColorTemperature(lightAction),
+        color: this.#lightActionToActionColor(lightAction),
+        effects_v2: this.#lightActionToEffectsV2(lightAction),
         gradient: this.#lightActionToGradient(lightAction),
       },
     }

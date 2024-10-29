@@ -1796,6 +1796,7 @@
     },
     {
       "id": "hallowen_red",
+      "effect": "candle",
       "color": {
         "x": 0.6799,
         "y": 0.3027
@@ -1804,11 +1805,13 @@
     },
     {
       "id": "hallowen_white",
+      "effect": "candle",
       "mirek": 153,
       "brigthness": 15
     },
     {
       "id": "hallowen_low_white",
+      "effect": "candle",
       "mirek": 153,
       "brigthness": 5
     },

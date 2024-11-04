@@ -106,10 +106,10 @@
     },
     {
       "id": "tv_ceiling",
-      "mac": "00:17:88:01:0d:3c:ce:f4-0b",
-      "serial": "BADB02",
-      "name": "TV room color ceiling",
-      "type": "sultan_bulb",
+      "mac": "00:17:88:01:0b:6c:5a:f5-0b",
+      "serial": "406C4C",
+      "name": "TV room filament",
+      "type": "vintage_bulb",
       "room": "tv_room",
       "zones": [
         "bridge",
@@ -131,9 +131,9 @@
     },
     {
       "id": "hall_down_2",
-      "mac": "00:17:88:01:0b:3f:d7:59-0b",
-      "serial": "74EF6D",
-      "name": "Hallway down ambiance ceiling 2",
+      "mac": "00:17:88:01:0d:3c:ce:f4-0b",
+      "serial": "BADB02",
+      "name": "Hallway down color ceiling 2",
       "type": "sultan_bulb",
       "room": "hallway_down",
       "zones": [
@@ -1257,15 +1257,15 @@
         },
         {
           "target": "tv_gradient_left",
-          "light-action": "hallowen_white"
+          "light-action": "hallowen_red"
         },
         {
           "target": "tv_gradient_right",
-          "light-action": "hallowen_white"
+          "light-action": "hallowen_red"
         },
         {
           "target": "tv_ceiling",
-          "light-action": "hallowen_red"
+          "light-action": "hallowen_ellipse_filament_white"
         },
         {
           "target": "toilet_spot_left",
@@ -1339,6 +1339,10 @@
         {
           "target": "tv_gradient_right",
           "light-action": "default_day_action"
+        },
+        {
+          "target": "tv_ceiling",
+          "light-action": "ellipse_filament_min"
         }
       ]
     },
@@ -1571,6 +1575,11 @@
   "light-actions": [
     {
       "id": "smart_plug_on"
+    },
+    {
+      "id": "ellipse_filament_min",
+      "mirek": 323,
+      "brigthness": 1
     },
     {
       "id": "toilet_blue_day",
@@ -1814,6 +1823,12 @@
       "effect": "candle",
       "mirek": 153,
       "brigthness": 5
+    },
+    {
+      "id": "hallowen_ellipse_filament_white",
+      "effect": "candle",
+      "mirek": 153,
+      "brigthness": 1
     },
     {
       "id": "malibu_pink_ceiling",

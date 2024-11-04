@@ -54,41 +54,46 @@
       "type": "upstairs"
     },
     {
-      "id": "dining",
-      "name": "Dining area",
-      "type": "kitchen"
+      "id": "kitchen_cooking",
+      "name": "Kitchen cooking area",
+      "type": "other"
     },
     {
-      "id": "cooking",
-      "name": "Cooking area",
-      "type": "kitchen"
+      "id": "kitchen_spots",
+      "name": "Kitchen spots",
+      "type": "other"
+    },
+    {
+      "id": "kitchen_color",
+      "name": "Kitchen colored lights",
+      "type": "other"
     }
   ],
   "lights": [
     {
-      "id": "kitchen_pendant_left",
-      "mac": "00:17:88:01:0b:6d:be:81-0b",
-      "serial": "9D9664",
-      "name": "Kitchen filament left",
-      "type": "vintage_bulb",
+      "id": "kitchen_ellipse_left",
+      "mac": "00:17:88:01:0d:14:cf:76-0b",
+      "serial": "AA06C7",
+      "name": "Kitchen ellipse left",
+      "type": "ellipse_bulb",
       "room": "kitchen",
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_color"
       ]
     },
     {
-      "id": "kitchen_pendant_right",
-      "mac": "00:17:88:01:0b:6c:5a:f5-0b",
-      "serial": "406C4C",
-      "name": "Kitchen filament right",
-      "type": "vintage_bulb",
+      "id": "kitchen_ellipse_right",
+      "mac": "00:17:88:01:0d:14:ce:9e-0b",
+      "serial": "0F17AB",
+      "name": "Kitchen ellipse right",
+      "type": "ellipse_bulb",
       "room": "kitchen",
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_color"
       ]
     },
     {
@@ -100,7 +105,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_spots"
       ]
     },
     {
@@ -112,7 +117,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_spots"
       ]
     },
     {
@@ -124,7 +129,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_spots"
       ]
     },
     {
@@ -136,7 +141,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_spots"
       ]
     },
     {
@@ -148,7 +153,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_spots"
       ]
     },
     {
@@ -160,7 +165,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_spots"
       ]
     },
     {
@@ -172,7 +177,8 @@
       "zones": [
         "bridge",
         "downstairs",
-        "cooking"
+        "kitchen_cooking",
+        "kitchen_spots"
       ]
     },
     {
@@ -184,7 +190,8 @@
       "zones": [
         "bridge",
         "downstairs",
-        "cooking"
+        "kitchen_cooking",
+        "kitchen_spots"
       ]
     },
     {
@@ -196,7 +203,8 @@
       "zones": [
         "bridge",
         "downstairs",
-        "cooking"
+        "kitchen_cooking",
+        "kitchen_spots"
       ]
     },
     {
@@ -209,7 +217,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_color"
       ]
     },
     {
@@ -222,7 +230,7 @@
       "zones": [
         "bridge",
         "downstairs",
-        "dining"
+        "kitchen_color"
       ]
     },
     {
@@ -235,7 +243,8 @@
       "zones": [
         "bridge",
         "downstairs",
-        "cooking"
+        "kitchen_cooking",
+        "kitchen_color"
       ]
     },
     {
@@ -248,15 +257,16 @@
       "zones": [
         "bridge",
         "downstairs",
-        "cooking"
+        "kitchen_cooking",
+        "kitchen_color"
       ]
     },
     {
       "id": "office_ceiling",
-      "mac": "00:17:88:01:0d:24:74:4d-0b",
-      "serial": "22E73E",
-      "name": "Office color ceiling",
-      "type": "sultan_bulb",
+      "mac": "00:17:88:01:0b:6d:be:81-0b",
+      "serial": "9D9664",
+      "name": "Office filament",
+      "type": "vintage_bulb",
       "room": "office",
       "zones": [
         "bridge",
@@ -364,7 +374,7 @@
       "id": "bedroom_ceiling_2",
       "mac": "00:17:88:01:0c:9b:98:a5-0b",
       "serial": "8F1B18",
-      "name": "Bedroom color ceiling",
+      "name": "Bedroom color ceiling 2",
       "type": "sultan_bulb",
       "room": "bedroom",
       "zones": [
@@ -375,9 +385,9 @@
     },
     {
       "id": "bedroom_ceiling_1",
-      "mac": "00:17:88:01:0b:31:2e:1d-0b",
-      "serial": "201364",
-      "name": "Bedroom ambiance ceiling",
+      "mac": "00:17:88:01:0d:24:74:4d-0b",
+      "serial": "22E73E",
+      "name": "Bedroom color ceiling 1",
       "type": "sultan_bulb",
       "room": "bedroom",
       "zones": [
@@ -429,6 +439,30 @@
       "name": "Floodlight garden",
       "type": "wall_lantern",
       "room": "garden",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "festavia_250",
+      "mac": "00:17:88:01:0e:c6:3f:fd-0b",
+      "serial": "9C8114",
+      "name": "Festavia 250 string lights",
+      "type": "string_light",
+      "room": "office",
+      "zones": [
+        "bridge",
+        "downstairs"
+      ]
+    },
+    {
+      "id": "festavia_500",
+      "mac": "00:17:88:01:0e:c6:ca:18-0b",
+      "serial": "0D9A0D",
+      "name": "Festavia 500 string lights",
+      "type": "string_light",
+      "room": "office",
       "zones": [
         "bridge",
         "downstairs"
@@ -614,7 +648,7 @@
         }
       },
       "button3": {
-        "group": "cooking",
+        "group": "kitchen_cooking",
         "scenes": {
           "unique": "cooking_default_scene"
         }
@@ -650,7 +684,7 @@
         }
       },
       "button3": {
-        "group": "cooking",
+        "group": "kitchen_cooking",
         "scenes": {
           "unique": "cooking_default_scene"
         }
@@ -696,7 +730,7 @@
         }
       },
       "button2": {
-        "group": "cooking",
+        "group": "kitchen_cooking",
         "scenes": {
           "unique": "cooking_default_scene"
         }
@@ -732,7 +766,7 @@
         }
       },
       "button2": {
-        "group": "cooking",
+        "group": "kitchen_cooking",
         "scenes": {
           "unique": "cooking_default_scene"
         }
@@ -1132,27 +1166,19 @@
       "actions": [
         {
           "target": "kitchen_spot_2",
-          "light-action": "kitchen_spot_breakfast"
+          "light-action": "default_day_action"
         },
         {
           "target": "kitchen_spot_3",
-          "light-action": "kitchen_spot_breakfast"
+          "light-action": "default_day_action"
         },
         {
           "target": "kitchen_spot_5",
-          "light-action": "kitchen_spot_breakfast"
+          "light-action": "default_day_action"
         },
         {
           "target": "kitchen_spot_6",
-          "light-action": "kitchen_spot_breakfast"
-        },
-        {
-          "target": "kitchen_lightstrip_left",
-          "light-action": "kitchen_lightstrip_20"
-        },
-        {
-          "target": "kitchen_lightstrip_right",
-          "light-action": "kitchen_lightstrip_20"
+          "light-action": "default_day_action"
         }
       ]
     },
@@ -1164,12 +1190,12 @@
       "name": "Dinner",
       "actions": [
         {
-          "target": "kitchen_pendant_left",
-          "light-action": "kitchen_filament_min"
+          "target": "kitchen_ellipse_left",
+          "light-action": "ellipse_filament_min"
         },
         {
-          "target": "kitchen_pendant_right",
-          "light-action": "kitchen_filament_min"
+          "target": "kitchen_ellipse_right",
+          "light-action": "ellipse_filament_min"
         },
         {
           "target": "kitchen_spot_2",
@@ -1213,12 +1239,12 @@
       "name": "Sensor day",
       "actions": [
         {
-          "target": "kitchen_pendant_left",
-          "light-action": "kitchen_filament_min"
+          "target": "kitchen_ellipse_left",
+          "light-action": "ellipse_filament_min"
         },
         {
-          "target": "kitchen_pendant_right",
-          "light-action": "kitchen_filament_min"
+          "target": "kitchen_ellipse_right",
+          "light-action": "ellipse_filament_min"
         },
         {
           "target": "kitchen_spot_9",
@@ -1361,6 +1387,14 @@
         {
           "target": "kitchen_lightstrip_right",
           "light-action": "default_sensor_night_action"
+        },
+        {
+          "target": "kitchen_ellipse_left",
+          "light-action": "default_sensor_night_action"
+        },
+        {
+          "target": "kitchen_ellipse_right",
+          "light-action": "default_sensor_night_action"
         }
       ]
     },
@@ -1372,12 +1406,12 @@
       "name": "Forth",
       "actions": [
         {
-          "target": "kitchen_pendant_left",
-          "light-action": "kitchen_filament_min"
+          "target": "kitchen_ellipse_left",
+          "light-action": "ellipse_filament_min"
         },
         {
-          "target": "kitchen_pendant_right",
-          "light-action": "kitchen_filament_min"
+          "target": "kitchen_ellipse_right",
+          "light-action": "ellipse_filament_min"
         },
         {
           "target": "kitchen_spot_9",
@@ -1412,7 +1446,7 @@
     {
       "id": "cooking_default_scene",
       "groups": [
-        "cooking"
+        "kitchen_cooking"
       ],
       "name": "Default",
       "actions": [
@@ -1457,12 +1491,12 @@
           "light-action": "hallowen_red"
         },
         {
-          "target": "kitchen_pendant_left",
-          "light-action": "hallowen_filament_kitchen_white"
+          "target": "kitchen_ellipse_left",
+          "light-action": "hallowen_ellipse_filament_white"
         },
         {
-          "target": "kitchen_pendant_right",
-          "light-action": "hallowen_filament_kitchen_white"
+          "target": "kitchen_ellipse_right",
+          "light-action": "hallowen_ellipse_filament_white"
         },
         {
           "target": "kitchen_spot_1",
@@ -1562,7 +1596,7 @@
         },
         {
           "target": "office_ceiling",
-          "light-action": "hallowen_red"
+          "light-action": "hallowen_ellipse_filament_white"
         },
         {
           "target": "office_desk",
@@ -1660,6 +1694,10 @@
         {
           "target": "office_desk",
           "light-action": "default_day_action"
+        },
+        {
+          "target": "office_ceiling",
+          "light-action": "ellipse_filament_min"
         }
       ]
     },
@@ -1927,7 +1965,7 @@
       "brigthness": 5
     },
     {
-      "id": "hallowen_filament_kitchen_white",
+      "id": "hallowen_ellipse_filament_white",
       "effect": "candle",
       "mirek": 153,
       "brigthness": 1
@@ -1970,16 +2008,6 @@
       "brigthness": 40
     },
     {
-      "id": "kitchen_spot_breakfast",
-      "mirek": 323,
-      "brigthness": 80
-    },
-    {
-      "id": "kitchen_lightstrip_20",
-      "mirek": 323,
-      "brigthness": 20
-    },
-    {
       "id": "kitchen_lightstrip_55",
       "mirek": 323,
       "brigthness": 55
@@ -1990,7 +2018,7 @@
       "brigthness": 70
     },
     {
-      "id": "kitchen_filament_min",
+      "id": "ellipse_filament_min",
       "mirek": 323,
       "brigthness": 1
     },

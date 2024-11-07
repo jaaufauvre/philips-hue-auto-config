@@ -134,7 +134,7 @@ export interface LightAction {
     /**
      * A brightness percentage for lights
      */
-    brigthness?: number;
+    brightness?: number;
     color?:      Color;
     comment?:    string;
     /**
@@ -731,7 +731,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
     ], false),
     "LightAction": o([
-        { json: "brigthness", js: "brigthness", typ: u(undefined, 3.14) },
+        { json: "brightness", js: "brightness", typ: u(undefined, 3.14) },
         { json: "color", js: "color", typ: u(undefined, r("Color")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "effect", js: "effect", typ: u(undefined, r("Effect")) },

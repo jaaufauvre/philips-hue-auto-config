@@ -823,7 +823,7 @@
         "light-action": {
           "id": "default_day_action",
           "mirek": 323,
-          "brigthness": 100
+          "brightness": 100
         }
       },
       "night": {
@@ -833,7 +833,7 @@
         "light-action": {
           "id": "default_night_action",
           "mirek": 500,
-          "brigthness": 30
+          "brightness": 30
         }
       },
       "evening": {
@@ -843,7 +843,7 @@
         "light-action": {
           "id": "default_evening_action",
           "mirek": 400,
-          "brigthness": 40
+          "brightness": 40
         }
       },
       "motion-sensor-day": {
@@ -853,7 +853,7 @@
         "light-action": {
           "id": "default_sensor_day_action",
           "mirek": 323,
-          "brigthness": 70
+          "brightness": 70
         }
       },
       "motion-sensor-night": {
@@ -863,7 +863,7 @@
         "light-action": {
           "id": "default_sensor_night_action",
           "mirek": 500,
-          "brigthness": 6
+          "brightness": 6
         }
       },
       "motion-sensor-evening": {
@@ -873,7 +873,7 @@
         "light-action": {
           "id": "default_sensor_evening_action",
           "mirek": 500,
-          "brigthness": 25
+          "brightness": 25
         }
       }
     }
@@ -1844,7 +1844,7 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "bathroom_blue_evening",
@@ -1852,7 +1852,7 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 60
+      "brightness": 60
     },
     {
       "id": "bathroom_blue_night",
@@ -1860,7 +1860,7 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 25
+      "brightness": 25
     },
     {
       "id": "bathroom_red_day",
@@ -1868,7 +1868,7 @@
         "x": 0.6664,
         "y": 0.2982
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "bathroom_red_evening",
@@ -1876,7 +1876,7 @@
         "x": 0.6664,
         "y": 0.2982
       },
-      "brigthness": 60
+      "brightness": 60
     },
     {
       "id": "bathroom_red_night",
@@ -1884,7 +1884,7 @@
         "x": 0.6664,
         "y": 0.2982
       },
-      "brigthness": 25
+      "brightness": 25
     },
     {
       "id": "bathroom_green_day",
@@ -1892,7 +1892,7 @@
         "x": 0.17,
         "y": 0.6998
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "bathroom_green_evening",
@@ -1900,7 +1900,7 @@
         "x": 0.17,
         "y": 0.6998
       },
-      "brigthness": 60
+      "brightness": 60
     },
     {
       "id": "bathroom_green_night",
@@ -1908,7 +1908,7 @@
         "x": 0.17,
         "y": 0.6998
       },
-      "brigthness": 25
+      "brightness": 25
     },
     {
       "id": "bathroom_pink_day",
@@ -1916,7 +1916,7 @@
         "x": 0.3081,
         "y": 0.1655
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "bathroom_pink_evening",
@@ -1924,7 +1924,7 @@
         "x": 0.3081,
         "y": 0.1655
       },
-      "brigthness": 60
+      "brightness": 60
     },
     {
       "id": "bathroom_pink_night",
@@ -1932,22 +1932,22 @@
         "x": 0.3081,
         "y": 0.1655
       },
-      "brigthness": 25
+      "brightness": 25
     },
     {
       "id": "bathroom_spot_day",
       "mirek": 304,
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "bathroom_spot_evening",
       "mirek": 304,
-      "brigthness": 60
+      "brightness": 60
     },
     {
       "id": "bathroom_spot_night",
       "mirek": 304,
-      "brigthness": 25
+      "brightness": 25
     },
     {
       "id": "hallowen_red",
@@ -1956,25 +1956,25 @@
         "x": 0.6799,
         "y": 0.3027
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "hallowen_low_white",
       "effect": "candle",
       "mirek": 153,
-      "brigthness": 5
+      "brightness": 5
     },
     {
       "id": "hallowen_ellipse_filament_white",
       "effect": "candle",
       "mirek": 153,
-      "brigthness": 1
+      "brightness": 1
     },
     {
       "id": "hallowen_white",
       "effect": "candle",
       "mirek": 153,
-      "brigthness": 15
+      "brightness": 15
     },
     {
       "id": "kitchen_dinner_gradient",
@@ -1989,7 +1989,7 @@
         }
       ],
       "gradient-mode": "interpolated_palette_mirrored",
-      "brigthness": 90
+      "brightness": 90
     },
     {
       "id": "kitchen_dinner_color_85",
@@ -1997,7 +1997,7 @@
         "x": 0.6253,
         "y": 0.358
       },
-      "brigthness": 85
+      "brightness": 85
     },
     {
       "id": "kitchen_dinner_color_40",
@@ -2005,32 +2005,32 @@
         "x": 0.6253,
         "y": 0.358
       },
-      "brigthness": 40
+      "brightness": 40
     },
     {
       "id": "kitchen_lightstrip_55",
       "mirek": 323,
-      "brigthness": 55
+      "brightness": 55
     },
     {
       "id": "kitchen_lightstrip_70",
       "mirek": 323,
-      "brigthness": 70
+      "brightness": 70
     },
     {
       "id": "ellipse_filament_min",
       "mirek": 323,
-      "brigthness": 1
+      "brightness": 1
     },
     {
       "id": "candle_action",
       "effect": "candle",
-      "brigthness": 45
+      "brightness": 45
     },
     {
       "id": "bedroom_night",
       "mirek": 500,
-      "brigthness": 20
+      "brightness": 20
     },
     {
       "id": "gryffindor_ceiling",
@@ -2038,7 +2038,7 @@
         "x": 0.6915,
         "y": 0.3083
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "gryffindor_desk",
@@ -2046,7 +2046,7 @@
         "x": 0.4437,
         "y": 0.4803
       },
-      "brigthness": 80
+      "brightness": 80
     },
     {
       "id": "gryffindor_gradient",
@@ -2061,7 +2061,7 @@
         }
       ],
       "gradient-mode": "interpolated_palette_mirrored",
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "miami_ceiling",
@@ -2069,7 +2069,7 @@
         "x": 0.1561,
         "y": 0.1606
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "miami_desk",
@@ -2077,7 +2077,7 @@
         "x": 0.154,
         "y": 0.0799
       },
-      "brigthness": 100
+      "brightness": 100
     },
     {
       "id": "miami_gradient",
@@ -2100,7 +2100,7 @@
         }
       ],
       "gradient-mode": "interpolated_palette",
-      "brigthness": 100
+      "brightness": 100
     }
   ]
 }

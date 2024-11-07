@@ -215,7 +215,7 @@
           "id": "day_action",
           "name": "Default day action",
           "mirek": 500,
-          "brigthness": 100
+          "brightness": 100
         }
       },
       "night": {
@@ -229,7 +229,7 @@
             "x": 0.5,
             "y": 0.5
           },
-          "brigthness": 100
+          "brightness": 100
         }
       },
       "evening": {
@@ -239,7 +239,7 @@
           "id": "evening_action",
           "name": "Default evening action",
           "mirek": 400,
-          "brigthness": 40
+          "brightness": 40
         }
       },
       "motion-sensor-day": {
@@ -257,7 +257,7 @@
           "id": "sensor_night_action",
           "name": "Default sensor night action",
           "mirek": 500,
-          "brigthness": 100
+          "brightness": 100
         }
       },
       "motion-sensor-evening": {

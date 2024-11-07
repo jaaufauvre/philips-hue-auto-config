@@ -36,7 +36,7 @@
         "light-action": {
           "id": "default_day_action",
           "mirek": 323,
-          "brigthness": 100
+          "brightness": 100
         }
       },
       "night": {
@@ -45,7 +45,7 @@
         "light-action": {
           "id": "default_night_action",
           "mirek": 500,
-          "brigthness": 25
+          "brightness": 25
         }
       },
       "evening": {
@@ -54,7 +54,7 @@
         "light-action": {
           "id": "default_evening_action",
           "mirek": 500,
-          "brigthness": 50
+          "brightness": 50
         }
       }
     }
@@ -85,7 +85,7 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brigthness": 100
+      "brightness": 100
     }
   ]
 }

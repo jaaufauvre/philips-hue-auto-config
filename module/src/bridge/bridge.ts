@@ -1396,9 +1396,9 @@ export class Bridge {
   }
 
   #lightActionToDimming(lightAction: LightAction) {
-    if (lightAction.brigthness) {
+    if (lightAction.brightness) {
       return {
-        brightness: lightAction.brigthness,
+        brightness: lightAction.brightness,
       }
     }
   }

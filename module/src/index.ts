@@ -1,22 +1,25 @@
 ﻿import {
   Config,
-  ExtendedLight,
-  ExtendedRoom,
-  ExtendedWallSwitch,
-  ExtendedTapDialSwitch,
-  ExtendedZone,
   ExtendedDimmerSwitch,
+  ExtendedLight,
   ExtendedMotionSensor,
+  ExtendedRoom,
+  ExtendedTapDialSwitch,
+  ExtendedWallSwitch,
+  ExtendedZone,
   GroupType,
+  LightColorType,
 } from './config/config'
-import { Logger, Color } from './log/logger'
+import { Color, Logger } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import _ from 'lodash'
 import {
   AccessoryConfig,
   DefaultScene,
+  GradientMode,
   LightAction,
   Scene,
+  SceneType,
 } from './config/config-gen'
 
 const bridge = new Bridge()
@@ -118,16 +121,13 @@ async function main() {
     light.idV1 = lightId.id_v1
     light.idV2 = lightId.id_v2
     light.ownerId = lightId.ownerId
-    Logger.info(
-      Color.Green,
-      `Light '${light.name}' was added with IDs: '${light.idV1}' (v1) and '${light.idV2}' (v2)`,
-    )
+    light.colorType = lightId.colorType
   })
 
   for (const light of config.lights) {
     // Update light types & names
     await bridge.updateLightMetadata(light.ownerId!, light.name, light.type)
-    Logger.info(Color.Green, `Metadata for light '${light.name}' were updated'`)
+    Logger.info(Color.Green, `Metadata for light '${light.name}' was updated'`)
 
     // Add lights to rooms & zones
     const room = config.getResourceById(light.room) as ExtendedRoom
@@ -418,7 +418,7 @@ async function main() {
   await bridge.deleteUnexpectedLights(config.getAllResourceMacs())
   await bridge.deleteUnexpectedAccessories(config.getAllResourceMacs())
 
-  Logger.info(Color.Yellow, 'Done! 🙌')
+  Logger.info(Color.Yellow, 'All done! 🙌')
 }
 
 async function addAccessoryButton(
@@ -453,7 +453,7 @@ async function addDefaultScene(
   const lights = config.getGroupLights(group)
   const lightAction = defaultScene.lightAction
   const smartPlugAction = { id: 'smart-plug-on' }
-  const lightActions = new Map()
+  const lightActions = new Map<string, LightAction>()
   _.mapValues(lights, (light: ExtendedLight) => {
     lightActions.set(
       light.idV2!,
@@ -471,23 +471,27 @@ async function addDefaultScene(
 
 async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
   const lights = config.getGroupLights(group)
-  const lightActions = new Map()
-  _.mapValues(lights, (light: ExtendedLight) => {
-    const action = _.find(scene.actions, (action) => action.target === light.id)
-    const lightAction = action
-      ? (config.getResourceById(action.lightAction) as LightAction)
-      : undefined // Off
-    lightActions.set(light.idV2!, lightAction)
-  })
-  await createScene(scene.id, scene.name, group, lightActions, scene.imageID)
+  await createScene(
+    scene.id,
+    scene.name,
+    group,
+    scene.type == SceneType.Auto
+      ? getAutoSceneLightActions(lights, scene)
+      : getManualSceneLightActions(lights, scene),
+    scene.imageID,
+    scene.autoDynamic,
+    scene.speed,
+  )
 }
 
 async function createScene(
   id: string,
   name: string,
   group: ExtendedRoom | ExtendedZone,
-  lightActions: Map<string, LightAction>,
+  lightActions: Map<string, LightAction | undefined>,
   imageId?: string,
+  autoDynamic?: boolean,
+  speed?: number,
 ) {
   const sceneIds = await bridge.addScene(
     name,
@@ -495,6 +499,8 @@ async function createScene(
     group.groupType!,
     lightActions,
     imageId,
+    autoDynamic,
+    speed,
   )
   const sceneIdV1 = sceneIds[0]
   const sceneIdV2 = sceneIds[1]
@@ -504,4 +510,77 @@ async function createScene(
     Color.Green,
     `Scene '${name}' was created for ${group.groupType} '${group.name}' with IDs: '${sceneIdV1}' (v1) and '${sceneIdV2}' (v2)`,
   )
+}
+
+function getAutoSceneLightActions(
+  lights: ExtendedLight[],
+  scene: Scene,
+): Map<string, LightAction | undefined> {
+  const lightActions = new Map()
+  const colors = {
+    colorAmbianceActionCount: scene.colorAmbianceActions!.length,
+    currentColorAction: -1,
+    nextColorAmbianceAction: () => {
+      colors.currentColorAction =
+        (colors.currentColorAction + 1) % colors.colorAmbianceActionCount
+      return scene.colorAmbianceActions![colors.currentColorAction]
+    },
+    colorAmbianceAction: (index: number) => {
+      return scene.colorAmbianceActions![index]
+    },
+    whiteAmbianceAction: () => scene.whiteAmbianceAction!,
+  }
+  _.forEach(lights, (light: ExtendedLight) => {
+    lightActions.set(light.idV2!, generateLightAction(light, colors))
+  })
+  return lightActions
+}
+
+function getManualSceneLightActions(
+  lights: ExtendedLight[],
+  scene: Scene,
+): Map<string, LightAction | undefined> {
+  const lightActions = new Map()
+  _.forEach(lights, (light: ExtendedLight) => {
+    const action = _.find(scene.actions, { target: light.id })
+    const lightAction = action
+      ? (config.getResourceById(action.lightAction) as LightAction)
+      : undefined // Off
+    lightActions.set(light.idV2!, lightAction)
+  })
+  return lightActions
+}
+
+function generateLightAction(
+  light: ExtendedLight,
+  colors: any,
+): LightAction | undefined {
+  switch (light.colorType) {
+    case LightColorType.Gradient:
+      return generateGradientLightAction(colors)
+    case LightColorType.Colored:
+      return config.getResourceById(colors.nextColorAmbianceAction())
+    case LightColorType.WarmToCoolWhite:
+      return config.getResourceById(colors.whiteAmbianceAction())
+    default:
+      return undefined // Off
+  }
+}
+
+function generateGradientLightAction(colors: any): LightAction {
+  const gradient = _.times(colors.colorAmbianceActionCount, (i) => {
+    const color = (
+      config.getResourceById(colors.colorAmbianceAction(i)) as LightAction
+    ).color
+    return { x: color!.x, y: color!.y }
+  })
+  const brightness = (
+    config.getResourceById(colors.colorAmbianceAction(0)) as LightAction
+  ).brightness
+  return {
+    id: 'generated_gradient_action',
+    gradient,
+    gradientMode: GradientMode.InterpolatedPalette,
+    brightness,
+  }
 }

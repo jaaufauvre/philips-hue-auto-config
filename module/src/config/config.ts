@@ -29,10 +29,18 @@ interface Identifiable {
   id: string
 }
 
+export enum LightColorType {
+  SoftWarmWhite = 'soft warm white',
+  WarmToCoolWhite = 'warm to cool white',
+  Colored = 'colored',
+  Gradient = 'gradient',
+}
+
 export interface ExtendedLight extends Light {
   idV1?: string
   idV2?: string
   ownerId?: string
+  colorType?: LightColorType
 }
 
 export enum GroupType {
@@ -156,8 +164,8 @@ export class Config implements ConfigGen {
         _.find(this.lights, (light) =>
           _.includes([light.id, light.serial, light.mac], id),
         ),
-        _.find(this.rooms, (room) => room.id === id),
-        _.find(this.zones, (zone) => zone.id === id),
+        _.find(this.rooms, { id }),
+        _.find(this.zones, { id }),
         _.find(this.wallSwitches, (wallSwitch) =>
           _.includes([wallSwitch.id, wallSwitch.mac], id),
         ),
@@ -179,8 +187,8 @@ export class Config implements ConfigGen {
             id,
           ),
         ),
-        _.find(this.lightActions, (lightAction) => lightAction.id === id),
-        _.find(this.scenes, (scene) => scene.id === id),
+        _.find(this.lightActions, { id }),
+        _.find(this.scenes, { id }),
       ],
       (resource) => resource !== undefined,
     )
@@ -430,10 +438,14 @@ export class Config implements ConfigGen {
       scene.groups.forEach((group) => {
         this.#checkGroupDefined(group)
       })
-      scene.actions.forEach((action) => {
+      scene.actions?.forEach((action) => {
         this.#checkLightDefined(action.target)
         this.#checkResourceDefined(action.lightAction)
       })
+      scene.colorAmbianceActions?.forEach((actionId) => {
+        this.#checkResourceDefined(actionId)
+      })
+      this.#checkResourceDefined(scene.whiteAmbianceAction)
     })
   }
 
@@ -458,25 +470,25 @@ export class Config implements ConfigGen {
   }
 
   #checkGroupDefined(id: string) {
-    if (!_.find(_.concat(this.zones, this.rooms), (group) => group.id === id)) {
+    if (!_.find(_.concat(this.zones, this.rooms), { id })) {
       throw Error(`Undefined group identifier: '${id}'!`)
     }
   }
 
   #checkZoneDefined(id: string) {
-    if (!_.find(this.zones, (zone) => zone.id === id)) {
+    if (!_.find(this.zones, { id })) {
       throw Error(`Undefined zone identifier: '${id}'!`)
     }
   }
 
   #checkRoomDefined(id: string) {
-    if (!_.find(this.rooms, (room) => room.id === id)) {
+    if (!_.find(this.rooms, { id })) {
       throw Error(`Undefined room identifier: '${id}'!`)
     }
   }
 
   #checkLightDefined(id: string) {
-    if (!_.find(this.lights, (light) => light.id === id)) {
+    if (!_.find(this.lights, { id })) {
       throw Error(`Undefined light identifier: '${id}'!`)
     }
   }

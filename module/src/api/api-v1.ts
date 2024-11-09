@@ -4,8 +4,8 @@ import fs from 'fs'
 import { Logger } from '../log/logger'
 
 export class ApiV1 {
-  #bridgeIp
-  #appKey
+  readonly #bridgeIp
+  readonly #appKey
 
   #httpsClient = new HttpClient(
     new https.Agent({
@@ -48,12 +48,6 @@ export class ApiV1 {
     Logger.info(`[API v1] Retrieving lights ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/lights`
     return await this.#httpsClient.get<LightsV1>(uri)
-  }
-
-  async updateLightState(id: string, state: LightState) {
-    Logger.info(`[API v1] Updating light '${id}' state ...`)
-    const uri = `${this.#getBaseUrl()}/light/${id}/state`
-    return await this.#httpsClient.put(uri, state)
   }
 
   async deleteLight(id: string) {
@@ -201,9 +195,6 @@ export interface LightV1 {
 }
 export interface LightsV1 {
   [key: LightId]: LightV1
-}
-export interface LightState {
-  on: boolean
 }
 
 //

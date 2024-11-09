@@ -2,8 +2,8 @@ import axios from 'axios'
 import { Logger } from '../log/logger'
 
 class HttpClient {
-  #httpsAgent
-  #headers
+  readonly #httpsAgent
+  readonly #headers
 
   constructor(agent?: any, headers?: any) {
     this.#httpsAgent = agent

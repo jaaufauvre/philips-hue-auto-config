@@ -62,9 +62,8 @@
   "scenes": [
     {
       "id": "my_bedroom_blue_scene",
-      "groups": [
-        "my_bedroom"
-      ],
+      "type": "manual",
+      "groups": ["my_bedroom"],
       "name": "Blue scene",
       "actions": [
         {

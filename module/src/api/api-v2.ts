@@ -4,8 +4,8 @@ import fs from 'fs'
 import { Logger } from '../log/logger'
 
 export class ApiV2 {
-  #bridgeIp
-  #httpsClient
+  readonly #bridgeIp
+  readonly #httpsClient
 
   constructor(bridgeIp: string, appKey: string) {
     this.#bridgeIp = bridgeIp
@@ -247,6 +247,9 @@ export interface Light {
   id_v1: string
   owner: Resource
   type: 'light'
+  color?: any
+  color_temperature?: any
+  gradient?: any
 }
 
 export interface UpdatedLight {
@@ -311,6 +314,8 @@ export interface NewScene {
   metadata: SceneMetadata
   group: Resource
   type: 'scene'
+  auto_dynamic?: boolean
+  speed?: number
 }
 
 export interface Scenes {

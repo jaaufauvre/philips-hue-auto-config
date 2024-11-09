@@ -6,10 +6,9 @@ class Discovery {
 
   async discover() {
     Logger.info('Searching for bridges ...')
-    const bridges = await this.#httpsClient.get<Bridge[]>(
+    return await this.#httpsClient.get<Bridge[]>(
       'https://discovery.meethue.com/',
     )
-    return bridges
   }
 }
 

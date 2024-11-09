@@ -430,8 +430,16 @@ export interface Scene {
     /**
      * A list of target lights and actions
      */
-    actions:  Action[];
-    comment?: string;
+    actions?: Action[];
+    /**
+     * Indicates whether to automatically start the scene dynamically on active recall
+     */
+    autoDynamic?: boolean;
+    /**
+     * A list of IDs of actions to be randomly assigned to colored lights
+     */
+    colorAmbianceActions?: string[];
+    comment?:              string;
     /**
      * Rooms or zones in which to create the scene
      */
@@ -439,6 +447,19 @@ export interface Scene {
     id:       string;
     imageID?: string;
     name:     string;
+    /**
+     * Speed of dynamic palette for this scene
+     */
+    speed?: number;
+    /**
+     * Type of scene definition. "manual": an action is manually assigned to target lights.
+     * "auto": actions are randomly assigned to all lights in the group.
+     */
+    type: SceneType;
+    /**
+     * ID of an action to be assigned to white lights
+     */
+    whiteAmbianceAction?: string;
 }
 
 export interface Action {
@@ -450,6 +471,15 @@ export interface Action {
      * A target light ID
      */
     target: string;
+}
+
+/**
+ * Type of scene definition. "manual": an action is manually assigned to target lights.
+ * "auto": actions are randomly assigned to all lights in the group.
+ */
+export enum SceneType {
+    Auto = "auto",
+    Manual = "manual",
 }
 
 export interface TapDialSwitch {
@@ -792,12 +822,17 @@ const typeMap: any = {
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
     ], false),
     "Scene": o([
-        { json: "actions", js: "actions", typ: a(r("Action")) },
+        { json: "actions", js: "actions", typ: u(undefined, a(r("Action"))) },
+        { json: "auto-dynamic", js: "autoDynamic", typ: u(undefined, true) },
+        { json: "color-ambiance-actions", js: "colorAmbianceActions", typ: u(undefined, a("")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "groups", js: "groups", typ: a("") },
         { json: "id", js: "id", typ: "" },
         { json: "image-id", js: "imageID", typ: u(undefined, "") },
         { json: "name", js: "name", typ: "" },
+        { json: "speed", js: "speed", typ: u(undefined, 3.14) },
+        { json: "type", js: "type", typ: r("SceneType") },
+        { json: "white-ambiance-action", js: "whiteAmbianceAction", typ: u(undefined, "") },
     ], false),
     "Action": o([
         { json: "light-action", js: "lightAction", typ: "" },
@@ -940,6 +975,10 @@ const typeMap: any = {
         "top_floor",
         "tv",
         "upstairs",
+    ],
+    "SceneType": [
+        "auto",
+        "manual",
     ],
     "Mode": [
         "switch_dual_rocker",

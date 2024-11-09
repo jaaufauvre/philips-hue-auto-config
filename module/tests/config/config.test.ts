@@ -181,6 +181,39 @@ describe('Config', () => {
     }
   })
 
+  test('should throw Error when color ambiance action ID not defined', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(`["day_action", "evening_action"]`, `["unknown"]`),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined resource identifier: 'unknown'!`)
+    }
+  })
+
+  test('should throw Error when white ambiance action ID not defined', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(
+          `"white-ambiance-action": "day_action"`,
+          `"white-ambiance-action": "unknown"`,
+        ),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined resource identifier: 'unknown'!`)
+    }
+  })
+
   test('should throw Error when light action ID not defined', () => {
     try {
       const json = fs.readFileSync(

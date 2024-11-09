@@ -1,4 +1,4 @@
-import { Logger, Color } from '../log/logger'
+import { Color, Logger } from '../log/logger'
 import crypto from 'crypto'
 import type from 'typia'
 import { Discovery } from '../api/discovery'
@@ -11,8 +11,9 @@ import {
   RuleV1,
   SensorsV1,
 } from '../api/api-v1'
-import { ApiV2, Device, SceneAction, UpdatedDevice } from '../api/api-v2'
+import { ApiV2, Device, Light, SceneAction, UpdatedDevice } from '../api/api-v2'
 import { LightAction } from '../config/config-gen'
+import { LightColorType } from '../config/config'
 
 export class Bridge {
   #apiv1?: ApiV1
@@ -191,9 +192,7 @@ export class Bridge {
     return [idV1, idV2]
   }
 
-  async addLights(
-    lightIdList: LightIdentifiers[],
-  ): Promise<LightIdentifiers[]> {
+  async addLights(lightIdList: LightIdentifiers[]): Promise<LightInfo[]> {
     Logger.info('Adding lights ...')
     Logger.table(lightIdList)
 
@@ -235,20 +234,24 @@ export class Bridge {
     // Find created IDs
     const lightsV1 = await this.#apiv1!.getLights()
     const lightsV2 = await this.#apiv2!.getLights()
-    const finalLightIdList = _.cloneDeep(lightIdList)
-    _.forEach(finalLightIdList, (lightId) => {
-      lightId.id_v1 = _.find(
+    const lightInfoList: LightInfo[] = _.map(
+      lightIdList,
+      (lightId: LightIdentifiers) => ({ ...lightId }),
+    )
+    _.forEach(lightInfoList, (lightInfo) => {
+      lightInfo.id_v1 = _.find(
         Object.keys(lightsV1),
-        (key) => lightsV1[key].uniqueid === lightId.mac,
+        (key) => lightsV1[key].uniqueid === lightInfo.mac,
       )
-      const light = _.find(
-        lightsV2.data,
-        (light) => light.id_v1 === `/lights/${lightId.id_v1}`,
-      )
-      lightId.id_v2 = light!.id
-      lightId.ownerId = light!.owner.rid
+      const light = _.find(lightsV2.data, {
+        id_v1: `/lights/${lightInfo.id_v1}`,
+      })
+      lightInfo.id_v2 = light!.id
+      lightInfo.ownerId = light!.owner.rid
+      lightInfo.colorType = this.#getLightColorType(light!)
     })
-    return finalLightIdList
+    Logger.table(lightInfoList)
+    return lightInfoList
   }
 
   async addLightToRoom(lightOwnerIdV2: string, roomIdV2: string) {
@@ -310,6 +313,8 @@ export class Bridge {
     groupType: string,
     lightActions: Map<string, LightAction | undefined>,
     imageId?: string,
+    autoDynamic?: boolean,
+    speed?: number,
   ) {
     Logger.info(`Adding scene '${name}' to ${groupType} '${groupIdV2}'`)
     let image
@@ -338,6 +343,8 @@ export class Bridge {
         rtype: groupType,
       },
       actions: actions,
+      auto_dynamic: autoDynamic,
+      speed: speed,
     })
     const idV2 = created.data[0].rid
     const sceneIdV1 = (await this.#apiv2!.getScene(idV2)).data[0].id_v1 // "/scenes/FVQmKmwq2L-adLtW"
@@ -367,10 +374,9 @@ export class Bridge {
         accessoryId.mac,
         'ZLLSwitch',
       )
-      const accessory = _.find(
-        devicesV2.data,
-        (device) => device.id_v1 === `/sensors/${accessoryId.id_v1}`,
-      )
+      const accessory = _.find(devicesV2.data, {
+        id_v1: `/sensors/${accessoryId.id_v1}`,
+      })
       accessoryId.id_v2 = accessory!.id
     })
     return finalIdList
@@ -398,10 +404,9 @@ export class Bridge {
         tapDialSwitchId.mac,
         'ZLLRelativeRotary',
       )
-      const tapDialSwitch = _.find(
-        devicesV2.data,
-        (device) => device.id_v1 === `/sensors/${tapDialSwitchId.dial_id_v1}`,
-      )
+      const tapDialSwitch = _.find(devicesV2.data, {
+        id_v1: `/sensors/${tapDialSwitchId.dial_id_v1}`,
+      })
       tapDialSwitchId.id_v2 = tapDialSwitch!.id
     })
     return finalIdList
@@ -434,11 +439,9 @@ export class Bridge {
         motionSensorId.mac,
         'ZLLTemperature',
       )
-      const motionSensor = _.find(
-        devicesV2.data,
-        (device) =>
-          device.id_v1 === `/sensors/${motionSensorId.presence_id_v1}`,
-      )
+      const motionSensor = _.find(devicesV2.data, {
+        id_v1: `/sensors/${motionSensorId.presence_id_v1}`,
+      })
       motionSensorId.id_v2 = motionSensor!.id
     })
     return finalIdList
@@ -1455,6 +1458,13 @@ export class Bridge {
       },
     }
   }
+
+  #getLightColorType(light: Light): LightColorType {
+    if (light.gradient) return LightColorType.Gradient
+    if (light.color) return LightColorType.Colored
+    if (light.color_temperature) return LightColorType.WarmToCoolWhite
+    return LightColorType.SoftWarmWhite
+  }
 }
 
 type Identifiers = {
@@ -1464,23 +1474,17 @@ type Identifiers = {
 
 export type LightIdentifiers = Identifiers & {
   serial?: string
+}
+
+export type LightInfo = LightIdentifiers & {
   id_v1?: string
   id_v2?: string
   ownerId?: string
+  colorType?: LightColorType
 }
 
 export type AccessoryIdentifiers = Identifiers & {
   type: AccessoryType
-  id_v1?: string
-  id_v2?: string
-}
-
-export type WallSwitchIdentifiers = Identifiers & {
-  id_v1?: string
-  id_v2?: string
-}
-
-export type DimmerSwitchIdentifiers = Identifiers & {
   id_v1?: string
   id_v2?: string
 }

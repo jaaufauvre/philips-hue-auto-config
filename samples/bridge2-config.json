@@ -108,6 +108,15 @@
       "zones": ["bridge", "downstairs"]
     },
     {
+      "id": "festavia_250",
+      "mac": "00:17:88:01:0e:c6:3f:fd-0b",
+      "serial": "9C8114",
+      "name": "Festavia 250 string lights",
+      "type": "string_light",
+      "room": "tv_room",
+      "zones": ["bridge", "downstairs"]
+    },
+    {
       "id": "hall_down_1",
       "mac": "00:17:88:01:0c:96:46:ea-0b",
       "serial": "80521A",
@@ -175,15 +184,25 @@
       "comment": "Smart plug for shelves"
     },
     {
-      "id": "savannah_plug_bed",
+      "id": "savannah_plug_unicorn",
       "mac": "00:17:88:01:0b:49:b4:8a-0b",
       "serial": "33221A",
-      "name": "Savannah bed light",
+      "name": "Savannah unicorn light",
       "type": "plug",
       "smart-plug": true,
       "room": "bedroom_sav",
       "zones": ["bridge", "upstairs"],
       "comment": "Smart plug for bed"
+    },
+    {
+      "id": "savannah_plug_light_string",
+      "mac": "00:17:88:01:0d:e8:b4:01-0b",
+      "serial": "283142",
+      "name": "Savannah light string",
+      "type": "plug",
+      "smart-plug": true,
+      "room": "bedroom_sav",
+      "zones": ["bridge", "upstairs"]
     },
     {
       "id": "savannah_ceiling",
@@ -329,32 +348,32 @@
         "group": "toilet",
         "scenes": {
           "day": "toilet_blue_day_scene",
-          "night": "toilet_blue_night_scene",
-          "evening": "toilet_blue_evening_scene"
+          "evening": "toilet_blue_evening_scene",
+          "night": "toilet_blue_night_scene"
         }
       },
       "button2": {
         "group": "toilet",
         "scenes": {
           "day": "toilet_pink_day_scene",
-          "night": "toilet_pink_night_scene",
-          "evening": "toilet_pink_evening_scene"
+          "evening": "toilet_pink_evening_scene",
+          "night": "toilet_pink_night_scene"
         }
       },
       "button3": {
         "group": "toilet",
         "scenes": {
           "day": "toilet_green_day_scene",
-          "night": "toilet_green_night_scene",
-          "evening": "toilet_green_evening_scene"
+          "evening": "toilet_green_evening_scene",
+          "night": "toilet_green_night_scene"
         }
       },
       "button4": {
         "group": "toilet",
         "scenes": {
           "day": "toilet_red_day_scene",
-          "night": "toilet_red_night_scene",
-          "evening": "toilet_red_evening_scene"
+          "evening": "toilet_red_evening_scene",
+          "night": "toilet_red_night_scene"
         }
       }
     },
@@ -364,28 +383,16 @@
       "serial": "0517BA",
       "name": "Dimmer Savannah",
       "button1": {
-        "group": "bedroom_sav",
-        "scenes": {
-          "unique": "savannah_bed1_scene"
-        }
+        "group": "bedroom_sav"
       },
       "button2": {
-        "group": "bedroom_sav",
-        "scenes": {
-          "unique": "savannah_bed2_scene"
-        }
+        "group": "bedroom_sav"
       },
       "button3": {
-        "group": "bedroom_sav",
-        "scenes": {
-          "unique": "savannah_malibu_pink_scene"
-        }
+        "group": "bedroom_sav"
       },
       "button4": {
-        "group": "bedroom_sav",
-        "scenes": {
-          "unique": "savannah_desk_scene"
-        }
+        "group": "bedroom_sav"
       }
     },
     {
@@ -397,32 +404,32 @@
         "group": "kids_bathroom",
         "scenes": {
           "day": "bathroom_blue_day_scene",
-          "night": "bathroom_blue_night_scene",
-          "evening": "bathroom_blue_evening_scene"
+          "evening": "bathroom_blue_evening_scene",
+          "night": "bathroom_blue_night_scene"
         }
       },
       "button2": {
         "group": "kids_bathroom",
         "scenes": {
           "day": "bathroom_pink_day_scene",
-          "night": "bathroom_pink_night_scene",
-          "evening": "bathroom_pink_evening_scene"
+          "evening": "bathroom_pink_evening_scene",
+          "night": "bathroom_pink_night_scene"
         }
       },
       "button3": {
         "group": "kids_bathroom",
         "scenes": {
           "day": "bathroom_green_day_scene",
-          "night": "bathroom_green_night_scene",
-          "evening": "bathroom_green_evening_scene"
+          "evening": "bathroom_green_evening_scene",
+          "night": "bathroom_green_night_scene"
         }
       },
       "button4": {
         "group": "kids_bathroom",
         "scenes": {
           "day": "bathroom_red_day_scene",
-          "night": "bathroom_red_night_scene",
-          "evening": "bathroom_red_evening_scene"
+          "evening": "bathroom_red_evening_scene",
+          "night": "bathroom_red_night_scene"
         }
       }
     },
@@ -434,9 +441,9 @@
       "button1": {
         "group": "tv_room",
         "scenes": {
-          "day": "tv_room_day_switch_scene",
-          "night": "tv_room_night_scene",
-          "evening": "tv_room_evening_scene"
+          "day": "tv_room_day_scene",
+          "evening": "tv_room_evening_scene",
+          "night": "tv_room_night_scene"
         }
       },
       "button2": {
@@ -454,7 +461,7 @@
       "button4": {
         "group": "tv_room",
         "scenes": {
-          "unique": "tv_room_day_switch_scene"
+          "unique": "tv_room_day_scene"
         }
       }
     }
@@ -469,7 +476,9 @@
       "button1": {
         "group": "tv_room",
         "scenes": {
-          "unique": "tv_room_day_switch_scene"
+          "day": "tv_room_day_scene",
+          "evening": "tv_room_evening_scene",
+          "night": "tv_room_night_scene"
         }
       }
     },
@@ -479,12 +488,7 @@
       "name": "Switch Savannah",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom_sav",
-        "scenes": {
-          "day": "savannah_day_evening_scene",
-          "evening": "savannah_day_evening_scene",
-          "night": "savannah_night_scene"
-        }
+        "group": "bedroom_sav"
       }
     },
     {
@@ -508,8 +512,8 @@
         "group": "toilet",
         "scenes": {
           "day": "toilet_blue_day_scene",
-          "night": "toilet_blue_night_scene",
-          "evening": "toilet_blue_evening_scene"
+          "evening": "toilet_blue_evening_scene",
+          "night": "toilet_blue_night_scene"
         }
       },
       "button2": {
@@ -540,8 +544,8 @@
         "group": "kids_bathroom",
         "scenes": {
           "day": "bathroom_blue_day_scene",
-          "night": "bathroom_blue_night_scene",
-          "evening": "bathroom_blue_evening_scene"
+          "evening": "bathroom_blue_evening_scene",
+          "night": "bathroom_blue_night_scene"
         }
       }
     },
@@ -598,16 +602,6 @@
           "brightness": 100
         }
       },
-      "night": {
-        "id": "default-night-scene",
-        "name": "Night (default)",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "default_night_action",
-          "mirek": 500,
-          "brightness": 30
-        }
-      },
       "evening": {
         "id": "default-evening-scene",
         "name": "Evening (default)",
@@ -616,6 +610,16 @@
           "id": "default_evening_action",
           "mirek": 400,
           "brightness": 40
+        }
+      },
+      "night": {
+        "id": "default-night-scene",
+        "name": "Night (default)",
+        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+        "light-action": {
+          "id": "default_night_action",
+          "mirek": 500,
+          "brightness": 30
         }
       },
       "motion-sensor-day": {
@@ -628,16 +632,6 @@
           "brightness": 70
         }
       },
-      "motion-sensor-night": {
-        "id": "default-sensor-night-scene",
-        "name": "Sensor night (default)",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "default_sensor_night_action",
-          "mirek": 500,
-          "brightness": 6
-        }
-      },
       "motion-sensor-evening": {
         "id": "default-sensor-evening-scene",
         "name": "Sensor evening (default)",
@@ -646,6 +640,16 @@
           "id": "default_sensor_evening_action",
           "mirek": 500,
           "brightness": 25
+        }
+      },
+      "motion-sensor-night": {
+        "id": "default-sensor-night-scene",
+        "name": "Sensor night (default)",
+        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+        "light-action": {
+          "id": "default_sensor_night_action",
+          "mirek": 500,
+          "brightness": 6
         }
       }
     }
@@ -1158,7 +1162,7 @@
         "utility_room",
         "bridge"
       ],
-      "name": "Hallowen 🦇",
+      "name": "Hallowen \uD83E\uDD87",
       "image-id": "b5f5a765-8f72-4aef-af99-90a116818ad4",
       "actions": [
         {
@@ -1176,6 +1180,10 @@
         {
           "target": "tv_ceiling",
           "light-action": "hallowen_ellipse_filament_white"
+        },
+        {
+          "target": "festavia_250",
+          "light-action": "hallowen_low_white"
         },
         {
           "target": "toilet_spot_left",
@@ -1236,7 +1244,7 @@
       ]
     },
     {
-      "id": "tv_room_day_switch_scene",
+      "id": "tv_room_day_scene",
       "type": "manual",
       "groups": ["tv_room"],
       "name": "Switch / Dimmer day",
@@ -1252,6 +1260,10 @@
         {
           "target": "tv_ceiling",
           "light-action": "ellipse_filament_min"
+        },
+        {
+          "target": "festavia_250",
+          "light-action": "default_day_action"
         }
       ]
     },
@@ -1302,6 +1314,10 @@
         {
           "target": "tv_gradient_right",
           "light-action": "default_evening_action"
+        },
+        {
+          "target": "festavia_250",
+          "light-action": "default_evening_action"
         }
       ]
     },
@@ -1318,103 +1334,10 @@
         {
           "target": "tv_gradient_right",
           "light-action": "default_night_action"
-        }
-      ]
-    },
-    {
-      "id": "savannah_bed1_scene",
-      "type": "manual",
-      "groups": ["bedroom_sav"],
-      "name": "Bed",
-      "actions": [
-        {
-          "target": "savannah_plug_bed",
-          "light-action": "smart_plug_on"
         },
         {
-          "target": "savannah_ceiling",
-          "light-action": "default_day_action"
-        }
-      ]
-    },
-    {
-      "id": "savannah_bed2_scene",
-      "type": "manual",
-      "groups": ["bedroom_sav"],
-      "name": "Bed",
-      "actions": [
-        {
-          "target": "savannah_plug_bed",
-          "light-action": "smart_plug_on"
-        }
-      ]
-    },
-    {
-      "id": "savannah_desk_scene",
-      "type": "manual",
-      "groups": ["bedroom_sav"],
-      "name": "Desk",
-      "actions": [
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_signe",
-          "light-action": "default_day_action"
-        }
-      ]
-    },
-    {
-      "id": "savannah_day_evening_scene",
-      "type": "manual",
-      "groups": ["bedroom_sav"],
-      "name": "Switch day/evening",
-      "actions": [
-        {
-          "target": "savannah_ceiling",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "savannah_signe",
-          "light-action": "default_day_action"
-        }
-      ]
-    },
-    {
-      "id": "savannah_night_scene",
-      "type": "manual",
-      "groups": ["bedroom_sav"],
-      "name": "Switch night",
-      "actions": [
-        {
-          "target": "savannah_signe",
+          "target": "festavia_250",
           "light-action": "default_night_action"
-        }
-      ]
-    },
-    {
-      "id": "savannah_malibu_pink_scene",
-      "type": "manual",
-      "groups": ["bedroom_sav"],
-      "name": "Malibu pink",
-      "image-id": "b037f15f-f7e4-46ab-b624-45ba2886c127",
-      "actions": [
-        {
-          "target": "savannah_plug_bed",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_ceiling",
-          "light-action": "malibu_pink_ceiling"
-        },
-        {
-          "target": "savannah_signe",
-          "light-action": "malibu_pink_gradient"
         }
       ]
     },
@@ -1741,76 +1664,6 @@
       "effect": "candle",
       "mirek": 153,
       "brightness": 1
-    },
-    {
-      "id": "malibu_pink_ceiling",
-      "color": {
-        "x": 0.1540317385167025,
-        "y": 0.07989918249272199
-      },
-      "brightness": 80
-    },
-    {
-      "id": "malibu_pink_gradient",
-      "gradient": [
-        {
-          "x": 0.5572999999999998,
-          "y": 0.3225999999999999
-        },
-        {
-          "x": 0.45479999999999928,
-          "y": 0.24329999999999944
-        },
-        {
-          "x": 0.3677999999999997,
-          "y": 0.18389999999999988
-        },
-        {
-          "x": 0.15610986380125708,
-          "y": 0.16059974509665465
-        },
-        {
-          "x": 0.1540317385167025,
-          "y": 0.07989918249272199
-        }
-      ],
-      "gradient-mode": "interpolated_palette",
-      "brightness": 80
-    },
-    {
-      "id": "glitz_and_glam_ceiling",
-      "color": {
-        "x": 0.4006999999999998,
-        "y": 0.2296
-      },
-      "brightness": 50
-    },
-    {
-      "id": "glitz_and_glam_gradient",
-      "gradient": [
-        {
-          "x": 0.45,
-          "y": 0.19800000000000005
-        },
-        {
-          "x": 0.4006999999999998,
-          "y": 0.2296
-        },
-        {
-          "x": 0.4468999999999998,
-          "y": 0.27300000000000015
-        },
-        {
-          "x": 0.5564999999999994,
-          "y": 0.3924000000000001
-        },
-        {
-          "x": 0.5856,
-          "y": 0.3736
-        }
-      ],
-      "gradient-mode": "interpolated_palette",
-      "brightness": 50
     },
     {
       "id": "palm_beach_gradient",

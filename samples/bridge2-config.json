@@ -383,16 +383,28 @@
       "serial": "0517BA",
       "name": "Dimmer Savannah",
       "button1": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "sav_bed_scene"
+        }
       },
       "button2": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "honolulu_scene"
+        }
       },
       "button3": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "honolulu_scene"
+        }
       },
       "button4": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "sav_light_string_scene"
+        }
       }
     },
     {
@@ -449,13 +461,13 @@
       "button2": {
         "group": "tv_room",
         "scenes": {
-          "unique": "tv_room_palm_beach_scene"
+          "unique": "palm_beach_scene"
         }
       },
       "button3": {
         "group": "tv_room",
         "scenes": {
-          "unique": "tv_room_soho_scene"
+          "unique": "soho_scene"
         }
       },
       "button4": {
@@ -657,7 +669,6 @@
   "scenes": [
     {
       "id": "front_door_sensor_scene",
-      "type": "manual",
       "groups": ["front_door"],
       "name": "Sensor",
       "actions": [
@@ -669,7 +680,6 @@
     },
     {
       "id": "toilet_blue_day_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Blue (Day)",
       "actions": [
@@ -689,7 +699,6 @@
     },
     {
       "id": "toilet_blue_night_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Blue (Night)",
       "actions": [
@@ -709,7 +718,6 @@
     },
     {
       "id": "toilet_blue_evening_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Blue (Evening)",
       "actions": [
@@ -729,7 +737,6 @@
     },
     {
       "id": "toilet_red_day_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Red (Day)",
       "actions": [
@@ -749,7 +756,6 @@
     },
     {
       "id": "toilet_red_night_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Red (Night)",
       "actions": [
@@ -769,7 +775,6 @@
     },
     {
       "id": "toilet_red_evening_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Red (Evening)",
       "actions": [
@@ -789,7 +794,6 @@
     },
     {
       "id": "toilet_green_day_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Green (Day)",
       "actions": [
@@ -809,7 +813,6 @@
     },
     {
       "id": "toilet_green_night_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Green (Night)",
       "actions": [
@@ -829,7 +832,6 @@
     },
     {
       "id": "toilet_green_evening_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Green (Evening)",
       "actions": [
@@ -849,7 +851,6 @@
     },
     {
       "id": "toilet_pink_day_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Pink (Day)",
       "actions": [
@@ -869,7 +870,6 @@
     },
     {
       "id": "toilet_pink_night_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Pink (Night)",
       "actions": [
@@ -889,7 +889,6 @@
     },
     {
       "id": "toilet_pink_evening_scene",
-      "type": "manual",
       "groups": ["toilet"],
       "name": "Pink (Evening)",
       "actions": [
@@ -909,7 +908,6 @@
     },
     {
       "id": "bathroom_blue_day_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Blue (Day)",
       "actions": [
@@ -929,7 +927,6 @@
     },
     {
       "id": "bathroom_blue_evening_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Blue (Evening)",
       "actions": [
@@ -949,7 +946,6 @@
     },
     {
       "id": "bathroom_blue_night_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Blue (Night)",
       "actions": [
@@ -969,7 +965,6 @@
     },
     {
       "id": "bathroom_red_day_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Red (Day)",
       "actions": [
@@ -989,7 +984,6 @@
     },
     {
       "id": "bathroom_red_evening_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Red (Evening)",
       "actions": [
@@ -1009,7 +1003,6 @@
     },
     {
       "id": "bathroom_red_night_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Red (Night)",
       "actions": [
@@ -1029,7 +1022,6 @@
     },
     {
       "id": "bathroom_green_day_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Green (Day)",
       "actions": [
@@ -1049,7 +1041,6 @@
     },
     {
       "id": "bathroom_green_evening_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Green (Evening)",
       "actions": [
@@ -1069,7 +1060,6 @@
     },
     {
       "id": "bathroom_green_night_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Green (Night)",
       "actions": [
@@ -1089,7 +1079,6 @@
     },
     {
       "id": "bathroom_pink_day_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Pink (Day)",
       "actions": [
@@ -1109,7 +1098,6 @@
     },
     {
       "id": "bathroom_pink_evening_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Pink (Evening)",
       "actions": [
@@ -1129,7 +1117,6 @@
     },
     {
       "id": "bathroom_pink_night_scene",
-      "type": "manual",
       "groups": ["kids_bathroom"],
       "name": "Pink (Night)",
       "actions": [
@@ -1149,7 +1136,6 @@
     },
     {
       "id": "hallowen_scene",
-      "type": "manual",
       "groups": [
         "tv_room",
         "hallway_down",
@@ -1245,9 +1231,8 @@
     },
     {
       "id": "tv_room_day_scene",
-      "type": "manual",
       "groups": ["tv_room"],
-      "name": "Switch / Dimmer day",
+      "name": "Day",
       "actions": [
         {
           "target": "tv_gradient_left",
@@ -1268,44 +1253,9 @@
       ]
     },
     {
-      "id": "tv_room_soho_scene",
-      "type": "manual",
-      "image-id": "e4ee61c3-ecdd-4005-b483-58207e693258",
-      "groups": ["tv_room"],
-      "name": "Soho",
-      "actions": [
-        {
-          "target": "tv_gradient_left",
-          "light-action": "soho_gradient"
-        },
-        {
-          "target": "tv_gradient_right",
-          "light-action": "soho_gradient"
-        }
-      ]
-    },
-    {
-      "id": "tv_room_palm_beach_scene",
-      "type": "manual",
-      "image-id": "f44b43b1-b6d1-46e1-8c15-00d2b551b6fa",
-      "groups": ["tv_room"],
-      "name": "Palm Beach",
-      "actions": [
-        {
-          "target": "tv_gradient_left",
-          "light-action": "palm_beach_gradient"
-        },
-        {
-          "target": "tv_gradient_right",
-          "light-action": "palm_beach_gradient"
-        }
-      ]
-    },
-    {
       "id": "tv_room_evening_scene",
-      "type": "manual",
       "groups": ["tv_room"],
-      "name": "Dimmer evening",
+      "name": "Evening",
       "actions": [
         {
           "target": "tv_gradient_left",
@@ -1323,9 +1273,8 @@
     },
     {
       "id": "tv_room_night_scene",
-      "type": "manual",
       "groups": ["tv_room"],
-      "name": "Dimmer night",
+      "name": "Night",
       "actions": [
         {
           "target": "tv_gradient_left",
@@ -1342,8 +1291,37 @@
       ]
     },
     {
+      "id": "soho_scene",
+      "image-id": "e4ee61c3-ecdd-4005-b483-58207e693258",
+      "groups": ["tv_room"],
+      "name": "Soho",
+      "color-ambiance-actions": [
+        "soho_color1",
+        "soho_color2",
+        "soho_color3",
+        "soho_color4",
+        "soho_color5"
+      ],
+      "speed": 0.626984126984127,
+      "auto-dynamic": false
+    },
+    {
+      "id": "palm_beach_scene",
+      "image-id": "f44b43b1-b6d1-46e1-8c15-00d2b551b6fa",
+      "groups": ["tv_room"],
+      "name": "Palm Beach",
+      "color-ambiance-actions": [
+        "palm_beach_color1",
+        "palm_beach_color2",
+        "palm_beach_color3",
+        "palm_beach_color4",
+        "palm_beach_color5"
+      ],
+      "speed": 0.626984126984127,
+      "auto-dynamic": false
+    },
+    {
       "id": "dressing_switch_scene",
-      "type": "manual",
       "groups": ["dressing"],
       "name": "Switch",
       "actions": [
@@ -1355,7 +1333,6 @@
     },
     {
       "id": "utility_room_switch_scene",
-      "type": "manual",
       "groups": ["utility_room"],
       "name": "Switch",
       "actions": [
@@ -1367,7 +1344,6 @@
     },
     {
       "id": "under_stairs_switch_scene",
-      "type": "manual",
       "groups": ["under_stairs"],
       "name": "Switch",
       "actions": [
@@ -1379,7 +1355,6 @@
     },
     {
       "id": "attic_scene",
-      "type": "manual",
       "groups": ["attic"],
       "name": "Switch",
       "actions": [
@@ -1391,10 +1366,19 @@
     },
     {
       "id": "honolulu_scene",
-      "type": "auto",
-      "groups": ["bridge"],
-      "name": "Honolulu \uD83C\uDF34",
+      "groups": ["bridge", "bedroom_sav"],
+      "name": "Honolulu",
       "image-id": "d271d202-6856-4633-95ae-953ba73aee64",
+      "actions": [
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_unicorn",
+          "light-action": "smart_plug_on"
+        }
+      ],
       "color-ambiance-actions": [
         "honolulu_color1",
         "honolulu_color2",
@@ -1405,6 +1389,28 @@
       "white-ambiance-action": "honolulu_white",
       "speed": 0.6031746031746031,
       "auto-dynamic": false
+    },
+    {
+      "id": "sav_bed_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Bed",
+      "actions": [
+        {
+          "target": "savannah_signe",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "sav_light_string_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Light string",
+      "actions": [
+        {
+          "target": "savannah_plug_light_string",
+          "light-action": "smart_plug_on"
+        }
+      ]
     }
   ],
   "light-actions": [
@@ -1666,60 +1672,6 @@
       "brightness": 1
     },
     {
-      "id": "palm_beach_gradient",
-      "gradient": [
-        {
-          "x": 0.2007000000000001,
-          "y": 0.34179999999999968
-        },
-        {
-          "x": 0.2576000000000003,
-          "y": 0.3185
-        },
-        {
-          "x": 0.3887999999999997,
-          "y": 0.2997
-        },
-        {
-          "x": 0.4823999999999995,
-          "y": 0.33250000000000015
-        },
-        {
-          "x": 0.5690999999999998,
-          "y": 0.3512
-        }
-      ],
-      "gradient-mode": "interpolated_palette",
-      "brightness": 38
-    },
-    {
-      "id": "soho_gradient",
-      "gradient": [
-        {
-          "x": 0.1916,
-          "y": 0.3953999999999996
-        },
-        {
-          "x": 0.2219,
-          "y": 0.0825
-        },
-        {
-          "x": 0.5018999999999998,
-          "y": 0.2750999999999998
-        },
-        {
-          "x": 0.5115,
-          "y": 0.3625
-        },
-        {
-          "x": 0.586541023802804,
-          "y": 0.2574681122637848
-        }
-      ],
-      "gradient-mode": "interpolated_palette",
-      "brightness": 62
-    },
-    {
       "id": "honolulu_color1",
       "color": {
         "x": 0.6364,
@@ -1763,6 +1715,96 @@
       "id": "honolulu_white",
       "mirek": 455,
       "brightness": 39
+    },
+    {
+      "id": "palm_beach_color1",
+      "color": {
+        "x": 0.2007000000000001,
+        "y": 0.34179999999999968
+      },
+      "brightness": 38
+    },
+    {
+      "id": "palm_beach_color2",
+      "color": {
+        "x": 0.2576000000000003,
+        "y": 0.3185
+      },
+      "brightness": 38
+    },
+    {
+      "id": "palm_beach_color3",
+      "color": {
+        "x": 0.3887999999999997,
+        "y": 0.2997
+      },
+      "brightness": 38
+    },
+    {
+      "id": "palm_beach_color4",
+      "color": {
+        "x": 0.4823999999999995,
+        "y": 0.33250000000000015
+      },
+      "brightness": 38
+    },
+    {
+      "id": "palm_beach_color5",
+      "color": {
+        "x": 0.5690999999999998,
+        "y": 0.3512
+      },
+      "brightness": 38
+    },
+    {
+      "id": "palm_beach_white",
+      "mirek": 333,
+      "brightness": 38
+    },
+    {
+      "id": "soho_color1",
+      "color": {
+        "x": 0.5865410238176876,
+        "y": 0.25746811227099289
+      },
+      "brightness": 62
+    },
+    {
+      "id": "soho_color2",
+      "color": {
+        "x": 0.5115,
+        "y": 0.3625
+      },
+      "brightness": 62
+    },
+    {
+      "id": "soho_color3",
+      "color": {
+        "x": 0.5018999999999999,
+        "y": 0.2750999999999999
+      },
+      "brightness": 62
+    },
+    {
+      "id": "soho_color4",
+      "color": {
+        "x": 0.2219,
+        "y": 0.08249999999999999
+      },
+      "brightness": 62
+    },
+    {
+      "id": "soho_color5",
+      "color": {
+        "x": 0.1916,
+        "y": 0.3953999999999996
+      },
+      "brightness": 62
+    },
+    {
+      "id": "soho_white",
+      "mirek": 370,
+      "brightness": 62
     }
   ]
 }

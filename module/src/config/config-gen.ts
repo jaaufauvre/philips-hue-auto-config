@@ -428,7 +428,7 @@ export enum RoomType {
 
 export interface Scene {
     /**
-     * A list of target lights and actions
+     * A list of actions for some of the lights in the group
      */
     actions?: Action[];
     /**
@@ -436,7 +436,8 @@ export interface Scene {
      */
     autoDynamic?: boolean;
     /**
-     * A list of IDs of actions to be randomly assigned to colored lights
+     * A list of actions to be randomly assigned to colored lights not explicitly listed in
+     * 'actions'
      */
     colorAmbianceActions?: string[];
     comment?:              string;
@@ -452,34 +453,21 @@ export interface Scene {
      */
     speed?: number;
     /**
-     * Type of scene definition. "manual": an action is manually assigned to target lights.
-     * "auto": actions are randomly assigned to all lights in the group.
-     */
-    type: SceneType;
-    /**
-     * ID of an action to be assigned to white lights
+     * Action to be assigned to white ambiance lights not explicitly listed in 'actions'
      */
     whiteAmbianceAction?: string;
 }
 
 export interface Action {
     /**
-     * The ID of an action to execute on the light
+     * The ID of an action to execute on the light. The light will stay off if this value is not
+     * defined.
      */
-    lightAction: string;
+    lightAction?: string;
     /**
      * A target light ID
      */
     target: string;
-}
-
-/**
- * Type of scene definition. "manual": an action is manually assigned to target lights.
- * "auto": actions are randomly assigned to all lights in the group.
- */
-export enum SceneType {
-    Auto = "auto",
-    Manual = "manual",
 }
 
 export interface TapDialSwitch {
@@ -831,11 +819,10 @@ const typeMap: any = {
         { json: "image-id", js: "imageID", typ: u(undefined, "") },
         { json: "name", js: "name", typ: "" },
         { json: "speed", js: "speed", typ: u(undefined, 3.14) },
-        { json: "type", js: "type", typ: r("SceneType") },
         { json: "white-ambiance-action", js: "whiteAmbianceAction", typ: u(undefined, "") },
     ], false),
     "Action": o([
-        { json: "light-action", js: "lightAction", typ: "" },
+        { json: "light-action", js: "lightAction", typ: u(undefined, "") },
         { json: "target", js: "target", typ: "" },
     ], false),
     "TapDialSwitch": o([
@@ -975,10 +962,6 @@ const typeMap: any = {
         "top_floor",
         "tv",
         "upstairs",
-    ],
-    "SceneType": [
-        "auto",
-        "manual",
     ],
     "Mode": [
         "switch_dual_rocker",

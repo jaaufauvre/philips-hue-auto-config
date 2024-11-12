@@ -1280,9 +1280,9 @@ export class Bridge {
 
   async #hasSensor(mac: string): Promise<boolean> {
     const sensors = await this.#getSensors()
-    return _.some(Object.values(sensors), (sensor) =>
-      sensor.uniqueid?.startsWith(mac),
-    )
+    return _.some(Object.values(sensors), (sensor) => {
+      return sensor.uniqueid != undefined && sensor.uniqueid.startsWith(mac)
+    })
   }
 
   async #getDaylightSensorId() {

@@ -273,7 +273,6 @@
   "scenes": [
     {
       "id": "scene",
-      "type": "manual",
       "groups": ["scene_zone"],
       "name": "Scene",
       "actions": [
@@ -281,11 +280,12 @@
           "target": "scene_light",
           "light-action": "scene_action"
         }
-      ]
+      ],
+      "color-ambiance-actions": ["day_action", "evening_action"],
+      "white-ambiance-action": "day_action"
     },
     {
       "id": "day_scene",
-      "type": "manual",
       "groups": ["scene_zone"],
       "name": "Day scene",
       "actions": [
@@ -297,7 +297,6 @@
     },
     {
       "id": "night_scene",
-      "type": "manual",
       "groups": ["scene_zone"],
       "name": "Night scene",
       "actions": [
@@ -309,7 +308,6 @@
     },
     {
       "id": "evening_scene",
-      "type": "manual",
       "groups": ["scene_zone"],
       "name": "Evening scene",
       "actions": [
@@ -318,16 +316,6 @@
           "light-action": "evening_action"
         }
       ]
-    },
-    {
-      "id": "auto_scene",
-      "type": "auto",
-      "groups": ["scene_zone"],
-      "name": "Evening scene",
-      "color-ambiance-actions": ["day_action", "evening_action"],
-      "white-ambiance-action": "day_action",
-      "speed": 0.1,
-      "auto-dynamic": true
     }
   ],
   "light-actions": [

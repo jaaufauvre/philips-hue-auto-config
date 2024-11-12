@@ -746,7 +746,6 @@
   "scenes": [
     {
       "id": "garden_scene",
-      "type": "manual",
       "groups": ["garden"],
       "name": "Switch",
       "actions": [
@@ -758,7 +757,6 @@
     },
     {
       "id": "garden_sensor_scene",
-      "type": "manual",
       "groups": ["garden"],
       "name": "Sensor",
       "actions": [
@@ -770,7 +768,6 @@
     },
     {
       "id": "bathroom_blue_day_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Blue (Day)",
       "actions": [
@@ -790,7 +787,6 @@
     },
     {
       "id": "bathroom_blue_evening_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Blue (Evening)",
       "actions": [
@@ -810,7 +806,6 @@
     },
     {
       "id": "bathroom_blue_night_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Blue (Night)",
       "actions": [
@@ -830,7 +825,6 @@
     },
     {
       "id": "bathroom_red_day_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Red (Day)",
       "actions": [
@@ -850,7 +844,6 @@
     },
     {
       "id": "bathroom_red_evening_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Red (Evening)",
       "actions": [
@@ -870,7 +863,6 @@
     },
     {
       "id": "bathroom_red_night_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Red (Night)",
       "actions": [
@@ -890,7 +882,6 @@
     },
     {
       "id": "bathroom_green_day_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Green (Day)",
       "actions": [
@@ -910,7 +901,6 @@
     },
     {
       "id": "bathroom_green_evening_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Green (Evening)",
       "actions": [
@@ -930,7 +920,6 @@
     },
     {
       "id": "bathroom_green_night_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Green (Night)",
       "actions": [
@@ -950,7 +939,6 @@
     },
     {
       "id": "bathroom_pink_day_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Pink (Day)",
       "actions": [
@@ -970,7 +958,6 @@
     },
     {
       "id": "bathroom_pink_evening_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Pink (Evening)",
       "actions": [
@@ -990,7 +977,6 @@
     },
     {
       "id": "bathroom_pink_night_scene",
-      "type": "manual",
       "groups": ["bathroom"],
       "name": "Pink (Night)",
       "actions": [
@@ -1010,7 +996,6 @@
     },
     {
       "id": "kitchen_breakfast_scene",
-      "type": "manual",
       "groups": ["kitchen"],
       "name": "Breakfast",
       "actions": [
@@ -1034,7 +1019,6 @@
     },
     {
       "id": "kitchen_dinner_scene",
-      "type": "manual",
       "groups": ["kitchen"],
       "name": "Dinner",
       "actions": [
@@ -1082,7 +1066,6 @@
     },
     {
       "id": "kitchen_sensor_day_scene",
-      "type": "manual",
       "groups": ["kitchen"],
       "name": "Sensor day",
       "actions": [
@@ -1118,7 +1101,6 @@
     },
     {
       "id": "kitchen_sensor_evening_scene",
-      "type": "manual",
       "groups": ["kitchen"],
       "name": "Sensor evening",
       "actions": [
@@ -1178,7 +1160,6 @@
     },
     {
       "id": "kitchen_sensor_night_scene",
-      "type": "manual",
       "groups": ["kitchen"],
       "name": "Sensor night",
       "actions": [
@@ -1246,7 +1227,6 @@
     },
     {
       "id": "kitchen_forth_scene",
-      "type": "manual",
       "groups": ["kitchen"],
       "name": "Forth",
       "actions": [
@@ -1290,7 +1270,6 @@
     },
     {
       "id": "kitchen_spots_warm_scene",
-      "type": "auto",
       "groups": ["kitchen_spots"],
       "name": "Warm dimmed",
       "color-ambiance-actions": ["spots_warm_min"],
@@ -1298,7 +1277,6 @@
     },
     {
       "id": "kitchen_spots_cold_scene",
-      "type": "auto",
       "groups": ["kitchen_spots"],
       "name": "Cold dimmed",
       "color-ambiance-actions": ["spots_cold_min"],
@@ -1306,7 +1284,6 @@
     },
     {
       "id": "cooking_default_scene",
-      "type": "manual",
       "groups": ["kitchen_cooking"],
       "name": "Default",
       "actions": [
@@ -1334,7 +1311,6 @@
     },
     {
       "id": "memento_scene",
-      "type": "auto",
       "groups": ["kitchen_color"],
       "name": "Memento",
       "image-id": "9b4a6882-b2e5-4ce2-9235-75f93a3a70e2",
@@ -1351,9 +1327,8 @@
     },
     {
       "id": "honolulu_scene",
-      "type": "auto",
       "groups": ["kitchen_color", "bedroom_aaliya", "bridge"],
-      "name": "Honolulu \uD83C\uDF34",
+      "name": "Honolulu",
       "image-id": "d271d202-6856-4633-95ae-953ba73aee64",
       "color-ambiance-actions": [
         "honolulu_color1",
@@ -1368,7 +1343,6 @@
     },
     {
       "id": "hallowen_scene",
-      "type": "manual",
       "groups": [
         "kitchen",
         "office",
@@ -1505,7 +1479,6 @@
     },
     {
       "id": "bedroom_night_scene",
-      "type": "manual",
       "groups": ["bedroom"],
       "name": "Night",
       "actions": [
@@ -1525,7 +1498,6 @@
     },
     {
       "id": "bedroom_switch_scene",
-      "type": "manual",
       "groups": ["bedroom"],
       "name": "Switch",
       "actions": [
@@ -1545,7 +1517,6 @@
     },
     {
       "id": "bedroom_candle_scene",
-      "type": "manual",
       "groups": ["bedroom"],
       "name": "Candles",
       "actions": [
@@ -1565,7 +1536,6 @@
     },
     {
       "id": "bedroom_ceiling_scene",
-      "type": "manual",
       "groups": ["bedroom"],
       "name": "Ceiling",
       "actions": [
@@ -1581,7 +1551,6 @@
     },
     {
       "id": "office_switch_day_evening_scene",
-      "type": "manual",
       "groups": ["office"],
       "name": "Switch day/evening",
       "actions": [
@@ -1597,7 +1566,6 @@
     },
     {
       "id": "office_switch_night_scene",
-      "type": "manual",
       "groups": ["office"],
       "name": "Switch night",
       "actions": [
@@ -1609,7 +1577,6 @@
     },
     {
       "id": "aaliya_candle_scene",
-      "type": "manual",
       "groups": ["bedroom_aaliya"],
       "name": "Candles",
       "actions": [
@@ -1629,7 +1596,6 @@
     },
     {
       "id": "aaliya_night_scene",
-      "type": "manual",
       "groups": ["bedroom_aaliya"],
       "name": "Night",
       "actions": [
@@ -1649,7 +1615,6 @@
     },
     {
       "id": "aaliya_evening_scene",
-      "type": "manual",
       "groups": ["bedroom_aaliya"],
       "name": "Evening",
       "actions": [
@@ -1669,7 +1634,6 @@
     },
     {
       "id": "aaliya_day_scene",
-      "type": "manual",
       "groups": ["bedroom_aaliya"],
       "name": "Day",
       "actions": [
@@ -1689,7 +1653,6 @@
     },
     {
       "id": "malibu_pink_scene",
-      "type": "auto",
       "groups": ["bedroom_aaliya", "bridge", "kitchen_color"],
       "name": "Malibu pink",
       "image-id": "b037f15f-f7e4-46ab-b624-45ba2886c127",

@@ -251,11 +251,6 @@
         "id": {
           "$ref": "#/definitions/scene-id"
         },
-        "type": {
-          "type": "string",
-          "description": "Type of scene definition. \"manual\": an action is manually assigned to target lights. \"auto\": actions are randomly assigned to all lights in the group.",
-          "enum": ["manual", "auto"]
-        },
         "groups": {
           "type": "array",
           "description": "Rooms or zones in which to create the scene",
@@ -273,7 +268,7 @@
         },
         "actions": {
           "type": "array",
-          "description": "A list of target lights and actions",
+          "description": "A list of actions for some of the lights in the group",
           "uniqueItemProperties": ["target"],
           "minItems": 1,
           "items": {
@@ -287,16 +282,16 @@
               },
               "light-action": {
                 "type": "string",
-                "description": "The ID of an action to execute on the light",
+                "description": "The ID of an action to execute on the light. The light will stay off if this value is not defined.",
                 "examples": ["kitchen_blue"]
               }
             },
-            "required": ["target", "light-action"]
+            "required": ["target"]
           }
         },
         "color-ambiance-actions": {
           "type": "array",
-          "description": "A list of IDs of actions to be randomly assigned to colored lights",
+          "description": "A list of actions to be randomly assigned to colored lights not explicitly listed in 'actions'",
           "uniqueItems": true,
           "minItems": 1,
           "maxItems": 5,
@@ -306,7 +301,7 @@
         },
         "white-ambiance-action": {
           "type": "string",
-          "description": "ID of an action to be assigned to white lights"
+          "description": "Action to be assigned to white ambiance lights not explicitly listed in 'actions'"
         },
         "speed": {
           "type": "number",
@@ -324,42 +319,7 @@
           "type": "string"
         }
       },
-      "required": ["id", "type", "groups", "name"],
-      "oneOf": [
-        {
-          "properties": {
-            "type": {
-              "const": "manual"
-            }
-          },
-          "not": {
-            "anyOf": [
-              {
-                "required": ["color-ambiance-actions"]
-              },
-              {
-                "required": ["white-ambiance-action"]
-              }
-            ]
-          },
-          "required": ["actions"]
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "auto"
-            }
-          },
-          "not": {
-            "anyOf": [
-              {
-                "required": ["actions"]
-              }
-            ]
-          },
-          "required": ["color-ambiance-actions", "white-ambiance-action"]
-        }
-      ]
+      "required": ["id", "groups", "name"]
     },
     "default-scene": {
       "type": "object",

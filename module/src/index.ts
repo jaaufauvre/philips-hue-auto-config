@@ -12,15 +12,15 @@
 } from './config/config'
 import { Color, Logger } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
-import _ from 'lodash'
 import {
   AccessoryConfig,
+  Action,
   DefaultScene,
   GradientMode,
   LightAction,
   Scene,
-  SceneType,
 } from './config/config-gen'
+import _ from 'lodash'
 
 const bridge = new Bridge()
 let config: Config
@@ -470,14 +470,36 @@ async function addDefaultScene(
 }
 
 async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
-  const lights = config.getGroupLights(group)
+  const groupLights = config.getGroupLights(group)
+  const lightActions = new Map<string, LightAction | undefined>()
+  const colors = {
+    colorActionCount: scene.colorAmbianceActions?.length ?? 0,
+    currentColorAction: 0,
+    nextColorAction: () => {
+      colors.currentColorAction =
+        (colors.currentColorAction + 1) % colors.colorActionCount
+      return scene.colorAmbianceActions![colors.currentColorAction - 1]
+    },
+    colorAction: (index: number) => {
+      return scene.colorAmbianceActions![index]
+    },
+    whiteAmbianceAction: () => scene.whiteAmbianceAction!,
+  }
+
+  _.forEach(groupLights, (light) => {
+    lightActions.set(light.idV2!, undefined) // Default: light is off
+    if (useExplicitAction(light, scene)) {
+      lightActions.set(light.idV2!, getLightAction(light, scene.actions!))
+    }
+    if (useAutoAction(light, scene)) {
+      lightActions.set(light.idV2!, generateLightAction(light, colors))
+    }
+  })
   await createScene(
     scene.id,
     scene.name,
     group,
-    scene.type == SceneType.Auto
-      ? getAutoSceneLightActions(lights, scene)
-      : getManualSceneLightActions(lights, scene),
+    lightActions,
     scene.imageID,
     scene.autoDynamic,
     scene.speed,
@@ -512,43 +534,38 @@ async function createScene(
   )
 }
 
-function getAutoSceneLightActions(
-  lights: ExtendedLight[],
-  scene: Scene,
-): Map<string, LightAction | undefined> {
-  const lightActions = new Map()
-  const colors = {
-    colorAmbianceActionCount: scene.colorAmbianceActions!.length,
-    currentColorAction: -1,
-    nextColorAmbianceAction: () => {
-      colors.currentColorAction =
-        (colors.currentColorAction + 1) % colors.colorAmbianceActionCount
-      return scene.colorAmbianceActions![colors.currentColorAction]
-    },
-    colorAmbianceAction: (index: number) => {
-      return scene.colorAmbianceActions![index]
-    },
-    whiteAmbianceAction: () => scene.whiteAmbianceAction!,
-  }
-  _.forEach(lights, (light: ExtendedLight) => {
-    lightActions.set(light.idV2!, generateLightAction(light, colors))
-  })
-  return lightActions
+function useOffAction(light: ExtendedLight, scene: Scene): boolean {
+  const action = _.find(scene.actions, { target: light.id })
+  return action !== undefined && action.lightAction === undefined
 }
 
-function getManualSceneLightActions(
-  lights: ExtendedLight[],
-  scene: Scene,
-): Map<string, LightAction | undefined> {
-  const lightActions = new Map()
-  _.forEach(lights, (light: ExtendedLight) => {
-    const action = _.find(scene.actions, { target: light.id })
-    const lightAction = action
-      ? (config.getResourceById(action.lightAction) as LightAction)
-      : undefined // Off
-    lightActions.set(light.idV2!, lightAction)
-  })
-  return lightActions
+function useExplicitAction(light: ExtendedLight, scene: Scene): boolean {
+  const action = _.find(scene.actions, { target: light.id })
+  return action?.lightAction !== undefined
+}
+
+function useAutoAction(light: ExtendedLight, scene: Scene): boolean {
+  if (useOffAction(light, scene) || useExplicitAction(light, scene)) {
+    return false
+  }
+  switch (light.colorType) {
+    case LightColorType.Gradient:
+    case LightColorType.Colored:
+      return (
+        scene.colorAmbianceActions != undefined &&
+        scene.colorAmbianceActions.length > 0
+      )
+    case LightColorType.WarmToCoolWhite:
+      return scene.whiteAmbianceAction != undefined
+    default:
+      return false
+  }
+}
+
+function getLightAction(light: ExtendedLight, actions: Action[]): LightAction {
+  return config.getResourceById(
+    _.find(actions, { target: light.id })!.lightAction!,
+  ) as LightAction
 }
 
 function generateLightAction(
@@ -559,23 +576,22 @@ function generateLightAction(
     case LightColorType.Gradient:
       return generateGradientLightAction(colors)
     case LightColorType.Colored:
-      return config.getResourceById(colors.nextColorAmbianceAction())
+      return config.getResourceById(colors.nextColorAction()) as LightAction
     case LightColorType.WarmToCoolWhite:
-      return config.getResourceById(colors.whiteAmbianceAction())
+      return config.getResourceById(colors.whiteAmbianceAction()) as LightAction
     default:
-      return undefined // Off
+      return undefined // Light off
   }
 }
 
 function generateGradientLightAction(colors: any): LightAction {
-  const gradient = _.times(colors.colorAmbianceActionCount, (i) => {
-    const color = (
-      config.getResourceById(colors.colorAmbianceAction(i)) as LightAction
-    ).color
+  const gradient = _.times(colors.colorActionCount, (i) => {
+    const color = (config.getResourceById(colors.colorAction(i)) as LightAction)
+      .color
     return { x: color!.x, y: color!.y }
   })
   const brightness = (
-    config.getResourceById(colors.colorAmbianceAction(0)) as LightAction
+    config.getResourceById(colors.colorAction(0)) as LightAction
   ).brightness
   return {
     id: 'generated_gradient_action',

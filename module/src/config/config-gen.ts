@@ -179,6 +179,8 @@ export interface Color {
  */
 export enum Effect {
     Candle = "candle",
+    Cosmos = "cosmos",
+    Enchant = "enchant",
     Fire = "fire",
     Glisten = "glisten",
     Opal = "opal",
@@ -859,6 +861,8 @@ const typeMap: any = {
     ],
     "Effect": [
         "candle",
+        "cosmos",
+        "enchant",
         "fire",
         "glisten",
         "opal",

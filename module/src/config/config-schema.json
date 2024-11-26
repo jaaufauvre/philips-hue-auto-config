@@ -77,7 +77,16 @@
         "effect": {
           "description": "A light effect",
           "type": "string",
-          "enum": ["prism", "opal", "glisten", "sparkle", "fire", "candle"]
+          "enum": [
+            "prism",
+            "opal",
+            "glisten",
+            "sparkle",
+            "fire",
+            "candle",
+            "enchant",
+            "cosmos"
+          ]
         },
         "gradient": {
           "type": "array",

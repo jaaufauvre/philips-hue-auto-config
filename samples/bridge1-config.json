@@ -1597,45 +1597,63 @@
     {
       "id": "aaliya_night_scene",
       "groups": ["bedroom_aaliya"],
-      "name": "Night",
+      "name": "Suzuka night",
+      "image-id": "c3a1f243-c6a3-4f94-ac00-a7afb30fc867",
       "actions": [
         {
           "target": "aaliya_desk",
           "light-action": "default_night_action"
         },
         {
-          "target": "aaliya_signe",
-          "light-action": "default_night_action"
+          "target": "aaliya_ceiling"
         },
         {
-          "target": "festavia_500",
+          "target": "aaliya_signe",
           "light-action": "default_night_action"
         }
-      ]
+      ],
+      "color-ambiance-actions": [
+        "suzuka_night_color1",
+        "suzuka_night_color2",
+        "suzuka_night_color3",
+        "suzuka_night_color4",
+        "suzuka_night_color5"
+      ],
+      "speed": 0.7301587301587301,
+      "auto-dynamic": true
     },
     {
       "id": "aaliya_evening_scene",
       "groups": ["bedroom_aaliya"],
-      "name": "Evening",
+      "name": "Suzuka evening",
+      "image-id": "c3a1f243-c6a3-4f94-ac00-a7afb30fc867",
       "actions": [
         {
           "target": "aaliya_desk",
           "light-action": "default_evening_action"
         },
         {
-          "target": "aaliya_signe",
-          "light-action": "default_evening_action"
+          "target": "aaliya_ceiling"
         },
         {
-          "target": "festavia_500",
+          "target": "aaliya_signe",
           "light-action": "default_evening_action"
         }
-      ]
+      ],
+      "color-ambiance-actions": [
+        "suzuka_evening_color1",
+        "suzuka_evening_color2",
+        "suzuka_evening_color3",
+        "suzuka_evening_color4",
+        "suzuka_evening_color5"
+      ],
+      "speed": 0.7301587301587301,
+      "auto-dynamic": true
     },
     {
       "id": "aaliya_day_scene",
       "groups": ["bedroom_aaliya"],
-      "name": "Day",
+      "name": "Day Cosmos",
       "actions": [
         {
           "target": "aaliya_desk",
@@ -1647,7 +1665,51 @@
         },
         {
           "target": "festavia_500",
-          "light-action": "default_day_action"
+          "light-action": "purple_cosmos_action"
+        }
+      ]
+    },
+    {
+      "id": "festavia_fireplace",
+      "groups": ["bedroom_aaliya"],
+      "name": "Festavia Fireplace",
+      "actions": [
+        {
+          "target": "festavia_500",
+          "light-action": "fireplace_action"
+        }
+      ]
+    },
+    {
+      "id": "festavia_prism",
+      "groups": ["bedroom_aaliya"],
+      "name": "Festavia Prism",
+      "actions": [
+        {
+          "target": "festavia_500",
+          "light-action": "prism_action"
+        }
+      ]
+    },
+    {
+      "id": "festavia_enchant",
+      "groups": ["bedroom_aaliya"],
+      "name": "Festavia Enchant",
+      "actions": [
+        {
+          "target": "festavia_500",
+          "light-action": "enchant_action"
+        }
+      ]
+    },
+    {
+      "id": "festavia_red_sparkle",
+      "groups": ["bedroom_aaliya"],
+      "name": "Festavia Sparkle",
+      "actions": [
+        {
+          "target": "festavia_500",
+          "light-action": "red_sparkle_action"
         }
       ]
     },
@@ -2007,6 +2069,141 @@
       "id": "malibu_pink_white",
       "mirek": 455,
       "brightness": 80
+    },
+    {
+      "id": "suzuka_night_color1",
+      "color": {
+        "x": 0.22415098882246577,
+        "y": 0.09459107643582164
+      },
+      "brightness": 10
+    },
+    {
+      "id": "suzuka_night_color2",
+      "color": {
+        "x": 0.34815628076797736,
+        "y": 0.1912720780814357
+      },
+      "brightness": 10
+    },
+    {
+      "id": "suzuka_night_color3",
+      "color": {
+        "x": 0.4633680015046482,
+        "y": 0.2642182781116472
+      },
+      "brightness": 10
+    },
+    {
+      "id": "suzuka_night_color4",
+      "color": {
+        "x": 0.4484876642973355,
+        "y": 0.3245220337035739
+      },
+      "brightness": 10
+    },
+    {
+      "id": "suzuka_night_color5",
+      "color": {
+        "x": 0.4195422435217816,
+        "y": 0.44499303625433547
+      },
+      "brightness": 10
+    },
+    {
+      "id": "suzuka_night_white",
+      "mirek": 250,
+      "brightness": 10
+    },
+    {
+      "id": "suzuka_evening_color1",
+      "color": {
+        "x": 0.22415098882246577,
+        "y": 0.09459107643582164
+      },
+      "brightness": 80
+    },
+    {
+      "id": "suzuka_evening_color2",
+      "color": {
+        "x": 0.34815628076797736,
+        "y": 0.1912720780814357
+      },
+      "brightness": 80
+    },
+    {
+      "id": "suzuka_evening_color3",
+      "color": {
+        "x": 0.4633680015046482,
+        "y": 0.2642182781116472
+      },
+      "brightness": 80
+    },
+    {
+      "id": "suzuka_evening_color4",
+      "color": {
+        "x": 0.4484876642973355,
+        "y": 0.3245220337035739
+      },
+      "brightness": 80
+    },
+    {
+      "id": "suzuka_evening_color5",
+      "color": {
+        "x": 0.4195422435217816,
+        "y": 0.44499303625433547
+      },
+      "brightness": 80
+    },
+    {
+      "id": "suzuka_evening_white",
+      "mirek": 250,
+      "brightness": 80
+    },
+    {
+      "id": "purple_cosmos_action",
+      "effect": "cosmos",
+      "color": {
+        "x": 0.1852999999999999,
+        "y": 0.06349999999999992
+      },
+      "brightness": 100
+    },
+    {
+      "id": "red_sparkle_action",
+      "effect": "sparkle",
+      "color": {
+        "x": 0.6915,
+        "y": 0.3083
+      },
+      "brightness": 100
+    },
+    {
+      "id": "prism_action",
+      "effect": "prism",
+      "color": {
+        "x": 0.2116000000000001,
+        "y": 0.07590000000000008
+      },
+      "brightness": 100
+    },
+    {
+      "id": "enchant_action",
+      "effect": "enchant",
+      "color": {
+        "x": 0.1532,
+        "y": 0.04760000000000002
+      },
+      "brightness": 100
+    },
+    {
+      "id": "fireplace_action",
+      "effect": "fire",
+      "color": {
+        "x": 0.5799999999999999,
+        "y": 0.38
+      },
+      "brightness": 100
     }
   ]
 }

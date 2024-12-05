@@ -52,6 +52,11 @@
       "type": "staircase"
     },
     {
+      "id": "stairs",
+      "name": "Stairs",
+      "type": "staircase"
+    },
+    {
       "id": "utility_room",
       "name": "Utility room",
       "type": "laundry_room"
@@ -67,16 +72,6 @@
       "id": "bridge",
       "name": "Bridge #2",
       "type": "computer"
-    },
-    {
-      "id": "downstairs",
-      "name": "Downstairs #2",
-      "type": "downstairs"
-    },
-    {
-      "id": "upstairs",
-      "name": "Upstairs #2",
-      "type": "upstairs"
     }
   ],
   "lights": [
@@ -87,7 +82,7 @@
       "name": "TV Signe gradient left",
       "type": "hue_signe",
       "room": "tv_room",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "tv_gradient_right",
@@ -96,7 +91,7 @@
       "name": "TV Signe gradient right",
       "type": "hue_signe",
       "room": "tv_room",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "tv_ceiling",
@@ -105,16 +100,16 @@
       "name": "TV room filament",
       "type": "vintage_bulb",
       "room": "tv_room",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "festavia_250",
       "mac": "00:17:88:01:0e:c6:3f:fd-0b",
       "serial": "9C8114",
-      "name": "Festavia 250 string lights",
+      "name": "Festavia 250 stairs",
       "type": "string_light",
-      "room": "tv_room",
-      "zones": ["bridge", "downstairs"]
+      "room": "stairs",
+      "zones": ["bridge"]
     },
     {
       "id": "hall_down_1",
@@ -123,7 +118,7 @@
       "name": "Hallway down color ceiling 1",
       "type": "sultan_bulb",
       "room": "hallway_down",
-      "zones": ["bridge", "downstairs"],
+      "zones": ["bridge"],
       "comment": "Close to the main door"
     },
     {
@@ -133,7 +128,7 @@
       "name": "Hallway down color ceiling 2",
       "type": "sultan_bulb",
       "room": "hallway_down",
-      "zones": ["bridge", "downstairs"],
+      "zones": ["bridge"],
       "comment": "Close to the kitchen"
     },
     {
@@ -143,7 +138,7 @@
       "name": "Xamento toilet",
       "type": "ceiling_round",
       "room": "toilet",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "toilet_spot_left",
@@ -152,7 +147,7 @@
       "name": "Toilet Adore spot left",
       "type": "double_spot",
       "room": "toilet",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "toilet_spot_right",
@@ -161,7 +156,7 @@
       "name": "Toilet Adore spot right",
       "type": "double_spot",
       "room": "toilet",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "dressing_ceiling",
@@ -170,7 +165,7 @@
       "name": "Dressing color ceiling",
       "type": "sultan_bulb",
       "room": "dressing",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "savannah_plug_shelves",
@@ -180,7 +175,7 @@
       "type": "plug",
       "smart-plug": true,
       "room": "bedroom_sav",
-      "zones": ["bridge", "upstairs"],
+      "zones": ["bridge"],
       "comment": "Smart plug for shelves"
     },
     {
@@ -191,7 +186,7 @@
       "type": "plug",
       "smart-plug": true,
       "room": "bedroom_sav",
-      "zones": ["bridge", "upstairs"],
+      "zones": ["bridge"],
       "comment": "Smart plug for bed"
     },
     {
@@ -202,7 +197,7 @@
       "type": "plug",
       "smart-plug": true,
       "room": "bedroom_sav",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "savannah_ceiling",
@@ -211,7 +206,7 @@
       "name": "Savannah color ceiling",
       "type": "sultan_bulb",
       "room": "bedroom_sav",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "savannah_signe",
@@ -220,7 +215,7 @@
       "name": "Savannah Signe gradient",
       "type": "hue_signe",
       "room": "bedroom_sav",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "kids_bathroom_ceiling",
@@ -229,7 +224,7 @@
       "name": "Xamento kids bathroom",
       "type": "ceiling_round",
       "room": "kids_bathroom",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "kids_bathroom_spot_left",
@@ -238,7 +233,7 @@
       "name": "Kids bathroom Adore spot left",
       "type": "double_spot",
       "room": "kids_bathroom",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "kids_bathroom_spot_right",
@@ -247,7 +242,7 @@
       "name": "Kids bathroom Adore spot right",
       "type": "double_spot",
       "room": "kids_bathroom",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "hall_up_1",
@@ -256,7 +251,7 @@
       "name": "Hallway up ambiance ceiling 1",
       "type": "sultan_bulb",
       "room": "hallway_up",
-      "zones": ["bridge", "upstairs"],
+      "zones": ["bridge"],
       "comment": "Close to bathroom"
     },
     {
@@ -266,17 +261,17 @@
       "name": "Hallway up ambiance ceiling 2",
       "type": "sultan_bulb",
       "room": "hallway_up",
-      "zones": ["bridge", "upstairs"],
+      "zones": ["bridge"],
       "comment": "Close to bedrooms"
     },
     {
       "id": "front_door_spot",
-      "mac": "00:17:88:01:0d:c2:16:06-0b",
-      "serial": "F1EFB4",
-      "name": "Front door spot",
+      "mac": "00:17:88:01:0e:cf:d9:6b-0b",
+      "serial": "02B106",
+      "name": "Front door color spot",
       "type": "recessed_ceiling",
       "room": "front_door",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "enrave_under_stairs",
@@ -285,7 +280,7 @@
       "name": "Enrave under stairs",
       "type": "ceiling_round",
       "room": "under_stairs",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "enrave_utility",
@@ -294,7 +289,7 @@
       "name": "Enrave utility",
       "type": "ceiling_round",
       "room": "utility_room",
-      "zones": ["bridge", "downstairs"]
+      "zones": ["bridge"]
     },
     {
       "id": "enrave_attic",
@@ -303,7 +298,7 @@
       "name": "Enrave attic",
       "type": "ceiling_round",
       "room": "attic",
-      "zones": ["bridge", "upstairs"]
+      "zones": ["bridge"]
     }
   ],
   "motion-sensors": [
@@ -667,6 +662,72 @@
     }
   },
   "scenes": [
+    {
+      "id": "festavia_fireplace",
+      "groups": ["stairs"],
+      "name": "Festavia Fireplace",
+      "actions": [
+        {
+          "target": "festavia_250",
+          "light-action": "fireplace_action_fast"
+        }
+      ]
+    },
+    {
+      "id": "festavia_prism",
+      "groups": ["stairs"],
+      "name": "Festavia Prism",
+      "actions": [
+        {
+          "target": "festavia_250",
+          "light-action": "prism_action_fast"
+        }
+      ]
+    },
+    {
+      "id": "festavia_enchant",
+      "groups": ["stairs"],
+      "name": "Festavia Enchant",
+      "actions": [
+        {
+          "target": "festavia_250",
+          "light-action": "enchant_action_fast"
+        }
+      ]
+    },
+    {
+      "id": "festavia_red_sparkle",
+      "groups": ["stairs"],
+      "name": "Festavia Red Sparkle",
+      "actions": [
+        {
+          "target": "festavia_250",
+          "light-action": "red_sparkle_action_fast"
+        }
+      ]
+    },
+    {
+      "id": "festavia_blue_cosmos",
+      "groups": ["stairs"],
+      "name": "Festavia Cosmos",
+      "actions": [
+        {
+          "target": "festavia_250",
+          "light-action": "blue_cosmos_action_fast"
+        }
+      ]
+    },
+    {
+      "id": "festavia_white_sparkle",
+      "groups": ["stairs"],
+      "name": "Festavia White Sparkle",
+      "actions": [
+        {
+          "target": "festavia_250",
+          "light-action": "white_sparkle_action_fast"
+        }
+      ]
+    },
     {
       "id": "front_door_sensor_scene",
       "groups": ["front_door"],
@@ -1153,7 +1214,7 @@
       "actions": [
         {
           "target": "front_door_spot",
-          "light-action": "hallowen_white"
+          "light-action": "hallowen_red"
         },
         {
           "target": "tv_gradient_left",
@@ -1245,10 +1306,6 @@
         {
           "target": "tv_ceiling",
           "light-action": "ellipse_filament_min"
-        },
-        {
-          "target": "festavia_250",
-          "light-action": "default_day_action"
         }
       ]
     },
@@ -1264,10 +1321,6 @@
         {
           "target": "tv_gradient_right",
           "light-action": "default_evening_action"
-        },
-        {
-          "target": "festavia_250",
-          "light-action": "default_evening_action"
         }
       ]
     },
@@ -1282,10 +1335,6 @@
         },
         {
           "target": "tv_gradient_right",
-          "light-action": "default_night_action"
-        },
-        {
-          "target": "festavia_250",
           "light-action": "default_night_action"
         }
       ]
@@ -1805,6 +1854,66 @@
       "id": "soho_white",
       "mirek": 370,
       "brightness": 62
+    },
+    {
+      "id": "blue_cosmos_action_fast",
+      "effect": "cosmos",
+      "color": {
+        "x": 0.1532,
+        "y": 0.0476
+      },
+      "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "red_sparkle_action_fast",
+      "effect": "sparkle",
+      "color": {
+        "x": 0.6915,
+        "y": 0.3083
+      },
+      "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "prism_action_fast",
+      "effect": "prism",
+      "color": {
+        "x": 0.2116000000000001,
+        "y": 0.07590000000000008
+      },
+      "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "enchant_action_fast",
+      "effect": "enchant",
+      "color": {
+        "x": 0.1532,
+        "y": 0.04760000000000002
+      },
+      "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "fireplace_action_fast",
+      "effect": "fire",
+      "color": {
+        "x": 0.5799999999999999,
+        "y": 0.38
+      },
+      "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "white_sparkle_action_fast",
+      "effect": "sparkle",
+      "color": {
+        "x": 0.2681000000000002,
+        "y": 0.2813000000000001
+      },
+      "effect-speed": 0.619,
+      "brightness": 100
     }
   ]
 }

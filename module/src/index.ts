@@ -472,13 +472,14 @@ async function addDefaultScene(
 async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
   const groupLights = config.getGroupLights(group)
   const lightActions = new Map<string, LightAction | undefined>()
-  const colors = {
+  const actions = {
+    colorActions: scene.colorAmbianceActions,
     colorActionCount: scene.colorAmbianceActions?.length ?? 0,
     currentColorAction: 0,
     nextColorAction: () => {
-      colors.currentColorAction =
-        (colors.currentColorAction + 1) % colors.colorActionCount
-      return scene.colorAmbianceActions![colors.currentColorAction - 1]
+      actions.currentColorAction =
+        (actions.currentColorAction + 1) % actions.colorActionCount
+      return scene.colorAmbianceActions![actions.currentColorAction]
     },
     colorAction: (index: number) => {
       return scene.colorAmbianceActions![index]
@@ -492,7 +493,7 @@ async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
       lightActions.set(light.idV2!, getLightAction(light, scene.actions!))
     }
     if (useAutoAction(light, scene)) {
-      lightActions.set(light.idV2!, generateLightAction(light, colors))
+      lightActions.set(light.idV2!, generateLightAction(light, actions))
     }
   })
   await createScene(
@@ -570,28 +571,37 @@ function getLightAction(light: ExtendedLight, actions: Action[]): LightAction {
 
 function generateLightAction(
   light: ExtendedLight,
-  colors: any,
+  actions: any,
 ): LightAction | undefined {
   switch (light.colorType) {
     case LightColorType.Gradient:
-      return generateGradientLightAction(colors)
+      return generateGradientLightAction(actions)
     case LightColorType.Colored:
-      return config.getResourceById(colors.nextColorAction()) as LightAction
+      return config.getResourceById(actions.nextColorAction()) as LightAction
     case LightColorType.WarmToCoolWhite:
-      return config.getResourceById(colors.whiteAmbianceAction()) as LightAction
+      return config.getResourceById(
+        actions.whiteAmbianceAction(),
+      ) as LightAction
     default:
       return undefined // Light off
   }
 }
 
-function generateGradientLightAction(colors: any): LightAction {
-  const gradient = _.times(colors.colorActionCount, (i) => {
-    const color = (config.getResourceById(colors.colorAction(i)) as LightAction)
-      .color
+function generateGradientLightAction(actions: any): LightAction {
+  const useGradient = _.every(actions.colorActions, (action) => {
+    return (config.getResourceById(action) as LightAction).color != undefined
+  })
+  if (!useGradient) {
+    return config.getResourceById(actions.nextColorAction()) as LightAction
+  }
+  const gradient = _.times(actions.colorActionCount, (i) => {
+    const color = (
+      config.getResourceById(actions.colorAction(i)) as LightAction
+    ).color
     return { x: color!.x, y: color!.y }
   })
   const brightness = (
-    config.getResourceById(colors.colorAction(0)) as LightAction
+    config.getResourceById(actions.colorAction(0)) as LightAction
   ).brightness
   return {
     id: 'generated_gradient_action',

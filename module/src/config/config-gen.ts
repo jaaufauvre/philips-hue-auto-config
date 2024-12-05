@@ -142,6 +142,10 @@ export interface LightAction {
      */
     effect?: Effect;
     /**
+     * Speed of the effect (if any)
+     */
+    effectSpeed?: number;
+    /**
      * A list of color points
      */
     gradient?: Color[];
@@ -755,6 +759,7 @@ const typeMap: any = {
         { json: "color", js: "color", typ: u(undefined, r("Color")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "effect", js: "effect", typ: u(undefined, r("Effect")) },
+        { json: "effect-speed", js: "effectSpeed", typ: u(undefined, 3.14) },
         { json: "gradient", js: "gradient", typ: u(undefined, a(r("Color"))) },
         { json: "gradient-mode", js: "gradientMode", typ: u(undefined, r("GradientMode")) },
         { json: "id", js: "id", typ: "" },

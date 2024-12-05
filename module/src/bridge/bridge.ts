@@ -203,7 +203,10 @@ export class Bridge {
         (await this.#isScanningLights()) &&
         (await this.#hasMissingLights(lightIdList))
       ) {
-        Logger.info(Color.DarkBlue, 'Scan is in progress ...')
+        Logger.info(
+          Color.DarkBlue,
+          'Scan is in progress, this may take a few minutes ...',
+        )
         await this.#wait(10000)
       }
       const missingLightIdList = await this.#findMissingLights(lightIdList)
@@ -226,7 +229,10 @@ export class Bridge {
           !(await this.#hasLight(missingLightId.mac)) &&
           (await this.#hasMissingLights(lightIdList))
         ) {
-          Logger.info(Color.DarkBlue, 'Scan with serial is in progress ...')
+          Logger.info(
+            Color.DarkBlue,
+            'Scan with serial is in progress, this may take a few minutes ...',
+          )
           await this.#wait(10000)
         }
       }
@@ -1200,39 +1206,42 @@ export class Bridge {
         if (!(await this.#isScanningSensors())) {
           await this.#triggerSensorSearch(name, accessoryId.type)
         }
-        Logger.info(Color.DarkBlue, 'Scan is in progress ...')
+        Logger.info(
+          Color.DarkBlue,
+          'Scan is in progress, this may take a few minutes ...',
+        )
         await this.#wait(10000)
       }
     }
   }
 
   async #triggerSensorSearch(name: string, type: AccessoryType) {
-    const instuctionMsg =
+    const instructionMsg =
       'Instructions/troubleshooting: https://github.com/jaaufauvre/philips-hue-auto-config?tab=readme-ov-file#troubleshooting'
     await this.#apiv1!.searchSensors()
     switch (type) {
       case AccessoryType.WallSwitch:
         Logger.info(
           Color.Purple,
-          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. ${instuctionMsg}`,
+          `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. ${instructionMsg}`,
         )
         break
       case AccessoryType.TapDialSwitch:
         Logger.info(
           Color.Purple,
-          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. ${instuctionMsg}`,
+          `[Tap dial switch] Now, press and hold the first button of '${name}' for 3 seconds. ${instructionMsg}`,
         )
         break
       case AccessoryType.DimmerSwitch:
         Logger.info(
           Color.Purple,
-          `[Dimmer switch] Now, press and hold the "on/off" button of '${name}' for 3 seconds. ${instuctionMsg}`,
+          `[Dimmer switch] Now, press and hold the "on/off" button of '${name}' for 3 seconds. ${instructionMsg}`,
         )
         break
       case AccessoryType.MotionSensor:
         Logger.info(
           Color.Purple,
-          `[Motion sensor] Now, press the "setup" button of '${name}'. ${instuctionMsg}`,
+          `[Motion sensor] Now, press the "setup" button of '${name}'. ${instructionMsg}`,
         )
         break
       default:
@@ -1392,6 +1401,7 @@ export class Bridge {
           parameters: {
             color: this.#lightActionToColor(lightAction),
             color_temperature: this.#lightActionToColorTemperature(lightAction),
+            speed: lightAction.effectSpeed,
           },
         },
       }

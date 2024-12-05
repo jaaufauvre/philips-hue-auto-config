@@ -366,6 +366,7 @@ interface EffectsV2 {
     parameters: {
       color?: Color
       color_temperature?: ColorTemperature
+      speed?: number
     }
   }
 }

@@ -88,6 +88,13 @@
             "cosmos"
           ]
         },
+        "effect-speed": {
+          "type": "number",
+          "description": "Speed of the effect (if any)",
+          "minimum": 0,
+          "maximum": 1,
+          "examples": [0.0539]
+        },
         "gradient": {
           "type": "array",
           "description": "A list of color points",

@@ -52,11 +52,6 @@
       "type": "staircase"
     },
     {
-      "id": "stairs",
-      "name": "Stairs",
-      "type": "staircase"
-    },
-    {
       "id": "utility_room",
       "name": "Utility room",
       "type": "laundry_room"
@@ -108,7 +103,7 @@
       "serial": "9C8114",
       "name": "Festavia 250 stairs",
       "type": "string_light",
-      "room": "stairs",
+      "room": "hallway_down",
       "zones": ["bridge"]
     },
     {
@@ -477,7 +472,7 @@
   "wall-switches": [
     {
       "id": "tv_room_ws",
-      "mac": "00:17:88:01:0d:08:f0:76-01-fc00",
+      "mac": "00:17:88:01:0e:ee:79:b0-01-fc00",
       "name": "Switch TV room",
       "mode": "switch_single_rocker",
       "button1": {
@@ -664,7 +659,7 @@
   "scenes": [
     {
       "id": "festavia_fireplace",
-      "groups": ["stairs"],
+      "groups": ["hallway_down"],
       "name": "Festavia Fireplace",
       "actions": [
         {
@@ -675,7 +670,7 @@
     },
     {
       "id": "festavia_prism",
-      "groups": ["stairs"],
+      "groups": ["hallway_down"],
       "name": "Festavia Prism",
       "actions": [
         {
@@ -686,7 +681,7 @@
     },
     {
       "id": "festavia_enchant",
-      "groups": ["stairs"],
+      "groups": ["hallway_down"],
       "name": "Festavia Enchant",
       "actions": [
         {
@@ -697,7 +692,7 @@
     },
     {
       "id": "festavia_red_sparkle",
-      "groups": ["stairs"],
+      "groups": ["hallway_down"],
       "name": "Festavia Red Sparkle",
       "actions": [
         {
@@ -708,7 +703,7 @@
     },
     {
       "id": "festavia_blue_cosmos",
-      "groups": ["stairs"],
+      "groups": ["hallway_down"],
       "name": "Festavia Cosmos",
       "actions": [
         {
@@ -719,7 +714,7 @@
     },
     {
       "id": "festavia_white_sparkle",
-      "groups": ["stairs"],
+      "groups": ["hallway_down"],
       "name": "Festavia White Sparkle",
       "actions": [
         {
@@ -736,6 +731,28 @@
         {
           "target": "front_door_spot",
           "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "front_door_red",
+      "groups": ["front_door"],
+      "name": "Red",
+      "actions": [
+        {
+          "target": "front_door_spot",
+          "light-action": "red"
+        }
+      ]
+    },
+    {
+      "id": "front_door_green",
+      "groups": ["front_door"],
+      "name": "Green",
+      "actions": [
+        {
+          "target": "front_door_spot",
+          "light-action": "green"
         }
       ]
     },
@@ -1913,6 +1930,22 @@
         "y": 0.2813000000000001
       },
       "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "green",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brightness": 100
+    },
+    {
+      "id": "red",
+      "color": {
+        "x": 0.6664,
+        "y": 0.2982
+      },
       "brightness": 100
     }
   ]

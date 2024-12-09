@@ -740,6 +740,28 @@
       ]
     },
     {
+      "id": "front_door_red",
+      "groups": ["front_door"],
+      "name": "Red",
+      "actions": [
+        {
+          "target": "front_door_spot",
+          "light-action": "red"
+        }
+      ]
+    },
+    {
+      "id": "front_door_green",
+      "groups": ["front_door"],
+      "name": "Green",
+      "actions": [
+        {
+          "target": "front_door_spot",
+          "light-action": "green"
+        }
+      ]
+    },
+    {
       "id": "toilet_blue_day_scene",
       "groups": ["toilet"],
       "name": "Blue (Day)",
@@ -1913,6 +1935,22 @@
         "y": 0.2813000000000001
       },
       "effect-speed": 0.619,
+      "brightness": 100
+    },
+    {
+      "id": "green",
+      "color": {
+        "x": 0.17,
+        "y": 0.6998
+      },
+      "brightness": 100
+    },
+    {
+      "id": "red",
+      "color": {
+        "x": 0.6664,
+        "y": 0.2982
+      },
       "brightness": 100
     }
   ]

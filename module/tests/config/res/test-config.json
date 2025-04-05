@@ -41,6 +41,10 @@
     {
       "id": "ms_room",
       "name": "Room for motion sensor"
+    },
+    {
+      "id": "sm_room",
+      "name": "Room for smart button"
     }
   ],
   "zones": [
@@ -199,6 +203,19 @@
       },
       "button4": {
         "group": "ds_zone2",
+        "scenes": {
+          "unique": "scene"
+        }
+      }
+    }
+  ],
+  "smart-buttons": [
+    {
+      "id": "smartbutton",
+      "mac": "00:17:88:01:0c:33:33:33-01-fc00",
+      "name": "Smart button",
+      "button": {
+        "group": "sm_room",
         "scenes": {
           "unique": "scene"
         }

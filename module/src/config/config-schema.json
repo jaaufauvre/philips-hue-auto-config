@@ -969,6 +969,44 @@
         "required": ["id", "mac", "name", "mode", "button1"]
       }
     },
+    "smart-buttons": {
+      "type": "array",
+      "uniqueItemProperties": ["id", "name", "mac"],
+      "description": "A list of smart buttons",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Uniquely identify the smart button in this configuration",
+            "examples": ["my_smart_button"]
+          },
+          "mac": {
+            "type": "string",
+            "pattern": "^[a-f0-9-:]+$",
+            "description": "MAC address, required for uniquely identifying smart buttons added to a bridge",
+            "examples": ["00:17:88:01:0b:09:c7:49-01-fc00"]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 25,
+            "description": "A name for the smart button",
+            "examples": ["My smart button"]
+          },
+          "button": {
+            "$ref": "#/definitions/accessory-config"
+          },
+          "comment": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "mac", "name", "button"]
+      }
+    },
     "light-actions": {
       "type": "array",
       "uniqueItemProperties": ["id"],

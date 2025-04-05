@@ -119,19 +119,20 @@ describe('Config', () => {
   })
 
   it.each`
-    device               | what          | original_group_id
-    ${'Dimmer switch'}   | ${'button 1'} | ${'ds_room1'}
-    ${'Dimmer switch'}   | ${'button 2'} | ${'ds_zone1'}
-    ${'Dimmer switch'}   | ${'button 3'} | ${'ds_room2'}
-    ${'Dimmer switch'}   | ${'button 4'} | ${'ds_zone2'}
-    ${'Wall switch'}     | ${'button 1'} | ${'ws_room'}
-    ${'Wall switch'}     | ${'button 2'} | ${'ws_zone'}
-    ${'Tap dial switch'} | ${'button 1'} | ${'ts_room1'}
-    ${'Tap dial switch'} | ${'button 2'} | ${'ts_zone1'}
-    ${'Tap dial switch'} | ${'button 3'} | ${'ts_room2'}
-    ${'Tap dial switch'} | ${'button 4'} | ${'ts_zone2'}
-    ${'Tap dial switch'} | ${'dial'}     | ${'ts_room3'}
-    ${'Motion sensor'}   | ${'motion'}   | ${'ms_room'}
+    device               | what             | original_group_id
+    ${'Dimmer switch'}   | ${'button 1'}    | ${'ds_room1'}
+    ${'Dimmer switch'}   | ${'button 2'}    | ${'ds_zone1'}
+    ${'Dimmer switch'}   | ${'button 3'}    | ${'ds_room2'}
+    ${'Dimmer switch'}   | ${'button 4'}    | ${'ds_zone2'}
+    ${'Wall switch'}     | ${'button 1'}    | ${'ws_room'}
+    ${'Wall switch'}     | ${'button 2'}    | ${'ws_zone'}
+    ${'Tap dial switch'} | ${'button 1'}    | ${'ts_room1'}
+    ${'Tap dial switch'} | ${'button 2'}    | ${'ts_zone1'}
+    ${'Tap dial switch'} | ${'button 3'}    | ${'ts_room2'}
+    ${'Tap dial switch'} | ${'button 4'}    | ${'ts_zone2'}
+    ${'Tap dial switch'} | ${'dial'}        | ${'ts_room3'}
+    ${'Motion sensor'}   | ${'motion'}      | ${'ms_room'}
+    ${'Smart button'}    | ${'smartbutton'} | ${'sm_room'}
   `(
     'should throw Error when group ID not defined for $device $what',
     ({ device, what, original_group_id }) => {
@@ -232,6 +233,19 @@ describe('Config', () => {
     }
   })
 
+  test('should throw Error when accessory using undefined scene ID', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(json.replace(`"unique": "scene"`, `"unique": "unknown"`))
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined scene identifier: 'unknown'!`)
+    }
+  })
+
   test('should throw Error when motion sensor and missing motion sensor scene', () => {
     try {
       const json = fs.readFileSync(
@@ -263,6 +277,7 @@ describe('Config', () => {
     expect(config1.tapDialSwitches![0].mac).toBe('00:17:88:01:0b:12:34:56-fc00')
     expect(config1.wallSwitches![0].mac).toBe('00:17:88:01:0c:22:1e:81-01-fc00')
     expect(config1.dimmerSwitches![0].serial).toBe('98C27F')
+    expect(config1.smartButtons![0].mac).toBe('00:17:88:01:0c:00:3c:a3-01-fc00')
     expect(config1.dimmerSwitches![0].mac).toBe(
       '00:17:88:01:0b:11:2d:b2-01-fc00',
     )
@@ -282,6 +297,7 @@ describe('Config', () => {
     expect(config2.tapDialSwitches![0].mac).toBe('00:17:88:01:0b:8a:90:6d-fc00')
     expect(config2.wallSwitches![0].mac).toBe('00:17:88:01:0c:ba:ba:ba-01-fc00')
     expect(config2.dimmerSwitches![0].serial).toBe('006644')
+    expect(config2.smartButtons![0].mac).toBe('00:17:88:01:0c:98:98:98-01-fc00')
     expect(config2.dimmerSwitches![0].mac).toBe(
       '00:17:88:01:0b:89:89:89-01-fc00',
     )
@@ -300,9 +316,15 @@ describe('Config', () => {
     expect(config.tapDialSwitches![0].mac).toBe('00:17:88:01:0b:21:3b:c6-fc00')
     expect(config.wallSwitches![0].mac).toBe('00:17:88:01:0c:11:11:11-01-fc00')
     expect(config.dimmerSwitches![0].serial).toBe('ABCDEF')
+    expect(config.smartButtons![0].mac).toBe('00:17:88:01:0c:33:33:33-01-fc00')
     expect(config.dimmerSwitches![0].mac).toBe(
       '00:17:88:01:0b:22:22:22-01-fc00',
     )
+  })
+
+  test('should return a list of resource mac addresses', () => {
+    const config = new Config('./tests/config/res/test-config.json')
+    expect(config.getAllResourceMacs().length).toBe(11)
   })
 
   it.each`
@@ -323,6 +345,8 @@ describe('Config', () => {
     ${'dimmer switch'} | ${'dimmerswitch'}                    | ${'Dimmer switch'}
     ${'dimmer switch'} | ${'ABCDEF'}                          | ${'Dimmer switch'}
     ${'dimmer switch'} | ${'00:17:88:01:0b:22:22:22-01-fc00'} | ${'Dimmer switch'}
+    ${'smart button'}  | ${'smartbutton'}                     | ${'Smart button'}
+    ${'smart button'}  | ${'00:17:88:01:0c:33:33:33-01-fc00'} | ${'Smart button'}
     ${'scene'}         | ${'scene'}                           | ${'Scene'}
     ${'scene action'}  | ${'scene_action'}                    | ${'Action'}
     ${'scene action'}  | ${'day_action'}                      | ${'Default day action'}
@@ -339,11 +363,6 @@ describe('Config', () => {
       expect(config.getResourceById(id)!.name).toBe(expected_name)
     },
   )
-
-  test('should return a list of resource mac addresses', () => {
-    const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getAllResourceMacs().length).toBe(10)
-  })
 
   test('should return room lights', () => {
     const config = new Config('./tests/config/res/test-config.json')

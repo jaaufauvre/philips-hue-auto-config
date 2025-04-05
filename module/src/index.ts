@@ -4,6 +4,7 @@
   ExtendedLight,
   ExtendedMotionSensor,
   ExtendedRoom,
+  ExtendedSmartButton,
   ExtendedTapDialSwitch,
   ExtendedWallSwitch,
   ExtendedZone,
@@ -178,7 +179,7 @@ async function main() {
   }
   Logger.info(Color.Green, `Updated power up behavior for all lights`)
 
-  // Add wall switches and dimmer switches
+  // Add wall switches, dimmer switches and smart buttons
   const wallSwitchIds = config.wallSwitches.map((wallSwitch) => ({
     mac: wallSwitch.mac,
     name: wallSwitch.name,
@@ -189,12 +190,20 @@ async function main() {
     name: dimmerSwitch.name,
     type: AccessoryType.DimmerSwitch,
   }))
+  const smartButtonIds = config.smartButtons.map((smartButton) => ({
+    mac: smartButton.mac,
+    name: smartButton.name,
+    type: AccessoryType.SmartButton,
+  }))
   _.forEach(
-    await bridge.addAccessories(_.concat(dimmerSwitchIds, wallSwitchIds)),
+    await bridge.addAccessories(
+      _.concat(dimmerSwitchIds, wallSwitchIds, smartButtonIds),
+    ),
     (accessoryId) => {
       const accessory = config.getResourceById(accessoryId.mac)! as
         | ExtendedWallSwitch
         | ExtendedDimmerSwitch
+        | ExtendedSmartButton
       accessory.idV1 = accessoryId.id_v1
       accessory.idV2 = accessoryId.id_v2
       Logger.info(
@@ -274,6 +283,28 @@ async function main() {
       wallSwitch.mode,
     )
     Logger.info(Color.Green, `Wall switch '${wallSwitch.name}' was configured`)
+  }
+
+  // Configure smart buttons
+  for (const smartButton of config.smartButtons) {
+    // Create button rules
+    await addAccessoryButton(
+      AccessoryType.SmartButton,
+      ButtonType.Button1,
+      smartButton.button,
+      smartButton.idV1!,
+      smartButton.name,
+    )
+
+    // Update smart button name
+    await bridge.updateSmartButtonProperties(
+      smartButton.idV2!,
+      smartButton.name,
+    )
+    Logger.info(
+      Color.Green,
+      `Smart button '${smartButton.name}' was configured`,
+    )
   }
 
   // Configure dimmer switches

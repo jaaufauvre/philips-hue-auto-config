@@ -17,6 +17,7 @@ import {
   LightAction,
   Convert,
   AccessoryConfig,
+  SmartButton,
 } from './config-gen'
 import _ from 'lodash'
 
@@ -65,6 +66,11 @@ export interface ExtendedWallSwitch extends WallSwitch {
   idV2?: string
 }
 
+export interface ExtendedSmartButton extends SmartButton {
+  idV1?: string
+  idV2?: string
+}
+
 export interface ExtendedTapDialSwitch extends TapDialSwitch {
   dialIdV1?: string
   switchIdV1?: string
@@ -95,6 +101,7 @@ export class Config implements ConfigGen {
   tapDialSwitches: ExtendedTapDialSwitch[]
   dimmerSwitches: ExtendedDimmerSwitch[]
   wallSwitches: ExtendedWallSwitch[]
+  smartButtons: ExtendedSmartButton[]
   scenes: Scene[]
   lightActions: LightAction[]
 
@@ -124,6 +131,7 @@ export class Config implements ConfigGen {
     this.tapDialSwitches = this._internalConfig.tapDialSwitches ?? []
     this.dimmerSwitches = this._internalConfig.dimmerSwitches ?? []
     this.wallSwitches = this._internalConfig.wallSwitches ?? []
+    this.smartButtons = this._internalConfig.smartButtons ?? []
     _.forEach(this.rooms, (room) => (room.groupType = GroupType.Room))
     _.forEach(this.zones, (zone) => (zone.groupType = GroupType.Zone))
     _.forEach(_.concat<ExtendedGroup>(this.zones, this.rooms), (group) => {
@@ -152,6 +160,7 @@ export class Config implements ConfigGen {
     this.#validateUniqueIds()
     this.#validateLightConfig()
     this.#validateWallSwitchConfig()
+    this.#validateSmartButtonConfig()
     this.#validateTapDialSwitchConfig()
     this.#validateDimmerSwitchConfig()
     this.#validateMotionSensorConfig()
@@ -168,6 +177,9 @@ export class Config implements ConfigGen {
         _.find(this.zones, { id }),
         _.find(this.wallSwitches, (wallSwitch) =>
           _.includes([wallSwitch.id, wallSwitch.mac], id),
+        ),
+        _.find(this.smartButtons, (smartButton) =>
+          _.includes([smartButton.id, smartButton.mac], id),
         ),
         _.find(this.tapDialSwitches, (tapDialSwitch) =>
           _.includes(
@@ -203,6 +215,7 @@ export class Config implements ConfigGen {
         this.motionSensors,
         this.dimmerSwitches,
         this.wallSwitches,
+        this.smartButtons,
         this.tapDialSwitches,
       ),
       (resource) => resource.mac,
@@ -275,6 +288,7 @@ export class Config implements ConfigGen {
     Logger.info(`${copy.tapDialSwitches.length} tap dial switch(es)`)
     Logger.info(`${copy.dimmerSwitches.length} dimmer switch(es)`)
     Logger.info(`${copy.wallSwitches.length} wall switch(es)`)
+    Logger.info(`${copy.smartButtons.length} smart button(s)`)
     Logger.info(`${copy.scenes.length} scene(s)`)
     Logger.info(`${copy.lightActions.length} light action(s)`)
   }
@@ -307,6 +321,7 @@ export class Config implements ConfigGen {
       ...this.tapDialSwitches,
       ...this.dimmerSwitches,
       ...this.wallSwitches,
+      ...this.smartButtons,
     ]
     objects.forEach((obj: Decryptable) => {
       obj.serial = this.#decryptSerial(xorKey, obj.serial)
@@ -367,6 +382,7 @@ export class Config implements ConfigGen {
       this.motionSensors,
       this.dimmerSwitches,
       this.wallSwitches,
+      this.smartButtons,
       this.scenes,
       this.lightActions,
       [defaultScenes.day, defaultScenes.night, defaultScenes.evening],
@@ -397,6 +413,12 @@ export class Config implements ConfigGen {
     this.wallSwitches.forEach((wallSwitch) => {
       this.#checkAccessoryConfig(wallSwitch.button1)
       this.#checkAccessoryConfig(wallSwitch.button2)
+    })
+  }
+
+  #validateSmartButtonConfig() {
+    this.smartButtons.forEach((smartButton) => {
+      this.#checkAccessoryConfig(smartButton.button)
     })
   }
 
@@ -454,10 +476,10 @@ export class Config implements ConfigGen {
       return
     }
     this.#checkGroupDefined(config.group)
-    this.#checkResourceDefined(config.scenes?.day)
-    this.#checkResourceDefined(config.scenes?.night)
-    this.#checkResourceDefined(config.scenes?.evening)
-    this.#checkResourceDefined(config.scenes?.unique)
+    this.#checkSceneDefined(config.scenes?.day)
+    this.#checkSceneDefined(config.scenes?.night)
+    this.#checkSceneDefined(config.scenes?.evening)
+    this.#checkSceneDefined(config.scenes?.unique)
   }
 
   #checkResourceDefined(id: string | undefined) {
@@ -490,6 +512,15 @@ export class Config implements ConfigGen {
   #checkLightDefined(id: string) {
     if (!_.find(this.lights, { id })) {
       throw Error(`Undefined light identifier: '${id}'!`)
+    }
+  }
+
+  #checkSceneDefined(id: string | undefined) {
+    if (!id) {
+      return
+    }
+    if (!_.find(this.scenes, { id })) {
+      throw Error(`Undefined scene identifier: '${id}'!`)
     }
   }
 }

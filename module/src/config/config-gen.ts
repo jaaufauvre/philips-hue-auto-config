@@ -45,6 +45,10 @@ export interface ConfigGen {
      */
     scenes?: Scene[];
     /**
+     * A list of smart buttons
+     */
+    smartButtons?: SmartButton[];
+    /**
      * A list of tap dial switches
      */
     tapDialSwitches?: TapDialSwitch[];
@@ -476,6 +480,23 @@ export interface Action {
     target: string;
 }
 
+export interface SmartButton {
+    button:   AccessoryConfig;
+    comment?: string;
+    /**
+     * Uniquely identify the smart button in this configuration
+     */
+    id: string;
+    /**
+     * MAC address, required for uniquely identifying smart buttons added to a bridge
+     */
+    mac: string;
+    /**
+     * A name for the smart button
+     */
+    name: string;
+}
+
 export interface TapDialSwitch {
     button1:  AccessoryConfig;
     button2:  AccessoryConfig;
@@ -727,6 +748,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "rooms", js: "rooms", typ: a(r("Room")) },
         { json: "scenes", js: "scenes", typ: u(undefined, a(r("Scene"))) },
+        { json: "smart-buttons", js: "smartButtons", typ: u(undefined, a(r("SmartButton"))) },
         { json: "tap-dial-switches", js: "tapDialSwitches", typ: u(undefined, a(r("TapDialSwitch"))) },
         { json: "wall-switches", js: "wallSwitches", typ: u(undefined, a(r("WallSwitch"))) },
         { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
@@ -831,6 +853,13 @@ const typeMap: any = {
     "Action": o([
         { json: "light-action", js: "lightAction", typ: u(undefined, "") },
         { json: "target", js: "target", typ: "" },
+    ], false),
+    "SmartButton": o([
+        { json: "button", js: "button", typ: r("AccessoryConfig") },
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: "" },
+        { json: "mac", js: "mac", typ: "" },
+        { json: "name", js: "name", typ: "" },
     ], false),
     "TapDialSwitch": o([
         { json: "button1", js: "button1", typ: r("AccessoryConfig") },

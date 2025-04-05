@@ -368,7 +368,7 @@ export class Bridge {
   ): Promise<AccessoryIdentifiers[]> {
     Logger.info('Adding accessories:')
     Logger.table(accessoryIdList)
-    // All all
+    // Add all
     await this.#searchAccessories(accessoryIdList)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
@@ -474,6 +474,16 @@ export class Bridge {
     }
   }
 
+  async updateSmartButtonProperties(idV2: string, name: string) {
+    Logger.info(`Updating smart button '${idV2}'`)
+    const device = {
+      metadata: {
+        name: name,
+      },
+    }
+    await this.#updateDevice(idV2, device)
+  }
+
   async updateDimmerSwitchProperties(idV2: string, name: string) {
     Logger.info(`Updating dimmer switch '${idV2}'`)
     const device = {
@@ -568,6 +578,7 @@ export class Bridge {
         off = !brighten && !darken
         onEvent = offEvent = brightenEvent = darkenEvent = `${button}000` // initial_press
         break
+      case AccessoryType.SmartButton:
       case AccessoryType.WallSwitch:
         on = off = true
         onEvent = offEvent = `${button}000` // initial_press
@@ -1226,6 +1237,12 @@ export class Bridge {
           `[Wall switch] Now, toggle (on/off) each button of '${name}' one time. ${instructionMsg}`,
         )
         break
+      case AccessoryType.SmartButton:
+        Logger.info(
+          Color.Purple,
+          `[Smart button] Now, press and hold '${name}' for 3 seconds. ${instructionMsg}`,
+        )
+        break
       case AccessoryType.TapDialSwitch:
         Logger.info(
           Color.Purple,
@@ -1241,7 +1258,7 @@ export class Bridge {
       case AccessoryType.MotionSensor:
         Logger.info(
           Color.Purple,
-          `[Motion sensor] Now, press the "setup" button of '${name}'. ${instructionMsg}`,
+          `[Motion sensor] Now, press the "setup" button on the back of '${name}'. ${instructionMsg}`,
         )
         break
       default:
@@ -1525,5 +1542,6 @@ export enum AccessoryType {
   WallSwitch = 'Wall switch',
   TapDialSwitch = 'Tap dial switch',
   DimmerSwitch = 'Dimmer switch',
+  SmartButton = 'Smart button',
   MotionSensor = 'Motion sensor',
 }

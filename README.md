@@ -102,6 +102,13 @@ Source: https://www.philips-hue.com/en-us/explore-hue/blog/dimmer-switch-install
  <img src="./res/tap-dial-switch-get-help.png" width="300px"/>
 </p>
 
+### Smart buttons
+
+<p>
+ <img src="./res/connect-smart-button.png" width="300px"/>
+ <img src="./res/smart-button-troubleshooting.png" width="300px"/>
+</p>
+
 ## References
 
 * https://developers.meethue.com/develop/hue-api/

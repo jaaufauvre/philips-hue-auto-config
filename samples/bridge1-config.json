@@ -195,6 +195,15 @@
       "zones": ["bridge"]
     },
     {
+      "id": "office_signe_left",
+      "mac": "00:17:88:01:0b:73:30:f6-0b",
+      "serial": "410ABF",
+      "name": "Office Signe gradient L",
+      "type": "hue_signe",
+      "room": "office",
+      "zones": ["bridge"]
+    },
+    {
       "id": "office_desk",
       "mac": "00:17:88:01:0e:c1:b2:06-0b",
       "serial": "956326",
@@ -1472,6 +1481,10 @@
         {
           "target": "office_desk",
           "light-action": "hallowen_red"
+        },
+        {
+          "target": "office_signe_left",
+          "light-action": "hallowen_red"
         }
       ]
     },
@@ -1557,6 +1570,10 @@
           "light-action": "default_day_action"
         },
         {
+          "target": "office_signe_left",
+          "light-action": "default_day_action"
+        },
+        {
           "target": "office_ceiling",
           "light-action": "ellipse_filament_min"
         }
@@ -1569,6 +1586,10 @@
       "actions": [
         {
           "target": "office_desk",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "office_signe_left",
           "light-action": "default_night_action"
         }
       ]

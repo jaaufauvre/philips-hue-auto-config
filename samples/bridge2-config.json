@@ -185,12 +185,11 @@
       "comment": "Smart plug for bed"
     },
     {
-      "id": "savannah_plug_light_string",
-      "mac": "00:17:88:01:0d:e8:b4:01-0b",
-      "serial": "283142",
-      "name": "Savannah light string",
-      "type": "plug",
-      "smart-plug": true,
+      "id": "savannah_festavia_250",
+      "mac": "00:17:88:01:0e:c6:e4:a0-0b",
+      "serial": "4016DD",
+      "name": "Savannah Festavia 250",
+      "type": "string_light",
       "room": "bedroom_sav",
       "zones": ["bridge"]
     },
@@ -204,11 +203,20 @@
       "zones": ["bridge"]
     },
     {
-      "id": "savannah_signe",
-      "mac": "00:17:88:01:0b:73:30:f6-0b",
-      "serial": "410ABF",
-      "name": "Savannah Signe gradient",
-      "type": "hue_signe",
+      "id": "savannah_spot",
+      "mac": "00:17:88:01:0e:cf:da:c5-0b",
+      "serial": "917B5A",
+      "name": "Savannah color bed",
+      "type": "single_spot",
+      "room": "bedroom_sav",
+      "zones": ["bridge"]
+    },
+    {
+      "id": "savannah_go_portable",
+      "mac": "00:17:88:01:0e:e8:2e:b1-0b",
+      "serial": "39F473",
+      "name": "Savannah Go portable",
+      "type": "table_shade",
       "room": "bedroom_sav",
       "zones": ["bridge"]
     },
@@ -387,7 +395,7 @@
       "button3": {
         "group": "bedroom_sav",
         "scenes": {
-          "unique": "honolulu_scene"
+          "unique": "glitz_and_glam_scene"
         }
       },
       "button4": {
@@ -490,7 +498,12 @@
       "name": "Switch Savannah",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom_sav"
+        "group": "bedroom_sav",
+        "scenes": {
+          "day": "sav_day_scene",
+          "evening": "glitz_and_glam_scene",
+          "night": "sav_night_scene"
+        }
       }
     },
     {
@@ -587,6 +600,19 @@
         "group": "under_stairs",
         "scenes": {
           "unique": "under_stairs_switch_scene"
+        }
+      }
+    }
+  ],
+  "smart-buttons": [
+    {
+      "id": "savannah_sb",
+      "mac": "00:17:88:01:0b:09:c7:49-01-fc00",
+      "name": "Smart button Savannah",
+      "button": {
+        "group": "bedroom_sav",
+        "scenes": {
+          "unique": "sav_bed_scene"
         }
       }
     }
@@ -1278,7 +1304,15 @@
           "light-action": "hallowen_red"
         },
         {
-          "target": "savannah_signe",
+          "target": "savannah_spot",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "savannah_go_portable",
+          "light-action": "hallowen_white"
+        },
+        {
+          "target": "savannah_festavia_250",
           "light-action": "hallowen_white"
         },
         {
@@ -1462,10 +1496,112 @@
       "name": "Bed",
       "actions": [
         {
-          "target": "savannah_signe",
+          "target": "savannah_spot",
+          "light-action": "sav_bed_action"
+        }
+      ]
+    },
+    {
+      "id": "sav_desk_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Desk",
+      "actions": [
+        {
+          "target": "savannah_go_portable",
           "light-action": "default_day_action"
         }
       ]
+    },
+    {
+      "id": "sav_day_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Switch day",
+      "actions": [
+        {
+          "target": "savannah_spot",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "savannah_go_portable",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_unicorn",
+          "light-action": "smart_plug_on"
+        }
+      ]
+    },
+    {
+      "id": "sav_night_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Switch night",
+      "actions": [
+        {
+          "target": "savannah_spot",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "savannah_go_portable",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "default_night_action"
+        }
+      ]
+    },
+    {
+      "id": "glitz_and_glam_scene",
+      "image-id": "df93ccf7-8928-41eb-af11-eefdcffbb06a",
+      "groups": ["bedroom_sav"],
+      "name": "Glitz and glam evening",
+      "color-ambiance-actions": [
+        "glitz_and_glam_color1",
+        "glitz_and_glam_color2",
+        "glitz_and_glam_color3",
+        "glitz_and_glam_color4",
+        "glitz_and_glam_color5"
+      ],
+      "actions": [
+        {
+          "target": "savannah_spot",
+          "light-action": "glitz_and_glam_color1"
+        },
+        {
+          "target": "savannah_go_portable",
+          "light-action": "glitz_and_glam_color2"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "glitz_and_glam_color4"
+        },
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_unicorn",
+          "light-action": "smart_plug_on"
+        }
+      ],
+      "speed": 0.626984126984127,
+      "auto-dynamic": false
     },
     {
       "id": "sav_light_string_scene",
@@ -1473,8 +1609,8 @@
       "name": "Light string",
       "actions": [
         {
-          "target": "savannah_plug_light_string",
-          "light-action": "smart_plug_on"
+          "target": "savannah_festavia_250",
+          "light-action": "default_day_action"
         }
       ]
     }
@@ -1947,6 +2083,56 @@
         "y": 0.2982
       },
       "brightness": 100
+    },
+    {
+      "id": "glitz_and_glam_color1",
+      "color": {
+        "x": 0.4500000000000002,
+        "y": 0.1980000000000001
+      },
+      "brightness": 50
+    },
+    {
+      "id": "glitz_and_glam_color2",
+      "color": {
+        "x": 0.4006999999999999,
+        "y": 0.2296
+      },
+      "brightness": 50
+    },
+    {
+      "id": "glitz_and_glam_color3",
+      "color": {
+        "x": 0.4468999999999999,
+        "y": 0.2730000000000001
+      },
+      "brightness": 50
+    },
+    {
+      "id": "glitz_and_glam_color4",
+      "color": {
+        "x": 0.5564999999999997,
+        "y": 0.3924
+      },
+      "brightness": 50
+    },
+    {
+      "id": "glitz_and_glam_color5",
+      "color": {
+        "x": 0.5856,
+        "y": 0.3736
+      },
+      "brightness": 50
+    },
+    {
+      "id": "glitz_and_glam_white",
+      "mirek": 400,
+      "brightness": 50
+    },
+    {
+      "id": "sav_bed_action",
+      "mirek": 380,
+      "brightness": 60
     }
   ]
 }

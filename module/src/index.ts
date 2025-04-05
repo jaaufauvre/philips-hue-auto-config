@@ -296,6 +296,16 @@ async function main() {
       smartButton.name,
     )
 
+    // Create behavior script (dim +/-)
+    const group = config.getResourceById(smartButton.button.group)! as
+      | ExtendedRoom
+      | ExtendedZone
+    await bridge.configureSmartButton(
+      smartButton.idV2!,
+      group.idV2!,
+      group.groupType!,
+    )
+
     // Update smart button name
     await bridge.updateSmartButtonProperties(
       smartButton.idV2!,
@@ -382,7 +392,7 @@ async function main() {
       tapDialSwitch.name,
     )
 
-    // Create behavior script
+    // Create behavior script (dim +/-)
     const group = config.getResourceById(tapDialSwitch.dial.group)! as
       | ExtendedRoom
       | ExtendedZone

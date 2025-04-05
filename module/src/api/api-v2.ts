@@ -291,6 +291,7 @@ export interface DeviceMetadata {
 
 export interface DeviceProductData {
   product_name: string
+  model_id: string
 }
 
 export interface DeviceMode {
@@ -416,16 +417,24 @@ export interface NewBehaviorInstance {
   type: string
   enabled: boolean
   script_id: string
-  configuration: BehaviorConfiguration
+  configuration:
+    | TapDialBehaviorConfiguration
+    | GenericButtonBehaviorConfiguration
 }
 
-export interface BehaviorConfiguration {
+export interface TapDialBehaviorConfiguration {
   device: Resource
   button1: ButtonBehaviorConfiguration
   button2: ButtonBehaviorConfiguration
   button3: ButtonBehaviorConfiguration
   button4: ButtonBehaviorConfiguration
   rotary: RotaryBehaviorConfiguration
+}
+
+export interface GenericButtonBehaviorConfiguration {
+  device: Resource
+  buttons: ButtonsBehaviorConfiguration
+  model_id: string
 }
 
 export interface ButtonBehaviorConfiguration {
@@ -436,6 +445,25 @@ export interface ButtonBehaviorConfiguration {
     action: string
   }
   where: Where[]
+}
+
+export interface ButtonsBehaviorConfiguration {
+  [buttonServiceId: string]: {
+    on_repeat: {
+      action: string
+    }
+    on_short_release: {
+      recall_single_extended: {
+        actions: {
+          action: string
+        }[]
+        with_off: {
+          enabled: boolean
+        }
+      }
+    }
+    where: Where[]
+  }
 }
 
 export interface Where {

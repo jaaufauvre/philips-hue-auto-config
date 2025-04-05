@@ -579,6 +579,9 @@ export class Bridge {
         onEvent = offEvent = brightenEvent = darkenEvent = `${button}000` // initial_press
         break
       case AccessoryType.SmartButton:
+        on = off = true
+        onEvent = offEvent = `1002` // short_release
+        break
       case AccessoryType.WallSwitch:
         on = off = true
         onEvent = offEvent = `${button}000` // initial_press
@@ -778,14 +781,14 @@ export class Bridge {
     groupType: string,
   ) {
     Logger.info(
-      `Configuring dial '${idV2}' to control group '${groupIdV2}', scene: '${daySceneIdV2}'`,
+      `Configuring ${AccessoryType.TapDialSwitch} '${idV2}' to control group '${groupIdV2}', scene: '${daySceneIdV2}'`,
     )
     const button = {
       on_short_release: {
-        action: 'do_nothing',
+        action: 'do_nothing', // We use legacy rules for that
       },
       on_long_press: {
-        action: 'do_nothing',
+        action: 'do_nothing', // We use legacy rules for that
       },
       where: [
         {
@@ -796,10 +799,10 @@ export class Bridge {
         },
       ],
     }
-    const behavior = {
+    const dimOnOffBehavior = {
       type: 'behavior_instance',
-      enabled: true,
       script_id: 'f306f634-acdb-4dd6-bdf5-48dd626d667e', // "Tap Switch script"
+      enabled: true,
       configuration: {
         device: {
           rid: idV2,
@@ -836,7 +839,62 @@ export class Bridge {
         },
       },
     }
-    await this.#apiv2!.createBehaviorInstance(behavior)
+    await this.#apiv2!.createBehaviorInstance(dimOnOffBehavior)
+  }
+
+  async configureSmartButton(
+    idV2: string,
+    groupIdV2: string,
+    groupType: string,
+  ) {
+    Logger.info(
+      `Configuring ${AccessoryType.SmartButton} '${idV2}' to control group '${groupIdV2}`,
+    )
+    const device = (await this.#apiv2!.getDevice(idV2)).data[0]
+    const buttonServiceId = _.find(device.services, { rtype: 'button' })!.rid
+    const modelId = device.product_data.model_id
+
+    const buttons = {
+      [buttonServiceId]: {
+        on_repeat: {
+          action: 'dim_alternate',
+        },
+        on_short_release: {
+          recall_single_extended: {
+            actions: [
+              {
+                action: 'do_nothing', // We use legacy rules for that
+              },
+            ],
+            with_off: {
+              enabled: false, // We use legacy rules for that
+            },
+          },
+        },
+        where: [
+          {
+            group: {
+              rid: groupIdV2,
+              rtype: groupType,
+            },
+          },
+        ],
+      },
+    }
+    const dimOnOffBehavior = {
+      type: 'behavior_instance',
+      script_id: '67d9395b-4403-42cc-b5f0-740b699d67c6', // "Generic switches script"
+      enabled: true,
+      configuration: {
+        buttons: buttons,
+        device: {
+          rid: idV2,
+          rtype: 'device',
+        },
+        model_id: modelId,
+      },
+    }
+    await this.#apiv2!.createBehaviorInstance(dimOnOffBehavior)
   }
 
   async configureMotionSensor(
@@ -850,7 +908,7 @@ export class Bridge {
     eveningSceneIdV1: string,
   ) {
     Logger.info(
-      `Configuring motion sensor with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${sensorGroupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}', evening scene: '${eveningSceneIdV1}'.`,
+      `Configuring ${AccessoryType.MotionSensor} with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${sensorGroupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}', evening scene: '${eveningSceneIdV1}'.`,
     )
 
     // Create a virtual switch for the motion sensor

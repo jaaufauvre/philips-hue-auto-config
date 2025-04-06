@@ -383,7 +383,7 @@
       "button1": {
         "group": "bedroom_sav",
         "scenes": {
-          "unique": "sav_bed_scene"
+          "unique": "sav_desk_scene"
         }
       },
       "button2": {
@@ -401,7 +401,7 @@
       "button4": {
         "group": "bedroom_sav",
         "scenes": {
-          "unique": "sav_light_string_scene"
+          "unique": "fairfax_scene"
         }
       }
     },
@@ -1604,6 +1604,32 @@
       "auto-dynamic": false
     },
     {
+      "id": "fairfax_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Fairfax",
+      "image-id": "cc716363-44c2-4d64-88be-152d74072ea0",
+      "actions": [
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_unicorn",
+          "light-action": "smart_plug_on"
+        }
+      ],
+      "color-ambiance-actions": [
+        "fairfax_color1",
+        "fairfax_color2",
+        "fairfax_color3",
+        "fairfax_color4",
+        "fairfax_color5"
+      ],
+      "white-ambiance-action": "fairfax_white",
+      "speed": 0.6031746031746031,
+      "auto-dynamic": false
+    },
+    {
       "id": "sav_light_string_scene",
       "groups": ["bedroom_sav"],
       "name": "Light string",
@@ -2133,6 +2159,51 @@
       "id": "sav_bed_action",
       "mirek": 380,
       "brightness": 60
+    },
+    {
+      "id": "fairfax_color1",
+      "color": {
+        "x": 0.15832187179872266,
+        "y": 0.2464994360459551
+      },
+      "brightness": 62
+    },
+    {
+      "id": "fairfax_color2",
+      "color": {
+        "x": 0.1935000000000001,
+        "y": 0.23530000000000024
+      },
+      "brightness": 62
+    },
+    {
+      "id": "fairfax_color3",
+      "color": {
+        "x": 0.4817999999999997,
+        "y": 0.321
+      },
+      "brightness": 62
+    },
+    {
+      "id": "fairfax_color4",
+      "color": {
+        "x": 0.6130000000000001,
+        "y": 0.3132000000000001
+      },
+      "brightness": 62
+    },
+    {
+      "id": "fairfax_color5",
+      "color": {
+        "x": 0.6775732472610194,
+        "y": 0.301555239738354
+      },
+      "brightness": 62
+    },
+    {
+      "id": "fairfax_white",
+      "mirek": 286,
+      "brightness": 62
     }
   ]
 }

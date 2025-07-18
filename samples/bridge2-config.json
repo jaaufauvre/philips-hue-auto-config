@@ -1497,7 +1497,7 @@
       "actions": [
         {
           "target": "savannah_spot",
-          "light-action": "sav_bed_action"
+          "light-action": "default_day_action"
         }
       ]
     },
@@ -1672,7 +1672,7 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "toilet_red_day",
@@ -1696,7 +1696,7 @@
         "x": 0.6664,
         "y": 0.2982
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "toilet_green_day",
@@ -1720,7 +1720,7 @@
         "x": 0.17,
         "y": 0.6998
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "toilet_pink_day",
@@ -1744,7 +1744,7 @@
         "x": 0.3081,
         "y": 0.1655
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "toilet_spot_day",
@@ -1759,7 +1759,7 @@
     {
       "id": "toilet_spot_night",
       "mirek": 304,
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "bathroom_blue_day",
@@ -1783,7 +1783,7 @@
         "x": 0.1534,
         "y": 0.0539
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "bathroom_red_day",
@@ -1807,7 +1807,7 @@
         "x": 0.6664,
         "y": 0.2982
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "bathroom_green_day",
@@ -1831,7 +1831,7 @@
         "x": 0.17,
         "y": 0.6998
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "bathroom_pink_day",
@@ -1855,7 +1855,7 @@
         "x": 0.3081,
         "y": 0.1655
       },
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "bathroom_spot_day",
@@ -1870,7 +1870,7 @@
     {
       "id": "bathroom_spot_night",
       "mirek": 304,
-      "brightness": 25
+      "brightness": 20
     },
     {
       "id": "hallowen_red",
@@ -2154,11 +2154,6 @@
       "id": "glitz_and_glam_white",
       "mirek": 400,
       "brightness": 50
-    },
-    {
-      "id": "sav_bed_action",
-      "mirek": 380,
-      "brightness": 60
     },
     {
       "id": "fairfax_color1",

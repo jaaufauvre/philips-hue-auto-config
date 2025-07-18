@@ -393,7 +393,7 @@ export class Bridge {
   ): Promise<TapDialSwitchIdentifiers[]> {
     Logger.info('Adding tap dial switches:')
     Logger.table(tapDialSwitchIdList)
-    // All all
+    // Add all
     await this.#searchAccessories(tapDialSwitchIdList)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
@@ -423,7 +423,7 @@ export class Bridge {
   ): Promise<MotionSensorIdentifiers[]> {
     Logger.info('Adding motion sensors:')
     Logger.table(motionSensorIdList)
-    // All all
+    // Add all
     await this.#searchAccessories(motionSensorIdList)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
@@ -536,7 +536,7 @@ export class Bridge {
     const lightSensor = {
       name: `${name} (L)`,
       config: {
-        tholddark: 19000, // Medium
+        tholddark: 15000, // Medium
       },
     }
     const presenceSensor = {

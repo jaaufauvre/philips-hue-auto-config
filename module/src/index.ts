@@ -498,7 +498,10 @@ async function addDefaultScene(
   _.mapValues(lights, (light: ExtendedLight) => {
     lightActions.set(
       light.idV2!,
-      light.smartPlug ? smartPlugAction : lightAction,
+      // If smart plug or "White" light, just switch it on
+      light.smartPlug || light.colorType == LightColorType.SoftWarmWhite
+        ? smartPlugAction
+        : lightAction,
     )
   })
   await createScene(

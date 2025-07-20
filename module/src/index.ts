@@ -297,14 +297,16 @@ async function main() {
     )
 
     // Create behavior script (dim +/-)
-    const group = config.getResourceById(smartButton.button.group)! as
-      | ExtendedRoom
-      | ExtendedZone
-    await bridge.configureSmartButton(
-      smartButton.idV2!,
-      group.idV2!,
-      group.groupType!,
-    )
+    for (const groupId of smartButton.button.groups) {
+      const group = config.getResourceById(groupId)! as
+        | ExtendedRoom
+        | ExtendedZone
+      await bridge.configureSmartButton(
+        smartButton.idV2!,
+        group.idV2!,
+        group.groupType!,
+      )
+    }
 
     // Update smart button name
     await bridge.updateSmartButtonProperties(
@@ -393,15 +395,17 @@ async function main() {
     )
 
     // Create behavior script (dim +/-)
-    const group = config.getResourceById(tapDialSwitch.dial.group)! as
-      | ExtendedRoom
-      | ExtendedZone
-    await bridge.configureTapDial(
-      tapDialSwitch.idV2!,
-      group.idV2!,
-      group.sceneIdsV2!.get(config.getDaySceneId(tapDialSwitch.dial))!,
-      group.groupType!,
-    )
+    for (const groupId of tapDialSwitch.dial.groups) {
+      const group = config.getResourceById(groupId)! as
+        | ExtendedRoom
+        | ExtendedZone
+      await bridge.configureTapDial(
+        tapDialSwitch.idV2!,
+        group.idV2!,
+        group.sceneIdsV2!.get(config.getDaySceneId(tapDialSwitch.dial))!,
+        group.groupType!,
+      )
+    }
 
     // Update tap dial switch name
     await bridge.updateTapDialSwitchProperties(
@@ -418,28 +422,30 @@ async function main() {
 
   // Configure motion sensors
   for (const motionSensor of config.motionSensors) {
-    const group = config.getResourceById(motionSensor.motion.group)! as
-      | ExtendedRoom
-      | ExtendedZone
+    for (const groupId of motionSensor.motion.groups) {
+      const group = config.getResourceById(groupId)! as
+        | ExtendedRoom
+        | ExtendedZone
 
-    // Create default scenes
-    await addDefaultScene(group, config.defaults.scenes.motionSensorDay!)
-    await addDefaultScene(group, config.defaults.scenes.motionSensorNight!)
-    await addDefaultScene(group, config.defaults.scenes.motionSensorEvening!)
+      // Create default scenes
+      await addDefaultScene(group, config.defaults.scenes.motionSensorDay!)
+      await addDefaultScene(group, config.defaults.scenes.motionSensorNight!)
+      await addDefaultScene(group, config.defaults.scenes.motionSensorEvening!)
 
-    // Create motion sensor rules
-    await bridge.configureMotionSensor(
-      motionSensor.mac,
-      motionSensor.lightIdV1!,
-      motionSensor.presenceIdV1!,
-      motionSensor.name,
-      group.idV1!,
-      group.sceneIdsV1!.get(config.getSensorDaySceneId(motionSensor.motion))!,
-      group.sceneIdsV1!.get(config.getSensorNightSceneId(motionSensor.motion))!,
-      group.sceneIdsV1!.get(
-        config.getSensorEveningSceneId(motionSensor.motion),
-      )!,
-    )
+      // Create motion sensor rules
+      await bridge.configureMotionSensor(
+        motionSensor.mac,
+        motionSensor.lightIdV1!,
+        motionSensor.presenceIdV1!,
+        motionSensor.name,
+        group.idV1!,
+        group.sceneIdsV1!.get(config.getSensorDaySceneId(motionSensor.motion))!,
+        group.sceneIdsV1!.get(config.getSensorNightSceneId(motionSensor.motion))!,
+        group.sceneIdsV1!.get(
+          config.getSensorEveningSceneId(motionSensor.motion),
+        )!,
+      )
+    }
 
     // Update motion sensor name & default settings
     await bridge.updateMotionSensorProperties(
@@ -472,19 +478,23 @@ async function addAccessoryButton(
   if (!buttonConfig) {
     return
   }
-  const group = config.getResourceById(buttonConfig.group)! as
-    | ExtendedRoom
-    | ExtendedZone
-  await bridge.configureAccessoryButton(
-    accessoryType,
-    button,
-    accessoryIdV1,
-    accessoryName,
-    group.idV1!,
-    group.sceneIdsV1!.get(config.getDaySceneId(buttonConfig))!,
-    group.sceneIdsV1!.get(config.getNightSceneId(buttonConfig))!,
-    group.sceneIdsV1!.get(config.getEveningSceneId(buttonConfig))!,
-  )
+
+  for (const groupId of buttonConfig.groups) {
+    const group = config.getResourceById(groupId)! as
+      | ExtendedRoom
+      | ExtendedZone
+
+    await bridge.configureAccessoryButton(
+      accessoryType,
+      button,
+      accessoryIdV1,
+      accessoryName,
+      group.idV1!,
+      group.sceneIdsV1!.get(config.getDaySceneId(buttonConfig))!,
+      group.sceneIdsV1!.get(config.getNightSceneId(buttonConfig))!,
+      group.sceneIdsV1!.get(config.getEveningSceneId(buttonConfig))!,
+    )
+  }
 }
 
 async function addDefaultScene(

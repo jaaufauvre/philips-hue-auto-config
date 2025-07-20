@@ -311,7 +311,7 @@
       "serial": "0B477B62",
       "name": "Sensor hall. up",
       "motion": {
-        "group": "hallway_up"
+        "groups": ["hallway_up"]
       }
     },
     {
@@ -320,7 +320,7 @@
       "serial": "0B58007C",
       "name": "Sensor hall. down",
       "motion": {
-        "group": "hallway_down"
+        "groups": ["hallway_down"]
       }
     },
     {
@@ -329,7 +329,7 @@
       "serial": "0C4B1EE7",
       "name": "Sensor front door",
       "motion": {
-        "group": "front_door",
+        "groups": ["front_door"],
         "scenes": {
           "unique": "front_door_sensor_scene"
         }
@@ -343,7 +343,7 @@
       "serial": "299347",
       "name": "Dimmer toilet",
       "button1": {
-        "group": "toilet",
+        "groups": ["toilet"],
         "scenes": {
           "day": "toilet_blue_day_scene",
           "evening": "toilet_blue_evening_scene",
@@ -351,7 +351,7 @@
         }
       },
       "button2": {
-        "group": "toilet",
+        "groups": ["toilet"],
         "scenes": {
           "day": "toilet_pink_day_scene",
           "evening": "toilet_pink_evening_scene",
@@ -359,7 +359,7 @@
         }
       },
       "button3": {
-        "group": "toilet",
+        "groups": ["toilet"],
         "scenes": {
           "day": "toilet_green_day_scene",
           "evening": "toilet_green_evening_scene",
@@ -367,7 +367,7 @@
         }
       },
       "button4": {
-        "group": "toilet",
+        "groups": ["toilet"],
         "scenes": {
           "day": "toilet_red_day_scene",
           "evening": "toilet_red_evening_scene",
@@ -381,25 +381,25 @@
       "serial": "0517BA",
       "name": "Dimmer Savannah",
       "button1": {
-        "group": "bedroom_sav",
+        "groups": ["bedroom_sav"],
         "scenes": {
           "unique": "sav_desk_scene"
         }
       },
       "button2": {
-        "group": "bedroom_sav",
+        "groups": ["bedroom_sav"],
         "scenes": {
           "unique": "honolulu_scene"
         }
       },
       "button3": {
-        "group": "bedroom_sav",
+        "groups": ["bedroom_sav"],
         "scenes": {
           "unique": "glitz_and_glam_scene"
         }
       },
       "button4": {
-        "group": "bedroom_sav",
+        "groups": ["bedroom_sav"],
         "scenes": {
           "unique": "fairfax_scene"
         }
@@ -411,7 +411,7 @@
       "serial": "61E40B",
       "name": "Dimmer kids bathroom",
       "button1": {
-        "group": "kids_bathroom",
+        "groups": ["kids_bathroom"],
         "scenes": {
           "day": "bathroom_blue_day_scene",
           "evening": "bathroom_blue_evening_scene",
@@ -419,7 +419,7 @@
         }
       },
       "button2": {
-        "group": "kids_bathroom",
+        "groups": ["kids_bathroom"],
         "scenes": {
           "day": "bathroom_pink_day_scene",
           "evening": "bathroom_pink_evening_scene",
@@ -427,7 +427,7 @@
         }
       },
       "button3": {
-        "group": "kids_bathroom",
+        "groups": ["kids_bathroom"],
         "scenes": {
           "day": "bathroom_green_day_scene",
           "evening": "bathroom_green_evening_scene",
@@ -435,7 +435,7 @@
         }
       },
       "button4": {
-        "group": "kids_bathroom",
+        "groups": ["kids_bathroom"],
         "scenes": {
           "day": "bathroom_red_day_scene",
           "evening": "bathroom_red_evening_scene",
@@ -449,7 +449,7 @@
       "serial": "2381C6",
       "name": "Dimmer TV room",
       "button1": {
-        "group": "tv_room",
+        "groups": ["tv_room"],
         "scenes": {
           "day": "tv_room_day_scene",
           "evening": "tv_room_evening_scene",
@@ -457,19 +457,19 @@
         }
       },
       "button2": {
-        "group": "tv_room",
+        "groups": ["tv_room"],
         "scenes": {
           "unique": "palm_beach_scene"
         }
       },
       "button3": {
-        "group": "tv_room",
+        "groups": ["tv_room"],
         "scenes": {
           "unique": "soho_scene"
         }
       },
       "button4": {
-        "group": "tv_room",
+        "groups": ["tv_room"],
         "scenes": {
           "unique": "tv_room_day_scene"
         }
@@ -484,7 +484,7 @@
       "name": "Switch TV room",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "tv_room",
+        "groups": ["tv_room"],
         "scenes": {
           "day": "tv_room_day_scene",
           "evening": "tv_room_evening_scene",
@@ -498,7 +498,7 @@
       "name": "Switch Savannah",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom_sav",
+        "groups": ["bedroom_sav"],
         "scenes": {
           "day": "sav_day_scene",
           "evening": "glitz_and_glam_scene",
@@ -512,10 +512,10 @@
       "name": "Switch hall. down/up",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "hallway_up"
+        "groups": ["hallway_up"]
       },
       "button2": {
-        "group": "hallway_down"
+        "groups": ["hallway_down"]
       }
     },
     {
@@ -524,7 +524,7 @@
       "name": "Switch hall. down/toilet",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "toilet",
+        "groups": ["toilet"],
         "scenes": {
           "day": "toilet_blue_day_scene",
           "evening": "toilet_blue_evening_scene",
@@ -532,7 +532,7 @@
         }
       },
       "button2": {
-        "group": "hallway_down"
+        "groups": ["hallway_down"]
       }
     },
     {
@@ -541,7 +541,7 @@
       "name": "Switch dressing",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "dressing",
+        "groups": ["dressing"],
         "scenes": {
           "unique": "dressing_switch_scene"
         }
@@ -553,10 +553,10 @@
       "name": "Switch hall. up/bathroom",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "hallway_up"
+        "groups": ["hallway_up"]
       },
       "button2": {
-        "group": "kids_bathroom",
+        "groups": ["kids_bathroom"],
         "scenes": {
           "day": "bathroom_blue_day_scene",
           "evening": "bathroom_blue_evening_scene",
@@ -570,13 +570,13 @@
       "name": "Switch hall. up/attic",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "attic",
+        "groups": ["attic"],
         "scenes": {
           "unique": "attic_scene"
         }
       },
       "button2": {
-        "group": "hallway_up"
+        "groups": ["hallway_up"]
       }
     },
     {
@@ -585,7 +585,7 @@
       "name": "Switch utility room",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "utility_room",
+        "groups": ["utility_room"],
         "scenes": {
           "unique": "utility_room_switch_scene"
         }
@@ -597,7 +597,7 @@
       "name": "Switch under stairs",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "under_stairs",
+        "groups": ["under_stairs"],
         "scenes": {
           "unique": "under_stairs_switch_scene"
         }
@@ -610,7 +610,7 @@
       "mac": "00:17:88:01:0b:09:c7:49-01-fc00",
       "name": "Smart button Savannah",
       "button": {
-        "group": "bedroom_sav",
+        "groups": ["bedroom_sav"],
         "scenes": {
           "unique": "sav_bed_scene"
         }
@@ -651,7 +651,7 @@
         }
       },
       "motion-sensor-day": {
-        "id": "default_sensor_day_scene",
+        "id": "default-sensor-day-scene",
         "name": "Sensor day (default)",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
@@ -661,7 +661,7 @@
         }
       },
       "motion-sensor-evening": {
-        "id": "default_sensor_evening_scene",
+        "id": "default-sensor-evening-scene",
         "name": "Sensor evening (default)",
         "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
         "light-action": {
@@ -671,7 +671,7 @@
         }
       },
       "motion-sensor-night": {
-        "id": "default_sensor_night_scene",
+        "id": "default-sensor-night-scene",
         "name": "Sensor night (default)",
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
         "light-action": {

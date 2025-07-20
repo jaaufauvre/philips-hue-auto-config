@@ -235,9 +235,9 @@ export interface DimmerSwitch {
  */
 export interface AccessoryConfig {
     /**
-     * An ID of the room or zone being controlled
+     * An array of the rooms or zones being controlled
      */
-    group:   string;
+    groups:   string[];
     scenes?: ConfigScenes;
 }
 
@@ -804,7 +804,7 @@ const typeMap: any = {
         { json: "serial", js: "serial", typ: u(undefined, "") },
     ], false),
     "AccessoryConfig": o([
-        { json: "group", js: "group", typ: "" },
+        { json: "groups", js: "groups", typ: a("") },
         { json: "scenes", js: "scenes", typ: u(undefined, r("ConfigScenes")) },
     ], false),
     "ConfigScenes": o([

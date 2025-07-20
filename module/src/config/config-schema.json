@@ -395,16 +395,20 @@
       "description": "Configuration for an accessory controlling a group",
       "additionalProperties": false,
       "properties": {
-        "group": {
-          "type": "string",
-          "description": "An ID of the room or zone being controlled",
-          "examples": ["office"]
+        "groups": {
+          "type": "array",
+          "description": "Rooms or zones being controlled",
+          "items": {
+            "type": "string",
+            "description": "An ID of room or zone",
+            "examples": ["office"]
+          }
         },
         "scenes": {
           "$ref": "#/definitions/config-scenes"
         }
       },
-      "required": ["group"]
+      "required": ["groups"]
     }
   },
   "properties": {

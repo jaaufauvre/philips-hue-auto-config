@@ -339,7 +339,7 @@
       "serial": "0B58026A",
       "name": "Sensor kitchen",
       "motion": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "day": "kitchen_sensor_day_scene",
           "evening": "kitchen_sensor_evening_scene",
@@ -353,7 +353,7 @@
       "serial": "0C4B13C7",
       "name": "Sensor garden",
       "motion": {
-        "group": "garden",
+        "groups": ["garden"],
         "scenes": {
           "unique": "garden_sensor_scene"
         }
@@ -367,7 +367,7 @@
       "serial": "D328A0",
       "name": "Dimmer Aaliya",
       "button1": {
-        "group": "bedroom_aaliya",
+        "groups": ["bedroom_aaliya"],
         "scenes": {
           "day": "aaliya_day_scene",
           "evening": "aaliya_evening_scene",
@@ -375,19 +375,19 @@
         }
       },
       "button2": {
-        "group": "bedroom_aaliya",
+        "groups": ["bedroom_aaliya"],
         "scenes": {
           "unique": "honolulu_scene"
         }
       },
       "button3": {
-        "group": "bedroom_aaliya",
+        "groups": ["bedroom_aaliya"],
         "scenes": {
           "unique": "malibu_pink_scene"
         }
       },
       "button4": {
-        "group": "bedroom_aaliya",
+        "groups": ["bedroom_aaliya"],
         "scenes": {
           "unique": "aaliya_candle_scene"
         }
@@ -399,7 +399,7 @@
       "serial": "82CCD6",
       "name": "Dimmer bathroom",
       "button1": {
-        "group": "bathroom",
+        "groups": ["bathroom"],
         "scenes": {
           "day": "bathroom_blue_day_scene",
           "evening": "bathroom_blue_evening_scene",
@@ -407,7 +407,7 @@
         }
       },
       "button2": {
-        "group": "bathroom",
+        "groups": ["bathroom"],
         "scenes": {
           "day": "bathroom_pink_day_scene",
           "evening": "bathroom_pink_evening_scene",
@@ -415,7 +415,7 @@
         }
       },
       "button3": {
-        "group": "bathroom",
+        "groups": ["bathroom"],
         "scenes": {
           "day": "bathroom_green_day_scene",
           "evening": "bathroom_green_evening_scene",
@@ -423,7 +423,7 @@
         }
       },
       "button4": {
-        "group": "bathroom",
+        "groups": ["bathroom"],
         "scenes": {
           "day": "bathroom_red_day_scene",
           "evening": "bathroom_red_evening_scene",
@@ -437,25 +437,25 @@
       "serial": "93B657",
       "name": "Dimmer bedroom right",
       "button1": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_night_scene"
         }
       },
       "button2": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_candle_scene"
         }
       },
       "button3": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_switch_scene"
         }
       },
       "button4": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_ceiling_scene"
         }
@@ -467,25 +467,25 @@
       "serial": "9317F5",
       "name": "Dimmer bedroom left",
       "button1": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_night_scene"
         }
       },
       "button2": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_candle_scene"
         }
       },
       "button3": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_switch_scene"
         }
       },
       "button4": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_ceiling_scene"
         }
@@ -499,31 +499,31 @@
       "serial": "0057DB",
       "name": "Tap dial kitchen 1",
       "button1": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button1_scene"
         }
       },
       "button2": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button2_scene"
         }
       },
       "button3": {
-        "group": "kitchen_cooking",
+        "groups": ["kitchen_cooking"],
         "scenes": {
           "unique": "kitchen_button3_scene"
         }
       },
       "button4": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button4_scene"
         }
       },
       "dial": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button4_scene"
         }
@@ -535,31 +535,31 @@
       "serial": "806995",
       "name": "Tap dial kitchen 2",
       "button1": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button1_scene"
         }
       },
       "button2": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button2_scene"
         }
       },
       "button3": {
-        "group": "kitchen_cooking",
+        "groups": ["kitchen_cooking"],
         "scenes": {
           "unique": "kitchen_button3_scene"
         }
       },
       "button4": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button4_scene"
         }
       },
       "dial": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button4_scene"
         }
@@ -573,7 +573,7 @@
       "name": "Switch Aaliya",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom_aaliya",
+        "groups": ["bedroom_aaliya"],
         "scenes": {
           "day": "aaliya_day_scene",
           "evening": "aaliya_evening_scene",
@@ -587,13 +587,13 @@
       "name": "Switch kitchen L",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button4_scene"
         }
       },
       "button2": {
-        "group": "kitchen_cooking",
+        "groups": ["kitchen_cooking"],
         "scenes": {
           "unique": "kitchen_button3_scene"
         }
@@ -605,13 +605,13 @@
       "name": "Switch kitchen R",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button2_scene"
         }
       },
       "button2": {
-        "group": "kitchen",
+        "groups": ["kitchen"],
         "scenes": {
           "unique": "kitchen_button1_scene"
         }
@@ -623,13 +623,13 @@
       "name": "Switch kitchen/garden",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "garden",
+        "groups": ["garden"],
         "scenes": {
           "unique": "garden_scene"
         }
       },
       "button2": {
-        "group": "kitchen_cooking",
+        "groups": ["kitchen_cooking"],
         "scenes": {
           "unique": "kitchen_button3_scene"
         }
@@ -641,7 +641,7 @@
       "name": "Switch office",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "office",
+        "groups": ["office"],
         "scenes": {
           "day": "office_switch_day_evening_scene",
           "evening": "office_switch_day_evening_scene",
@@ -655,7 +655,7 @@
       "name": "Switch bathroom",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bathroom",
+        "groups": ["bathroom"],
         "scenes": {
           "day": "bathroom_blue_day_scene",
           "evening": "bathroom_blue_evening_scene",
@@ -669,7 +669,7 @@
       "name": "Switch bedroom",
       "mode": "switch_single_rocker",
       "button1": {
-        "group": "bedroom",
+        "groups": ["bedroom"],
         "scenes": {
           "unique": "bedroom_switch_scene"
         }
@@ -710,7 +710,7 @@
         }
       },
       "motion-sensor-day": {
-        "id": "default_sensor_day_scene",
+        "id": "default-sensor-day-scene",
         "name": "Sensor day (default)",
         "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
         "light-action": {
@@ -720,7 +720,7 @@
         }
       },
       "motion-sensor-evening": {
-        "id": "default_sensor_evening_scene",
+        "id": "default-sensor-evening-scene",
         "name": "Sensor evening (default)",
         "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
         "light-action": {
@@ -730,7 +730,7 @@
         }
       },
       "motion-sensor-night": {
-        "id": "default_sensor_night_scene",
+        "id": "default-sensor-night-scene",
         "name": "Sensor night (default)",
         "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
         "light-action": {

@@ -377,18 +377,18 @@ describe('Config', () => {
   test('should return default scenes for accessory configs when no scenes defined', () => {
     const config = new Config('./tests/config/res/test-config.json')
     const dimmerButton = config.dimmerSwitches[0].button1
-    expect(config.getDaySceneId(dimmerButton)).toBe('default-day-scene')
-    expect(config.getNightSceneId(dimmerButton)).toBe('default-night-scene')
-    expect(config.getEveningSceneId(dimmerButton)).toBe('default-evening-scene')
+    expect(config.getDaySceneId(dimmerButton)).toBe('default_day_scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('default_night_scene')
+    expect(config.getEveningSceneId(dimmerButton)).toBe('default_evening_scene')
     const sensorMotion = config.motionSensors[0].motion
     expect(config.getSensorDaySceneId(sensorMotion)).toBe(
-      'default-sensor-day-scene',
+      'default_sensor_day_scene',
     )
     expect(config.getSensorNightSceneId(sensorMotion)).toBe(
-      'default-sensor-night-scene',
+      'default_sensor_night_scene',
     )
     expect(config.getSensorEveningSceneId(sensorMotion)).toBe(
-      'default-sensor-evening-scene',
+      'default_sensor_evening_scene',
     )
   })
 

@@ -493,14 +493,14 @@ async function addDefaultScene(
 ) {
   const lights = config.getGroupLights(group)
   const lightAction = defaultScene.lightAction
-  const smartPlugAction = { id: 'smart-plug-on' }
+  const simpleOnAction = { id: 'light_on_action' }
   const lightActions = new Map<string, LightAction>()
   _.mapValues(lights, (light: ExtendedLight) => {
     lightActions.set(
       light.idV2!,
       // If smart plug or "White" light, just switch it on
       light.smartPlug || light.colorType == LightColorType.SoftWarmWhite
-        ? smartPlugAction
+        ? simpleOnAction
         : lightAction,
     )
   })

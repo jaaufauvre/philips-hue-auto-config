@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest ./tests --coverage",
     "lint": "eslint .",
-    "format": "prettier --write \"../**/*.+(js|mjs|ts|json)\"",
+    "format": "prettier --write \"../**/*.+(js|mjs|ts|json)\" --config .prettierrc.json",
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "quicktype": "quicktype --nice-property-names -s schema src/config/config-schema.json -o src/config/config-gen.ts",

@@ -463,6 +463,10 @@ export interface Scene {
      */
     speed?: number;
     /**
+     * Action to be assigned to white lights not explicitly listed in 'actions'
+     */
+    whiteAction?: string;
+    /**
      * Action to be assigned to white ambiance lights not explicitly listed in 'actions'
      */
     whiteAmbianceAction?: string;
@@ -848,6 +852,7 @@ const typeMap: any = {
         { json: "image-id", js: "imageID", typ: u(undefined, "") },
         { json: "name", js: "name", typ: "" },
         { json: "speed", js: "speed", typ: u(undefined, 3.14) },
+        { json: "white-action", js: "whiteAction", typ: u(undefined, "") },
         { json: "white-ambiance-action", js: "whiteAmbianceAction", typ: u(undefined, "") },
     ], false),
     "Action": o([

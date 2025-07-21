@@ -192,7 +192,7 @@ describe('Config', () => {
         'utf-8',
       )
       new Config(
-        json.replace(`["day_action", "evening_action"]`, `["unknown"]`),
+        json.replace(`["color_action_1", "color_action_2"]`, `["unknown"]`),
       )
       fail('An error was expected')
     } catch (e: any) {
@@ -208,8 +208,26 @@ describe('Config', () => {
       )
       new Config(
         json.replace(
-          `"white-ambiance-action": "day_action"`,
+          `"white-ambiance-action": "white_ambiance_light_action"`,
           `"white-ambiance-action": "unknown"`,
+        ),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined resource identifier: 'unknown'!`)
+    }
+  })
+
+  test('should throw Error when white action ID not defined', () => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(
+          `"white-action": "white_light_action"`,
+          `"white-action": "unknown"`,
         ),
       )
       fail('An error was expected')

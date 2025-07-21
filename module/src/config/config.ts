@@ -468,6 +468,7 @@ export class Config implements ConfigGen {
         this.#checkResourceDefined(actionId)
       })
       this.#checkResourceDefined(scene.whiteAmbianceAction)
+      this.#checkResourceDefined(scene.whiteAction)
     })
   }
 

@@ -298,8 +298,9 @@
           "light-action": "scene_action"
         }
       ],
-      "color-ambiance-actions": ["day_action", "evening_action"],
-      "white-ambiance-action": "day_action"
+      "color-ambiance-actions": ["color_action_1", "color_action_2"],
+      "white-ambiance-action": "white_ambiance_light_action",
+      "white-action": "white_light_action"
     },
     {
       "id": "day_scene",
@@ -339,6 +340,31 @@
     {
       "id": "scene_action",
       "name": "Action"
+    },
+    {
+      "id": "color_action_1",
+      "color": {
+        "x": 0.1534,
+        "y": 0.0539
+      },
+      "brightness": 80
+    },
+    {
+      "id": "color_action_2",
+      "color": {
+        "x": 0.6664,
+        "y": 0.2982
+      },
+      "brightness": 80
+    },
+    {
+      "id": "white_ambiance_light_action",
+      "mirek": 455,
+      "brightness": 80
+    },
+    {
+      "id": "white_light_action",
+      "brightness": 80
     }
   ]
 }

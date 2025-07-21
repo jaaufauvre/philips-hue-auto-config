@@ -440,7 +440,9 @@ async function main() {
         motionSensor.name,
         group.idV1!,
         group.sceneIdsV1!.get(config.getSensorDaySceneId(motionSensor.motion))!,
-        group.sceneIdsV1!.get(config.getSensorNightSceneId(motionSensor.motion))!,
+        group.sceneIdsV1!.get(
+          config.getSensorNightSceneId(motionSensor.motion),
+        )!,
         group.sceneIdsV1!.get(
           config.getSensorEveningSceneId(motionSensor.motion),
         )!,
@@ -539,6 +541,7 @@ async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
       return scene.colorAmbianceActions![index]
     },
     whiteAmbianceAction: () => scene.whiteAmbianceAction!,
+    whiteAction: () => scene.whiteAction!,
   }
 
   _.forEach(groupLights, (light) => {
@@ -612,6 +615,8 @@ function useAutoAction(light: ExtendedLight, scene: Scene): boolean {
       )
     case LightColorType.WarmToCoolWhite:
       return scene.whiteAmbianceAction != undefined
+    case LightColorType.SoftWarmWhite:
+      return scene.whiteAction != undefined
     default:
       return false
   }
@@ -636,6 +641,8 @@ function generateLightAction(
       return config.getResourceById(
         actions.whiteAmbianceAction(),
       ) as LightAction
+    case LightColorType.SoftWarmWhite:
+      return config.getResourceById(actions.whiteAction()) as LightAction
     default:
       return undefined // Light off
   }

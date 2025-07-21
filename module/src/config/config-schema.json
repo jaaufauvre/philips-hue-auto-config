@@ -213,6 +213,10 @@
           "type": "string",
           "description": "Action to be assigned to white ambiance lights not explicitly listed in 'actions'"
         },
+        "white-action": {
+          "type": "string",
+          "description": "Action to be assigned to white lights not explicitly listed in 'actions'"
+        },
         "speed": {
           "type": "number",
           "description": "Speed of dynamic palette for this scene",

@@ -129,134 +129,28 @@
       "required": ["id"],
       "oneOf": [
         {
-          "required": ["id"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["color"]
-              },
-              {
-                "required": ["effect"]
-              },
-              {
-                "required": ["mirek"]
-              },
-              {
-                "required": ["brightness"]
-              },
-              {
-                "required": ["gradient"]
-              },
-              {
-                "required": ["gradient-mode"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/lightOnAction"
         },
         {
-          "required": ["id", "color", "brightness"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["effect"]
-              },
-              {
-                "required": ["mirek"]
-              },
-              {
-                "required": ["gradient"]
-              },
-              {
-                "required": ["gradient-mode"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/coloredLightAction"
         },
         {
-          "required": ["id", "color", "effect", "brightness"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["mirek"]
-              },
-              {
-                "required": ["gradient"]
-              },
-              {
-                "required": ["gradient-mode"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/coloredWithEffectLightAction"
         },
         {
-          "required": ["id", "mirek", "effect", "brightness"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["color"]
-              },
-              {
-                "required": ["gradient"]
-              },
-              {
-                "required": ["gradient-mode"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/warmToCoolWhiteLightAction"
         },
         {
-          "required": ["id", "mirek", "brightness"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["effect"]
-              },
-              {
-                "required": ["color"]
-              },
-              {
-                "required": ["gradient"]
-              },
-              {
-                "required": ["gradient-mode"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/warmToCoolWhiteWithEffectLightAction"
         },
         {
-          "required": ["id", "effect", "brightness"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["mirek"]
-              },
-              {
-                "required": ["color"]
-              },
-              {
-                "required": ["gradient"]
-              },
-              {
-                "required": ["gradient-mode"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/softWarmWhiteLightAction"
         },
         {
-          "required": ["id", "gradient", "gradient-mode", "brightness"],
-          "not": {
-            "anyOf": [
-              {
-                "required": ["color"]
-              },
-              {
-                "required": ["mirek"]
-              },
-              {
-                "required": ["effect"]
-              }
-            ]
-          }
+          "$ref": "#/definitions/softWarmWhiteWithEffectLightAction"
+        },
+        {
+          "$ref": "#/definitions/gradientLightAction"
         }
       ]
     },
@@ -409,6 +303,166 @@
         }
       },
       "required": ["groups"]
+    },
+    "lightOnAction": {
+      "type": "object",
+      "required": ["id"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["color"]
+          },
+          {
+            "required": ["effect"]
+          },
+          {
+            "required": ["mirek"]
+          },
+          {
+            "required": ["brightness"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "coloredLightAction": {
+      "type": "object",
+      "required": ["id", "color", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["effect"]
+          },
+          {
+            "required": ["mirek"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "coloredWithEffectLightAction": {
+      "type": "object",
+      "required": ["id", "color", "effect", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["mirek"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "warmToCoolWhiteLightAction": {
+      "type": "object",
+      "required": ["id", "mirek", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["effect"]
+          },
+          {
+            "required": ["color"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "warmToCoolWhiteWithEffectLightAction": {
+      "type": "object",
+      "required": ["id", "mirek", "effect", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["color"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "softWarmWhiteLightAction": {
+      "type": "object",
+      "required": ["id", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["effect"]
+          },
+          {
+            "required": ["color"]
+          },
+          {
+            "required": ["mirek"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "softWarmWhiteWithEffectLightAction": {
+      "type": "object",
+      "required": ["id", "effect", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["color"]
+          },
+          {
+            "required": ["mirek"]
+          },
+          {
+            "required": ["gradient"]
+          },
+          {
+            "required": ["gradient-mode"]
+          }
+        ]
+      }
+    },
+    "gradientLightAction": {
+      "type": "object",
+      "required": ["id", "gradient", "gradient-mode", "brightness"],
+      "not": {
+        "anyOf": [
+          {
+            "required": ["color"]
+          },
+          {
+            "required": ["mirek"]
+          },
+          {
+            "required": ["effect"]
+          }
+        ]
+      }
     }
   },
   "properties": {

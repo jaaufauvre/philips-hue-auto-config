@@ -235,9 +235,9 @@ export interface DimmerSwitch {
  */
 export interface AccessoryConfig {
     /**
-     * An array of the rooms or zones being controlled
+     * Rooms or zones being controlled
      */
-    groups:   string[];
+    groups:  string[];
     scenes?: ConfigScenes;
 }
 

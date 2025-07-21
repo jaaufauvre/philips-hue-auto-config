@@ -475,9 +475,9 @@ export class Config implements ConfigGen {
     if (!config) {
       return
     }
-    for (const groupId of config.groups) {
-      this.#checkGroupDefined(groupId)
-    }
+    config.groups.forEach((group) => {
+      this.#checkGroupDefined(group)
+    })
     this.#checkSceneDefined(config.scenes?.day)
     this.#checkSceneDefined(config.scenes?.night)
     this.#checkSceneDefined(config.scenes?.evening)

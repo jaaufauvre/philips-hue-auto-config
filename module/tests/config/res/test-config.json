@@ -114,7 +114,7 @@
       "serial": "0B98C27F",
       "name": "Motion sensor",
       "motion": {
-        "group": "ms_room"
+        "groups": ["ms_room"]
       }
     },
     {
@@ -123,7 +123,7 @@
       "serial": "00000002",
       "name": "Motion sensor 2",
       "motion": {
-        "group": "ms_room",
+        "groups": ["ms_room"],
         "scenes": {
           "unique": "scene"
         }
@@ -135,7 +135,7 @@
       "serial": "00000003",
       "name": "Motion sensor 3",
       "motion": {
-        "group": "ms_room",
+        "groups": ["ms_room"],
         "scenes": {
           "day": "day_scene",
           "night": "night_scene",
@@ -151,19 +151,19 @@
       "serial": "0B213BC6",
       "name": "Tap dial",
       "button1": {
-        "group": "ts_room1"
+        "groups": ["ts_room1"]
       },
       "button2": {
-        "group": "ts_zone1"
+        "groups": ["ts_zone1"]
       },
       "button3": {
-        "group": "ts_room2"
+        "groups": ["ts_room2"]
       },
       "button4": {
-        "group": "ts_zone2"
+        "groups": ["ts_zone2"]
       },
       "dial": {
-        "group": "ts_room3"
+        "groups": ["ts_room3"]
       }
     }
   ],
@@ -174,10 +174,10 @@
       "name": "Wall switch",
       "mode": "switch_dual_rocker",
       "button1": {
-        "group": "ws_room"
+        "groups": ["ws_room"]
       },
       "button2": {
-        "group": "ws_zone"
+        "groups": ["ws_zone"]
       }
     }
   ],
@@ -188,13 +188,13 @@
       "serial": "ABCDEF",
       "name": "Dimmer switch",
       "button1": {
-        "group": "ds_room1"
+        "groups": ["ds_room1"]
       },
       "button2": {
-        "group": "ds_zone1"
+        "groups": ["ds_zone1"]
       },
       "button3": {
-        "group": "ds_room2",
+        "groups": ["ds_room2"],
         "scenes": {
           "day": "day_scene",
           "night": "night_scene",
@@ -202,7 +202,7 @@
         }
       },
       "button4": {
-        "group": "ds_zone2",
+        "groups": ["ds_zone2"],
         "scenes": {
           "unique": "scene"
         }
@@ -215,7 +215,7 @@
       "mac": "00:17:88:01:0c:33:33:33-01-fc00",
       "name": "Smart button",
       "button": {
-        "group": "sm_room",
+        "groups": ["sm_room"],
         "scenes": {
           "unique": "scene"
         }

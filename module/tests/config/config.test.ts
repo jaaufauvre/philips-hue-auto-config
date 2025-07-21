@@ -145,7 +145,10 @@ describe('Config', () => {
           'utf-8',
         )
         new Config(
-          json.replace(`"group": "${original_group_id}"`, `"group": "unknown"`),
+          json.replace(
+            `"groups": ["${original_group_id}"]`,
+            `"groups": ["unknown"]`,
+          ),
         )
         fail('An error was expected')
       } catch (e: any) {

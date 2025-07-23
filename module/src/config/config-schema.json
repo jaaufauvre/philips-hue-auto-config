@@ -163,7 +163,7 @@
         },
         "groups": {
           "type": "array",
-          "description": "Rooms or zones in which to create the scene",
+          "description": "Rooms or zones in which to create the scene (null to create the scene everywhere)",
           "items": {
             "type": "string",
             "description": "An ID of room or zone",
@@ -233,27 +233,7 @@
           "type": "string"
         }
       },
-      "required": ["id", "groups", "name"]
-    },
-    "default-scene": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "$ref": "#/definitions/scene-id"
-        },
-        "name": {
-          "$ref": "#/definitions/scene-name"
-        },
-        "image-id": {
-          "$ref": "#/definitions/scene-image-id"
-        },
-        "light-action": {
-          "description": "An action executed on all lights",
-          "$ref": "#/definitions/light-action"
-        }
-      },
-      "required": ["id", "name", "light-action"]
+      "required": ["id", "name"]
     },
     "config-scenes": {
       "type": "object",
@@ -515,22 +495,13 @@
           "additionalProperties": false,
           "properties": {
             "day": {
-              "$ref": "#/definitions/default-scene"
+              "$ref": "#/definitions/scene-id"
             },
             "night": {
-              "$ref": "#/definitions/default-scene"
+              "$ref": "#/definitions/scene-id"
             },
             "evening": {
-              "$ref": "#/definitions/default-scene"
-            },
-            "motion-sensor-day": {
-              "$ref": "#/definitions/default-scene"
-            },
-            "motion-sensor-night": {
-              "$ref": "#/definitions/default-scene"
-            },
-            "motion-sensor-evening": {
-              "$ref": "#/definitions/default-scene"
+              "$ref": "#/definitions/scene-id"
             }
           },
           "required": ["day", "night", "evening"]

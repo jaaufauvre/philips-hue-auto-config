@@ -5,6 +5,14 @@
     "long": "6.266155W",
     "lat": "53.350140N"
   },
+  "defaults": {
+    "powerup-behavior": "powerfail",
+    "scenes": {
+      "day": "default_day_scene",
+      "evening": "default_evening_scene",
+      "night": "default_night_scene"
+    }
+  },
   "rooms": [
     {
       "id": "kitchen",
@@ -676,72 +684,28 @@
       }
     }
   ],
-  "defaults": {
-    "powerup-behavior": "powerfail",
-    "scenes": {
-      "day": {
-        "id": "default_day_scene",
-        "name": "Day (default)",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "light-action": {
-          "id": "default_day_action",
-          "mirek": 323,
-          "brightness": 100
-        }
-      },
-      "evening": {
-        "id": "default_evening_scene",
-        "name": "Evening (default)",
-        "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
-        "light-action": {
-          "id": "default_evening_action",
-          "mirek": 400,
-          "brightness": 40
-        }
-      },
-      "night": {
-        "id": "default_night_scene",
-        "name": "Night (default)",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "default_night_action",
-          "mirek": 500,
-          "brightness": 30
-        }
-      },
-      "motion-sensor-day": {
-        "id": "default_sensor_day_scene",
-        "name": "Sensor day (default)",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "light-action": {
-          "id": "default_sensor_day_action",
-          "mirek": 323,
-          "brightness": 70
-        }
-      },
-      "motion-sensor-evening": {
-        "id": "default_sensor_evening_scene",
-        "name": "Sensor evening (default)",
-        "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
-        "light-action": {
-          "id": "default_sensor_evening_action",
-          "mirek": 500,
-          "brightness": 25
-        }
-      },
-      "motion-sensor-night": {
-        "id": "default_sensor_night_scene",
-        "name": "Sensor night (default)",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "default_sensor_night_action",
-          "mirek": 500,
-          "brightness": 6
-        }
-      }
-    }
-  },
   "scenes": [
+    {
+      "id": "default_day_scene",
+      "name": "Day (default)",
+      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "color-ambiance-actions": ["default_day_action"],
+      "white-ambiance-action": "default_day_action"
+    },
+    {
+      "id": "default_evening_scene",
+      "name": "Evening (default)",
+      "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
+      "color-ambiance-actions": ["default_evening_action"],
+      "white-ambiance-action": "default_evening_action"
+    },
+    {
+      "id": "default_night_scene",
+      "name": "Night (default)",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "color-ambiance-actions": ["default_night_action"],
+      "white-ambiance-action": "default_night_action"
+    },
     {
       "id": "garden_scene",
       "groups": ["garden"],
@@ -1104,55 +1068,55 @@
       "actions": [
         {
           "target": "kitchen_spot_9",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_8",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_7",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_6",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_5",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_4",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_3",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_2",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_spot_1",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_gradient",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_ceiling",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_lightstrip_left",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         },
         {
           "target": "kitchen_lightstrip_right",
-          "light-action": "default_sensor_evening_action"
+          "light-action": "kitchen_sensor_evening_action"
         }
       ]
     },
@@ -1163,63 +1127,63 @@
       "actions": [
         {
           "target": "kitchen_spot_9",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_8",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_7",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_6",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_5",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_4",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_3",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_2",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_spot_1",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_gradient",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_ceiling",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_lightstrip_left",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_lightstrip_right",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_ellipse_left",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         },
         {
           "target": "kitchen_ellipse_right",
-          "light-action": "default_sensor_night_action"
+          "light-action": "kitchen_sensor_night_action"
         }
       ]
     },
@@ -1751,6 +1715,21 @@
   ],
   "light-actions": [
     {
+      "id": "default_day_action",
+      "mirek": 323,
+      "brightness": 100
+    },
+    {
+      "id": "default_evening_action",
+      "mirek": 400,
+      "brightness": 40
+    },
+    {
+      "id": "default_night_action",
+      "mirek": 500,
+      "brightness": 30
+    },
+    {
       "id": "bathroom_blue_day",
       "color": {
         "x": 0.1534,
@@ -1887,6 +1866,16 @@
       "effect": "candle",
       "mirek": 153,
       "brightness": 15
+    },
+    {
+      "id": "kitchen_sensor_night_action",
+      "mirek": 500,
+      "brightness": 6
+    },
+    {
+      "id": "kitchen_sensor_evening_action",
+      "mirek": 500,
+      "brightness": 25
     },
     {
       "id": "kitchen_dinner_gradient",

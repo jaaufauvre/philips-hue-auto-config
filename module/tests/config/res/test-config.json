@@ -5,6 +5,14 @@
     "long": "0W",
     "lat": "0N"
   },
+  "defaults": {
+    "powerup-behavior": "safety",
+    "scenes": {
+      "day": "default_day_scene",
+      "evening": "default_evening_scene",
+      "night": "default_night_scene"
+    }
+  },
   "rooms": [
     {
       "id": "room",
@@ -222,72 +230,31 @@
       }
     }
   ],
-  "defaults": {
-    "powerup-behavior": "safety",
-    "scenes": {
-      "day": {
-        "id": "default_day_scene",
-        "name": "Day scene",
-        "light-action": {
-          "id": "day_action",
-          "name": "Default day action",
-          "mirek": 500,
-          "brightness": 100
-        }
-      },
-      "night": {
-        "id": "default_night_scene",
-        "name": "Night scene",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "night_action",
-          "name": "Default night action",
-          "color": {
-            "x": 0.5,
-            "y": 0.5
-          },
-          "brightness": 100
-        }
-      },
-      "evening": {
-        "id": "default_evening_scene",
-        "name": "Evening",
-        "light-action": {
-          "id": "evening_action",
-          "name": "Default evening action",
-          "mirek": 400,
-          "brightness": 40
-        }
-      },
-      "motion-sensor-day": {
-        "id": "default_sensor_day_scene",
-        "name": "Sensor day scene",
-        "light-action": {
-          "id": "sensor_day_action",
-          "name": "Default sensor day action"
-        }
-      },
-      "motion-sensor-night": {
-        "id": "default_sensor_night_scene",
-        "name": "Sensor night scene",
-        "light-action": {
-          "id": "sensor_night_action",
-          "name": "Default sensor night action",
-          "mirek": 500,
-          "brightness": 100
-        }
-      },
-      "motion-sensor-evening": {
-        "id": "default_sensor_evening_scene",
-        "name": "Sensor evening scene",
-        "light-action": {
-          "id": "sensor_evening_action",
-          "name": "Default sensor evening action"
-        }
-      }
-    }
-  },
   "scenes": [
+    {
+      "id": "default_day_scene",
+      "name": "Day scene (default)",
+      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "color-ambiance-actions": ["color_light_action"],
+      "white-ambiance-action": "white_ambiance_light_action",
+      "white-action": "white_light_action"
+    },
+    {
+      "id": "default_evening_scene",
+      "name": "Evening scene (default)",
+      "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
+      "color-ambiance-actions": ["color_light_action"],
+      "white-ambiance-action": "white_ambiance_light_action",
+      "white-action": "white_light_action"
+    },
+    {
+      "id": "default_night_scene",
+      "name": "Night scene (default)",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "color-ambiance-actions": ["color_light_action"],
+      "white-ambiance-action": "white_ambiance_light_action",
+      "white-action": "white_light_action"
+    },
     {
       "id": "scene",
       "groups": ["scene_zone"],
@@ -298,7 +265,7 @@
           "light-action": "scene_action"
         }
       ],
-      "color-ambiance-actions": ["color_action_1", "color_action_2"],
+      "color-ambiance-actions": ["color_light_action"],
       "white-ambiance-action": "white_ambiance_light_action",
       "white-action": "white_light_action"
     },
@@ -309,7 +276,7 @@
       "actions": [
         {
           "target": "scene_light",
-          "light-action": "day_action"
+          "light-action": "scene_action"
         }
       ]
     },
@@ -320,7 +287,7 @@
       "actions": [
         {
           "target": "scene_light",
-          "light-action": "night_action"
+          "light-action": "scene_action"
         }
       ]
     },
@@ -331,7 +298,7 @@
       "actions": [
         {
           "target": "scene_light",
-          "light-action": "evening_action"
+          "light-action": "scene_action"
         }
       ]
     }
@@ -342,7 +309,8 @@
       "name": "Action"
     },
     {
-      "id": "color_action_1",
+      "id": "color_light_action",
+      "name": "Action for color lights",
       "color": {
         "x": 0.1534,
         "y": 0.0539
@@ -350,20 +318,14 @@
       "brightness": 80
     },
     {
-      "id": "color_action_2",
-      "color": {
-        "x": 0.6664,
-        "y": 0.2982
-      },
-      "brightness": 80
-    },
-    {
       "id": "white_ambiance_light_action",
+      "name": "Action for white ambiance lights",
       "mirek": 455,
       "brightness": 80
     },
     {
       "id": "white_light_action",
+      "name": "Action for white lights",
       "brightness": 80
     }
   ]

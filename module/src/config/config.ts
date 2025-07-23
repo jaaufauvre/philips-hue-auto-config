@@ -142,18 +142,9 @@ export class Config implements ConfigGen {
     this.lightActions = this._internalConfig.lightActions ?? []
     const defaultScenes = this.defaults.scenes
     _.forEach(
-      [
-        defaultScenes.day,
-        defaultScenes.night,
-        defaultScenes.evening,
-        defaultScenes.motionSensorDay,
-        defaultScenes.motionSensorEvening,
-        defaultScenes.motionSensorNight,
-      ],
-      (scene) => {
-        if (scene) {
-          this.lightActions.push(scene.lightAction)
-        }
+      [defaultScenes.day, defaultScenes.night, defaultScenes.evening],
+      (sceneId) => {
+        this.#checkSceneDefined(sceneId)
       },
     )
     this.#decrypt(xorKey)
@@ -224,7 +215,7 @@ export class Config implements ConfigGen {
 
   getDaySceneId(config: AccessoryConfig) {
     return (
-      config.scenes?.day ?? config.scenes?.unique ?? this.defaults.scenes.day.id
+      config.scenes?.day ?? config.scenes?.unique ?? this.defaults.scenes.day
     )
   }
 
@@ -232,7 +223,7 @@ export class Config implements ConfigGen {
     return (
       config.scenes?.night ??
       config.scenes?.unique ??
-      this.defaults.scenes.night.id
+      this.defaults.scenes.night
     )
   }
 
@@ -240,31 +231,7 @@ export class Config implements ConfigGen {
     return (
       config.scenes?.evening ??
       config.scenes?.unique ??
-      this.defaults.scenes.evening.id
-    )
-  }
-
-  getSensorDaySceneId(config: AccessoryConfig) {
-    return (
-      config.scenes?.day ??
-      config.scenes?.unique ??
-      this.defaults.scenes.motionSensorDay!.id
-    )
-  }
-
-  getSensorNightSceneId(config: AccessoryConfig) {
-    return (
-      config.scenes?.night ??
-      config.scenes?.unique ??
-      this.defaults.scenes.motionSensorNight!.id
-    )
-  }
-
-  getSensorEveningSceneId(config: AccessoryConfig) {
-    return (
-      config.scenes?.evening ??
-      config.scenes?.unique ??
-      this.defaults.scenes.motionSensorEvening!.id
+      this.defaults.scenes.evening
     )
   }
 
@@ -373,7 +340,6 @@ export class Config implements ConfigGen {
   }
 
   #validateUniqueIds() {
-    const defaultScenes = this.defaults.scenes
     const all = _.concat<Identifiable>(
       this.lights,
       this.rooms,
@@ -385,16 +351,7 @@ export class Config implements ConfigGen {
       this.smartButtons,
       this.scenes,
       this.lightActions,
-      [defaultScenes.day, defaultScenes.night, defaultScenes.evening],
     )
-    const defaultSensorDayScene = defaultScenes.motionSensorDay
-    if (defaultSensorDayScene) {
-      all.push(defaultSensorDayScene)
-    }
-    const defaultSensorNightScene = defaultScenes.motionSensorNight
-    if (defaultSensorNightScene) {
-      all.push(defaultSensorNightScene)
-    }
     if (all.length != _.uniqBy(all, (i) => i.id).length) {
       throw new Error('Identifiers must be unique!')
     }
@@ -445,19 +402,11 @@ export class Config implements ConfigGen {
     this.motionSensors.forEach((motionSensor) => {
       this.#checkAccessoryConfig(motionSensor.motion)
     })
-    if (
-      this.motionSensors.length > 0 &&
-      (!this.defaults.scenes.motionSensorDay ||
-        !this.defaults.scenes.motionSensorNight ||
-        !this.defaults.scenes.motionSensorEvening)
-    ) {
-      throw new Error('Missing motion sensor scene definition!')
-    }
   }
 
   #validateSceneConfig() {
     this.scenes.forEach((scene) => {
-      scene.groups.forEach((group) => {
+      scene.groups?.forEach((group) => {
         this.#checkGroupDefined(group)
       })
       scene.actions?.forEach((action) => {

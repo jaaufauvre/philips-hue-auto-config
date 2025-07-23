@@ -8,7 +8,6 @@
   ExtendedTapDialSwitch,
   ExtendedWallSwitch,
   ExtendedZone,
-  GroupType,
   LightColorType,
 } from './config/config'
 import { Color, Logger } from './log/logger'
@@ -16,7 +15,6 @@ import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import {
   AccessoryConfig,
   Action,
-  DefaultScene,
   GradientMode,
   LightAction,
   Scene,
@@ -148,8 +146,12 @@ async function main() {
   }
 
   // Create scenes in rooms and zones
+  const allGroupIds = _.concat<ExtendedRoom | ExtendedZone>(
+    config.rooms,
+    config.zones,
+  ).map((group) => group.id)
   for (const scene of config.scenes) {
-    for (const groupId of scene.groups) {
+    for (const groupId of scene.groups ?? allGroupIds) {
       const group = config.getResourceById(groupId) as
         | ExtendedRoom
         | ExtendedZone
@@ -157,19 +159,11 @@ async function main() {
     }
   }
 
-  // Create default scenes in rooms and zones
-  for (const group of _.concat<ExtendedRoom | ExtendedZone>(
-    config.rooms,
-    config.zones,
-  )) {
-    await addDefaultScene(group, config.defaults.scenes.day)
-    await addDefaultScene(group, config.defaults.scenes.evening)
-    await addDefaultScene(group, config.defaults.scenes.night)
-    if (group.groupType === GroupType.Room) {
-      await bridge.activateScene(
-        group.sceneIdsV2!.get(config.defaults.scenes.day.id)!,
-      )
-    }
+  // Activate default scene in rooms
+  for (const group of config.rooms) {
+    await bridge.activateScene(
+      group.sceneIdsV2!.get(config.defaults.scenes.day)!,
+    )
   }
 
   // Set lights behavior at power on
@@ -427,11 +421,6 @@ async function main() {
         | ExtendedRoom
         | ExtendedZone
 
-      // Create default scenes
-      await addDefaultScene(group, config.defaults.scenes.motionSensorDay!)
-      await addDefaultScene(group, config.defaults.scenes.motionSensorNight!)
-      await addDefaultScene(group, config.defaults.scenes.motionSensorEvening!)
-
       // Create motion sensor rules
       await bridge.configureMotionSensor(
         motionSensor.mac,
@@ -439,13 +428,9 @@ async function main() {
         motionSensor.presenceIdV1!,
         motionSensor.name,
         group.idV1!,
-        group.sceneIdsV1!.get(config.getSensorDaySceneId(motionSensor.motion))!,
-        group.sceneIdsV1!.get(
-          config.getSensorNightSceneId(motionSensor.motion),
-        )!,
-        group.sceneIdsV1!.get(
-          config.getSensorEveningSceneId(motionSensor.motion),
-        )!,
+        group.sceneIdsV1!.get(config.getDaySceneId(motionSensor.motion))!,
+        group.sceneIdsV1!.get(config.getNightSceneId(motionSensor.motion))!,
+        group.sceneIdsV1!.get(config.getEveningSceneId(motionSensor.motion))!,
       )
     }
 
@@ -497,32 +482,6 @@ async function addAccessoryButton(
       group.sceneIdsV1!.get(config.getEveningSceneId(buttonConfig))!,
     )
   }
-}
-
-async function addDefaultScene(
-  group: ExtendedRoom | ExtendedZone,
-  defaultScene: DefaultScene,
-) {
-  const lights = config.getGroupLights(group)
-  const lightAction = defaultScene.lightAction
-  const simpleOnAction = { id: 'light_on_action' }
-  const lightActions = new Map<string, LightAction>()
-  _.mapValues(lights, (light: ExtendedLight) => {
-    lightActions.set(
-      light.idV2!,
-      // If smart plug or "White" light, just switch it on
-      light.smartPlug || light.colorType == LightColorType.SoftWarmWhite
-        ? simpleOnAction
-        : lightAction,
-    )
-  })
-  await createScene(
-    defaultScene.id,
-    defaultScene.name,
-    group,
-    lightActions,
-    defaultScene.imageID,
-  )
 }
 
 async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {

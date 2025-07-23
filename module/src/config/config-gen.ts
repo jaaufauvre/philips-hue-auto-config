@@ -111,27 +111,58 @@ export enum PowerupBehavior {
  * Default scenes for room and zones
  */
 export interface Scenes {
-    day:                  DefaultScene;
-    evening:              DefaultScene;
-    motionSensorDay?:     DefaultScene;
-    motionSensorEvening?: DefaultScene;
-    motionSensorNight?:   DefaultScene;
-    night:                DefaultScene;
+    day:     string;
+    evening: string;
+    night:   string;
 }
 
-export interface DefaultScene {
-    id:       string;
-    imageID?: string;
+export interface DimmerSwitch {
+    button1:  AccessoryConfig;
+    button2:  AccessoryConfig;
+    button3:  AccessoryConfig;
+    button4:  AccessoryConfig;
+    comment?: string;
     /**
-     * An action executed on all lights
+     * Uniquely identify the dimmer switch in this configuration
      */
-    lightAction: LightAction;
-    name:        string;
+    id: string;
+    /**
+     * MAC address, required for uniquely identifying dimmer switches added to a bridge
+     */
+    mac: string;
+    /**
+     * A name for the dimmer switch
+     */
+    name: string;
+    /**
+     * Serial number printed on the dimmer switch, recommended for searching for missing dimmer
+     * switches
+     */
+    serial?: string;
 }
 
 /**
- * An action executed on all lights
- *
+ * Configuration for an accessory controlling a group
+ */
+export interface AccessoryConfig {
+    /**
+     * Rooms or zones being controlled
+     */
+    groups:  string[];
+    scenes?: ConfigScenes;
+}
+
+/**
+ * Scenes for a room or zone being controlled
+ */
+export interface ConfigScenes {
+    day?:     string;
+    evening?: string;
+    night?:   string;
+    unique?:  string;
+}
+
+/**
  * An action to execute on one or many lights
  */
 export interface LightAction {
@@ -203,52 +234,6 @@ export enum GradientMode {
     InterpolatedPalette = "interpolated_palette",
     InterpolatedPaletteMirrored = "interpolated_palette_mirrored",
     RandomPixelated = "random_pixelated",
-}
-
-export interface DimmerSwitch {
-    button1:  AccessoryConfig;
-    button2:  AccessoryConfig;
-    button3:  AccessoryConfig;
-    button4:  AccessoryConfig;
-    comment?: string;
-    /**
-     * Uniquely identify the dimmer switch in this configuration
-     */
-    id: string;
-    /**
-     * MAC address, required for uniquely identifying dimmer switches added to a bridge
-     */
-    mac: string;
-    /**
-     * A name for the dimmer switch
-     */
-    name: string;
-    /**
-     * Serial number printed on the dimmer switch, recommended for searching for missing dimmer
-     * switches
-     */
-    serial?: string;
-}
-
-/**
- * Configuration for an accessory controlling a group
- */
-export interface AccessoryConfig {
-    /**
-     * Rooms or zones being controlled
-     */
-    groups:  string[];
-    scenes?: ConfigScenes;
-}
-
-/**
- * Scenes for a room or zone being controlled
- */
-export interface ConfigScenes {
-    day?:     string;
-    evening?: string;
-    night?:   string;
-    unique?:  string;
 }
 
 export interface Light {
@@ -452,9 +437,9 @@ export interface Scene {
     colorAmbianceActions?: string[];
     comment?:              string;
     /**
-     * Rooms or zones in which to create the scene
+     * Rooms or zones in which to create the scene (null to create the scene everywhere)
      */
-    groups:   string[];
+    groups?:  string[];
     id:       string;
     imageID?: string;
     name:     string;
@@ -767,34 +752,9 @@ const typeMap: any = {
         { json: "scenes", js: "scenes", typ: r("Scenes") },
     ], false),
     "Scenes": o([
-        { json: "day", js: "day", typ: r("DefaultScene") },
-        { json: "evening", js: "evening", typ: r("DefaultScene") },
-        { json: "motion-sensor-day", js: "motionSensorDay", typ: u(undefined, r("DefaultScene")) },
-        { json: "motion-sensor-evening", js: "motionSensorEvening", typ: u(undefined, r("DefaultScene")) },
-        { json: "motion-sensor-night", js: "motionSensorNight", typ: u(undefined, r("DefaultScene")) },
-        { json: "night", js: "night", typ: r("DefaultScene") },
-    ], false),
-    "DefaultScene": o([
-        { json: "id", js: "id", typ: "" },
-        { json: "image-id", js: "imageID", typ: u(undefined, "") },
-        { json: "light-action", js: "lightAction", typ: r("LightAction") },
-        { json: "name", js: "name", typ: "" },
-    ], false),
-    "LightAction": o([
-        { json: "brightness", js: "brightness", typ: u(undefined, 3.14) },
-        { json: "color", js: "color", typ: u(undefined, r("Color")) },
-        { json: "comment", js: "comment", typ: u(undefined, "") },
-        { json: "effect", js: "effect", typ: u(undefined, r("Effect")) },
-        { json: "effect-speed", js: "effectSpeed", typ: u(undefined, 3.14) },
-        { json: "gradient", js: "gradient", typ: u(undefined, a(r("Color"))) },
-        { json: "gradient-mode", js: "gradientMode", typ: u(undefined, r("GradientMode")) },
-        { json: "id", js: "id", typ: "" },
-        { json: "mirek", js: "mirek", typ: u(undefined, 3.14) },
-        { json: "name", js: "name", typ: u(undefined, "") },
-    ], false),
-    "Color": o([
-        { json: "x", js: "x", typ: 3.14 },
-        { json: "y", js: "y", typ: 3.14 },
+        { json: "day", js: "day", typ: "" },
+        { json: "evening", js: "evening", typ: "" },
+        { json: "night", js: "night", typ: "" },
     ], false),
     "DimmerSwitch": o([
         { json: "button1", js: "button1", typ: r("AccessoryConfig") },
@@ -816,6 +776,22 @@ const typeMap: any = {
         { json: "evening", js: "evening", typ: u(undefined, "") },
         { json: "night", js: "night", typ: u(undefined, "") },
         { json: "unique", js: "unique", typ: u(undefined, "") },
+    ], false),
+    "LightAction": o([
+        { json: "brightness", js: "brightness", typ: u(undefined, 3.14) },
+        { json: "color", js: "color", typ: u(undefined, r("Color")) },
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "effect", js: "effect", typ: u(undefined, r("Effect")) },
+        { json: "effect-speed", js: "effectSpeed", typ: u(undefined, 3.14) },
+        { json: "gradient", js: "gradient", typ: u(undefined, a(r("Color"))) },
+        { json: "gradient-mode", js: "gradientMode", typ: u(undefined, r("GradientMode")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "mirek", js: "mirek", typ: u(undefined, 3.14) },
+        { json: "name", js: "name", typ: u(undefined, "") },
+    ], false),
+    "Color": o([
+        { json: "x", js: "x", typ: 3.14 },
+        { json: "y", js: "y", typ: 3.14 },
     ], false),
     "Light": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -847,7 +823,7 @@ const typeMap: any = {
         { json: "auto-dynamic", js: "autoDynamic", typ: u(undefined, true) },
         { json: "color-ambiance-actions", js: "colorAmbianceActions", typ: u(undefined, a("")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
-        { json: "groups", js: "groups", typ: a("") },
+        { json: "groups", js: "groups", typ: u(undefined, a("")) },
         { json: "id", js: "id", typ: "" },
         { json: "image-id", js: "imageID", typ: u(undefined, "") },
         { json: "name", js: "name", typ: "" },

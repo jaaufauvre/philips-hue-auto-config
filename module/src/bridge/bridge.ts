@@ -49,7 +49,7 @@ export class Bridge {
       }
     }
     throw Error(
-      'Make sure your pressed the button in the centre of the bridge!',
+      'Make sure your pressed the button in the center of the bridge!',
     )
   }
 

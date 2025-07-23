@@ -5,6 +5,14 @@
     "long": "6.266155W",
     "lat": "53.350140N"
   },
+  "defaults": {
+    "powerup-behavior": "powerfail",
+    "scenes": {
+      "day": "default_day_scene",
+      "evening": "default_evening_scene",
+      "night": "default_night_scene"
+    }
+  },
   "rooms": [
     {
       "id": "tv_room",
@@ -311,7 +319,12 @@
       "serial": "0B477B62",
       "name": "Sensor hall. up",
       "motion": {
-        "groups": ["hallway_up"]
+        "groups": ["hallway_up"],
+        "scenes": {
+          "day": "sensor_hallway_day_scene",
+          "evening": "sensor_hallway_evening_scene",
+          "night": "sensor_hallway_night_scene"
+        }
       }
     },
     {
@@ -320,7 +333,12 @@
       "serial": "0B58007C",
       "name": "Sensor hall. down",
       "motion": {
-        "groups": ["hallway_down"]
+        "groups": ["hallway_down"],
+        "scenes": {
+          "day": "sensor_hallway_day_scene",
+          "evening": "sensor_hallway_evening_scene",
+          "night": "sensor_hallway_night_scene"
+        }
       }
     },
     {
@@ -617,72 +635,28 @@
       }
     }
   ],
-  "defaults": {
-    "powerup-behavior": "powerfail",
-    "scenes": {
-      "day": {
-        "id": "default_day_scene",
-        "name": "Day (default)",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "light-action": {
-          "id": "default_day_action",
-          "mirek": 323,
-          "brightness": 100
-        }
-      },
-      "evening": {
-        "id": "default_evening_scene",
-        "name": "Evening (default)",
-        "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
-        "light-action": {
-          "id": "default_evening_action",
-          "mirek": 400,
-          "brightness": 40
-        }
-      },
-      "night": {
-        "id": "default_night_scene",
-        "name": "Night (default)",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "default_night_action",
-          "mirek": 500,
-          "brightness": 30
-        }
-      },
-      "motion-sensor-day": {
-        "id": "default_sensor_day_scene",
-        "name": "Sensor day (default)",
-        "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
-        "light-action": {
-          "id": "default_sensor_day_action",
-          "mirek": 323,
-          "brightness": 70
-        }
-      },
-      "motion-sensor-evening": {
-        "id": "default_sensor_evening_scene",
-        "name": "Sensor evening (default)",
-        "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
-        "light-action": {
-          "id": "default_sensor_evening_action",
-          "mirek": 500,
-          "brightness": 25
-        }
-      },
-      "motion-sensor-night": {
-        "id": "default_sensor_night_scene",
-        "name": "Sensor night (default)",
-        "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
-        "light-action": {
-          "id": "default_sensor_night_action",
-          "mirek": 500,
-          "brightness": 6
-        }
-      }
-    }
-  },
   "scenes": [
+    {
+      "id": "default_day_scene",
+      "name": "Day (default)",
+      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "color-ambiance-actions": ["default_day_action"],
+      "white-ambiance-action": "default_day_action"
+    },
+    {
+      "id": "default_evening_scene",
+      "name": "Evening (default)",
+      "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
+      "color-ambiance-actions": ["default_evening_action"],
+      "white-ambiance-action": "default_evening_action"
+    },
+    {
+      "id": "default_night_scene",
+      "name": "Night (default)",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "color-ambiance-actions": ["default_night_action"],
+      "white-ambiance-action": "default_night_action"
+    },
     {
       "id": "festavia_fireplace",
       "groups": ["hallway_down"],
@@ -1639,11 +1613,65 @@
           "light-action": "default_day_action"
         }
       ]
+    },
+    {
+      "id": "sensor_hallway_day_scene",
+      "groups": ["hallway_up", "hallway_down"],
+      "name": "Sensor day",
+      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
+      "color-ambiance-actions": ["sensor_hallway_day_action"],
+      "white-ambiance-action": "sensor_hallway_day_action"
+    },
+    {
+      "id": "sensor_hallway_evening_scene",
+      "groups": ["hallway_up", "hallway_down"],
+      "name": "Sensor evening",
+      "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
+      "color-ambiance-actions": ["sensor_hallway_evening_action"],
+      "white-ambiance-action": "sensor_hallway_evening_action"
+    },
+    {
+      "id": "sensor_hallway_night_scene",
+      "groups": ["hallway_up", "hallway_down"],
+      "name": "Sensor night",
+      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
+      "color-ambiance-actions": ["sensor_hallway_day_action"],
+      "white-ambiance-action": "sensor_hallway_night_action"
     }
   ],
   "light-actions": [
     {
       "id": "smart_plug_on"
+    },
+    {
+      "id": "default_day_action",
+      "mirek": 323,
+      "brightness": 100
+    },
+    {
+      "id": "default_evening_action",
+      "mirek": 400,
+      "brightness": 40
+    },
+    {
+      "id": "default_night_action",
+      "mirek": 500,
+      "brightness": 30
+    },
+    {
+      "id": "sensor_hallway_day_action",
+      "mirek": 323,
+      "brightness": 70
+    },
+    {
+      "id": "sensor_hallway_evening_action",
+      "mirek": 500,
+      "brightness": 25
+    },
+    {
+      "id": "sensor_hallway_night_action",
+      "mirek": 500,
+      "brightness": 6
     },
     {
       "id": "ellipse_filament_min",

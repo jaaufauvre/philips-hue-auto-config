@@ -191,9 +191,7 @@ describe('Config', () => {
         './tests/config/res/test-config.json',
         'utf-8',
       )
-      new Config(
-        json.replace(`["color_action_1", "color_action_2"]`, `["unknown"]`),
-      )
+      new Config(json.replace(`["color_light_action"]`, `["unknown"]`))
       fail('An error was expected')
     } catch (e: any) {
       expect(e.message).toBe(`Undefined resource identifier: 'unknown'!`)
@@ -267,18 +265,21 @@ describe('Config', () => {
     }
   })
 
-  test('should throw Error when motion sensor and missing motion sensor scene', () => {
+  test('should throw Error when default scene ID not defined', () => {
     try {
       const json = fs.readFileSync(
         './tests/config/res/test-config.json',
         'utf-8',
       )
-      const obj = JSON.parse(json)
-      delete obj['defaults']['scenes']['motion-sensor-night']
-      new Config(JSON.stringify(obj))
+      new Config(
+        json.replace(
+          `"evening": "default_evening_scene"`,
+          `"evening": "unknown"`,
+        ),
+      )
       fail('An error was expected')
     } catch (e: any) {
-      expect(e.message).toBe('Missing motion sensor scene definition!')
+      expect(e.message).toBe(`Undefined scene identifier: 'unknown'!`)
     }
   })
 
@@ -368,14 +369,14 @@ describe('Config', () => {
     ${'dimmer switch'} | ${'00:17:88:01:0b:22:22:22-01-fc00'} | ${'Dimmer switch'}
     ${'smart button'}  | ${'smartbutton'}                     | ${'Smart button'}
     ${'smart button'}  | ${'00:17:88:01:0c:33:33:33-01-fc00'} | ${'Smart button'}
+    ${'scene'}         | ${'default_day_scene'}               | ${'Day scene (default)'}
+    ${'scene'}         | ${'default_evening_scene'}           | ${'Evening scene (default)'}
+    ${'scene'}         | ${'default_night_scene'}             | ${'Night scene (default)'}
     ${'scene'}         | ${'scene'}                           | ${'Scene'}
     ${'scene action'}  | ${'scene_action'}                    | ${'Action'}
-    ${'scene action'}  | ${'day_action'}                      | ${'Default day action'}
-    ${'scene action'}  | ${'night_action'}                    | ${'Default night action'}
-    ${'scene action'}  | ${'evening_action'}                  | ${'Default evening action'}
-    ${'scene action'}  | ${'sensor_day_action'}               | ${'Default sensor day action'}
-    ${'scene action'}  | ${'sensor_night_action'}             | ${'Default sensor night action'}
-    ${'scene action'}  | ${'sensor_evening_action'}           | ${'Default sensor evening action'}
+    ${'scene action'}  | ${'color_light_action'}              | ${'Action for color lights'}
+    ${'scene action'}  | ${'white_ambiance_light_action'}     | ${'Action for white ambiance lights'}
+    ${'scene action'}  | ${'white_light_action'}              | ${'Action for white lights'}
   `(
     'should return $resource "$expected_name" for ID "$id"',
     ({ resource, id, expected_name }) => {
@@ -399,42 +400,36 @@ describe('Config', () => {
     const config = new Config('./tests/config/res/test-config.json')
     const dimmerButton = config.dimmerSwitches[0].button1
     expect(config.getDaySceneId(dimmerButton)).toBe('default_day_scene')
-    expect(config.getNightSceneId(dimmerButton)).toBe('default_night_scene')
     expect(config.getEveningSceneId(dimmerButton)).toBe('default_evening_scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('default_night_scene')
     const sensorMotion = config.motionSensors[0].motion
-    expect(config.getSensorDaySceneId(sensorMotion)).toBe(
-      'default_sensor_day_scene',
-    )
-    expect(config.getSensorNightSceneId(sensorMotion)).toBe(
-      'default_sensor_night_scene',
-    )
-    expect(config.getSensorEveningSceneId(sensorMotion)).toBe(
-      'default_sensor_evening_scene',
-    )
+    expect(config.getDaySceneId(sensorMotion)).toBe('default_day_scene')
+    expect(config.getEveningSceneId(sensorMotion)).toBe('default_evening_scene')
+    expect(config.getNightSceneId(sensorMotion)).toBe('default_night_scene')
   })
 
-  test('should return default scene for accessory configs when default scene defined', () => {
+  test('should return scenes for accessory configs when unique scene defined', () => {
     const config = new Config('./tests/config/res/test-config.json')
     const dimmerButton = config.dimmerSwitches[0].button4
     expect(config.getDaySceneId(dimmerButton)).toBe('scene')
-    expect(config.getNightSceneId(dimmerButton)).toBe('scene')
     expect(config.getEveningSceneId(dimmerButton)).toBe('scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('scene')
     const sensorMotion = config.motionSensors[1].motion
-    expect(config.getSensorDaySceneId(sensorMotion)).toBe('scene')
-    expect(config.getSensorNightSceneId(sensorMotion)).toBe('scene')
-    expect(config.getSensorEveningSceneId(sensorMotion)).toBe('scene')
+    expect(config.getDaySceneId(sensorMotion)).toBe('scene')
+    expect(config.getEveningSceneId(sensorMotion)).toBe('scene')
+    expect(config.getNightSceneId(sensorMotion)).toBe('scene')
   })
 
-  test('should return scenes for accessory configs when scenes defined', () => {
+  test('should return scenes for accessory configs when day/evening/night scenes defined', () => {
     const config = new Config('./tests/config/res/test-config.json')
     const dimmerButton = config.dimmerSwitches[0].button3
     expect(config.getDaySceneId(dimmerButton)).toBe('day_scene')
-    expect(config.getNightSceneId(dimmerButton)).toBe('night_scene')
     expect(config.getEveningSceneId(dimmerButton)).toBe('evening_scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('night_scene')
     const sensorMotion = config.motionSensors[2].motion
-    expect(config.getSensorDaySceneId(sensorMotion)).toBe('day_scene')
-    expect(config.getSensorNightSceneId(sensorMotion)).toBe('night_scene')
-    expect(config.getSensorEveningSceneId(sensorMotion)).toBe('evening_scene')
+    expect(config.getDaySceneId(sensorMotion)).toBe('day_scene')
+    expect(config.getEveningSceneId(sensorMotion)).toBe('evening_scene')
+    expect(config.getNightSceneId(sensorMotion)).toBe('night_scene')
   })
 })
 

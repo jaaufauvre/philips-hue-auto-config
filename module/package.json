@@ -19,13 +19,13 @@
   "license": "ISC",
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
-    "@eslint/js": "9.31.0",
+    "@eslint/js": "9.32.0",
     "@types/jest": "30.0.0",
-    "@typescript-eslint/eslint-plugin": "8.37.0",
-    "@typescript-eslint/parser": "8.37.0",
-    "eslint": "9.31.0",
+    "@typescript-eslint/eslint-plugin": "8.38.0",
+    "@typescript-eslint/parser": "8.38.0",
+    "eslint": "9.32.0",
     "eslint-config-prettier": "10.1.8",
-    "jest": "30.0.4",
+    "jest": "30.0.5",
     "nodemon": "3.1.10",
     "prettier": "3.6.2",
     "quicktype": "23.2.6",
@@ -38,7 +38,7 @@
     "@types/lodash": "4.17.20",
     "ajv": "8.17.1",
     "ajv-keywords": "5.1.0",
-    "axios": "1.10.0",
+    "axios": "1.11.0",
     "lodash": "4.17.21",
     "typia": "9.6.0"
   }

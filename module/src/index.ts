@@ -159,13 +159,6 @@ async function main() {
     }
   }
 
-  // Activate default scene in rooms
-  for (const group of config.rooms) {
-    await bridge.activateScene(
-      group.sceneIdsV2!.get(config.defaults.scenes.day)!,
-    )
-  }
-
   // Set lights behavior at power on
   for (const light of config.lights) {
     const lightId = light.idV2!

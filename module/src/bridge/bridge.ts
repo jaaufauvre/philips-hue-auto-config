@@ -11,7 +11,14 @@ import {
   RuleV1,
   SensorsV1,
 } from '../api/api-v1'
-import { ApiV2, Device, Light, SceneAction, UpdatedDevice } from '../api/api-v2'
+import {
+  ApiV2,
+  Device,
+  Light,
+  SceneAction,
+  UpdatedDevice,
+  UpdatedLight,
+} from '../api/api-v2'
 import { LightAction } from '../config/config-gen'
 import { LightColorType } from '../config/config'
 
@@ -290,17 +297,21 @@ export class Bridge {
 
   async updateLightMetadata(
     lightOwnerIdV2: string,
+    lightIdV2: string,
     name: string,
     type?: string,
   ) {
-    Logger.info(`Updating metadata for light owner '${lightOwnerIdV2}'`)
-    const device = {
+    Logger.info(
+      `Updating metadata for light '${lightIdV2}', owner '${lightOwnerIdV2}'`,
+    )
+    const light = {
       metadata: {
         name: name,
         archetype: type ?? 'unknown_archetype',
       },
     }
-    await this.#updateDevice(lightOwnerIdV2, device)
+    await this.#updateDevice(lightOwnerIdV2, light)
+    await this.#updateLight(lightIdV2, light)
   }
 
   async updateLightPowerUp(idV2: string, preset: string) {
@@ -310,7 +321,7 @@ export class Bridge {
         preset: preset,
       },
     }
-    await this.#apiv2!.updateLight(idV2, light)
+    await this.#updateLight(idV2, light)
   }
 
   async addScene(
@@ -1422,6 +1433,15 @@ export class Bridge {
     if (updatedDevice.errors && updatedDevice.errors.length > 0) {
       throw Error(
         `Couldn't update device '${id}'. Errors: ${JSON.stringify(updatedDevice.errors, null, 2)}`,
+      )
+    }
+  }
+
+  async #updateLight(id: string, light: UpdatedLight) {
+    const updatedLight = await this.#apiv2!.updateLight(id, light)
+    if (updatedLight.errors && updatedLight.errors.length > 0) {
+      throw Error(
+        `Couldn't update light '${id}'. Errors: ${JSON.stringify(updatedLight.errors, null, 2)}`,
       )
     }
   }

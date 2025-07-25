@@ -125,7 +125,12 @@ async function main() {
 
   for (const light of config.lights) {
     // Update light types & names
-    await bridge.updateLightMetadata(light.ownerId!, light.name, light.type)
+    await bridge.updateLightMetadata(
+      light.ownerId!,
+      light.idV2!,
+      light.name,
+      light.type,
+    )
     Logger.info(Color.Green, `Metadata for light '${light.name}' was updated'`)
 
     // Add lights to rooms & zones
@@ -161,8 +166,10 @@ async function main() {
 
   // Set lights behavior at power on
   for (const light of config.lights) {
-    const lightId = light.idV2!
-    await bridge.updateLightPowerUp(lightId, config.defaults.powerupBehavior)
+    await bridge.updateLightPowerUp(
+      light.idV2!,
+      config.defaults.powerupBehavior,
+    )
   }
   Logger.info(Color.Green, `Updated power up behavior for all lights`)
 

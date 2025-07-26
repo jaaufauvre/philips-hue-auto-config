@@ -346,7 +346,7 @@ describe('Config', () => {
 
   test('should return a list of resource mac addresses', () => {
     const config = new Config('./tests/config/res/test-config.json')
-    expect(config.getAllResourceMacs().length).toBe(11)
+    expect(config.getAllResourceMacs().length).toBe(12)
   })
 
   it.each`
@@ -356,8 +356,10 @@ describe('Config', () => {
     ${'light'}         | ${'00:17:88:01:0c:11:2d:b2-0b'}      | ${'Light 2'}
     ${'room'}          | ${'room'}                            | ${'Room'}
     ${'zone'}          | ${'light_zone'}                      | ${'Zone for light'}
-    ${'wall switch'}   | ${'wallswitch'}                      | ${'Wall switch'}
-    ${'wall switch'}   | ${'00:17:88:01:0c:11:11:11-01-fc00'} | ${'Wall switch'}
+    ${'wall switch'}   | ${'wallswitch1'}                     | ${'Wall switch single'}
+    ${'wall switch'}   | ${'00:17:88:01:0c:11:11:11-01-fc00'} | ${'Wall switch single'}
+    ${'wall switch'}   | ${'wallswitch2'}                     | ${'Wall switch dual'}
+    ${'wall switch'}   | ${'00:17:88:01:0c:22:22:22-01-fc00'} | ${'Wall switch dual'}
     ${'tap dial'}      | ${'dial'}                            | ${'Tap dial'}
     ${'tap dial'}      | ${'0B213BC6'}                        | ${'Tap dial'}
     ${'tap dial'}      | ${'00:17:88:01:0b:21:3b:c6-fc00'}    | ${'Tap dial'}
@@ -431,6 +433,40 @@ describe('Config', () => {
     expect(config.getEveningSceneId(sensorMotion)).toBe('evening_scene')
     expect(config.getNightSceneId(sensorMotion)).toBe('night_scene')
   })
+})
+
+test('should throw Error when unexpected wall switch button 2 configuration', () => {
+  try {
+    const json = fs.readFileSync('./tests/config/res/test-config.json', 'utf-8')
+    new Config(
+      json.replace(
+        `"mode": "switch_dual_rocker"`,
+        `"mode": "switch_single_rocker"`,
+      ),
+    )
+    fail('An error was expected')
+  } catch (e: any) {
+    expect(e.message).toBe(
+      `Unexpected button 2 configuration for 'Wall switch dual'!`,
+    )
+  }
+})
+
+test('should throw Error when missing wall switch button 2 configuration', () => {
+  try {
+    const json = fs.readFileSync('./tests/config/res/test-config.json', 'utf-8')
+    new Config(
+      json.replace(
+        `"mode": "switch_single_rocker"`,
+        `"mode": "switch_dual_rocker"`,
+      ),
+    )
+    fail('An error was expected')
+  } catch (e: any) {
+    expect(e.message).toBe(
+      `Missing button 2 configuration for 'Wall switch single'!`,
+    )
+  }
 })
 
 function fail(msg: string) {

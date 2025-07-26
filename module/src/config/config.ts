@@ -3,21 +3,22 @@ import fs from 'fs'
 import Ajv from 'ajv'
 import AjvKeywords from 'ajv-keywords'
 import {
-  ConfigGen,
-  Bridge,
-  Light,
-  MotionSensor,
-  TapDialSwitch,
-  DimmerSwitch,
-  WallSwitch,
-  Room,
-  Zone,
-  Defaults,
-  Scene,
-  LightAction,
-  Convert,
   AccessoryConfig,
+  Bridge,
+  ConfigGen,
+  Convert,
+  Defaults,
+  DimmerSwitch,
+  Light,
+  LightAction,
+  Mode,
+  MotionSensor,
+  Room,
+  Scene,
   SmartButton,
+  TapDialSwitch,
+  WallSwitch,
+  Zone,
 } from './config-gen'
 import _ from 'lodash'
 
@@ -370,6 +371,7 @@ export class Config implements ConfigGen {
     this.wallSwitches.forEach((wallSwitch) => {
       this.#checkAccessoryConfig(wallSwitch.button1)
       this.#checkAccessoryConfig(wallSwitch.button2)
+      this.#checkWallSwitchMode(wallSwitch)
     })
   }
 
@@ -419,6 +421,23 @@ export class Config implements ConfigGen {
       this.#checkResourceDefined(scene.whiteAmbianceAction)
       this.#checkResourceDefined(scene.whiteAction)
     })
+  }
+
+  #checkWallSwitchMode(wallSwitch: ExtendedWallSwitch) {
+    switch (wallSwitch.mode) {
+      case Mode.SwitchSingleRocker:
+        if (wallSwitch.button2)
+          throw new Error(
+            `Unexpected button 2 configuration for '${wallSwitch.name}'!`,
+          )
+        break
+      case Mode.SwitchDualRocker:
+        if (!wallSwitch.button2)
+          throw new Error(
+            `Missing button 2 configuration for '${wallSwitch.name}'!`,
+          )
+        break
+    }
   }
 
   #checkAccessoryConfig(config: AccessoryConfig | undefined) {

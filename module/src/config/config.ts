@@ -411,7 +411,7 @@ export class Config implements ConfigGen {
       scene.groups?.forEach((group) => {
         this.#checkGroupDefined(group)
       })
-      scene.actions?.forEach((action) => {
+      scene.customActions?.forEach((action) => {
         this.#checkLightDefined(action.target)
         this.#checkResourceDefined(action.lightAction)
       })

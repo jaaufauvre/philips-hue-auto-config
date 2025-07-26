@@ -64,7 +64,7 @@
       "id": "my_bedroom_blue_scene",
       "groups": ["my_bedroom"],
       "name": "Blue scene",
-      "actions": [
+      "custom-actions": [
         {
           "target": "ceiling",
           "light-action": "blue_action"

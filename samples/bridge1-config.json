@@ -248,7 +248,7 @@
       "zones": ["bridge"]
     },
     {
-      "id": "festavia_500",
+      "id": "aaliya_festavia_500",
       "mac": "00:17:88:01:0e:c6:ca:18-0b",
       "serial": "0D9A0D",
       "name": "Aaliya Festavia 500",
@@ -377,21 +377,19 @@
       "button1": {
         "groups": ["bedroom_aaliya"],
         "scenes": {
-          "day": "aaliya_day_scene",
-          "evening": "aaliya_evening_scene",
-          "night": "aaliya_night_scene"
+          "unique": "aaliya_cosmos_scene"
         }
       },
       "button2": {
         "groups": ["bedroom_aaliya"],
         "scenes": {
-          "unique": "honolulu_scene"
+          "unique": "aaliya_reading_scene"
         }
       },
       "button3": {
         "groups": ["bedroom_aaliya"],
         "scenes": {
-          "unique": "malibu_pink_scene"
+          "unique": "suzuka_scene"
         }
       },
       "button4": {
@@ -445,27 +443,24 @@
       "serial": "93B657",
       "name": "Dimmer bedroom right",
       "button1": {
-        "groups": ["bedroom"],
-        "scenes": {
-          "unique": "bedroom_night_scene"
-        }
+        "groups": ["bedroom"]
       },
       "button2": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_candle_scene"
+          "unique": "bedroom_bed_scene"
         }
       },
       "button3": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_switch_scene"
+          "unique": "honolulu_scene"
         }
       },
       "button4": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_ceiling_scene"
+          "unique": "bedroom_candle_scene"
         }
       }
     },
@@ -475,27 +470,24 @@
       "serial": "9317F5",
       "name": "Dimmer bedroom left",
       "button1": {
-        "groups": ["bedroom"],
-        "scenes": {
-          "unique": "bedroom_night_scene"
-        }
+        "groups": ["bedroom"]
       },
       "button2": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_candle_scene"
+          "unique": "bedroom_bed_scene"
         }
       },
       "button3": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_switch_scene"
+          "unique": "honolulu_scene"
         }
       },
       "button4": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_ceiling_scene"
+          "unique": "bedroom_candle_scene"
         }
       }
     }
@@ -509,31 +501,31 @@
       "button1": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button1_scene"
+          "unique": "kitchen_table_scene"
         }
       },
       "button2": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button2_scene"
+          "unique": "kitchen_dinner_scene"
         }
       },
       "button3": {
         "groups": ["kitchen_cooking"],
         "scenes": {
-          "unique": "kitchen_button3_scene"
+          "unique": "kitchen_cooking_scene"
         }
       },
       "button4": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button4_scene"
+          "unique": "honolulu_scene"
         }
       },
       "dial": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button4_scene"
+          "unique": "honolulu_scene"
         }
       }
     },
@@ -545,31 +537,31 @@
       "button1": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button1_scene"
+          "unique": "kitchen_table_scene"
         }
       },
       "button2": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button2_scene"
+          "unique": "kitchen_dinner_scene"
         }
       },
       "button3": {
         "groups": ["kitchen_cooking"],
         "scenes": {
-          "unique": "kitchen_button3_scene"
+          "unique": "kitchen_cooking_scene"
         }
       },
       "button4": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button4_scene"
+          "unique": "honolulu_scene"
         }
       },
       "dial": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button4_scene"
+          "unique": "honolulu_scene"
         }
       }
     }
@@ -579,13 +571,14 @@
       "id": "aaliya_ws",
       "mac": "00:17:88:01:0c:53:df:35-01-fc00",
       "name": "Switch Aaliya",
-      "mode": "switch_single_rocker",
+      "mode": "switch_dual_rocker",
       "button1": {
+        "groups": ["bedroom_aaliya"]
+      },
+      "button2": {
         "groups": ["bedroom_aaliya"],
         "scenes": {
-          "day": "aaliya_day_scene",
-          "evening": "aaliya_evening_scene",
-          "night": "aaliya_night_scene"
+          "unique": "aaliya_cosmos_scene"
         }
       }
     },
@@ -597,13 +590,13 @@
       "button1": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button4_scene"
+          "unique": "honolulu_scene"
         }
       },
       "button2": {
         "groups": ["kitchen_cooking"],
         "scenes": {
-          "unique": "kitchen_button3_scene"
+          "unique": "kitchen_cooking_scene"
         }
       }
     },
@@ -615,13 +608,13 @@
       "button1": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button2_scene"
+          "unique": "kitchen_dinner_scene"
         }
       },
       "button2": {
         "groups": ["kitchen"],
         "scenes": {
-          "unique": "kitchen_button1_scene"
+          "unique": "kitchen_table_scene"
         }
       }
     },
@@ -639,7 +632,7 @@
       "button2": {
         "groups": ["kitchen_cooking"],
         "scenes": {
-          "unique": "kitchen_button3_scene"
+          "unique": "kitchen_cooking_scene"
         }
       }
     },
@@ -675,12 +668,15 @@
       "id": "bedroom_ws",
       "mac": "00:17:88:01:0c:54:44:d6-01-fc00",
       "name": "Switch bedroom",
-      "mode": "switch_single_rocker",
+      "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["bedroom"],
         "scenes": {
-          "unique": "bedroom_switch_scene"
+          "unique": "bedroom_bed_scene"
         }
+      },
+      "button2": {
+        "groups": ["bedroom"]
       }
     }
   ],
@@ -710,7 +706,7 @@
       "id": "garden_scene",
       "groups": ["garden"],
       "name": "Switch",
-      "actions": [
+      "custom-actions": [
         {
           "target": "garden_light",
           "light-action": "default_day_action"
@@ -721,7 +717,7 @@
       "id": "garden_sensor_scene",
       "groups": ["garden"],
       "name": "Sensor",
-      "actions": [
+      "custom-actions": [
         {
           "target": "garden_light",
           "light-action": "default_day_action"
@@ -731,8 +727,8 @@
     {
       "id": "bathroom_blue_day_scene",
       "groups": ["bathroom"],
-      "name": "Blue (Day)",
-      "actions": [
+      "name": "Blue (day)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_blue_day"
@@ -750,8 +746,8 @@
     {
       "id": "bathroom_blue_evening_scene",
       "groups": ["bathroom"],
-      "name": "Blue (Evening)",
-      "actions": [
+      "name": "Blue (evening)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_blue_evening"
@@ -769,8 +765,8 @@
     {
       "id": "bathroom_blue_night_scene",
       "groups": ["bathroom"],
-      "name": "Blue (Night)",
-      "actions": [
+      "name": "Blue (night)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_blue_night"
@@ -788,8 +784,8 @@
     {
       "id": "bathroom_red_day_scene",
       "groups": ["bathroom"],
-      "name": "Red (Day)",
-      "actions": [
+      "name": "Red (day)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_red_day"
@@ -807,8 +803,8 @@
     {
       "id": "bathroom_red_evening_scene",
       "groups": ["bathroom"],
-      "name": "Red (Evening)",
-      "actions": [
+      "name": "Red (evening)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_red_evening"
@@ -826,8 +822,8 @@
     {
       "id": "bathroom_red_night_scene",
       "groups": ["bathroom"],
-      "name": "Red (Night)",
-      "actions": [
+      "name": "Red (night)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_red_night"
@@ -845,8 +841,8 @@
     {
       "id": "bathroom_green_day_scene",
       "groups": ["bathroom"],
-      "name": "Green (Day)",
-      "actions": [
+      "name": "Green (day)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_green_day"
@@ -864,8 +860,8 @@
     {
       "id": "bathroom_green_evening_scene",
       "groups": ["bathroom"],
-      "name": "Green (Evening)",
-      "actions": [
+      "name": "Green (evening)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_green_evening"
@@ -883,8 +879,8 @@
     {
       "id": "bathroom_green_night_scene",
       "groups": ["bathroom"],
-      "name": "Green (Night)",
-      "actions": [
+      "name": "Green (night)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_green_night"
@@ -902,8 +898,8 @@
     {
       "id": "bathroom_pink_day_scene",
       "groups": ["bathroom"],
-      "name": "Pink (Day)",
-      "actions": [
+      "name": "Pink (day)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_pink_day"
@@ -921,8 +917,8 @@
     {
       "id": "bathroom_pink_evening_scene",
       "groups": ["bathroom"],
-      "name": "Pink (Evening)",
-      "actions": [
+      "name": "Pink (evening)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_pink_evening"
@@ -940,8 +936,8 @@
     {
       "id": "bathroom_pink_night_scene",
       "groups": ["bathroom"],
-      "name": "Pink (Night)",
-      "actions": [
+      "name": "Pink (night)",
+      "custom-actions": [
         {
           "target": "bathroom_ceiling",
           "light-action": "bathroom_pink_night"
@@ -957,10 +953,10 @@
       ]
     },
     {
-      "id": "kitchen_button1_scene",
+      "id": "kitchen_table_scene",
       "groups": ["kitchen"],
-      "name": "Button 1",
-      "actions": [
+      "name": "Table",
+      "custom-actions": [
         {
           "target": "kitchen_spot_2",
           "light-action": "default_day_action"
@@ -980,10 +976,10 @@
       ]
     },
     {
-      "id": "kitchen_button2_scene",
+      "id": "kitchen_dinner_scene",
       "groups": ["kitchen"],
-      "name": "Button 2",
-      "actions": [
+      "name": "Dinner",
+      "custom-actions": [
         {
           "target": "kitchen_ellipse_left",
           "light-action": "ellipse_filament_min"
@@ -1030,7 +1026,7 @@
       "id": "kitchen_sensor_day_scene",
       "groups": ["kitchen"],
       "name": "Sensor day",
-      "actions": [
+      "custom-actions": [
         {
           "target": "kitchen_ellipse_left",
           "light-action": "ellipse_filament_min"
@@ -1065,7 +1061,7 @@
       "id": "kitchen_sensor_evening_scene",
       "groups": ["kitchen"],
       "name": "Sensor evening",
-      "actions": [
+      "custom-actions": [
         {
           "target": "kitchen_spot_9",
           "light-action": "kitchen_sensor_evening_action"
@@ -1124,7 +1120,7 @@
       "id": "kitchen_sensor_night_scene",
       "groups": ["kitchen"],
       "name": "Sensor night",
-      "actions": [
+      "custom-actions": [
         {
           "target": "kitchen_spot_9",
           "light-action": "kitchen_sensor_night_action"
@@ -1188,53 +1184,10 @@
       ]
     },
     {
-      "id": "kitchen_button4_scene",
-      "groups": ["kitchen"],
-      "name": "Button 4",
-      "actions": [
-        {
-          "target": "kitchen_ellipse_left",
-          "light-action": "ellipse_filament_min"
-        },
-        {
-          "target": "kitchen_ellipse_right",
-          "light-action": "ellipse_filament_min"
-        },
-        {
-          "target": "kitchen_spot_9",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "kitchen_spot_8",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "kitchen_spot_7",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "kitchen_gradient",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "kitchen_ceiling",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "kitchen_lightstrip_left",
-          "light-action": "kitchen_lightstrip_70"
-        },
-        {
-          "target": "kitchen_lightstrip_right",
-          "light-action": "kitchen_lightstrip_70"
-        }
-      ]
-    },
-    {
-      "id": "kitchen_button3_scene",
+      "id": "kitchen_cooking_scene",
       "groups": ["kitchen_cooking"],
-      "name": "Button 3",
-      "actions": [
+      "name": "Cooking",
+      "custom-actions": [
         {
           "target": "kitchen_spot_9",
           "light-action": "default_day_action"
@@ -1277,8 +1230,8 @@
       "id": "candle_scene",
       "groups": ["kitchen"],
       "name": "Candle",
-      "color-ambiance-actions": ["candle_action"],
-      "white-ambiance-action": "candle_action"
+      "color-ambiance-actions": ["candle_60_action"],
+      "white-ambiance-action": "candle_60_action"
     },
     {
       "id": "singapore_scene",
@@ -1298,7 +1251,7 @@
     },
     {
       "id": "honolulu_scene",
-      "groups": ["kitchen", "bedroom_aaliya", "bridge"],
+      "groups": ["kitchen", "bedroom", "bridge"],
       "name": "Honolulu",
       "image-id": "d271d202-6856-4633-95ae-953ba73aee64",
       "color-ambiance-actions": [
@@ -1325,7 +1278,7 @@
       ],
       "name": "Hallowen \uD83E\uDD87",
       "image-id": "b5f5a765-8f72-4aef-af99-90a116818ad4",
-      "actions": [
+      "custom-actions": [
         {
           "target": "garden_light",
           "light-action": "hallowen_red"
@@ -1415,7 +1368,7 @@
           "light-action": "hallowen_white"
         },
         {
-          "target": "festavia_500",
+          "target": "aaliya_festavia_500",
           "light-action": "hallowen_low_white"
         },
         {
@@ -1453,29 +1406,10 @@
       ]
     },
     {
-      "id": "bedroom_night_scene",
+      "id": "bedroom_bed_scene",
       "groups": ["bedroom"],
-      "name": "Night",
-      "actions": [
-        {
-          "target": "bedroom_shade",
-          "light-action": "bedroom_night"
-        },
-        {
-          "target": "bedroom_candle_left",
-          "light-action": "bedroom_night"
-        },
-        {
-          "target": "bedroom_candle_right",
-          "light-action": "bedroom_night"
-        }
-      ]
-    },
-    {
-      "id": "bedroom_switch_scene",
-      "groups": ["bedroom"],
-      "name": "Switch",
-      "actions": [
+      "name": "Bed",
+      "custom-actions": [
         {
           "target": "bedroom_shade",
           "light-action": "default_day_action"
@@ -1494,33 +1428,18 @@
       "id": "bedroom_candle_scene",
       "groups": ["bedroom"],
       "name": "Candles",
-      "actions": [
+      "custom-actions": [
         {
           "target": "bedroom_shade",
-          "light-action": "candle_action"
+          "light-action": "candle_60_action"
         },
         {
           "target": "bedroom_candle_left",
-          "light-action": "candle_action"
+          "light-action": "candle_60_action"
         },
         {
           "target": "bedroom_candle_right",
-          "light-action": "candle_action"
-        }
-      ]
-    },
-    {
-      "id": "bedroom_ceiling_scene",
-      "groups": ["bedroom"],
-      "name": "Ceiling",
-      "actions": [
-        {
-          "target": "bedroom_ceiling_1",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "bedroom_ceiling_2",
-          "light-action": "default_day_action"
+          "light-action": "candle_60_action"
         }
       ]
     },
@@ -1528,7 +1447,7 @@
       "id": "office_switch_day_evening_scene",
       "groups": ["office"],
       "name": "Switch day/evening",
-      "actions": [
+      "custom-actions": [
         {
           "target": "office_desk",
           "light-action": "default_day_action"
@@ -1547,7 +1466,7 @@
       "id": "office_switch_night_scene",
       "groups": ["office"],
       "name": "Switch night",
-      "actions": [
+      "custom-actions": [
         {
           "target": "office_desk",
           "light-action": "default_night_action"
@@ -1559,85 +1478,10 @@
       ]
     },
     {
-      "id": "aaliya_candle_scene",
-      "groups": ["bedroom_aaliya"],
-      "name": "Candles",
-      "actions": [
-        {
-          "target": "aaliya_desk",
-          "light-action": "candle_action"
-        },
-        {
-          "target": "aaliya_signe",
-          "light-action": "candle_action"
-        },
-        {
-          "target": "festavia_500",
-          "light-action": "candle_action"
-        }
-      ]
-    },
-    {
-      "id": "aaliya_night_scene",
-      "groups": ["bedroom_aaliya"],
-      "name": "Suzuka night",
-      "image-id": "c3a1f243-c6a3-4f94-ac00-a7afb30fc867",
-      "actions": [
-        {
-          "target": "aaliya_desk",
-          "light-action": "default_night_action"
-        },
-        {
-          "target": "aaliya_ceiling"
-        },
-        {
-          "target": "aaliya_signe",
-          "light-action": "default_night_action"
-        }
-      ],
-      "color-ambiance-actions": [
-        "suzuka_night_color1",
-        "suzuka_night_color2",
-        "suzuka_night_color3",
-        "suzuka_night_color4",
-        "suzuka_night_color5"
-      ],
-      "speed": 0.7301587301587301,
-      "auto-dynamic": true
-    },
-    {
-      "id": "aaliya_evening_scene",
-      "groups": ["bedroom_aaliya"],
-      "name": "Suzuka evening",
-      "image-id": "c3a1f243-c6a3-4f94-ac00-a7afb30fc867",
-      "actions": [
-        {
-          "target": "aaliya_desk",
-          "light-action": "default_evening_action"
-        },
-        {
-          "target": "aaliya_ceiling"
-        },
-        {
-          "target": "aaliya_signe",
-          "light-action": "default_evening_action"
-        }
-      ],
-      "color-ambiance-actions": [
-        "suzuka_evening_color1",
-        "suzuka_evening_color2",
-        "suzuka_evening_color3",
-        "suzuka_evening_color4",
-        "suzuka_evening_color5"
-      ],
-      "speed": 0.7301587301587301,
-      "auto-dynamic": true
-    },
-    {
-      "id": "aaliya_day_scene",
+      "id": "aaliya_cosmos_scene",
       "groups": ["bedroom_aaliya"],
       "name": "Day Cosmos",
-      "actions": [
+      "custom-actions": [
         {
           "target": "aaliya_desk",
           "light-action": "default_day_action"
@@ -1647,18 +1491,82 @@
           "light-action": "default_day_action"
         },
         {
-          "target": "festavia_500",
+          "target": "aaliya_festavia_500",
+          "light-action": "purple_cosmos_action"
+        },
+        {
+          "target": "aaliya_ceiling",
           "light-action": "purple_cosmos_action"
         }
       ]
     },
     {
+      "id": "aaliya_reading_scene",
+      "groups": ["bedroom_aaliya"],
+      "name": "Reading",
+      "custom-actions": [
+        {
+          "target": "aaliya_signe",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "aaliya_festavia_500",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "aaliya_candle_scene",
+      "groups": ["bedroom_aaliya"],
+      "name": "Candles",
+      "custom-actions": [
+        {
+          "target": "aaliya_desk",
+          "light-action": "candle_60_action"
+        },
+        {
+          "target": "aaliya_signe",
+          "light-action": "candle_60_action"
+        },
+        {
+          "target": "aaliya_festavia_500",
+          "light-action": "candle_60_action"
+        }
+      ]
+    },
+    {
+      "id": "suzuka_scene",
+      "groups": ["bedroom_aaliya"],
+      "name": "Suzuka",
+      "image-id": "c3a1f243-c6a3-4f94-ac00-a7afb30fc867",
+      "color-ambiance-actions": [
+        "suzuka_color1",
+        "suzuka_color2",
+        "suzuka_color3",
+        "suzuka_color4",
+        "suzuka_color5"
+      ],
+      "white-ambiance-action": "suzuka_white",
+      "custom-actions": [
+        {
+          "target": "aaliya_desk",
+          "light-action": "suzuka_color5"
+        },
+        {
+          "target": "aaliya_ceiling",
+          "light-action": "suzuka_color1"
+        }
+      ],
+      "speed": 0.7301587301587301,
+      "auto-dynamic": true
+    },
+    {
       "id": "festavia_fireplace",
       "groups": ["bedroom_aaliya"],
       "name": "Festavia Fireplace",
-      "actions": [
+      "custom-actions": [
         {
-          "target": "festavia_500",
+          "target": "aaliya_festavia_500",
           "light-action": "fireplace_action"
         }
       ]
@@ -1667,9 +1575,9 @@
       "id": "festavia_prism",
       "groups": ["bedroom_aaliya"],
       "name": "Festavia Prism",
-      "actions": [
+      "custom-actions": [
         {
-          "target": "festavia_500",
+          "target": "aaliya_festavia_500",
           "light-action": "prism_action"
         }
       ]
@@ -1678,9 +1586,9 @@
       "id": "festavia_enchant",
       "groups": ["bedroom_aaliya"],
       "name": "Festavia Enchant",
-      "actions": [
+      "custom-actions": [
         {
-          "target": "festavia_500",
+          "target": "aaliya_festavia_500",
           "light-action": "enchant_action"
         }
       ]
@@ -1689,9 +1597,9 @@
       "id": "festavia_red_sparkle",
       "groups": ["bedroom_aaliya"],
       "name": "Festavia Sparkle",
-      "actions": [
+      "custom-actions": [
         {
-          "target": "festavia_500",
+          "target": "aaliya_festavia_500",
           "light-action": "red_sparkle_action"
         }
       ]
@@ -1914,24 +1822,14 @@
       "brightness": 55
     },
     {
-      "id": "kitchen_lightstrip_70",
-      "mirek": 323,
-      "brightness": 70
-    },
-    {
       "id": "ellipse_filament_min",
       "mirek": 323,
       "brightness": 1
     },
     {
-      "id": "candle_action",
+      "id": "candle_60_action",
       "effect": "candle",
-      "brightness": 45
-    },
-    {
-      "id": "bedroom_night",
-      "mirek": 500,
-      "brightness": 20
+      "brightness": 60
     },
     {
       "id": "memento_color1",
@@ -2114,52 +2012,7 @@
       "brightness": 75.49490660946432
     },
     {
-      "id": "suzuka_night_color1",
-      "color": {
-        "x": 0.22415098882246577,
-        "y": 0.09459107643582164
-      },
-      "brightness": 10
-    },
-    {
-      "id": "suzuka_night_color2",
-      "color": {
-        "x": 0.34815628076797736,
-        "y": 0.1912720780814357
-      },
-      "brightness": 10
-    },
-    {
-      "id": "suzuka_night_color3",
-      "color": {
-        "x": 0.4633680015046482,
-        "y": 0.2642182781116472
-      },
-      "brightness": 10
-    },
-    {
-      "id": "suzuka_night_color4",
-      "color": {
-        "x": 0.4484876642973355,
-        "y": 0.3245220337035739
-      },
-      "brightness": 10
-    },
-    {
-      "id": "suzuka_night_color5",
-      "color": {
-        "x": 0.4195422435217816,
-        "y": 0.44499303625433547
-      },
-      "brightness": 10
-    },
-    {
-      "id": "suzuka_night_white",
-      "mirek": 250,
-      "brightness": 10
-    },
-    {
-      "id": "suzuka_evening_color1",
+      "id": "suzuka_color1",
       "color": {
         "x": 0.22415098882246577,
         "y": 0.09459107643582164
@@ -2167,7 +2020,7 @@
       "brightness": 80
     },
     {
-      "id": "suzuka_evening_color2",
+      "id": "suzuka_color2",
       "color": {
         "x": 0.34815628076797736,
         "y": 0.1912720780814357
@@ -2175,7 +2028,7 @@
       "brightness": 80
     },
     {
-      "id": "suzuka_evening_color3",
+      "id": "suzuka_color3",
       "color": {
         "x": 0.4633680015046482,
         "y": 0.2642182781116472
@@ -2183,7 +2036,7 @@
       "brightness": 80
     },
     {
-      "id": "suzuka_evening_color4",
+      "id": "suzuka_color4",
       "color": {
         "x": 0.4484876642973355,
         "y": 0.3245220337035739
@@ -2191,7 +2044,7 @@
       "brightness": 80
     },
     {
-      "id": "suzuka_evening_color5",
+      "id": "suzuka_color5",
       "color": {
         "x": 0.4195422435217816,
         "y": 0.44499303625433547
@@ -2199,7 +2052,7 @@
       "brightness": 80
     },
     {
-      "id": "suzuka_evening_white",
+      "id": "suzuka_white",
       "mirek": 250,
       "brightness": 80
     },

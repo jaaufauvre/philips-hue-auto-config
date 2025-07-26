@@ -268,7 +268,7 @@
       "id": "scene",
       "groups": ["scene_zone"],
       "name": "Scene",
-      "actions": [
+      "custom-actions": [
         {
           "target": "scene_light",
           "light-action": "scene_action"
@@ -282,7 +282,7 @@
       "id": "day_scene",
       "groups": ["scene_zone"],
       "name": "Day scene",
-      "actions": [
+      "custom-actions": [
         {
           "target": "scene_light",
           "light-action": "scene_action"
@@ -293,7 +293,7 @@
       "id": "night_scene",
       "groups": ["scene_zone"],
       "name": "Night scene",
-      "actions": [
+      "custom-actions": [
         {
           "target": "scene_light",
           "light-action": "scene_action"
@@ -304,7 +304,7 @@
       "id": "evening_scene",
       "groups": ["scene_zone"],
       "name": "Evening scene",
-      "actions": [
+      "custom-actions": [
         {
           "target": "scene_light",
           "light-action": "scene_action"

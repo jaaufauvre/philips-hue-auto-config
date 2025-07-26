@@ -176,9 +176,9 @@
         "image-id": {
           "$ref": "#/definitions/scene-image-id"
         },
-        "actions": {
+        "custom-actions": {
           "type": "array",
-          "description": "A list of actions for some of the lights in the group",
+          "description": "A list of actions for specific lights in the group",
           "uniqueItemProperties": ["target"],
           "minItems": 1,
           "items": {
@@ -201,7 +201,7 @@
         },
         "color-ambiance-actions": {
           "type": "array",
-          "description": "A list of actions to be randomly assigned to colored lights not explicitly listed in 'actions'",
+          "description": "A list of actions to be randomly assigned to colored lights not explicitly listed in 'custom-actions'",
           "uniqueItems": true,
           "minItems": 1,
           "maxItems": 5,
@@ -211,11 +211,11 @@
         },
         "white-ambiance-action": {
           "type": "string",
-          "description": "Action to be assigned to white ambiance lights not explicitly listed in 'actions'"
+          "description": "Action to be assigned to white ambiance lights not explicitly listed in 'custom-actions'"
         },
         "white-action": {
           "type": "string",
-          "description": "Action to be assigned to white lights not explicitly listed in 'actions'"
+          "description": "Action to be assigned to white lights not explicitly listed in 'custom-actions'"
         },
         "speed": {
           "type": "number",

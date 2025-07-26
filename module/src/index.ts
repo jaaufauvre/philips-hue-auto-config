@@ -14,7 +14,7 @@ import { Color, Logger } from './log/logger'
 import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import {
   AccessoryConfig,
-  Action,
+  CustomAction,
   GradientMode,
   LightAction,
   Scene,
@@ -506,7 +506,7 @@ async function addScene(group: ExtendedRoom | ExtendedZone, scene: Scene) {
   _.forEach(groupLights, (light) => {
     lightActions.set(light.idV2!, undefined) // Default: light is off
     if (useExplicitAction(light, scene)) {
-      lightActions.set(light.idV2!, getLightAction(light, scene.actions!))
+      lightActions.set(light.idV2!, getLightAction(light, scene.customActions!))
     }
     if (useAutoAction(light, scene)) {
       lightActions.set(light.idV2!, generateLightAction(light, actions))
@@ -552,12 +552,12 @@ async function createScene(
 }
 
 function useOffAction(light: ExtendedLight, scene: Scene): boolean {
-  const action = _.find(scene.actions, { target: light.id })
+  const action = _.find(scene.customActions, { target: light.id })
   return action !== undefined && action.lightAction === undefined
 }
 
 function useExplicitAction(light: ExtendedLight, scene: Scene): boolean {
-  const action = _.find(scene.actions, { target: light.id })
+  const action = _.find(scene.customActions, { target: light.id })
   return action?.lightAction !== undefined
 }
 
@@ -581,9 +581,12 @@ function useAutoAction(light: ExtendedLight, scene: Scene): boolean {
   }
 }
 
-function getLightAction(light: ExtendedLight, actions: Action[]): LightAction {
+function getLightAction(
+  light: ExtendedLight,
+  customActions: CustomAction[],
+): LightAction {
   return config.getResourceById(
-    _.find(actions, { target: light.id })!.lightAction!,
+    _.find(customActions, { target: light.id })!.lightAction!,
   ) as LightAction
 }
 

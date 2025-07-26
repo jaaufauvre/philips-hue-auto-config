@@ -423,19 +423,19 @@ export enum RoomType {
 
 export interface Scene {
     /**
-     * A list of actions for some of the lights in the group
-     */
-    actions?: Action[];
-    /**
      * Indicates whether to automatically start the scene dynamically on active recall
      */
     autoDynamic?: boolean;
     /**
      * A list of actions to be randomly assigned to colored lights not explicitly listed in
-     * 'actions'
+     * 'custom-actions'
      */
     colorAmbianceActions?: string[];
     comment?:              string;
+    /**
+     * A list of actions for specific lights in the group
+     */
+    customActions?: CustomAction[];
     /**
      * Rooms or zones in which to create the scene (null to create the scene everywhere)
      */
@@ -448,16 +448,16 @@ export interface Scene {
      */
     speed?: number;
     /**
-     * Action to be assigned to white lights not explicitly listed in 'actions'
+     * Action to be assigned to white lights not explicitly listed in 'custom-actions'
      */
     whiteAction?: string;
     /**
-     * Action to be assigned to white ambiance lights not explicitly listed in 'actions'
+     * Action to be assigned to white ambiance lights not explicitly listed in 'custom-actions'
      */
     whiteAmbianceAction?: string;
 }
 
-export interface Action {
+export interface CustomAction {
     /**
      * The ID of an action to execute on the light. The light will stay off if this value is not
      * defined.
@@ -819,10 +819,10 @@ const typeMap: any = {
         { json: "type", js: "type", typ: u(undefined, r("RoomType")) },
     ], false),
     "Scene": o([
-        { json: "actions", js: "actions", typ: u(undefined, a(r("Action"))) },
         { json: "auto-dynamic", js: "autoDynamic", typ: u(undefined, true) },
         { json: "color-ambiance-actions", js: "colorAmbianceActions", typ: u(undefined, a("")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "custom-actions", js: "customActions", typ: u(undefined, a(r("CustomAction"))) },
         { json: "groups", js: "groups", typ: u(undefined, a("")) },
         { json: "id", js: "id", typ: "" },
         { json: "image-id", js: "imageID", typ: u(undefined, "") },
@@ -831,7 +831,7 @@ const typeMap: any = {
         { json: "white-action", js: "whiteAction", typ: u(undefined, "") },
         { json: "white-ambiance-action", js: "whiteAmbianceAction", typ: u(undefined, "") },
     ], false),
-    "Action": o([
+    "CustomAction": o([
         { json: "light-action", js: "lightAction", typ: u(undefined, "") },
         { json: "target", js: "target", typ: "" },
     ], false),

@@ -394,36 +394,6 @@
       }
     },
     {
-      "id": "savannah_dimmer",
-      "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
-      "serial": "0517BA",
-      "name": "Dimmer Savannah",
-      "button1": {
-        "groups": ["bedroom_sav"],
-        "scenes": {
-          "unique": "sav_desk_scene"
-        }
-      },
-      "button2": {
-        "groups": ["bedroom_sav"],
-        "scenes": {
-          "unique": "honolulu_scene"
-        }
-      },
-      "button3": {
-        "groups": ["bedroom_sav"],
-        "scenes": {
-          "unique": "glitz_and_glam_scene"
-        }
-      },
-      "button4": {
-        "groups": ["bedroom_sav"],
-        "scenes": {
-          "unique": "fairfax_scene"
-        }
-      }
-    },
-    {
       "id": "kids_bathroom_dimmer",
       "mac": "00:17:88:01:0b:ec:d1:41-01-fc00",
       "serial": "61E40B",
@@ -494,13 +464,50 @@
       }
     }
   ],
-  "tap-dial-switches": [],
+  "tap-dial-switches": [
+    {
+      "id": "savannah_dial",
+      "mac": "00:17:88:01:0e:06:88:b4-01-fc00",
+      "serial": "034853",
+      "name": "Tap Dial Savannah",
+      "button1": {
+        "groups": ["bedroom_sav"],
+        "scenes": {
+          "unique": "sav_bed_scene"
+        }
+      },
+      "button2": {
+        "groups": ["bedroom_sav"],
+        "scenes": {
+          "unique": "sav_desk_scene"
+        }
+      },
+      "button3": {
+        "groups": ["bedroom_sav"],
+        "scenes": {
+          "unique": "sav_light_string_scene"
+        }
+      },
+      "button4": {
+        "groups": ["bedroom_sav"],
+        "scenes": {
+          "unique": "default_day_scene"
+        }
+      },
+      "dial": {
+        "groups": ["bedroom_sav"],
+        "scenes": {
+          "unique": "default_day_scene"
+        }
+      }
+    }
+  ],
   "wall-switches": [
     {
       "id": "tv_room_ws",
       "mac": "00:17:88:01:0e:ee:79:b0-01-fc00",
       "name": "Switch TV room",
-      "mode": "switch_single_rocker",
+      "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["tv_room"],
         "scenes": {
@@ -508,19 +515,26 @@
           "evening": "tv_room_evening_scene",
           "night": "tv_room_night_scene"
         }
+      },
+      "button2": {
+        "groups": ["tv_room"],
+        "scenes": {
+          "unique": "rio_scene"
+        }
       }
     },
     {
       "id": "savannah_ws",
       "mac": "00:17:88:01:0c:55:d9:12-01-fc00",
       "name": "Switch Savannah",
-      "mode": "switch_single_rocker",
+      "mode": "switch_dual_rocker",
       "button1": {
+        "groups": ["bedroom_sav"]
+      },
+      "button2": {
         "groups": ["bedroom_sav"],
         "scenes": {
-          "day": "sav_day_scene",
-          "evening": "glitz_and_glam_scene",
-          "night": "sav_night_scene"
+          "unique": "osaka_scene"
         }
       }
     },
@@ -624,7 +638,7 @@
   ],
   "smart-buttons": [
     {
-      "id": "savannah_sb",
+      "id": "savannah_smart_button",
       "mac": "00:17:88:01:0b:09:c7:49-01-fc00",
       "name": "Smart button Savannah",
       "button": {
@@ -659,45 +673,61 @@
     },
     {
       "id": "festavia_fireplace",
-      "groups": ["hallway_down"],
+      "groups": ["hallway_down", "bedroom_sav"],
       "name": "Festavia Fireplace",
-      "actions": [
+      "custom-actions": [
         {
           "target": "festavia_250",
-          "light-action": "fireplace_action_fast"
+          "light-action": "fireplace_action"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "fireplace_action"
         }
       ]
     },
     {
       "id": "festavia_prism",
-      "groups": ["hallway_down"],
+      "groups": ["hallway_down", "bedroom_sav"],
       "name": "Festavia Prism",
-      "actions": [
+      "custom-actions": [
         {
           "target": "festavia_250",
-          "light-action": "prism_action_fast"
+          "light-action": "prism_action"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "prism_action"
         }
       ]
     },
     {
       "id": "festavia_enchant",
-      "groups": ["hallway_down"],
+      "groups": ["hallway_down", "bedroom_sav"],
       "name": "Festavia Enchant",
-      "actions": [
+      "custom-actions": [
         {
           "target": "festavia_250",
-          "light-action": "enchant_action_fast"
+          "light-action": "enchant_action"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "enchant_action"
         }
       ]
     },
     {
       "id": "festavia_red_sparkle",
-      "groups": ["hallway_down"],
+      "groups": ["hallway_down", "bedroom_sav"],
       "name": "Festavia Red Sparkle",
-      "actions": [
+      "custom-actions": [
         {
           "target": "festavia_250",
-          "light-action": "red_sparkle_action_fast"
+          "light-action": "red_sparkle_action"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "red_sparkle_action"
         }
       ]
     },
@@ -705,10 +735,10 @@
       "id": "festavia_blue_cosmos",
       "groups": ["hallway_down"],
       "name": "Festavia Cosmos",
-      "actions": [
+      "custom-actions": [
         {
           "target": "festavia_250",
-          "light-action": "blue_cosmos_action_fast"
+          "light-action": "blue_cosmos_action"
         }
       ]
     },
@@ -716,10 +746,10 @@
       "id": "festavia_white_sparkle",
       "groups": ["hallway_down"],
       "name": "Festavia White Sparkle",
-      "actions": [
+      "custom-actions": [
         {
           "target": "festavia_250",
-          "light-action": "white_sparkle_action_fast"
+          "light-action": "white_sparkle_action"
         }
       ]
     },
@@ -727,7 +757,7 @@
       "id": "front_door_sensor_scene",
       "groups": ["front_door"],
       "name": "Sensor",
-      "actions": [
+      "custom-actions": [
         {
           "target": "front_door_spot",
           "light-action": "default_day_action"
@@ -738,7 +768,7 @@
       "id": "front_door_red",
       "groups": ["front_door"],
       "name": "Red",
-      "actions": [
+      "custom-actions": [
         {
           "target": "front_door_spot",
           "light-action": "red"
@@ -749,7 +779,7 @@
       "id": "front_door_green",
       "groups": ["front_door"],
       "name": "Green",
-      "actions": [
+      "custom-actions": [
         {
           "target": "front_door_spot",
           "light-action": "green"
@@ -759,8 +789,8 @@
     {
       "id": "toilet_blue_day_scene",
       "groups": ["toilet"],
-      "name": "Blue (Day)",
-      "actions": [
+      "name": "Blue (day)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_blue_day"
@@ -778,8 +808,8 @@
     {
       "id": "toilet_blue_night_scene",
       "groups": ["toilet"],
-      "name": "Blue (Night)",
-      "actions": [
+      "name": "Blue (night)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_blue_night"
@@ -797,8 +827,8 @@
     {
       "id": "toilet_blue_evening_scene",
       "groups": ["toilet"],
-      "name": "Blue (Evening)",
-      "actions": [
+      "name": "Blue (evening)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_blue_evening"
@@ -816,8 +846,8 @@
     {
       "id": "toilet_red_day_scene",
       "groups": ["toilet"],
-      "name": "Red (Day)",
-      "actions": [
+      "name": "Red (day)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_red_day"
@@ -835,8 +865,8 @@
     {
       "id": "toilet_red_night_scene",
       "groups": ["toilet"],
-      "name": "Red (Night)",
-      "actions": [
+      "name": "Red (night)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_red_night"
@@ -854,8 +884,8 @@
     {
       "id": "toilet_red_evening_scene",
       "groups": ["toilet"],
-      "name": "Red (Evening)",
-      "actions": [
+      "name": "Red (evening)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_red_evening"
@@ -873,8 +903,8 @@
     {
       "id": "toilet_green_day_scene",
       "groups": ["toilet"],
-      "name": "Green (Day)",
-      "actions": [
+      "name": "Green (day)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_green_day"
@@ -892,8 +922,8 @@
     {
       "id": "toilet_green_night_scene",
       "groups": ["toilet"],
-      "name": "Green (Night)",
-      "actions": [
+      "name": "Green (night)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_green_night"
@@ -911,8 +941,8 @@
     {
       "id": "toilet_green_evening_scene",
       "groups": ["toilet"],
-      "name": "Green (Evening)",
-      "actions": [
+      "name": "Green (evening)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_green_evening"
@@ -930,8 +960,8 @@
     {
       "id": "toilet_pink_day_scene",
       "groups": ["toilet"],
-      "name": "Pink (Day)",
-      "actions": [
+      "name": "Pink (day)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_pink_day"
@@ -949,8 +979,8 @@
     {
       "id": "toilet_pink_night_scene",
       "groups": ["toilet"],
-      "name": "Pink (Night)",
-      "actions": [
+      "name": "Pink (night)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_pink_night"
@@ -968,8 +998,8 @@
     {
       "id": "toilet_pink_evening_scene",
       "groups": ["toilet"],
-      "name": "Pink (Evening)",
-      "actions": [
+      "name": "Pink (evening)",
+      "custom-actions": [
         {
           "target": "toilet_ceiling",
           "light-action": "toilet_pink_evening"
@@ -987,8 +1017,8 @@
     {
       "id": "bathroom_blue_day_scene",
       "groups": ["kids_bathroom"],
-      "name": "Blue (Day)",
-      "actions": [
+      "name": "Blue (day)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_blue_day"
@@ -1006,8 +1036,8 @@
     {
       "id": "bathroom_blue_evening_scene",
       "groups": ["kids_bathroom"],
-      "name": "Blue (Evening)",
-      "actions": [
+      "name": "Blue (evening)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_blue_evening"
@@ -1025,8 +1055,8 @@
     {
       "id": "bathroom_blue_night_scene",
       "groups": ["kids_bathroom"],
-      "name": "Blue (Night)",
-      "actions": [
+      "name": "Blue (night)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_blue_night"
@@ -1044,8 +1074,8 @@
     {
       "id": "bathroom_red_day_scene",
       "groups": ["kids_bathroom"],
-      "name": "Red (Day)",
-      "actions": [
+      "name": "Red (day)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_red_day"
@@ -1063,8 +1093,8 @@
     {
       "id": "bathroom_red_evening_scene",
       "groups": ["kids_bathroom"],
-      "name": "Red (Evening)",
-      "actions": [
+      "name": "Red (evening)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_red_evening"
@@ -1082,8 +1112,8 @@
     {
       "id": "bathroom_red_night_scene",
       "groups": ["kids_bathroom"],
-      "name": "Red (Night)",
-      "actions": [
+      "name": "Red (night)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_red_night"
@@ -1101,8 +1131,8 @@
     {
       "id": "bathroom_green_day_scene",
       "groups": ["kids_bathroom"],
-      "name": "Green (Day)",
-      "actions": [
+      "name": "Green (day)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_green_day"
@@ -1120,8 +1150,8 @@
     {
       "id": "bathroom_green_evening_scene",
       "groups": ["kids_bathroom"],
-      "name": "Green (Evening)",
-      "actions": [
+      "name": "Green (evening)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_green_evening"
@@ -1139,8 +1169,8 @@
     {
       "id": "bathroom_green_night_scene",
       "groups": ["kids_bathroom"],
-      "name": "Green (Night)",
-      "actions": [
+      "name": "Green (night)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_green_night"
@@ -1158,8 +1188,8 @@
     {
       "id": "bathroom_pink_day_scene",
       "groups": ["kids_bathroom"],
-      "name": "Pink (Day)",
-      "actions": [
+      "name": "Pink (day)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_pink_day"
@@ -1177,8 +1207,8 @@
     {
       "id": "bathroom_pink_evening_scene",
       "groups": ["kids_bathroom"],
-      "name": "Pink (Evening)",
-      "actions": [
+      "name": "Pink (evening)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_pink_evening"
@@ -1196,8 +1226,8 @@
     {
       "id": "bathroom_pink_night_scene",
       "groups": ["kids_bathroom"],
-      "name": "Pink (Night)",
-      "actions": [
+      "name": "Pink (night)",
+      "custom-actions": [
         {
           "target": "kids_bathroom_ceiling",
           "light-action": "bathroom_pink_night"
@@ -1228,7 +1258,7 @@
       ],
       "name": "Hallowen \uD83E\uDD87",
       "image-id": "b5f5a765-8f72-4aef-af99-90a116818ad4",
-      "actions": [
+      "custom-actions": [
         {
           "target": "front_door_spot",
           "light-action": "hallowen_red"
@@ -1319,7 +1349,7 @@
       "id": "tv_room_day_scene",
       "groups": ["tv_room"],
       "name": "Day",
-      "actions": [
+      "custom-actions": [
         {
           "target": "tv_gradient_left",
           "light-action": "default_day_action"
@@ -1338,7 +1368,7 @@
       "id": "tv_room_evening_scene",
       "groups": ["tv_room"],
       "name": "Evening",
-      "actions": [
+      "custom-actions": [
         {
           "target": "tv_gradient_left",
           "light-action": "default_evening_action"
@@ -1353,7 +1383,7 @@
       "id": "tv_room_night_scene",
       "groups": ["tv_room"],
       "name": "Night",
-      "actions": [
+      "custom-actions": [
         {
           "target": "tv_gradient_left",
           "light-action": "default_night_action"
@@ -1395,10 +1425,68 @@
       "auto-dynamic": false
     },
     {
+      "id": "rio_scene",
+      "image-id": "b17c7762-2619-4435-b931-313f17cc20e0",
+      "groups": ["tv_room"],
+      "name": "Rio",
+      "color-ambiance-actions": [
+        "rio_color1",
+        "rio_color2",
+        "rio_color3",
+        "rio_color4",
+        "rio_color5"
+      ],
+      "custom-actions": [
+        {
+          "target": "tv_ceiling",
+          "light-action": "ellipse_filament_min"
+        }
+      ],
+      "speed": 0.626984126984127,
+      "auto-dynamic": false
+    },
+    {
+      "id": "osaka_scene",
+      "image-id": "87cb1e51-f823-42b1-86e5-697fc0c3d2ae",
+      "groups": ["bedroom_sav"],
+      "name": "Osaka",
+      "color-ambiance-actions": [
+        "osaka_color1",
+        "osaka_color2",
+        "osaka_color3",
+        "osaka_color4",
+        "osaka_color5"
+      ],
+      "custom-actions": [
+        {
+          "target": "savannah_ceiling",
+          "light-action": "osaka_color1"
+        },
+        {
+          "target": "savannah_spot",
+          "light-action": "osaka_color5"
+        },
+        {
+          "target": "savannah_go_portable",
+          "light-action": "osaka_color4"
+        },
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_unicorn",
+          "light-action": "smart_plug_on"
+        }
+      ],
+      "speed": 0.6904761904761905,
+      "auto-dynamic": false
+    },
+    {
       "id": "dressing_switch_scene",
       "groups": ["dressing"],
       "name": "Switch",
-      "actions": [
+      "custom-actions": [
         {
           "target": "dressing_ceiling",
           "light-action": "default_day_action"
@@ -1409,7 +1497,7 @@
       "id": "utility_room_switch_scene",
       "groups": ["utility_room"],
       "name": "Switch",
-      "actions": [
+      "custom-actions": [
         {
           "target": "enrave_utility",
           "light-action": "default_day_action"
@@ -1420,7 +1508,7 @@
       "id": "under_stairs_switch_scene",
       "groups": ["under_stairs"],
       "name": "Switch",
-      "actions": [
+      "custom-actions": [
         {
           "target": "enrave_under_stairs",
           "light-action": "default_day_action"
@@ -1431,7 +1519,7 @@
       "id": "attic_scene",
       "groups": ["attic"],
       "name": "Switch",
-      "actions": [
+      "custom-actions": [
         {
           "target": "enrave_attic",
           "light-action": "default_day_action"
@@ -1439,36 +1527,10 @@
       ]
     },
     {
-      "id": "honolulu_scene",
-      "groups": ["bridge", "bedroom_sav"],
-      "name": "Honolulu",
-      "image-id": "d271d202-6856-4633-95ae-953ba73aee64",
-      "actions": [
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_plug_unicorn",
-          "light-action": "smart_plug_on"
-        }
-      ],
-      "color-ambiance-actions": [
-        "honolulu_color1",
-        "honolulu_color2",
-        "honolulu_color3",
-        "honolulu_color4",
-        "honolulu_color5"
-      ],
-      "white-ambiance-action": "honolulu_white",
-      "speed": 0.6031746031746031,
-      "auto-dynamic": false
-    },
-    {
       "id": "sav_bed_scene",
       "groups": ["bedroom_sav"],
-      "name": "Bed",
-      "actions": [
+      "name": "Bed only",
+      "custom-actions": [
         {
           "target": "savannah_spot",
           "light-action": "default_day_action"
@@ -1478,139 +1540,53 @@
     {
       "id": "sav_desk_scene",
       "groups": ["bedroom_sav"],
-      "name": "Desk",
-      "actions": [
+      "name": "Desk only",
+      "custom-actions": [
         {
           "target": "savannah_go_portable",
           "light-action": "default_day_action"
         }
       ]
-    },
-    {
-      "id": "sav_day_scene",
-      "groups": ["bedroom_sav"],
-      "name": "Switch day",
-      "actions": [
-        {
-          "target": "savannah_spot",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "savannah_go_portable",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "savannah_ceiling",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "savannah_festavia_250",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_plug_unicorn",
-          "light-action": "smart_plug_on"
-        }
-      ]
-    },
-    {
-      "id": "sav_night_scene",
-      "groups": ["bedroom_sav"],
-      "name": "Switch night",
-      "actions": [
-        {
-          "target": "savannah_spot",
-          "light-action": "default_night_action"
-        },
-        {
-          "target": "savannah_go_portable",
-          "light-action": "default_night_action"
-        },
-        {
-          "target": "savannah_ceiling",
-          "light-action": "default_night_action"
-        },
-        {
-          "target": "savannah_festavia_250",
-          "light-action": "default_night_action"
-        }
-      ]
-    },
-    {
-      "id": "glitz_and_glam_scene",
-      "image-id": "df93ccf7-8928-41eb-af11-eefdcffbb06a",
-      "groups": ["bedroom_sav"],
-      "name": "Glitz and glam evening",
-      "color-ambiance-actions": [
-        "glitz_and_glam_color1",
-        "glitz_and_glam_color2",
-        "glitz_and_glam_color3",
-        "glitz_and_glam_color4",
-        "glitz_and_glam_color5"
-      ],
-      "actions": [
-        {
-          "target": "savannah_spot",
-          "light-action": "glitz_and_glam_color1"
-        },
-        {
-          "target": "savannah_go_portable",
-          "light-action": "glitz_and_glam_color2"
-        },
-        {
-          "target": "savannah_ceiling",
-          "light-action": "glitz_and_glam_color4"
-        },
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_plug_unicorn",
-          "light-action": "smart_plug_on"
-        }
-      ],
-      "speed": 0.626984126984127,
-      "auto-dynamic": false
-    },
-    {
-      "id": "fairfax_scene",
-      "groups": ["bedroom_sav"],
-      "name": "Fairfax",
-      "image-id": "cc716363-44c2-4d64-88be-152d74072ea0",
-      "actions": [
-        {
-          "target": "savannah_plug_shelves",
-          "light-action": "smart_plug_on"
-        },
-        {
-          "target": "savannah_plug_unicorn",
-          "light-action": "smart_plug_on"
-        }
-      ],
-      "color-ambiance-actions": [
-        "fairfax_color1",
-        "fairfax_color2",
-        "fairfax_color3",
-        "fairfax_color4",
-        "fairfax_color5"
-      ],
-      "white-ambiance-action": "fairfax_white",
-      "speed": 0.6031746031746031,
-      "auto-dynamic": false
     },
     {
       "id": "sav_light_string_scene",
       "groups": ["bedroom_sav"],
-      "name": "Light string",
-      "actions": [
+      "name": "Light string only",
+      "custom-actions": [
         {
           "target": "savannah_festavia_250",
           "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "sav_purple_cosmos_scene",
+      "groups": ["bedroom_sav"],
+      "name": "Purple cosmos",
+      "custom-actions": [
+        {
+          "target": "savannah_go_portable",
+          "light-action": "purple_cosmos"
+        },
+        {
+          "target": "savannah_festavia_250",
+          "light-action": "purple_cosmos"
+        },
+        {
+          "target": "savannah_spot",
+          "light-action": "purple_cosmos"
+        },
+        {
+          "target": "savannah_ceiling",
+          "light-action": "purple_cosmos"
+        },
+        {
+          "target": "savannah_plug_shelves",
+          "light-action": "smart_plug_on"
+        },
+        {
+          "target": "savannah_plug_unicorn",
+          "light-action": "smart_plug_on"
         }
       ]
     },
@@ -1618,7 +1594,6 @@
       "id": "sensor_hallway_day_scene",
       "groups": ["hallway_up", "hallway_down"],
       "name": "Sensor day",
-      "image-id": "732ff1d9-76a7-4630-aad0-c8acc499bb0b",
       "color-ambiance-actions": ["sensor_hallway_day_action"],
       "white-ambiance-action": "sensor_hallway_day_action"
     },
@@ -1626,7 +1601,6 @@
       "id": "sensor_hallway_evening_scene",
       "groups": ["hallway_up", "hallway_down"],
       "name": "Sensor evening",
-      "image-id": "8c74b9ba-6e89-4083-a2a7-b10a1e566fed",
       "color-ambiance-actions": ["sensor_hallway_evening_action"],
       "white-ambiance-action": "sensor_hallway_evening_action"
     },
@@ -1634,7 +1608,6 @@
       "id": "sensor_hallway_night_scene",
       "groups": ["hallway_up", "hallway_down"],
       "name": "Sensor night",
-      "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
       "color-ambiance-actions": ["sensor_hallway_day_action"],
       "white-ambiance-action": "sensor_hallway_night_action"
     }
@@ -1928,51 +1901,6 @@
       "brightness": 1
     },
     {
-      "id": "honolulu_color1",
-      "color": {
-        "x": 0.6364,
-        "y": 0.29630000000000009
-      },
-      "brightness": 39
-    },
-    {
-      "id": "honolulu_color2",
-      "color": {
-        "x": 0.5752999999999998,
-        "y": 0.3275000000000001
-      },
-      "brightness": 39
-    },
-    {
-      "id": "honolulu_color3",
-      "color": {
-        "x": 0.5726999999999998,
-        "y": 0.3587000000000001
-      },
-      "brightness": 39
-    },
-    {
-      "id": "honolulu_color4",
-      "color": {
-        "x": 0.5635999999999998,
-        "y": 0.3912000000000001
-      },
-      "brightness": 39
-    },
-    {
-      "id": "honolulu_color5",
-      "color": {
-        "x": 0.4759,
-        "y": 0.42830000000000009
-      },
-      "brightness": 39
-    },
-    {
-      "id": "honolulu_white",
-      "mirek": 455,
-      "brightness": 39
-    },
-    {
       "id": "palm_beach_color1",
       "color": {
         "x": 0.2007000000000001,
@@ -2016,6 +1944,96 @@
       "id": "palm_beach_white",
       "mirek": 333,
       "brightness": 38
+    },
+    {
+      "id": "rio_color1",
+      "color": {
+        "x": 0.2588000000000001,
+        "y": 0.12660000000000017
+      },
+      "brightness": 80
+    },
+    {
+      "id": "rio_color2",
+      "color": {
+        "x": 0.5526999999999999,
+        "y": 0.2685999999999998
+      },
+      "brightness": 80
+    },
+    {
+      "id": "rio_color3",
+      "color": {
+        "x": 0.5352999999999998,
+        "y": 0.2908999999999998
+      },
+      "brightness": 80
+    },
+    {
+      "id": "rio_color4",
+      "color": {
+        "x": 0.5472999999999998,
+        "y": 0.3735000000000002
+      },
+      "brightness": 80
+    },
+    {
+      "id": "rio_color5",
+      "color": {
+        "x": 0.4691999999999999,
+        "y": 0.45360000000000019
+      },
+      "brightness": 80
+    },
+    {
+      "id": "rio_white",
+      "mirek": 454,
+      "brightness": 80
+    },
+    {
+      "id": "osaka_color1",
+      "color": {
+        "x": 0.5129999999999999,
+        "y": 0.4237000000000001
+      },
+      "brightness": 40
+    },
+    {
+      "id": "osaka_color2",
+      "color": {
+        "x": 0.6221732841913357,
+        "y": 0.36037147779196429
+      },
+      "brightness": 40
+    },
+    {
+      "id": "osaka_color3",
+      "color": {
+        "x": 0.5934999999999998,
+        "y": 0.308
+      },
+      "brightness": 40
+    },
+    {
+      "id": "osaka_color4",
+      "color": {
+        "x": 0.5531999999999998,
+        "y": 0.2546999999999998
+      },
+      "brightness": 40
+    },
+    {
+      "id": "osaka_color5",
+      "color": {
+        "x": 0.4518999999999999,
+        "y": 0.2677
+      },
+      "brightness": 40
+    },
+    {
+      "id": "osaka_white",
+      "mirek": 370,
+      "brightness": 40
     },
     {
       "id": "soho_color1",
@@ -2063,63 +2081,57 @@
       "brightness": 62
     },
     {
-      "id": "blue_cosmos_action_fast",
+      "id": "blue_cosmos_action",
       "effect": "cosmos",
       "color": {
         "x": 0.1532,
         "y": 0.0476
       },
-      "effect-speed": 0.619,
       "brightness": 100
     },
     {
-      "id": "red_sparkle_action_fast",
+      "id": "red_sparkle_action",
       "effect": "sparkle",
       "color": {
         "x": 0.6915,
         "y": 0.3083
       },
-      "effect-speed": 0.619,
       "brightness": 100
     },
     {
-      "id": "prism_action_fast",
+      "id": "prism_action",
       "effect": "prism",
       "color": {
         "x": 0.2116000000000001,
         "y": 0.07590000000000008
       },
-      "effect-speed": 0.619,
       "brightness": 100
     },
     {
-      "id": "enchant_action_fast",
+      "id": "enchant_action",
       "effect": "enchant",
       "color": {
         "x": 0.1532,
         "y": 0.04760000000000002
       },
-      "effect-speed": 0.619,
       "brightness": 100
     },
     {
-      "id": "fireplace_action_fast",
+      "id": "fireplace_action",
       "effect": "fire",
       "color": {
         "x": 0.5799999999999999,
         "y": 0.38
       },
-      "effect-speed": 0.619,
       "brightness": 100
     },
     {
-      "id": "white_sparkle_action_fast",
+      "id": "white_sparkle_action",
       "effect": "sparkle",
       "color": {
         "x": 0.2681000000000002,
         "y": 0.2813000000000001
       },
-      "effect-speed": 0.619,
       "brightness": 100
     },
     {
@@ -2139,94 +2151,14 @@
       "brightness": 100
     },
     {
-      "id": "glitz_and_glam_color1",
+      "id": "purple_cosmos",
+      "effect": "cosmos",
       "color": {
-        "x": 0.4500000000000002,
-        "y": 0.1980000000000001
+        "x": 0.1922000000000001,
+        "y": 0.06650000000000013
       },
-      "brightness": 50
-    },
-    {
-      "id": "glitz_and_glam_color2",
-      "color": {
-        "x": 0.4006999999999999,
-        "y": 0.2296
-      },
-      "brightness": 50
-    },
-    {
-      "id": "glitz_and_glam_color3",
-      "color": {
-        "x": 0.4468999999999999,
-        "y": 0.2730000000000001
-      },
-      "brightness": 50
-    },
-    {
-      "id": "glitz_and_glam_color4",
-      "color": {
-        "x": 0.5564999999999997,
-        "y": 0.3924
-      },
-      "brightness": 50
-    },
-    {
-      "id": "glitz_and_glam_color5",
-      "color": {
-        "x": 0.5856,
-        "y": 0.3736
-      },
-      "brightness": 50
-    },
-    {
-      "id": "glitz_and_glam_white",
-      "mirek": 400,
-      "brightness": 50
-    },
-    {
-      "id": "fairfax_color1",
-      "color": {
-        "x": 0.15832187179872266,
-        "y": 0.2464994360459551
-      },
-      "brightness": 62
-    },
-    {
-      "id": "fairfax_color2",
-      "color": {
-        "x": 0.1935000000000001,
-        "y": 0.23530000000000024
-      },
-      "brightness": 62
-    },
-    {
-      "id": "fairfax_color3",
-      "color": {
-        "x": 0.4817999999999997,
-        "y": 0.321
-      },
-      "brightness": 62
-    },
-    {
-      "id": "fairfax_color4",
-      "color": {
-        "x": 0.6130000000000001,
-        "y": 0.3132000000000001
-      },
-      "brightness": 62
-    },
-    {
-      "id": "fairfax_color5",
-      "color": {
-        "x": 0.6775732472610194,
-        "y": 0.301555239738354
-      },
-      "brightness": 62
-    },
-    {
-      "id": "fairfax_white",
-      "mirek": 286,
-      "brightness": 62
+      "effect-speed": 0.5,
+      "brightness": 100
     }
   ]
 }

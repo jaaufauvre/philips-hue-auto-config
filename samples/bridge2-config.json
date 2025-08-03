@@ -1608,7 +1608,7 @@
       "id": "sensor_hallway_night_scene",
       "groups": ["hallway_up", "hallway_down"],
       "name": "Sensor night",
-      "color-ambiance-actions": ["sensor_hallway_day_action"],
+      "color-ambiance-actions": ["sensor_hallway_night_action"],
       "white-ambiance-action": "sensor_hallway_night_action"
     }
   ],

@@ -469,7 +469,7 @@
       "id": "savannah_dial",
       "mac": "00:17:88:01:0e:06:88:b4-01-fc00",
       "serial": "034853",
-      "name": "Tap Dial Savannah",
+      "name": "Tap dial Savannah",
       "button1": {
         "groups": ["bedroom_sav"],
         "scenes": {

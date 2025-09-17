@@ -20,11 +20,6 @@
       "type": "kitchen"
     },
     {
-      "id": "office",
-      "name": "Office",
-      "type": "office"
-    },
-    {
       "id": "bedroom_aaliya",
       "name": "Aaliya's bedroom",
       "type": "kids_bedroom"
@@ -192,33 +187,6 @@
       "type": "hue_lightstrip",
       "room": "kitchen",
       "zones": ["bridge", "kitchen_cooking"]
-    },
-    {
-      "id": "office_ceiling",
-      "mac": "00:17:88:01:0b:6d:be:81-0b",
-      "serial": "9D9664",
-      "name": "Office filament",
-      "type": "vintage_bulb",
-      "room": "office",
-      "zones": ["bridge"]
-    },
-    {
-      "id": "office_signe_left",
-      "mac": "00:17:88:01:0b:73:30:f6-0b",
-      "serial": "410ABF",
-      "name": "Office Signe gradient L",
-      "type": "hue_signe",
-      "room": "office",
-      "zones": ["bridge"]
-    },
-    {
-      "id": "office_desk",
-      "mac": "00:17:88:01:0e:c1:b2:06-0b",
-      "serial": "956326",
-      "name": "Office desk color spot",
-      "type": "flexible_lamp",
-      "room": "office",
-      "zones": ["bridge"]
     },
     {
       "id": "aaliya_desk",
@@ -490,38 +458,6 @@
           "unique": "bedroom_candle_scene"
         }
       }
-    },
-    {
-      "id": "office_dimmer",
-      "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
-      "serial": "0517BA",
-      "name": "Dimmer office",
-      "button1": {
-        "groups": ["office"],
-        "scenes": {
-          "day": "office_switch_day_evening_scene",
-          "evening": "office_switch_day_evening_scene",
-          "night": "office_switch_night_scene"
-        }
-      },
-      "button2": {
-        "groups": ["office"],
-        "scenes": {
-          "unique": "office_desk_scene"
-        }
-      },
-      "button3": {
-        "groups": ["office"],
-        "scenes": {
-          "unique": "honolulu_scene"
-        }
-      },
-      "button4": {
-        "groups": ["office"],
-        "scenes": {
-          "unique": "candle_scene"
-        }
-      }
     }
   ],
   "tap-dial-switches": [
@@ -665,20 +601,6 @@
         "groups": ["kitchen_cooking"],
         "scenes": {
           "unique": "kitchen_cooking_scene"
-        }
-      }
-    },
-    {
-      "id": "office_ws",
-      "mac": "00:17:88:01:0e:b2:40:ff-01-fc00",
-      "name": "Switch office",
-      "mode": "switch_single_rocker",
-      "button1": {
-        "groups": ["office"],
-        "scenes": {
-          "day": "office_switch_day_evening_scene",
-          "evening": "office_switch_day_evening_scene",
-          "night": "office_switch_night_scene"
         }
       }
     },
@@ -1260,7 +1182,7 @@
     },
     {
       "id": "candle_scene",
-      "groups": ["kitchen", "office"],
+      "groups": ["kitchen"],
       "name": "Candle",
       "color-ambiance-actions": ["candle_60_action"],
       "white-ambiance-action": "candle_60_action"
@@ -1283,7 +1205,7 @@
     },
     {
       "id": "honolulu_scene",
-      "groups": ["kitchen", "bedroom", "office", "bridge"],
+      "groups": ["kitchen", "bedroom", "bridge"],
       "name": "Honolulu",
       "image-id": "d271d202-6856-4633-95ae-953ba73aee64",
       "color-ambiance-actions": [
@@ -1294,12 +1216,6 @@
         "honolulu_color5"
       ],
       "white-ambiance-action": "honolulu_white",
-      "custom-actions": [
-        {
-          "target": "office_ceiling",
-          "light-action": "ellipse_filament_min"
-        }
-      ],
       "speed": 0.6031746031746031,
       "auto-dynamic": false
     },
@@ -1307,7 +1223,6 @@
       "id": "hallowen_scene",
       "groups": [
         "kitchen",
-        "office",
         "bedroom_aaliya",
         "bathroom",
         "bedroom",
@@ -1428,18 +1343,6 @@
         {
           "target": "bedroom_shade",
           "light-action": "hallowen_red"
-        },
-        {
-          "target": "office_ceiling",
-          "light-action": "hallowen_ellipse_filament_white"
-        },
-        {
-          "target": "office_desk",
-          "light-action": "hallowen_red"
-        },
-        {
-          "target": "office_signe_left",
-          "light-action": "hallowen_red"
         }
       ]
     },
@@ -1478,55 +1381,6 @@
         {
           "target": "bedroom_candle_right",
           "light-action": "candle_60_action"
-        }
-      ]
-    },
-    {
-      "id": "office_switch_day_evening_scene",
-      "groups": ["office"],
-      "name": "Switch day/evening",
-      "custom-actions": [
-        {
-          "target": "office_desk",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "office_signe_left",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "office_ceiling",
-          "light-action": "ellipse_filament_min"
-        }
-      ]
-    },
-    {
-      "id": "office_desk_scene",
-      "groups": ["office"],
-      "name": "Desk only",
-      "custom-actions": [
-        {
-          "target": "office_desk",
-          "light-action": "default_day_action"
-        },
-        {
-          "target": "office_signe_left",
-          "light-action": "default_day_action"
-        }
-      ]
-    },
-    {
-      "id": "office_switch_night_scene",
-      "groups": ["office"],
-      "name": "Switch night",
-      "custom-actions": [
-        {
-          "target": "office_desk",
-          "light-action": "default_night_action"
-        },
-        {
-          "target": "office_signe_left",
-          "light-action": "default_night_action"
         }
       ]
     },

@@ -1,7 +1,7 @@
 {
-  "name": "Bridge #2 config",
+  "name": "Bridge Pro config",
   "bridge": {
-    "name": "Bridge #2",
+    "name": "Bridge Pro",
     "long": "6.266155W",
     "lat": "53.350140N"
   },
@@ -14,6 +14,11 @@
     }
   },
   "rooms": [
+    {
+      "id": "office",
+      "name": "Office",
+      "type": "office"
+    },
     {
       "id": "tv_room",
       "name": "TV Room",
@@ -73,11 +78,38 @@
   "zones": [
     {
       "id": "bridge",
-      "name": "Bridge #2",
+      "name": "Bridge Pro",
       "type": "computer"
     }
   ],
   "lights": [
+    {
+      "id": "office_ceiling",
+      "mac": "00:17:88:01:0b:6d:be:81-0b",
+      "serial": "9D9664",
+      "name": "Office filament",
+      "type": "vintage_bulb",
+      "room": "office",
+      "zones": ["bridge"]
+    },
+    {
+      "id": "office_signe_left",
+      "mac": "00:17:88:01:0b:73:30:f6-0b",
+      "serial": "410ABF",
+      "name": "Office Signe gradient L",
+      "type": "hue_signe",
+      "room": "office",
+      "zones": ["bridge"]
+    },
+    {
+      "id": "office_desk",
+      "mac": "00:17:88:01:0e:c1:b2:06-0b",
+      "serial": "956326",
+      "name": "Office desk color spot",
+      "type": "flexible_lamp",
+      "room": "office",
+      "zones": ["bridge"]
+    },
     {
       "id": "tv_gradient_left",
       "mac": "00:17:88:01:0c:c5:9a:29-0b",
@@ -356,6 +388,38 @@
   ],
   "dimmer-switches": [
     {
+      "id": "office_dimmer",
+      "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
+      "serial": "0517BA",
+      "name": "Dimmer office",
+      "button1": {
+        "groups": ["office"],
+        "scenes": {
+          "day": "office_switch_day_evening_scene",
+          "evening": "office_switch_day_evening_scene",
+          "night": "office_switch_night_scene"
+        }
+      },
+      "button2": {
+        "groups": ["office"],
+        "scenes": {
+          "unique": "office_desk_scene"
+        }
+      },
+      "button3": {
+        "groups": ["office"],
+        "scenes": {
+          "unique": "honolulu_scene"
+        }
+      },
+      "button4": {
+        "groups": ["office"],
+        "scenes": {
+          "unique": "candle_scene"
+        }
+      }
+    },
+    {
       "id": "toilet_dimmer",
       "mac": "00:17:88:01:0d:be:6c:a9-01-fc00",
       "serial": "299347",
@@ -504,6 +568,20 @@
   ],
   "wall-switches": [
     {
+      "id": "office_ws",
+      "mac": "00:17:88:01:0e:b2:40:ff-01-fc00",
+      "name": "Switch office",
+      "mode": "switch_single_rocker",
+      "button1": {
+        "groups": ["office"],
+        "scenes": {
+          "day": "office_switch_day_evening_scene",
+          "evening": "office_switch_day_evening_scene",
+          "night": "office_switch_night_scene"
+        }
+      }
+    },
+    {
       "id": "tv_room_ws",
       "mac": "00:17:88:01:0e:ee:79:b0-01-fc00",
       "name": "Switch TV room",
@@ -638,6 +716,17 @@
   ],
   "smart-buttons": [
     {
+      "id": "house_smart_button",
+      "mac": "00:17:88:01:0f:2b:3a:8f-01-fc00",
+      "name": "Smart button house",
+      "button": {
+        "groups": ["bridge"],
+        "scenes": {
+          "unique": "hallowen_scene"
+        }
+      }
+    },
+    {
       "id": "savannah_smart_button",
       "mac": "00:17:88:01:0b:09:c7:49-01-fc00",
       "name": "Smart button Savannah",
@@ -670,6 +759,100 @@
       "image-id": "28bbfeff-1a0c-444e-bb4b-0b74b88e0c95",
       "color-ambiance-actions": ["default_night_action"],
       "white-ambiance-action": "default_night_action"
+    },
+    {
+      "id": "office_switch_day_evening_scene",
+      "groups": ["office"],
+      "name": "Switch day/evening",
+      "custom-actions": [
+        {
+          "target": "office_desk",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "office_signe_left",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "office_ceiling",
+          "light-action": "ellipse_filament_min"
+        }
+      ]
+    },
+    {
+      "id": "office_desk_scene",
+      "groups": ["office"],
+      "name": "Desk only",
+      "custom-actions": [
+        {
+          "target": "office_desk",
+          "light-action": "default_day_action"
+        },
+        {
+          "target": "office_signe_left",
+          "light-action": "default_day_action"
+        }
+      ]
+    },
+    {
+      "id": "office_switch_night_scene",
+      "groups": ["office"],
+      "name": "Switch night",
+      "custom-actions": [
+        {
+          "target": "office_desk",
+          "light-action": "default_night_action"
+        },
+        {
+          "target": "office_signe_left",
+          "light-action": "default_night_action"
+        }
+      ]
+    },
+    {
+      "id": "candle_scene",
+      "groups": ["office"],
+      "name": "Candle",
+      "color-ambiance-actions": ["candle_60_action"],
+      "white-ambiance-action": "candle_60_action"
+    },
+    {
+      "id": "honolulu_scene",
+      "groups": ["office", "bridge"],
+      "name": "Honolulu",
+      "image-id": "d271d202-6856-4633-95ae-953ba73aee64",
+      "color-ambiance-actions": [
+        "honolulu_color1",
+        "honolulu_color2",
+        "honolulu_color3",
+        "honolulu_color4",
+        "honolulu_color5"
+      ],
+      "white-ambiance-action": "honolulu_white",
+      "custom-actions": [
+        {
+          "target": "office_ceiling",
+          "light-action": "ellipse_filament_min"
+        },
+        {
+          "target": "tv_ceiling",
+          "light-action": "ellipse_filament_min"
+        },
+        {
+          "target": "toilet_ceiling",
+          "light-action": "honolulu_color1"
+        },
+        {
+          "target": "kids_bathroom_ceiling",
+          "light-action": "honolulu_color1"
+        },
+        {
+          "target": "dressing_ceiling",
+          "light-action": "honolulu_color1"
+        }
+      ],
+      "speed": 0.6031746031746031,
+      "auto-dynamic": false
     },
     {
       "id": "festavia_fireplace",
@@ -1245,6 +1428,7 @@
     {
       "id": "hallowen_scene",
       "groups": [
+        "office",
         "tv_room",
         "hallway_down",
         "kids_bathroom",
@@ -1259,6 +1443,18 @@
       "name": "Hallowen \uD83E\uDD87",
       "image-id": "b5f5a765-8f72-4aef-af99-90a116818ad4",
       "custom-actions": [
+        {
+          "target": "office_ceiling",
+          "light-action": "hallowen_ellipse_filament_white"
+        },
+        {
+          "target": "office_desk",
+          "light-action": "hallowen_red"
+        },
+        {
+          "target": "office_signe_left",
+          "light-action": "hallowen_red"
+        },
         {
           "target": "front_door_spot",
           "light-action": "hallowen_red"
@@ -2159,6 +2355,56 @@
       },
       "effect-speed": 0.5,
       "brightness": 100
+    },
+    {
+      "id": "honolulu_color1",
+      "color": {
+        "x": 0.6364,
+        "y": 0.29630000000000009
+      },
+      "brightness": 39
+    },
+    {
+      "id": "honolulu_color2",
+      "color": {
+        "x": 0.5752999999999998,
+        "y": 0.3275000000000001
+      },
+      "brightness": 39
+    },
+    {
+      "id": "honolulu_color3",
+      "color": {
+        "x": 0.5726999999999998,
+        "y": 0.3587000000000001
+      },
+      "brightness": 39
+    },
+    {
+      "id": "honolulu_color4",
+      "color": {
+        "x": 0.5635999999999998,
+        "y": 0.3912000000000001
+      },
+      "brightness": 39
+    },
+    {
+      "id": "honolulu_color5",
+      "color": {
+        "x": 0.4759,
+        "y": 0.42830000000000009
+      },
+      "brightness": 39
+    },
+    {
+      "id": "honolulu_white",
+      "mirek": 455,
+      "brightness": 39
+    },
+    {
+      "id": "candle_60_action",
+      "effect": "candle",
+      "brightness": 60
     }
   ]
 }

@@ -469,6 +469,34 @@ test('should throw Error when missing wall switch button 2 configuration', () =>
   }
 })
 
+it.each`
+  device               | original_location
+  ${'smart button'}    | ${'sm_room'}
+  ${'motion sensor'}   | ${'ms_room'}
+  ${'tap dial switch'} | ${'ts_room1'}
+  ${'wall switch'}     | ${'ws_room'}
+  ${'dimmer switch'}   | ${'ds_room1'}
+`(
+  'should throw Error when $device location is not a room ID',
+  ({ original_location }) => {
+    try {
+      const json = fs.readFileSync(
+        './tests/config/res/test-config.json',
+        'utf-8',
+      )
+      new Config(
+        json.replace(
+          `"location": "${original_location}"`,
+          `"location": "light_zone"`,
+        ),
+      )
+      fail('An error was expected')
+    } catch (e: any) {
+      expect(e.message).toBe(`Undefined room identifier: 'light_zone'!`)
+    }
+  },
+)
+
 function fail(msg: string) {
   expect(`Test failed: ${msg}`).toBeFalsy()
 }

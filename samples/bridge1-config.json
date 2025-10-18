@@ -314,6 +314,7 @@
       "mac": "00:17:88:01:0b:58:02:6a-02",
       "serial": "0B58026A",
       "name": "Sensor kitchen",
+      "location": "kitchen",
       "motion": {
         "groups": ["kitchen"],
         "scenes": {
@@ -328,6 +329,7 @@
       "mac": "00:17:88:01:0c:4b:13:c7-02",
       "serial": "0C4B13C7",
       "name": "Sensor garden",
+      "location": "garden",
       "motion": {
         "groups": ["garden"],
         "scenes": {
@@ -342,6 +344,7 @@
       "mac": "00:17:88:01:0b:e3:88:a9-01-fc00",
       "serial": "D328A0",
       "name": "Dimmer Aaliya",
+      "location": "bedroom_aaliya",
       "button1": {
         "groups": ["bedroom_aaliya"],
         "scenes": {
@@ -372,6 +375,7 @@
       "mac": "00:17:88:01:0c:b2:e7:35-01-fc00",
       "serial": "82CCD6",
       "name": "Dimmer bathroom",
+      "location": "bathroom",
       "button1": {
         "groups": ["bathroom"],
         "scenes": {
@@ -410,6 +414,7 @@
       "mac": "00:17:88:01:0b:4e:06:d1-01-fc00",
       "serial": "93B657",
       "name": "Dimmer bedroom right",
+      "location": "bedroom",
       "button1": {
         "groups": ["bedroom"]
       },
@@ -437,6 +442,7 @@
       "mac": "00:17:88:01:0d:1b:28:be-01-fc00",
       "serial": "9317F5",
       "name": "Dimmer bedroom left",
+      "location": "bedroom",
       "button1": {
         "groups": ["bedroom"]
       },
@@ -466,6 +472,7 @@
       "mac": "00:17:88:01:0d:a2:09:21-01-fc00",
       "serial": "0057DB",
       "name": "Tap dial kitchen 1",
+      "location": "kitchen",
       "button1": {
         "groups": ["kitchen"],
         "scenes": {
@@ -502,6 +509,7 @@
       "mac": "00:17:88:01:0d:ea:cf:3e-01-fc00",
       "serial": "806995",
       "name": "Tap dial kitchen 2",
+      "location": "kitchen",
       "button1": {
         "groups": ["kitchen"],
         "scenes": {
@@ -539,6 +547,7 @@
       "id": "aaliya_ws",
       "mac": "00:17:88:01:0c:53:df:35-01-fc00",
       "name": "Switch Aaliya",
+      "location": "bedroom_aaliya",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["bedroom_aaliya"]
@@ -554,6 +563,7 @@
       "id": "kitchen_ws_left",
       "mac": "00:17:88:01:0c:55:dc:5d-01-fc00",
       "name": "Switch kitchen L",
+      "location": "kitchen",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["kitchen"],
@@ -572,6 +582,7 @@
       "id": "kitchen_ws_right",
       "mac": "00:17:88:01:0c:55:de:c5-01-fc00",
       "name": "Switch kitchen R",
+      "location": "kitchen",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["kitchen"],
@@ -590,6 +601,7 @@
       "id": "kitchen_garden_ws",
       "mac": "00:17:88:01:0c:55:dc:46-01-fc00",
       "name": "Switch kitchen/garden",
+      "location": "kitchen",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["garden"],
@@ -608,6 +620,7 @@
       "id": "bathroom_ws",
       "mac": "00:17:88:01:0c:53:dc:3f-01-fc00",
       "name": "Switch bathroom",
+      "location": "bedroom",
       "mode": "switch_single_rocker",
       "button1": {
         "groups": ["bathroom"],
@@ -622,6 +635,7 @@
       "id": "bedroom_ws",
       "mac": "00:17:88:01:0c:54:44:d6-01-fc00",
       "name": "Switch bedroom",
+      "location": "bedroom",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["bedroom"],

@@ -282,6 +282,19 @@ export class Bridge {
     await this.#apiv2!.updateRoom(roomIdV2, room)
   }
 
+  async addAccessoryToRoom(accessoryIdV2: string, roomIdV2: string) {
+    Logger.info(`Adding accessory '${accessoryIdV2}' to room '${roomIdV2}'`)
+    const children = (await this.#apiv2!.getRoom(roomIdV2)).data[0].children
+    children.push({
+      rid: accessoryIdV2,
+      rtype: 'device',
+    })
+    const room = {
+      children: children,
+    }
+    await this.#apiv2!.updateRoom(roomIdV2, room)
+  }
+
   async addLightToZone(lightIdV2: string, zoneIdV2: string) {
     Logger.info(`Adding light '${lightIdV2}' to zone '${zoneIdV2}'`)
     const children = (await this.#apiv2!.getZone(zoneIdV2)).data[0].children

@@ -821,6 +821,10 @@
           "motion": {
             "$ref": "#/definitions/accessory-config"
           },
+          "location": {
+            "type": "string",
+            "description": "ID of the room where this motion sensor is located"
+          },
           "comment": {
             "type": "string"
           }
@@ -877,6 +881,10 @@
           },
           "dial": {
             "$ref": "#/definitions/accessory-config"
+          },
+          "location": {
+            "type": "string",
+            "description": "ID of the room where this tap dial switch is located"
           },
           "comment": {
             "type": "string"
@@ -941,6 +949,10 @@
           "button4": {
             "$ref": "#/definitions/accessory-config"
           },
+          "location": {
+            "type": "string",
+            "description": "ID of the room where this dimmer switch is located"
+          },
           "comment": {
             "type": "string"
           }
@@ -995,6 +1007,10 @@
           "button2": {
             "$ref": "#/definitions/accessory-config"
           },
+          "location": {
+            "type": "string",
+            "description": "ID of the room where this wall switch is located"
+          },
           "comment": {
             "type": "string"
           }
@@ -1032,6 +1048,10 @@
           },
           "button": {
             "$ref": "#/definitions/accessory-config"
+          },
+          "location": {
+            "type": "string",
+            "description": "ID of the room where this smart button is located"
           },
           "comment": {
             "type": "string"

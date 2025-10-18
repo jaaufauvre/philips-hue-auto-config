@@ -127,6 +127,10 @@ export interface DimmerSwitch {
      */
     id: string;
     /**
+     * ID of the room where this dimmer switch is located
+     */
+    location?: string;
+    /**
      * MAC address, required for uniquely identifying dimmer switches added to a bridge
      */
     mac: string;
@@ -336,6 +340,10 @@ export interface MotionSensor {
      */
     id: string;
     /**
+     * ID of the room where this motion sensor is located
+     */
+    location?: string;
+    /**
      * MAC address, required for uniquely identifying motion sensors added to a bridge
      */
     mac:    string;
@@ -477,6 +485,10 @@ export interface SmartButton {
      */
     id: string;
     /**
+     * ID of the room where this smart button is located
+     */
+    location?: string;
+    /**
      * MAC address, required for uniquely identifying smart buttons added to a bridge
      */
     mac: string;
@@ -497,6 +509,10 @@ export interface TapDialSwitch {
      * Uniquely identify the tap dial switch in this configuration
      */
     id: string;
+    /**
+     * ID of the room where this tap dial switch is located
+     */
+    location?: string;
     /**
      * MAC address, required for uniquely identifying tap dial switches added to a bridge
      */
@@ -520,6 +536,10 @@ export interface WallSwitch {
      * Uniquely identify the wall switch in this configuration
      */
     id: string;
+    /**
+     * ID of the room where this wall switch is located
+     */
+    location?: string;
     /**
      * MAC address, required for uniquely identifying wall switches added to a bridge
      */
@@ -763,6 +783,7 @@ const typeMap: any = {
         { json: "button4", js: "button4", typ: r("AccessoryConfig") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
+        { json: "location", js: "location", typ: u(undefined, "") },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
@@ -807,6 +828,7 @@ const typeMap: any = {
     "MotionSensor": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
+        { json: "location", js: "location", typ: u(undefined, "") },
         { json: "mac", js: "mac", typ: "" },
         { json: "motion", js: "motion", typ: r("AccessoryConfig") },
         { json: "name", js: "name", typ: "" },
@@ -839,6 +861,7 @@ const typeMap: any = {
         { json: "button", js: "button", typ: r("AccessoryConfig") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
+        { json: "location", js: "location", typ: u(undefined, "") },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
     ], false),
@@ -850,6 +873,7 @@ const typeMap: any = {
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "dial", js: "dial", typ: r("AccessoryConfig") },
         { json: "id", js: "id", typ: "" },
+        { json: "location", js: "location", typ: u(undefined, "") },
         { json: "mac", js: "mac", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "serial", js: "serial", typ: u(undefined, "") },
@@ -859,6 +883,7 @@ const typeMap: any = {
         { json: "button2", js: "button2", typ: u(undefined, r("AccessoryConfig")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
+        { json: "location", js: "location", typ: u(undefined, "") },
         { json: "mac", js: "mac", typ: "" },
         { json: "mode", js: "mode", typ: r("Mode") },
         { json: "name", js: "name", typ: "" },

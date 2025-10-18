@@ -276,6 +276,13 @@ async function main() {
       wallSwitch.name,
       wallSwitch.mode,
     )
+
+    if (wallSwitch.location) {
+      // Add wall switch to its defined location/room
+      const room = config.getResourceById(wallSwitch.location) as ExtendedRoom
+      await bridge.addAccessoryToRoom(wallSwitch.idV2!, room.idV2!)
+    }
+
     Logger.info(Color.Green, `Wall switch '${wallSwitch.name}' was configured`)
   }
 
@@ -307,6 +314,13 @@ async function main() {
       smartButton.idV2!,
       smartButton.name,
     )
+
+    if (smartButton.location) {
+      // Add smart button to its defined location/room
+      const room = config.getResourceById(smartButton.location) as ExtendedRoom
+      await bridge.addAccessoryToRoom(smartButton.idV2!, room.idV2!)
+    }
+
     Logger.info(
       Color.Green,
       `Smart button '${smartButton.name}' was configured`,
@@ -350,6 +364,13 @@ async function main() {
       dimmerSwitch.idV2!,
       dimmerSwitch.name,
     )
+
+    if (dimmerSwitch.location) {
+      // Add dimmer switch to its defined location/room
+      const room = config.getResourceById(dimmerSwitch.location) as ExtendedRoom
+      await bridge.addAccessoryToRoom(dimmerSwitch.idV2!, room.idV2!)
+    }
+
     Logger.info(
       Color.Green,
       `Dimmer switch '${dimmerSwitch.name}' was configured`,
@@ -408,6 +429,15 @@ async function main() {
       tapDialSwitch.idV2!,
       tapDialSwitch.name,
     )
+
+    if (tapDialSwitch.location) {
+      // Add tap dial switch to its defined location/room
+      const room = config.getResourceById(
+        tapDialSwitch.location,
+      ) as ExtendedRoom
+      await bridge.addAccessoryToRoom(tapDialSwitch.idV2!, room.idV2!)
+    }
+
     Logger.info(
       Color.Green,
       `Tap dial switch '${tapDialSwitch.name}' was configured`,
@@ -442,6 +472,13 @@ async function main() {
       motionSensor.idV2!,
       motionSensor.name,
     )
+
+    if (motionSensor.location) {
+      // Add motion sensor to its defined location/room
+      const room = config.getResourceById(motionSensor.location) as ExtendedRoom
+      await bridge.addAccessoryToRoom(motionSensor.idV2!, room.idV2!)
+    }
+
     Logger.info(
       Color.Green,
       `Motion sensor '${motionSensor.name}' was configured`,

@@ -350,6 +350,7 @@
       "mac": "00:17:88:01:0b:47:7b:62-02",
       "serial": "0B477B62",
       "name": "Sensor hall. up",
+      "location": "hallway_up",
       "motion": {
         "groups": ["hallway_up"],
         "scenes": {
@@ -364,6 +365,7 @@
       "mac": "00:17:88:01:0b:58:00:7c-02",
       "serial": "0B58007C",
       "name": "Sensor hall. down",
+      "location": "hallway_down",
       "motion": {
         "groups": ["hallway_down"],
         "scenes": {
@@ -378,6 +380,7 @@
       "mac": "00:17:88:01:0c:4b:1e:e7-02",
       "serial": "0C4B1EE7",
       "name": "Sensor front door",
+      "location": "front_door",
       "motion": {
         "groups": ["front_door"],
         "scenes": {
@@ -392,6 +395,7 @@
       "mac": "00:17:88:01:0b:e3:ba:36-01-fc00",
       "serial": "0517BA",
       "name": "Dimmer office",
+      "location": "office",
       "button1": {
         "groups": ["office"],
         "scenes": {
@@ -424,6 +428,7 @@
       "mac": "00:17:88:01:0d:be:6c:a9-01-fc00",
       "serial": "299347",
       "name": "Dimmer toilet",
+      "location": "toilet",
       "button1": {
         "groups": ["toilet"],
         "scenes": {
@@ -462,6 +467,7 @@
       "mac": "00:17:88:01:0b:ec:d1:41-01-fc00",
       "serial": "61E40B",
       "name": "Dimmer kids bathroom",
+      "location": "kids_bathroom",
       "button1": {
         "groups": ["kids_bathroom"],
         "scenes": {
@@ -500,6 +506,7 @@
       "mac": "00:17:88:01:0b:e0:ee:09-01-fc00",
       "serial": "2381C6",
       "name": "Dimmer TV room",
+      "location": "tv_room",
       "button1": {
         "groups": ["tv_room"],
         "scenes": {
@@ -534,6 +541,7 @@
       "mac": "00:17:88:01:0e:06:88:b4-01-fc00",
       "serial": "034853",
       "name": "Tap dial Savannah",
+      "location": "bedroom_sav",
       "button1": {
         "groups": ["bedroom_sav"],
         "scenes": {
@@ -571,6 +579,7 @@
       "id": "office_ws",
       "mac": "00:17:88:01:0e:b2:40:ff-01-fc00",
       "name": "Switch office",
+      "location": "office",
       "mode": "switch_single_rocker",
       "button1": {
         "groups": ["office"],
@@ -585,6 +594,7 @@
       "id": "tv_room_ws",
       "mac": "00:17:88:01:0e:ee:79:b0-01-fc00",
       "name": "Switch TV room",
+      "location": "tv_room",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["tv_room"],
@@ -605,6 +615,7 @@
       "id": "savannah_ws",
       "mac": "00:17:88:01:0c:55:d9:12-01-fc00",
       "name": "Switch Savannah",
+      "location": "bedroom_sav",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["bedroom_sav"]
@@ -620,6 +631,7 @@
       "id": "hall_down_up_ws",
       "mac": "00:17:88:01:0c:54:44:da-01-fc00",
       "name": "Switch hall. down/up",
+      "location": "hallway_down",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["hallway_up"]
@@ -632,6 +644,7 @@
       "id": "hall_down_toilet_ws",
       "mac": "00:17:88:01:0c:53:df:28-01-fc00",
       "name": "Switch hall. down/toilet",
+      "location": "hallway_down",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["toilet"],
@@ -649,6 +662,7 @@
       "id": "dressing_ws",
       "mac": "00:17:88:01:0c:53:dc:3c-01-fc00",
       "name": "Switch dressing",
+      "location": "dressing",
       "mode": "switch_single_rocker",
       "button1": {
         "groups": ["dressing"],
@@ -661,6 +675,7 @@
       "id": "hall_up_bathroom_ws",
       "mac": "00:17:88:01:0c:54:44:dd-01-fc00",
       "name": "Switch hall. up/bathroom",
+      "location": "hallway_up",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["hallway_up"]
@@ -678,6 +693,7 @@
       "id": "hall_up_attic_ws",
       "mac": "00:17:88:01:0c:54:44:ec-01-fc00",
       "name": "Switch hall. up/attic",
+      "location": "hallway_up",
       "mode": "switch_dual_rocker",
       "button1": {
         "groups": ["hallway_up"]
@@ -693,6 +709,7 @@
       "id": "utility_room_ws",
       "mac": "00:17:88:01:0e:b3:98:2e-01-fc00",
       "name": "Switch utility room",
+      "location": "utility_room",
       "mode": "switch_single_rocker",
       "button1": {
         "groups": ["utility_room"],
@@ -705,6 +722,7 @@
       "id": "under_stairs_ws",
       "mac": "00:17:88:01:0e:b3:98:2c-01-fc00",
       "name": "Switch under stairs",
+      "location": "under_stairs",
       "mode": "switch_single_rocker",
       "button1": {
         "groups": ["under_stairs"],
@@ -719,6 +737,7 @@
       "id": "house_smart_button",
       "mac": "00:17:88:01:0f:2b:3a:8f-01-fc00",
       "name": "Smart button house",
+      "location": "hallway_down",
       "button": {
         "groups": ["bridge"],
         "scenes": {
@@ -730,6 +749,7 @@
       "id": "savannah_smart_button",
       "mac": "00:17:88:01:0b:09:c7:49-01-fc00",
       "name": "Smart button Savannah",
+      "location": "bedroom_sav",
       "button": {
         "groups": ["bedroom_sav"],
         "scenes": {

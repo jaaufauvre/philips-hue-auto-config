@@ -369,6 +369,7 @@ export class Config implements ConfigGen {
 
   #validateWallSwitchConfig() {
     this.wallSwitches.forEach((wallSwitch) => {
+      this.#checkRoomDefined(wallSwitch.location)
       this.#checkAccessoryConfig(wallSwitch.button1)
       this.#checkAccessoryConfig(wallSwitch.button2)
       this.#checkWallSwitchMode(wallSwitch)
@@ -377,12 +378,14 @@ export class Config implements ConfigGen {
 
   #validateSmartButtonConfig() {
     this.smartButtons.forEach((smartButton) => {
+      this.#checkRoomDefined(smartButton.location)
       this.#checkAccessoryConfig(smartButton.button)
     })
   }
 
   #validateTapDialSwitchConfig() {
     this.tapDialSwitches.forEach((tapDialSwitch) => {
+      this.#checkRoomDefined(tapDialSwitch.location)
       this.#checkAccessoryConfig(tapDialSwitch.button1)
       this.#checkAccessoryConfig(tapDialSwitch.button2)
       this.#checkAccessoryConfig(tapDialSwitch.button3)
@@ -393,6 +396,7 @@ export class Config implements ConfigGen {
 
   #validateDimmerSwitchConfig() {
     this.dimmerSwitches.forEach((dimmerSwitch) => {
+      this.#checkRoomDefined(dimmerSwitch.location)
       this.#checkAccessoryConfig(dimmerSwitch.button1)
       this.#checkAccessoryConfig(dimmerSwitch.button2)
       this.#checkAccessoryConfig(dimmerSwitch.button3)
@@ -402,6 +406,7 @@ export class Config implements ConfigGen {
 
   #validateMotionSensorConfig() {
     this.motionSensors.forEach((motionSensor) => {
+      this.#checkRoomDefined(motionSensor.location)
       this.#checkAccessoryConfig(motionSensor.motion)
     })
   }
@@ -474,7 +479,10 @@ export class Config implements ConfigGen {
     }
   }
 
-  #checkRoomDefined(id: string) {
+  #checkRoomDefined(id: string | undefined) {
+    if (!id) {
+      return
+    }
     if (!_.find(this.rooms, { id })) {
       throw Error(`Undefined room identifier: '${id}'!`)
     }

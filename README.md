@@ -20,7 +20,7 @@ The configuration must adhere to [config-schema.json](./module/src/config/config
 
 ### Examples
 * [simple-config.json](./samples/simple-config.json)
-* [bridge.json](./samples/bridge-config.json)
+* [bridge-config.json](./samples/bridge-config.json)
 
 ## Run the program
 

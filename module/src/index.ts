@@ -11,7 +11,6 @@
   LightColorType,
 } from './config/config'
 import { Color, Logger } from './log/logger'
-import { AccessoryType, Bridge, ButtonType } from './bridge/bridge'
 import {
   AccessoryConfig,
   CustomAction,
@@ -20,6 +19,13 @@ import {
   Scene,
 } from './config/config-gen'
 import _ from 'lodash'
+import {
+  AccessoryType,
+  ButtonType,
+  Group,
+  MotionSensor,
+} from './bridge/bridge-types'
+import { Bridge } from './bridge/bridge'
 
 const bridge = new Bridge()
 let config: Config
@@ -244,10 +250,13 @@ async function main() {
       motionSensor.presenceIdV1 = motionSensorId.presence_id_v1
       motionSensor.lightIdV1 = motionSensorId.light_id_v1
       motionSensor.temperatureIdV1 = motionSensorId.temperature_id_v1
+      motionSensor.lightIdV2 = motionSensorId.light_id_v2
+      motionSensor.motionIdV2 = motionSensorId.motion_id_v2
+      motionSensor.temperatureIdV2 = motionSensorId.temperature_id_v2
       motionSensor.idV2 = motionSensorId.id_v2
       Logger.info(
         Color.Green,
-        `Motion sensor '${motionSensor.name}' was added with IDs: '${motionSensor.presenceIdV1}', '${motionSensor.lightIdV1}', '${motionSensor.temperatureIdV1}' (v1) and '${motionSensor.idV2}' (v2)`,
+        `Motion sensor '${motionSensor.name}' was added with IDs: '${motionSensor.idV2}', '${motionSensor.lightIdV2}', '${motionSensor.motionIdV2}' and '${motionSensor.temperatureIdV2}' (v2)`,
       )
     },
   )
@@ -277,11 +286,8 @@ async function main() {
       wallSwitch.mode,
     )
 
-    if (wallSwitch.location) {
-      // Add wall switch to its defined location/room
-      const room = config.getResourceById(wallSwitch.location) as ExtendedRoom
-      await bridge.addAccessoryToRoom(wallSwitch.idV2!, room.idV2!)
-    }
+    // Add wall switch to its defined location/room
+    await addAccessoryToRoom(wallSwitch.location, wallSwitch.idV2!)
 
     Logger.info(Color.Green, `Wall switch '${wallSwitch.name}' was configured`)
   }
@@ -315,11 +321,8 @@ async function main() {
       smartButton.name,
     )
 
-    if (smartButton.location) {
-      // Add smart button to its defined location/room
-      const room = config.getResourceById(smartButton.location) as ExtendedRoom
-      await bridge.addAccessoryToRoom(smartButton.idV2!, room.idV2!)
-    }
+    // Add smart button to its defined location/room
+    await addAccessoryToRoom(smartButton.location, smartButton.idV2!)
 
     Logger.info(
       Color.Green,
@@ -365,11 +368,8 @@ async function main() {
       dimmerSwitch.name,
     )
 
-    if (dimmerSwitch.location) {
-      // Add dimmer switch to its defined location/room
-      const room = config.getResourceById(dimmerSwitch.location) as ExtendedRoom
-      await bridge.addAccessoryToRoom(dimmerSwitch.idV2!, room.idV2!)
-    }
+    // Add dimmer switch to its defined location/room
+    await addAccessoryToRoom(dimmerSwitch.location, dimmerSwitch.idV2!)
 
     Logger.info(
       Color.Green,
@@ -430,13 +430,8 @@ async function main() {
       tapDialSwitch.name,
     )
 
-    if (tapDialSwitch.location) {
-      // Add tap dial switch to its defined location/room
-      const room = config.getResourceById(
-        tapDialSwitch.location,
-      ) as ExtendedRoom
-      await bridge.addAccessoryToRoom(tapDialSwitch.idV2!, room.idV2!)
-    }
+    // Add tap dial switch to its defined location/room
+    await addAccessoryToRoom(tapDialSwitch.location, tapDialSwitch.idV2!)
 
     Logger.info(
       Color.Green,
@@ -446,38 +441,36 @@ async function main() {
 
   // Configure motion sensors
   for (const motionSensor of config.motionSensors) {
-    for (const groupId of motionSensor.motion.groups) {
+    const groups = _.map(
+      motionSensor.motion.groups,
+      (groupId) => config.getResourceById(groupId)! as Group,
+    )
+    const scenes = _.map(motionSensor.motion.groups, (groupId) => {
       const group = config.getResourceById(groupId)! as
         | ExtendedRoom
         | ExtendedZone
+      return {
+        daySceneIdV2: group.sceneIdsV2!.get(
+          config.getDaySceneId(motionSensor.motion),
+        )!,
+        eveningSceneIdV2: group.sceneIdsV2!.get(
+          config.getEveningSceneId(motionSensor.motion),
+        )!,
+        nightSceneIdV2: group.sceneIdsV2!.get(
+          config.getNightSceneId(motionSensor.motion),
+        )!,
+      }
+    })
 
-      // Create motion sensor rules
-      await bridge.configureMotionSensor(
-        motionSensor.mac,
-        motionSensor.lightIdV1!,
-        motionSensor.presenceIdV1!,
-        motionSensor.name,
-        group.idV1!,
-        group.sceneIdsV1!.get(config.getDaySceneId(motionSensor.motion))!,
-        group.sceneIdsV1!.get(config.getNightSceneId(motionSensor.motion))!,
-        group.sceneIdsV1!.get(config.getEveningSceneId(motionSensor.motion))!,
-      )
-    }
-
-    // Update motion sensor name & default settings
-    await bridge.updateMotionSensorProperties(
-      motionSensor.temperatureIdV1!,
-      motionSensor.lightIdV1!,
-      motionSensor.presenceIdV1!,
-      motionSensor.idV2!,
-      motionSensor.name,
+    // Create motion sensor behavior and update sensor settings
+    await bridge.configureMotionSensor(
+      motionSensor as MotionSensor,
+      groups,
+      scenes,
     )
 
-    if (motionSensor.location) {
-      // Add motion sensor to its defined location/room
-      const room = config.getResourceById(motionSensor.location) as ExtendedRoom
-      await bridge.addAccessoryToRoom(motionSensor.idV2!, room.idV2!)
-    }
+    // Add motion sensor to its defined location/room
+    await addAccessoryToRoom(motionSensor.location, motionSensor.idV2!)
 
     Logger.info(
       Color.Green,
@@ -586,6 +579,17 @@ async function createScene(
     Color.Green,
     `Scene '${name}' was created for ${group.groupType} '${group.name}' with IDs: '${sceneIdV1}' (v1) and '${sceneIdV2}' (v2)`,
   )
+}
+
+async function addAccessoryToRoom(
+  roomId: string | undefined,
+  accessoryIdV2: string,
+) {
+  if (!roomId) {
+    return
+  }
+  const room = config.getResourceById(roomId) as ExtendedRoom
+  await bridge.addAccessoryToRoom(accessoryIdV2, room.idV2!)
 }
 
 function useOffAction(light: ExtendedLight, scene: Scene): boolean {

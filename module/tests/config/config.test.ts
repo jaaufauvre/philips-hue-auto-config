@@ -164,7 +164,10 @@ describe('Config', () => {
         'utf-8',
       )
       new Config(
-        json.replace(`"groups": ["scene_zone"]`, `"groups": ["unknown"]`),
+        json.replace(
+          `"groups": ["scene_zone", "sm_room", "ms_room"]`,
+          `"groups": ["scene_zone", "sm_room", "ms_room", "unknown"]`,
+        ),
       )
       fail('An error was expected')
     } catch (e: any) {
@@ -413,9 +416,9 @@ describe('Config', () => {
   test('should return scenes for accessory configs when unique scene defined', () => {
     const config = new Config('./tests/config/res/test-config.json')
     const dimmerButton = config.dimmerSwitches[0].button4
-    expect(config.getDaySceneId(dimmerButton)).toBe('scene')
-    expect(config.getEveningSceneId(dimmerButton)).toBe('scene')
-    expect(config.getNightSceneId(dimmerButton)).toBe('scene')
+    expect(config.getDaySceneId(dimmerButton)).toBe('default_day_scene')
+    expect(config.getEveningSceneId(dimmerButton)).toBe('default_day_scene')
+    expect(config.getNightSceneId(dimmerButton)).toBe('default_day_scene')
     const sensorMotion = config.motionSensors[1].motion
     expect(config.getDaySceneId(sensorMotion)).toBe('scene')
     expect(config.getEveningSceneId(sensorMotion)).toBe('scene')
@@ -496,6 +499,18 @@ it.each`
     }
   },
 )
+
+test('should throw Error when scene not in group', () => {
+  try {
+    const json = fs.readFileSync('./tests/config/res/test-config.json', 'utf-8')
+    new Config(
+      json.replace(`"unique": "default_day_scene"`, `"unique": "scene"`),
+    )
+    fail('An error was expected')
+  } catch (e: any) {
+    expect(e.message).toBe(`Scene 'scene' doesn't exist in group 'ds_zone2'!`)
+  }
+})
 
 function fail(msg: string) {
   expect(`Test failed: ${msg}`).toBeFalsy()

@@ -21,14 +21,26 @@ import {
 } from '../api/api-v2'
 import { LightAction } from '../config/config-gen'
 import { LightColorType } from '../config/config'
+import {
+  AccessoryIdentifiers,
+  AccessoryType,
+  ButtonType,
+  Group,
+  GroupScenes,
+  LightIdentifiers,
+  LightInfo,
+  MotionSensor,
+  MotionSensorIdentifiers,
+  TapDialSwitchIdentifiers,
+} from './bridge-types'
 
 export class Bridge {
-  #apiv1?: ApiV1
-  #apiv2?: ApiV2
+  #apiV1?: ApiV1
+  #apiV2?: ApiV2
 
   init(bridgeIp: string, appKey: string) {
-    this.#apiv1 = new ApiV1(bridgeIp, appKey)
-    this.#apiv2 = new ApiV2(bridgeIp, appKey)
+    this.#apiV1 = new ApiV1(bridgeIp, appKey)
+    this.#apiV2 = new ApiV2(bridgeIp, appKey)
   }
 
   static async discoverBridges() {
@@ -61,45 +73,39 @@ export class Bridge {
   }
 
   async resetBridge() {
-    for (const ruleId of Object.keys(await this.#apiv1!.getRules())) {
-      await this.#apiv1!.deleteRule(ruleId)
+    for (const ruleId of Object.keys(await this.#apiV1!.getRules())) {
+      await this.#apiV1!.deleteRule(ruleId)
     }
-    for (const behaviorInstance of (await this.#apiv2!.getBehaviorInstances())
+    for (const behaviorInstance of (await this.#apiV2!.getBehaviorInstances())
       .data) {
-      await this.#apiv2!.deleteBehaviorInstance(behaviorInstance.id)
+      await this.#apiV2!.deleteBehaviorInstance(behaviorInstance.id)
     }
-    for (const room of (await this.#apiv2!.getRooms()).data) {
-      await this.#apiv2!.deleteRoom(room.id)
+    for (const room of (await this.#apiV2!.getRooms()).data) {
+      await this.#apiV2!.deleteRoom(room.id)
     }
-    for (const zone of (await this.#apiv2!.getZones()).data) {
-      await this.#apiv2!.deleteZone(zone.id)
+    for (const zone of (await this.#apiV2!.getZones()).data) {
+      await this.#apiV2!.deleteZone(zone.id)
     }
-    for (const linkId of Object.keys(await this.#apiv1!.getResourcelinks())) {
-      await this.#apiv1!.deleteResourcelink(linkId)
+    for (const linkId of Object.keys(await this.#apiV1!.getResourcelinks())) {
+      await this.#apiV1!.deleteResourcelink(linkId)
     }
-    for (const sceneId of Object.keys(await this.#apiv1!.getScenes())) {
-      await this.#apiv1!.deleteScene(sceneId)
-    }
-    const flagSensorsV1 = await this.#getSensors(['CLIPGenericFlag'])
-    for (const sensorId of Object.keys(flagSensorsV1)) {
-      if (flagSensorsV1[sensorId].modelid === 'PHILIPSHUEAUTOCONFIG') {
-        await this.#apiv1!.deleteSensor(sensorId)
-      }
+    for (const sceneId of Object.keys(await this.#apiV1!.getScenes())) {
+      await this.#apiV1!.deleteScene(sceneId)
     }
   }
 
   async resetBridgeWithDevices() {
     await this.resetBridge()
-    for (const light of (await this.#apiv2!.getLights()).data) {
-      await this.#apiv2!.deleteDevice(light.owner.rid)
+    for (const light of (await this.#apiV2!.getLights()).data) {
+      await this.#apiV2!.deleteDevice(light.owner.rid)
     }
     for (const device of (await this.#getDevices()).data) {
       if (!this.#isBridge(device)) {
-        await this.#apiv2!.deleteDevice(device.id)
+        await this.#apiV2!.deleteDevice(device.id)
       }
     }
     for (const sensorId of Object.keys(await this.#getSensors())) {
-      await this.#apiv1!.deleteSensor(sensorId)
+      await this.#apiV1!.deleteSensor(sensorId)
     }
   }
 
@@ -108,12 +114,12 @@ export class Bridge {
       Logger.info(Color.DarkBlue, 'Waiting for light scan to end ...')
       await this.#wait(10000)
     }
-    const lightsV1 = await this.#apiv1!.getLights()
+    const lightsV1 = await this.#apiV1!.getLights()
     for (const id of Object.keys(lightsV1)) {
       const light = lightsV1[id]
       if (!_.includes(excludedMacAddresses, light.uniqueid)) {
         Logger.info(`Deleting unexpected light '${light.uniqueid}' ...`)
-        await this.#apiv1!.deleteLight(id)
+        await this.#apiV1!.deleteLight(id)
       }
     }
   }
@@ -134,7 +140,7 @@ export class Bridge {
         )
       ) {
         Logger.info(`Deleting unexpected sensor '${sensor.uniqueid}' ...`)
-        await this.#apiv1!.deleteSensor(id)
+        await this.#apiV1!.deleteSensor(id)
       }
     }
   }
@@ -153,7 +159,7 @@ export class Bridge {
   async updateBridgeLocation(lat: string, long: string) {
     Logger.info('Updating bridge location ...')
     const daylightSensorId = await this.#getDaylightSensorId()
-    await this.#apiv1!.updateDaylightSensorConfig(daylightSensorId, {
+    await this.#apiV1!.updateDaylightSensorConfig(daylightSensorId, {
       long: long,
       lat: lat,
       sunriseoffset: 0, // "daylight" value is "true" at sunrise
@@ -166,7 +172,7 @@ export class Bridge {
       // Rooms can have the same name
       throw new Error(`Room '${name}' already exists!`)
     }
-    const created = await this.#apiv2!.createRoom({
+    const created = await this.#apiV2!.createRoom({
       type: 'room',
       metadata: {
         name: name,
@@ -175,7 +181,7 @@ export class Bridge {
       children: [],
     })
     const idV2 = created.data[0].rid
-    const groupIdV1 = (await this.#apiv2!.getRoom(idV2)).data[0].id_v1 // "/groups/81"
+    const groupIdV1 = (await this.#apiV2!.getRoom(idV2)).data[0].id_v1 // "/groups/81"
     const idV1 = groupIdV1.replace('/groups/', '')
     return [idV1, idV2]
   }
@@ -185,7 +191,7 @@ export class Bridge {
       // Zones can have the same name
       throw new Error(`Zone '${name}' already exists!`)
     }
-    const created = await this.#apiv2!.createZone({
+    const created = await this.#apiV2!.createZone({
       type: 'zone',
       metadata: {
         name: name,
@@ -194,21 +200,21 @@ export class Bridge {
       children: [],
     })
     const idV2 = created.data[0].rid
-    const groupIdV1 = (await this.#apiv2!.getZone(idV2)).data[0].id_v1 // "/groups/81"
+    const groupIdV1 = (await this.#apiV2!.getZone(idV2)).data[0].id_v1 // "/groups/81"
     const idV1 = groupIdV1.replace('/groups/', '')
     return [idV1, idV2]
   }
 
-  async addLights(lightIdList: LightIdentifiers[]): Promise<LightInfo[]> {
+  async addLights(lightIds: LightIdentifiers[]): Promise<LightInfo[]> {
     Logger.info('Adding lights ...')
-    Logger.table(lightIdList)
+    Logger.table(lightIds)
 
-    while (await this.#hasMissingLights(lightIdList)) {
+    while (await this.#hasMissingLights(lightIds)) {
       // Search without serial
-      await this.#apiv1!.searchLights({ deviceid: [] })
+      await this.#apiV1!.searchLights({ deviceid: [] })
       while (
         (await this.#isScanningLights()) &&
-        (await this.#hasMissingLights(lightIdList))
+        (await this.#hasMissingLights(lightIds))
       ) {
         Logger.info(
           Color.DarkBlue,
@@ -216,11 +222,11 @@ export class Bridge {
         )
         await this.#wait(10000)
       }
-      const missingLightIdList = await this.#findMissingLights(lightIdList)
-      if (_.isEmpty(missingLightIdList)) {
+      const missingLightIds = await this.#findMissingLights(lightIds)
+      if (_.isEmpty(missingLightIds)) {
         break
       }
-      for (const missingLightId of missingLightIdList) {
+      for (const missingLightId of missingLightIds) {
         if (!missingLightId.serial) {
           Logger.warn(
             `Light ${missingLightId.mac} wasn't found and no serial was provided`,
@@ -230,11 +236,11 @@ export class Bridge {
         // Search one by one by serial
         const serial = missingLightId.serial
         Logger.info(`Searching for serial ${serial}`)
-        await this.#apiv1!.searchLights({ deviceid: [serial] })
+        await this.#apiV1!.searchLights({ deviceid: [serial] })
         while (
           (await this.#isScanningLights()) &&
           !(await this.#hasLight(missingLightId.mac)) &&
-          (await this.#hasMissingLights(lightIdList))
+          (await this.#hasMissingLights(lightIds))
         ) {
           Logger.info(
             Color.DarkBlue,
@@ -245,10 +251,10 @@ export class Bridge {
       }
     }
     // Find created IDs
-    const lightsV1 = await this.#apiv1!.getLights()
-    const lightsV2 = await this.#apiv2!.getLights()
+    const lightsV1 = await this.#apiV1!.getLights()
+    const lightsV2 = await this.#apiV2!.getLights()
     const lightInfoList: LightInfo[] = _.map(
-      lightIdList,
+      lightIds,
       (lightId: LightIdentifiers) => ({ ...lightId }),
     )
     _.forEach(lightInfoList, (lightInfo) => {
@@ -271,7 +277,7 @@ export class Bridge {
     Logger.info(
       `Adding light owned by '${lightOwnerIdV2}' to room '${roomIdV2}'`,
     )
-    const children = (await this.#apiv2!.getRoom(roomIdV2)).data[0].children
+    const children = (await this.#apiV2!.getRoom(roomIdV2)).data[0].children
     children.push({
       rid: lightOwnerIdV2,
       rtype: 'device',
@@ -279,12 +285,12 @@ export class Bridge {
     const room = {
       children: children,
     }
-    await this.#apiv2!.updateRoom(roomIdV2, room)
+    await this.#apiV2!.updateRoom(roomIdV2, room)
   }
 
   async addAccessoryToRoom(accessoryIdV2: string, roomIdV2: string) {
     Logger.info(`Adding accessory '${accessoryIdV2}' to room '${roomIdV2}'`)
-    const children = (await this.#apiv2!.getRoom(roomIdV2)).data[0].children
+    const children = (await this.#apiV2!.getRoom(roomIdV2)).data[0].children
     children.push({
       rid: accessoryIdV2,
       rtype: 'device',
@@ -292,12 +298,12 @@ export class Bridge {
     const room = {
       children: children,
     }
-    await this.#apiv2!.updateRoom(roomIdV2, room)
+    await this.#apiV2!.updateRoom(roomIdV2, room)
   }
 
   async addLightToZone(lightIdV2: string, zoneIdV2: string) {
     Logger.info(`Adding light '${lightIdV2}' to zone '${zoneIdV2}'`)
-    const children = (await this.#apiv2!.getZone(zoneIdV2)).data[0].children
+    const children = (await this.#apiV2!.getZone(zoneIdV2)).data[0].children
     children.push({
       rid: lightIdV2,
       rtype: 'light',
@@ -305,7 +311,7 @@ export class Bridge {
     const zone = {
       children: children,
     }
-    await this.#apiv2!.updateZone(zoneIdV2, zone)
+    await this.#apiV2!.updateZone(zoneIdV2, zone)
   }
 
   async updateLightMetadata(
@@ -362,7 +368,7 @@ export class Bridge {
           : this.#getOffSceneAction(lightId),
       )
     })
-    const created = await this.#apiv2!.createScene({
+    const created = await this.#apiV2!.createScene({
       type: 'scene',
       metadata: {
         name: name,
@@ -377,104 +383,108 @@ export class Bridge {
       speed: speed,
     })
     const idV2 = created.data[0].rid
-    const sceneIdV1 = (await this.#apiv2!.getScene(idV2)).data[0].id_v1 // "/scenes/FVQmKmwq2L-adLtW"
+    const sceneIdV1 = (await this.#apiV2!.getScene(idV2)).data[0].id_v1 // "/scenes/FVQmKmwq2L-adLtW"
     const idV1 = sceneIdV1.replace('/scenes/', '')
     return [idV1, idV2]
   }
 
-  async activateScene(idV2: string) {
-    Logger.info(`Activating scene '${idV2}'`)
-    await this.#apiv2!.updateScene(idV2, { recall: { action: 'active' } })
-  }
-
   async addAccessories(
-    accessoryIdList: AccessoryIdentifiers[],
+    accessoryIds: AccessoryIdentifiers[],
   ): Promise<AccessoryIdentifiers[]> {
     Logger.info('Adding accessories:')
-    Logger.table(accessoryIdList)
+    Logger.table(accessoryIds)
     // Add all
-    await this.#searchAccessories(accessoryIdList)
+    await this.#searchAccessories(accessoryIds)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#getDevices()
-    const finalIdList = _.cloneDeep(accessoryIdList)
-    _.forEach(finalIdList, (accessoryId) => {
-      accessoryId.id_v1 = this.#findSensorIdByAddressAndType(
+    const addedAccessories = _.cloneDeep(accessoryIds)
+    _.forEach(addedAccessories, (addedAccessory) => {
+      addedAccessory.id_v1 = this.#findSensorIdByAddressAndType(
         sensorsV1,
-        accessoryId.mac,
+        addedAccessory.mac,
         'ZLLSwitch',
       )
       const accessory = _.find(devicesV2.data, {
-        id_v1: `/sensors/${accessoryId.id_v1}`,
+        id_v1: `/sensors/${addedAccessory.id_v1}`,
       })
-      accessoryId.id_v2 = accessory!.id
+      addedAccessory.id_v2 = accessory!.id
     })
-    return finalIdList
+    return addedAccessories
   }
 
   async addTapDialSwitches(
-    tapDialSwitchIdList: TapDialSwitchIdentifiers[],
+    tapDialSwitchIds: TapDialSwitchIdentifiers[],
   ): Promise<TapDialSwitchIdentifiers[]> {
     Logger.info('Adding tap dial switches:')
-    Logger.table(tapDialSwitchIdList)
+    Logger.table(tapDialSwitchIds)
     // Add all
-    await this.#searchAccessories(tapDialSwitchIdList)
+    await this.#searchAccessories(tapDialSwitchIds)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#getDevices()
-    const finalIdList = _.cloneDeep(tapDialSwitchIdList)
-    _.forEach(finalIdList, (tapDialSwitchId) => {
-      tapDialSwitchId.switch_id_v1 = this.#findSensorIdByAddressAndType(
+    const addedTapDialSwitches = _.cloneDeep(tapDialSwitchIds)
+    _.forEach(addedTapDialSwitches, (addedTapDialSwitch) => {
+      addedTapDialSwitch.switch_id_v1 = this.#findSensorIdByAddressAndType(
         sensorsV1,
-        tapDialSwitchId.mac,
+        addedTapDialSwitch.mac,
         'ZLLSwitch',
       )
-      tapDialSwitchId.dial_id_v1 = this.#findSensorIdByAddressAndType(
+      addedTapDialSwitch.dial_id_v1 = this.#findSensorIdByAddressAndType(
         sensorsV1,
-        tapDialSwitchId.mac,
+        addedTapDialSwitch.mac,
         'ZLLRelativeRotary',
       )
       const tapDialSwitch = _.find(devicesV2.data, {
-        id_v1: `/sensors/${tapDialSwitchId.dial_id_v1}`,
+        id_v1: `/sensors/${addedTapDialSwitch.dial_id_v1}`,
       })
-      tapDialSwitchId.id_v2 = tapDialSwitch!.id
+      addedTapDialSwitch.id_v2 = tapDialSwitch!.id
     })
-    return finalIdList
+    return addedTapDialSwitches
   }
 
   async addMotionSensors(
-    motionSensorIdList: MotionSensorIdentifiers[],
+    motionSensorIds: MotionSensorIdentifiers[],
   ): Promise<MotionSensorIdentifiers[]> {
     Logger.info('Adding motion sensors:')
-    Logger.table(motionSensorIdList)
+    Logger.table(motionSensorIds)
     // Add all
-    await this.#searchAccessories(motionSensorIdList)
+    await this.#searchAccessories(motionSensorIds)
     // Find created IDs
     const sensorsV1 = await this.#getSensors()
     const devicesV2 = await this.#getDevices()
-    const finalIdList = _.cloneDeep(motionSensorIdList)
-    _.forEach(finalIdList, (motionSensorId) => {
-      motionSensorId.light_id_v1 = this.#findSensorIdByAddressAndType(
+    const addedMotionSensors = _.cloneDeep(motionSensorIds)
+    _.forEach(addedMotionSensors, (addedMotionSensor) => {
+      addedMotionSensor.light_id_v1 = this.#findSensorIdByAddressAndType(
         sensorsV1,
-        motionSensorId.mac,
+        addedMotionSensor.mac,
         'ZLLLightLevel',
       )
-      motionSensorId.presence_id_v1 = this.#findSensorIdByAddressAndType(
+      addedMotionSensor.presence_id_v1 = this.#findSensorIdByAddressAndType(
         sensorsV1,
-        motionSensorId.mac,
+        addedMotionSensor.mac,
         'ZLLPresence',
       )
-      motionSensorId.temperature_id_v1 = this.#findSensorIdByAddressAndType(
+      addedMotionSensor.temperature_id_v1 = this.#findSensorIdByAddressAndType(
         sensorsV1,
-        motionSensorId.mac,
+        addedMotionSensor.mac,
         'ZLLTemperature',
       )
-      const motionSensor = _.find(devicesV2.data, {
-        id_v1: `/sensors/${motionSensorId.presence_id_v1}`,
+      const device = _.find(devicesV2.data, {
+        id_v1: `/sensors/${addedMotionSensor.presence_id_v1}`,
       })
-      motionSensorId.id_v2 = motionSensor!.id
+      addedMotionSensor.id_v2 = device!.id
+      addedMotionSensor.motion_id_v2 = _.find(device!.services, {
+        rtype: 'motion',
+      })!.rid
+      addedMotionSensor.temperature_id_v2 = _.find(device!.services, {
+        rtype: 'temperature',
+      })!.rid
+      addedMotionSensor.light_id_v2 = _.find(device!.services, {
+        rtype: 'light_level',
+      })!.rid
     })
-    return finalIdList
+    return addedMotionSensors
   }
 
   async updateWallSwitchProperties(idV2: string, name: string, mode: string) {
@@ -536,42 +546,8 @@ export class Bridge {
     const switchSensor = {
       name: `${name} (S)`,
     }
-    await this.#apiv1!.updateSensor(dialIdV1, dialSensor)
-    await this.#apiv1!.updateSensor(switchIdV1, switchSensor)
-    await this.#updateDevice(idV2, device)
-  }
-
-  async updateMotionSensorProperties(
-    temperatureIdV1: string,
-    lightIdV1: string,
-    presenceIdV1: string,
-    idV2: string,
-    name: string,
-  ) {
-    Logger.info(`Updating motion sensor '${idV2}'`)
-    const device = {
-      metadata: {
-        name: name,
-      },
-    }
-    const temperatureSensor = {
-      name: `${name} (T)`,
-    }
-    const lightSensor = {
-      name: `${name} (L)`,
-      config: {
-        tholddark: 15000, // Medium
-      },
-    }
-    const presenceSensor = {
-      name: `${name} (P)`,
-      config: {
-        sensitivity: 4, // Very high
-      },
-    }
-    await this.#apiv1!.updateSensor(temperatureIdV1, temperatureSensor)
-    await this.#apiv1!.updateSensor(lightIdV1, lightSensor)
-    await this.#apiv1!.updateSensor(presenceIdV1, presenceSensor)
+    await this.#apiV1!.updateSensor(dialIdV1, dialSensor)
+    await this.#apiV1!.updateSensor(switchIdV1, switchSensor)
     await this.#updateDevice(idV2, device)
   }
 
@@ -863,7 +839,7 @@ export class Bridge {
         },
       },
     }
-    await this.#apiv2!.createBehaviorInstance(dimOnOffBehavior)
+    await this.#apiV2!.createBehaviorInstance(dimOnOffBehavior)
   }
 
   async configureSmartButton(
@@ -874,7 +850,7 @@ export class Bridge {
     Logger.info(
       `Configuring ${AccessoryType.SmartButton} '${idV2}' to control group '${groupIdV2}`,
     )
-    const device = (await this.#apiv2!.getDevice(idV2)).data[0]
+    const device = (await this.#apiV2!.getDevice(idV2)).data[0]
     const buttonServiceId = _.find(device.services, { rtype: 'button' })!.rid
     const modelId = device.product_data.model_id
 
@@ -918,214 +894,153 @@ export class Bridge {
         model_id: modelId,
       },
     }
-    await this.#apiv2!.createBehaviorInstance(dimOnOffBehavior)
+    await this.#apiV2!.createBehaviorInstance(dimOnOffBehavior)
   }
 
   async configureMotionSensor(
-    macAddress: string,
-    lightIdV1: string,
-    presenceIdV1: string,
-    name: string,
-    sensorGroupIdV1: string,
-    daySceneIdV1: string,
-    nightSceneIdV1: string,
-    eveningSceneIdV1: string,
+    sensor: MotionSensor,
+    groups: Group[],
+    scenes: GroupScenes[],
   ) {
     Logger.info(
-      `Configuring ${AccessoryType.MotionSensor} with IDs '${lightIdV1}', '${presenceIdV1}' to control group '${sensorGroupIdV1}'. Day scene: '${daySceneIdV1}', night scene: '${nightSceneIdV1}', evening scene: '${eveningSceneIdV1}'.`,
+      `Configuring ${AccessoryType.MotionSensor} '${sensor.name}' with ID '${sensor.idV2}'`,
     )
+    const motionSensorBehavior = {
+      type: 'behavior_instance',
+      script_id: '67d9395b-4403-42cc-b5f0-740b699d67c6', // "Generic switches script"
+      enabled: true,
+      configuration: {
+        light_level: {
+          daylight: {
+            daylight_sensitivity: {
+              light_level_service: {
+                rid: sensor.lightIdV2,
+                rtype: 'light_level',
+              },
+              settings: {
+                dark_threshold: 18000, // Medium +
+                offset: 7000,
+              },
+            },
+          },
+        },
+        motion: {
+          motion_service: {
+            rid: sensor.motionIdV2,
+            rtype: 'motion',
+          },
+          when: {
+            timeslots: [
+              this.#getTimeslot(7, 0, scenes, (s) => s.daySceneIdV2),
+              this.#getTimeslot(18, 0, scenes, (s) => s.eveningSceneIdV2),
+              this.#getTimeslot(22, 0, scenes, (s) => s.nightSceneIdV2),
+            ],
+          },
+          where: this.#getWhere(groups),
+        },
+        source: {
+          rid: sensor.idV2,
+          rtype: 'device',
+        },
+      },
+    }
+    await this.#apiV2?.createBehaviorInstance(motionSensorBehavior)
 
-    // Create a virtual switch for the motion sensor
-    const virtualSwitchSensor = {
-      state: {
-        flag: true, // Enabled
-      },
+    // Update sensor names + sensitivity
+    await this.#apiV1!.updateSensor(sensor.temperatureIdV1, {
+      name: `${sensor.name} (T)`,
+    })
+    await this.#apiV1!.updateSensor(sensor.lightIdV1, {
+      name: `${sensor.name} (L)`,
+    })
+    const presenceSensor = {
+      name: `${sensor.name} (P)`,
       config: {
+        sensitivity: 4, // Very high
+      },
+    }
+    await this.#apiV1!.updateSensor(sensor.presenceIdV1, presenceSensor)
+    await this.#updateDevice(sensor.idV2, {
+      metadata: {
+        name: sensor.name,
+      },
+    })
+
+    const disableSensorAction = {
+      address: `/sensors/${sensor.presenceIdV1}/config`,
+      method: 'PUT',
+      body: {
+        on: false,
+      },
+    }
+    const enableSensorAction = {
+      address: `/sensors/${sensor.presenceIdV1}/config`,
+      method: 'PUT',
+      body: {
         on: true,
-        reachable: true,
-      },
-      name: `${name} helper`,
-      type: 'CLIPGenericFlag',
-      modelid: 'PHILIPSHUEAUTOCONFIG',
-      manufacturername: 'philips-hue-auto-config',
-      swversion: '1.0',
-      uniqueid: `${macAddress}-switch`,
-      recycle: false,
-    }
-    const virtualSwitchSensorId = (
-      await this.#apiv1!.createSensor(virtualSwitchSensor)
-    ).at(0)!.success.id
-    const virtualSwitchOffAction = {
-      address: `/sensors/${virtualSwitchSensorId}/state`,
-      method: 'PUT',
-      body: {
-        flag: false,
       },
     }
-    const virtualSwitchOnAction = {
-      address: `/sensors/${virtualSwitchSensorId}/state`,
-      method: 'PUT',
-      body: {
-        flag: true,
-      },
-    }
-    const virtualSwitchOnCondition = {
-      address: `/sensors/${virtualSwitchSensorId}/state/flag`,
-      operator: 'eq',
-      value: 'true',
-    }
-    const virtualSwitchOffCondition = {
-      address: `/sensors/${virtualSwitchSensorId}/state/flag`,
+    const sensorDisabledCondition = {
+      address: `/sensors/${sensor.presenceIdV1}/config/on`,
       operator: 'eq',
       value: 'false',
     }
+    for (const group of groups) {
+      // Update accessory rules to disable the motion sensor when
+      // at least a light from the same group is switched on (manual intervention)
+      const allRules = await this.#apiV1!.getRules()
+      const allGroups = await this.#apiV1!.getGroups()
+      for (const ruleId of Object.keys(allRules)) {
+        const rule = allRules[ruleId]
+        if (
+          !this.#isSwitchOnSceneRule(rule) ||
+          this.#isSwitchOffGroupRule(rule)
+        ) {
+          continue
+        }
+        const ruleGroupIdV1 = this.#getRuleGroup(rule)
+        if (!ruleGroupIdV1) {
+          continue
+        }
+        const sameLights =
+          _.intersection(
+            allGroups[ruleGroupIdV1].lights,
+            allGroups[group.idV1].lights,
+          ).length > 0
+        if (!sameLights) {
+          continue
+        }
+        if (_.some(rule.actions, disableSensorAction)) {
+          continue
+        }
+        rule.owner = undefined
+        rule.recycle = undefined
+        rule.created = undefined
+        rule.lasttriggered = undefined
+        rule.timestriggered = undefined
+        rule.actions = _.concat<Action>([disableSensorAction], rule.actions)
+        await this.#updateRule(ruleId, rule)
+      }
 
-    // Update accessory rules to disable the motion sensor when
-    // at least a light from the same group is switched on (manual intervention)
-    const rules = await this.#apiv1!.getRules()
-    const groups = await this.#apiv1!.getGroups()
-    for (const ruleId of Object.keys(rules)) {
-      const rule = rules[ruleId]
-      if (
-        !this.#isSwitchOnSceneRule(rule) ||
-        this.#isSwitchOffGroupRule(rule)
-      ) {
-        continue
-      }
-      const ruleGroupIdV1 = this.#getRuleGroup(rule)
-      if (!ruleGroupIdV1) {
-        continue
-      }
-      const sameLights =
-        _.intersection(
-          groups[ruleGroupIdV1].lights,
-          groups[sensorGroupIdV1].lights,
-        ).length > 0
-      if (!sameLights) {
-        continue
-      }
-      rule.owner = undefined
-      rule.recycle = undefined
-      rule.created = undefined
-      rule.lasttriggered = undefined
-      rule.timestriggered = undefined
-      rule.actions = _.concat<Action>([virtualSwitchOffAction], rule.actions)
-      await this.#updateRule(ruleId, rule)
-    }
-
-    // On motion, recall a group scene (day or night scene)
-    const daylightSensorId = await this.#getDaylightSensorId()
-    const onMotionBaseRule: NewRule = {
-      name: `${name} on`,
-      conditions: [
-        virtualSwitchOnCondition,
-        {
-          address: `/sensors/${presenceIdV1}/state/presence`,
-          operator: 'eq',
-          value: 'true',
-        },
-        {
-          address: `/sensors/${presenceIdV1}/state/presence`,
-          operator: 'dx',
-        },
-        {
-          address: `/sensors/${lightIdV1}/state/dark`,
-          operator: 'eq',
-          value: 'true',
-        },
-        {
-          address: `/sensors/${daylightSensorId}/state/daylight`,
-          operator: 'eq',
-          value: '{placeholder}',
-        },
-      ],
-      actions: [
-        {
-          address: `/groups/${sensorGroupIdV1}/action`,
-          method: 'PUT',
-          body: {
-            scene: '{placeholder}',
+      // After group switched off, enable the motion sensor again
+      const enableSensorRule = {
+        name: `${sensor.name} enab.`,
+        conditions: [
+          sensorDisabledCondition,
+          {
+            address: `/groups/${group.idV1}/state/any_on`,
+            operator: 'eq',
+            value: 'false',
           },
-        },
-      ],
-    }
-    await this.#createSceneRules(
-      onMotionBaseRule,
-      daySceneIdV1,
-      eveningSceneIdV1,
-      nightSceneIdV1,
-    )
-
-    // When no motion, transition to group off
-    const noMotionRule = {
-      name: `${name} off`,
-      conditions: [
-        virtualSwitchOnCondition,
-        {
-          address: `/sensors/${presenceIdV1}/state/presence`,
-          operator: 'eq',
-          value: 'false',
-        },
-        {
-          address: `/sensors/${presenceIdV1}/state/presence`,
-          operator: 'ddx',
-          value: 'PT00:00:15', // After ~30s
-        },
-      ],
-      actions: [
-        {
-          address: `/groups/${sensorGroupIdV1}/action`,
-          method: 'PUT',
-          body: {
-            on: false,
+          {
+            address: `/groups/${group.idV1}/state/any_on`,
+            operator: 'dx',
           },
-        },
-      ],
+        ],
+        actions: [enableSensorAction],
+      }
+      await this.#createRule(enableSensorRule)
     }
-    await this.#createRule(noMotionRule)
-
-    // When group switched on (manual intervention), disable the motion sensor
-    const disableSensorRule = {
-      name: `${name} disab.`,
-      conditions: [
-        virtualSwitchOnCondition,
-        {
-          address: `/groups/${sensorGroupIdV1}/state/any_on`,
-          operator: 'eq',
-          value: 'true',
-        },
-        {
-          address: `/groups/${sensorGroupIdV1}/state/any_on`,
-          operator: 'dx',
-        },
-        {
-          address: `/sensors/${presenceIdV1}/state/presence`,
-          operator: 'eq',
-          value: 'false', // Not because of the sensor
-        },
-      ],
-      actions: [virtualSwitchOffAction],
-    }
-    await this.#createRule(disableSensorRule)
-
-    // After group switched off, enable the motion sensor again
-    const enableSensorRule = {
-      name: `${name} enab.`,
-      conditions: [
-        virtualSwitchOffCondition,
-        {
-          address: `/groups/${sensorGroupIdV1}/state/any_on`,
-          operator: 'eq',
-          value: 'false',
-        },
-        {
-          address: `/groups/${sensorGroupIdV1}/state/any_on`,
-          operator: 'dx',
-        },
-      ],
-      actions: [virtualSwitchOnAction],
-    }
-    await this.#createRule(enableSensorRule)
   }
 
   #getRuleGroup(rule: RuleV1) {
@@ -1135,6 +1050,62 @@ export class Bridge {
         return match[1]
       }
     }
+  }
+
+  #mapScenesToRecall(
+    scenes: GroupScenes[],
+    sceneSelector: (scene: GroupScenes) => string,
+  ) {
+    return _.map(scenes, (scene) => ({
+      action: {
+        recall: {
+          rid: sceneSelector(scene),
+          rtype: 'scene',
+        },
+      },
+    }))
+  }
+
+  #previousStateRecall(scenes: GroupScenes[]) {
+    return _.map(scenes, () => ({
+      action: 'previous_state',
+    }))
+  }
+
+  #getTimeslot(
+    hour: number,
+    minute: number,
+    scenes: GroupScenes[],
+    sceneSelector: (scene: GroupScenes) => string,
+  ) {
+    return {
+      do_not_disturb: true,
+      on_motion: {
+        recall_single: this.#mapScenesToRecall(scenes, sceneSelector),
+      },
+      on_no_motion: {
+        after: {
+          minutes: 1,
+        },
+        recall_single: this.#previousStateRecall(scenes),
+      },
+      start_time: {
+        time: {
+          hour: hour,
+          minute: minute,
+        },
+        type: 'time',
+      },
+    }
+  }
+
+  #getWhere(groups: Group[]) {
+    return _.map(groups, (group) => ({
+      group: {
+        rid: group.idV2,
+        rtype: group.groupType,
+      },
+    }))
   }
 
   #isSwitchOffGroupRule(rule: RuleV1) {
@@ -1272,17 +1243,17 @@ export class Bridge {
     })
   }
 
-  async #hasMissingLights(lightIdList: LightIdentifiers[]) {
-    return _.some(await this.#findMissingLights(lightIdList))
+  async #hasMissingLights(lightIds: LightIdentifiers[]) {
+    return _.some(await this.#findMissingLights(lightIds))
   }
 
   async #findMissingLights(
-    lightIdList: LightIdentifiers[],
+    lightIds: LightIdentifiers[],
   ): Promise<LightIdentifiers[]> {
-    const addedMacAddresses = Object.values(await this.#apiv1!.getLights()).map(
+    const addedMacAddresses = Object.values(await this.#apiV1!.getLights()).map(
       (light) => light.uniqueid,
     )
-    const missingLightIds = _.cloneDeep(lightIdList)
+    const missingLightIds = _.cloneDeep(lightIds)
     _.remove(missingLightIds, (lightId) =>
       _.includes(addedMacAddresses, lightId.mac),
     )
@@ -1291,8 +1262,8 @@ export class Bridge {
     return missingLightIds
   }
 
-  async #searchAccessories(accessoryIdList: AccessoryIdentifiers[]) {
-    for (const accessoryId of accessoryIdList) {
+  async #searchAccessories(accessoryIds: AccessoryIdentifiers[]) {
+    for (const accessoryId of accessoryIds) {
       const name = accessoryId.name
       Logger.info(`Searching for '${name}'`)
       while (!(await this.#hasSensor(accessoryId.mac))) {
@@ -1311,7 +1282,7 @@ export class Bridge {
   async #triggerSensorSearch(name: string, type: AccessoryType) {
     const instructionMsg =
       'Instructions/troubleshooting: https://github.com/jaaufauvre/philips-hue-auto-config?tab=readme-ov-file#troubleshooting'
-    await this.#apiv1!.searchSensors()
+    await this.#apiV1!.searchSensors()
     switch (type) {
       case AccessoryType.WallSwitch:
         Logger.info(
@@ -1349,12 +1320,12 @@ export class Bridge {
   }
 
   async #isScanningSensors(): Promise<boolean> {
-    return (await this.#apiv1!.getNewSensors()).lastscan === 'active'
+    return (await this.#apiV1!.getNewSensors()).lastscan === 'active'
   }
 
   async #isWallSwitchUpdating(idV2: string): Promise<boolean> {
     return (
-      (await this.#apiv2!.getDevice(idV2)).data[0].device_mode?.status !== 'set'
+      (await this.#apiV2!.getDevice(idV2)).data[0].device_mode?.status !== 'set'
     )
   }
 
@@ -1363,26 +1334,26 @@ export class Bridge {
     mode: string,
     name: string,
   ): Promise<boolean> {
-    const device = (await this.#apiv2!.getDevice(idV2)).data[0]
+    const device = (await this.#apiV2!.getDevice(idV2)).data[0]
     return device.device_mode?.mode === mode && device.metadata.name === name
   }
 
   async #isScanningLights(): Promise<boolean> {
-    return (await this.#apiv1!.getNewLights()).lastscan === 'active'
+    return (await this.#apiV1!.getNewLights()).lastscan === 'active'
   }
 
   async #hasRoom(name: string): Promise<boolean> {
-    const rooms = await this.#apiv2!.getRooms()
+    const rooms = await this.#apiV2!.getRooms()
     return _.some(rooms.data, (room) => room.metadata?.name === name)
   }
 
   async #hasZone(name: string): Promise<boolean> {
-    const zones = await this.#apiv2!.getZones()
+    const zones = await this.#apiV2!.getZones()
     return _.some(zones.data, (room) => room.metadata?.name === name)
   }
 
   async #hasLight(mac: string): Promise<boolean> {
-    const lights = await this.#apiv1!.getLights()
+    const lights = await this.#apiV1!.getLights()
     return _.some(Object.values(lights), (light) => light.uniqueid === mac)
   }
 
@@ -1398,7 +1369,7 @@ export class Bridge {
   }
 
   async #getSensors(types?: string[]) {
-    const sensors = await this.#apiv1!.getSensors()
+    const sensors = await this.#apiV1!.getSensors()
     for (const sensorId of Object.keys(sensors)) {
       if (types && !_.includes(types, sensors[sensorId].type)) {
         delete sensors[sensorId]
@@ -1408,7 +1379,7 @@ export class Bridge {
   }
 
   async #getDevices(productNames?: string[]) {
-    const devices = await this.#apiv2!.getDevices()
+    const devices = await this.#apiV2!.getDevices()
     if (devices.errors.length > 0) {
       throw Error(
         `Couldn't retrieve devices. Errors: ${JSON.stringify(devices.errors, null, 2)}`,
@@ -1424,7 +1395,7 @@ export class Bridge {
   }
 
   async #createRule(rule: NewRule) {
-    const rules = await this.#apiv1!.createRule(rule)
+    const rules = await this.#apiV1!.createRule(rule)
     if (_.find(rules, (r) => r.error != null)) {
       throw Error(
         `Couldn't create rule. Errors: ${JSON.stringify(rules, null, 2)}`,
@@ -1433,7 +1404,7 @@ export class Bridge {
   }
 
   async #updateRule(id: string, rule: RuleV1) {
-    const rules = await this.#apiv1!.updateRule(id, rule)
+    const rules = await this.#apiV1!.updateRule(id, rule)
     if (_.find(rules, (r) => r.error != null)) {
       throw Error(
         `Couldn't update rule '${id}'. Errors: ${JSON.stringify(rules, null, 2)}`,
@@ -1442,7 +1413,7 @@ export class Bridge {
   }
 
   async #updateDevice(id: string, device: UpdatedDevice) {
-    const updatedDevice = await this.#apiv2!.updateDevice(id, device)
+    const updatedDevice = await this.#apiV2!.updateDevice(id, device)
     if (updatedDevice.errors && updatedDevice.errors.length > 0) {
       throw Error(
         `Couldn't update device '${id}'. Errors: ${JSON.stringify(updatedDevice.errors, null, 2)}`,
@@ -1451,7 +1422,7 @@ export class Bridge {
   }
 
   async #updateLight(id: string, light: UpdatedLight) {
-    const updatedLight = await this.#apiv2!.updateLight(id, light)
+    const updatedLight = await this.#apiV2!.updateLight(id, light)
     if (updatedLight.errors && updatedLight.errors.length > 0) {
       throw Error(
         `Couldn't update light '${id}'. Errors: ${JSON.stringify(updatedLight.errors, null, 2)}`,
@@ -1583,56 +1554,4 @@ export class Bridge {
     if (light.color_temperature) return LightColorType.WarmToCoolWhite
     return LightColorType.SoftWarmWhite
   }
-}
-
-type Identifiers = {
-  mac: string
-  name: string
-}
-
-export type LightIdentifiers = Identifiers & {
-  serial?: string
-}
-
-export type LightInfo = LightIdentifiers & {
-  id_v1?: string
-  id_v2?: string
-  ownerId?: string
-  colorType?: LightColorType
-}
-
-export type AccessoryIdentifiers = Identifiers & {
-  type: AccessoryType
-  id_v1?: string
-  id_v2?: string
-}
-
-export type TapDialSwitchIdentifiers = Identifiers & {
-  type: AccessoryType
-  dial_id_v1?: string
-  switch_id_v1?: string
-  id_v2?: string
-}
-
-export type MotionSensorIdentifiers = Identifiers & {
-  type: AccessoryType
-  presence_id_v1?: string
-  light_id_v1?: string
-  temperature_id_v1?: string
-  id_v2?: string
-}
-
-export enum ButtonType {
-  Button1 = 1,
-  Button2 = 2,
-  Button3 = 3,
-  Button4 = 4,
-}
-
-export enum AccessoryType {
-  WallSwitch = 'Wall switch',
-  TapDialSwitch = 'Tap dial switch',
-  DimmerSwitch = 'Dimmer switch',
-  SmartButton = 'Smart button',
-  MotionSensor = 'Motion sensor',
 }

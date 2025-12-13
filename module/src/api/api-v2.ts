@@ -135,12 +135,6 @@ export class ApiV2 {
     return await this.#httpsClient.get<Scenes>(uri)
   }
 
-  async updateScene(id: string, scene: UpdatedScene) {
-    Logger.info(`[API v2] Updating scene '${id}' ...`)
-    const uri = `${this.#getBaseUrl()}/scene/${id}`
-    return await this.#httpsClient.put(uri, scene)
-  }
-
   async getBehaviorInstances(): Promise<BehaviorInstances> {
     Logger.info(`[API v2] Retrieving behavior instances ...`)
     const uri = `${this.#getBaseUrl()}/behavior_instance`
@@ -332,10 +326,6 @@ export interface Scene {
   type: 'scene'
 }
 
-export interface UpdatedScene {
-  recall: Recall
-}
-
 export interface CreatedScenes {
   data: Resource[]
   errors: any[]
@@ -398,10 +388,6 @@ export interface SceneMetadata {
   image?: Resource
 }
 
-export interface Recall {
-  action: string
-}
-
 //
 // Behaviors
 //
@@ -422,6 +408,7 @@ export interface NewBehaviorInstance {
   configuration:
     | TapDialBehaviorConfiguration
     | GenericButtonBehaviorConfiguration
+    | MotionSensorBehaviorConfiguration
 }
 
 export interface TapDialBehaviorConfiguration {
@@ -449,6 +436,16 @@ export interface ButtonBehaviorConfiguration {
   where: Where[]
 }
 
+export interface RotaryBehaviorConfiguration {
+  on_dim_off: {
+    action: string
+  }
+  on_dim_on: {
+    recall_single: RecallSceneSingle[]
+  }
+  where: Where[]
+}
+
 export interface ButtonsBehaviorConfiguration {
   [buttonServiceId: string]: {
     on_repeat: {
@@ -468,21 +465,55 @@ export interface ButtonsBehaviorConfiguration {
   }
 }
 
+export interface MotionSensorBehaviorConfiguration {
+  light_level: {
+    daylight: {
+      daylight_sensitivity: {
+        light_level_service: Resource
+        settings: {
+          dark_threshold: number
+          offset: number
+        }
+      }
+    }
+  }
+  motion: {
+    motion_service: Resource
+    when: {
+      timeslots: Timeslot[]
+    }
+    where: Where[]
+  }
+  source: Resource
+}
+
+export interface Timeslot {
+  do_not_disturb: boolean
+  on_motion: {
+    recall_single: RecallSceneSingle[]
+  }
+  on_no_motion: {
+    after: {
+      minutes: number
+    }
+    recall_single: {
+      action: string
+    }[]
+  }
+  start_time: {
+    time: {
+      hour: number
+      minute: number
+    }
+    type: string
+  }
+}
+
 export interface Where {
   group: Resource
 }
 
-export interface RotaryBehaviorConfiguration {
-  on_dim_off: {
-    action: string
-  }
-  on_dim_on: {
-    recall_single: RecallSingle[]
-  }
-  where: Where[]
-}
-
-export interface RecallSingle {
+export interface RecallSceneSingle {
   action: {
     recall: Resource
   }

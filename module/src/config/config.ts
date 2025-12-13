@@ -88,6 +88,9 @@ export interface ExtendedMotionSensor extends MotionSensor {
   lightIdV1?: string
   temperatureIdV1?: string
   idV2?: string
+  motionIdV2?: string
+  lightIdV2?: string
+  temperatureIdV2?: string
 }
 
 export class Config implements ConfigGen {
@@ -449,13 +452,21 @@ export class Config implements ConfigGen {
     if (!config) {
       return
     }
-    config.groups.forEach((group) => {
-      this.#checkGroupDefined(group)
+    config.groups.forEach((groupId) => {
+      this.#checkGroupDefined(groupId)
+      _.forEach(
+        [
+          config.scenes?.day,
+          config.scenes?.evening,
+          config.scenes?.night,
+          config.scenes?.unique,
+        ],
+        (sceneId) => {
+          this.#checkSceneDefined(sceneId)
+          this.#checkSceneInGroup(sceneId, groupId)
+        },
+      )
     })
-    this.#checkSceneDefined(config.scenes?.day)
-    this.#checkSceneDefined(config.scenes?.night)
-    this.#checkSceneDefined(config.scenes?.evening)
-    this.#checkSceneDefined(config.scenes?.unique)
   }
 
   #checkResourceDefined(id: string | undefined) {
@@ -468,13 +479,13 @@ export class Config implements ConfigGen {
   }
 
   #checkGroupDefined(id: string) {
-    if (!_.find(_.concat(this.zones, this.rooms), { id })) {
+    if (!_.some(_.concat(this.zones, this.rooms), { id })) {
       throw Error(`Undefined group identifier: '${id}'!`)
     }
   }
 
   #checkZoneDefined(id: string) {
-    if (!_.find(this.zones, { id })) {
+    if (!_.some(this.zones, { id })) {
       throw Error(`Undefined zone identifier: '${id}'!`)
     }
   }
@@ -483,13 +494,13 @@ export class Config implements ConfigGen {
     if (!id) {
       return
     }
-    if (!_.find(this.rooms, { id })) {
+    if (!_.some(this.rooms, { id })) {
       throw Error(`Undefined room identifier: '${id}'!`)
     }
   }
 
   #checkLightDefined(id: string) {
-    if (!_.find(this.lights, { id })) {
+    if (!_.some(this.lights, { id })) {
       throw Error(`Undefined light identifier: '${id}'!`)
     }
   }
@@ -498,8 +509,25 @@ export class Config implements ConfigGen {
     if (!id) {
       return
     }
-    if (!_.find(this.scenes, { id })) {
+    if (!_.some(this.scenes, { id })) {
       throw Error(`Undefined scene identifier: '${id}'!`)
+    }
+  }
+
+  #checkSceneInGroup(sceneId: string | undefined, groupId: string) {
+    if (!sceneId) {
+      return
+    }
+    const scene = this.getResourceById(sceneId)! as Scene
+    if (
+      !scene.groups?.includes(groupId) &&
+      ![
+        this.defaults.scenes.day,
+        this.defaults.scenes.evening,
+        this.defaults.scenes.night,
+      ].includes(sceneId)
+    ) {
+      throw Error(`Scene '${sceneId}' doesn't exist in group '${groupId}'!`)
     }
   }
 }

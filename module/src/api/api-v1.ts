@@ -111,7 +111,7 @@ export class ApiV1 {
   }
 
   async updateRule(id: string, rule: RuleV1): Promise<UpdatedRule[]> {
-    Logger.info(`[API v1] Updating rule ...`)
+    Logger.info(`[API v1] Updating rule '${id}' ...`)
     const uri = `${this.#getBaseUrl()}/${this.#appKey}/rules/${id}`
     return await this.#httpsClient.put<UpdatedRule[]>(uri, rule)
   }

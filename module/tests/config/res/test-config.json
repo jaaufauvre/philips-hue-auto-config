@@ -225,7 +225,7 @@
       "button4": {
         "groups": ["ds_zone2"],
         "scenes": {
-          "unique": "scene"
+          "unique": "default_day_scene"
         }
       }
     }
@@ -271,7 +271,7 @@
     },
     {
       "id": "scene",
-      "groups": ["scene_zone"],
+      "groups": ["scene_zone", "sm_room", "ms_room"],
       "name": "Scene",
       "custom-actions": [
         {
@@ -285,7 +285,7 @@
     },
     {
       "id": "day_scene",
-      "groups": ["scene_zone"],
+      "groups": ["scene_zone", "ds_room2", "ms_room"],
       "name": "Day scene",
       "custom-actions": [
         {
@@ -296,7 +296,7 @@
     },
     {
       "id": "night_scene",
-      "groups": ["scene_zone"],
+      "groups": ["scene_zone", "ds_room2", "ms_room"],
       "name": "Night scene",
       "custom-actions": [
         {
@@ -307,7 +307,7 @@
     },
     {
       "id": "evening_scene",
-      "groups": ["scene_zone"],
+      "groups": ["scene_zone", "ds_room2", "ms_room"],
       "name": "Evening scene",
       "custom-actions": [
         {
